@@ -660,7 +660,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                         return;
                                       }
 
-                                      context.goNamedAuth(TestWidget.routeName,
+                                      context.goNamedAuth(
+                                          ScanBeaconWidget.routeName,
                                           context.mounted);
                                     },
                                     text: 'Continue with Google',
@@ -722,7 +723,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                             }
 
                                             context.goNamedAuth(
-                                                TestWidget.routeName,
+                                                ScanBeaconWidget.routeName,
                                                 context.mounted);
                                           },
                                           text: 'Continue with Apple',

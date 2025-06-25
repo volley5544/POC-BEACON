@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
+import '/backend/push_notifications/push_notifications_handler.dart'
+    show PushNotificationsHandler;
 import '/main.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -95,8 +97,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: TestWidget.routeName,
           path: TestWidget.routePath,
-          builder: (context, params) =>
-              params.isEmpty ? NavBarPage(initialPage: 'test') : TestWidget(),
+          builder: (context, params) => TestWidget(),
         ),
         FFRoute(
           name: LoginPageWidget.routeName,
@@ -113,7 +114,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: ScanBeaconWidget.routeName,
           path: ScanBeaconWidget.routePath,
-          builder: (context, params) => ScanBeaconWidget(),
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'scan_beacon')
+              : ScanBeaconWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -309,7 +312,7 @@ class FFRoute {
                     ),
                   ),
                 )
-              : page;
+              : PushNotificationsHandler(child: page);
 
           final transitionInfo = state.transitionInfo;
           return transitionInfo.hasTransition

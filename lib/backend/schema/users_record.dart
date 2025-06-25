@@ -65,6 +65,11 @@ class UsersRecord extends FirestoreRecord {
   String get password => _password ?? '';
   bool hasPassword() => _password != null;
 
+  // "fcm_token" field.
+  String? _fcmToken;
+  String get fcmToken => _fcmToken ?? '';
+  bool hasFcmToken() => _fcmToken != null;
+
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
     _displayName = snapshotData['display_name'] as String?;
@@ -76,6 +81,7 @@ class UsersRecord extends FirestoreRecord {
     _bio = snapshotData['bio'] as String?;
     _userName = snapshotData['user_name'] as String?;
     _password = snapshotData['password'] as String?;
+    _fcmToken = snapshotData['fcm_token'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -122,6 +128,7 @@ Map<String, dynamic> createUsersRecordData({
   String? bio,
   String? userName,
   String? password,
+  String? fcmToken,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -135,6 +142,7 @@ Map<String, dynamic> createUsersRecordData({
       'bio': bio,
       'user_name': userName,
       'password': password,
+      'fcm_token': fcmToken,
     }.withoutNulls,
   );
 
@@ -155,7 +163,8 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e1?.editedTime == e2?.editedTime &&
         e1?.bio == e2?.bio &&
         e1?.userName == e2?.userName &&
-        e1?.password == e2?.password;
+        e1?.password == e2?.password &&
+        e1?.fcmToken == e2?.fcmToken;
   }
 
   @override
@@ -169,7 +178,8 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e?.editedTime,
         e?.bio,
         e?.userName,
-        e?.password
+        e?.password,
+        e?.fcmToken
       ]);
 
   @override
