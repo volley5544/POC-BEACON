@@ -518,7 +518,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                             }
 
                             context.goNamedAuth(
-                                TestWidget.routeName, context.mounted);
+                                ScanBeaconWidget.routeName, context.mounted);
                           },
                           text: 'Sign In',
                           options: FFButtonOptions(
