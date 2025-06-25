@@ -54,6 +54,8 @@ class _ScanBeaconWidgetState extends State<ScanBeaconWidget> {
       }
       await actions.startScanningBeacon(
         context,
+        currentUserDisplayName,
+        currentUserReference,
       );
     });
 
@@ -188,6 +190,8 @@ class _ScanBeaconWidgetState extends State<ScanBeaconWidget> {
                     }
                     await actions.startScanningBeacon(
                       context,
+                      currentUserDisplayName,
+                      currentUserReference,
                     );
                     triggerPushNotification(
                       notificationTitle: 'Test Notification Title',

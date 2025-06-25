@@ -9,8 +9,10 @@ import 'package:flutter/material.dart';
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
 import 'package:dchs_flutter_beacon/dchs_flutter_beacon.dart';
+import '/backend/push_notifications/push_notifications_util.dart';
 
-Future startScanningBeacon(BuildContext context) async {
+Future startScanningBeacon(BuildContext context, String? currentUserDisplayName,
+    DocumentReference? currentUserReference) async {
   // Add your function code here!
   WidgetsFlutterBinding.ensureInitialized();
   await flutterBeacon.initializeScanning;
@@ -30,6 +32,15 @@ Future startScanningBeacon(BuildContext context) async {
       // หาตัวที่ใกล้ที่สุด (accuracy ต่ำสุด)
       result.beacons.sort((a, b) => a.accuracy.compareTo(b.accuracy));
       final nearest = result.beacons.first;
+      triggerPushNotification(
+        notificationTitle: 'Test Notification Title',
+        notificationText:
+            'เชิญคุณ ${currentUserDisplayName!} มาเล่นเกมที่ Booth01',
+        notificationSound: 'default',
+        userRefs: [currentUserReference!],
+        initialPageName: 'scan_beacon',
+        parameterData: {},
+      );
 
       showDialog(
         context: context,

@@ -204,50 +204,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                           focusColor: Colors.transparent,
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
-                          onTap: () async {
-                            var _shouldSetState = false;
-                            _model.checkPermissionBeaconOutput =
-                                await actions.checkPermissionsBeacon();
-                            _shouldSetState = true;
-                            if (!_model.checkPermissionBeaconOutput!) {
-                              await showDialog(
-                                context: context,
-                                builder: (alertDialogContext) {
-                                  return AlertDialog(
-                                    content: Text('กรุณาเปิดอนุญาต'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.pop(alertDialogContext),
-                                        child: Text('Ok'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                              if (_shouldSetState) safeSetState(() {});
-                              return;
-                            }
-                            await showDialog(
-                              context: context,
-                              builder: (alertDialogContext) {
-                                return AlertDialog(
-                                  content: Text('wow'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(alertDialogContext),
-                                      child: Text('Ok'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                            await actions.startScanningBeacon(
-                              context,
-                            );
-                            if (_shouldSetState) safeSetState(() {});
-                          },
+                          onTap: () async {},
                           child: Icon(
                             Icons.animation,
                             color: Color(0xFF4B39EF),

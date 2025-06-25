@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 class LoginPageModel extends FlutterFlowModel<LoginPageWidget> {
   ///  State fields for stateful widgets in this page.
 
-  // Stores action output result for [Custom Action - checkPermissionsBeacon] action in Icon widget.
-  bool? checkPermissionBeaconOutput;
   // State field(s) for emailAddress widget.
   FocusNode? emailAddressFocusNode;
   TextEditingController? emailAddressTextController;
