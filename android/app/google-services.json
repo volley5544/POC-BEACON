@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "166354661539",
+    "project_id": "poc-beacon-firebase",
+    "storage_bucket": "poc-beacon-firebase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:166354661539:android:628c300f77f34b39ba4f16",
+        "android_client_info": {
+          "package_name": "com.mycompany.pocbeacon"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDW53zhK_w-F_4anHuXHdaCEPRUU2KN7Q4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
