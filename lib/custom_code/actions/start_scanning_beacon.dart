@@ -48,7 +48,6 @@ Future startScanningBeacon(BuildContext context) async {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.of(context).pop(); // กลับหน้าแรก
               },
               child: const Text('OK'),
             ),
