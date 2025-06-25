@@ -1,5 +1,4 @@
 import '/auth/firebase_auth/auth_util.dart';
-import '/backend/push_notifications/push_notifications_util.dart';
 import '/flutter_flow/flutter_flow_expanded_image_view.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -52,7 +51,7 @@ class _ScanBeaconWidgetState extends State<ScanBeaconWidget> {
         );
         return;
       }
-      await actions.startScanningBeacon(
+      await actions.periodicScanBeacon(
         context,
         currentUserDisplayName,
         currentUserReference,
@@ -192,15 +191,6 @@ class _ScanBeaconWidgetState extends State<ScanBeaconWidget> {
                       context,
                       currentUserDisplayName,
                       currentUserReference,
-                    );
-                    triggerPushNotification(
-                      notificationTitle: 'Test Notification Title',
-                      notificationText:
-                          'เชิญคุณ ${currentUserDisplayName} มาเล่นเกมที่ Booth01',
-                      notificationSound: 'default',
-                      userRefs: [currentUserReference!],
-                      initialPageName: 'scan_beacon',
-                      parameterData: {},
                     );
                     if (_shouldSetState) safeSetState(() {});
                   },

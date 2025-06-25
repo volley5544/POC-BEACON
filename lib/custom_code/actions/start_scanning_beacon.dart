@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 
 import 'package:dchs_flutter_beacon/dchs_flutter_beacon.dart';
 import '/backend/push_notifications/push_notifications_util.dart';
+import 'dart:async';
 
 Future startScanningBeacon(BuildContext context, String? currentUserDisplayName,
     DocumentReference? currentUserReference) async {
@@ -18,16 +19,17 @@ Future startScanningBeacon(BuildContext context, String? currentUserDisplayName,
   await flutterBeacon.initializeScanning;
 
   StreamSubscription<RangingResult>? _streamRanging;
-  bool _alertShown = false;
+  // bool _alertShown = false;
 
   final regions = <Region>[
     Region(identifier: 'any'),
   ];
-
+  print('Timer 5 sec');
   _streamRanging =
-      flutterBeacon.ranging(regions).listen((RangingResult result) {
-    if (result.beacons.isNotEmpty && !_alertShown) {
-      _alertShown = true;
+      await flutterBeacon.ranging(regions).listen((RangingResult result) {
+    if (result.beacons.isNotEmpty) {
+      // && !_alertShown
+      // _alertShown = true;
 
       // หาตัวที่ใกล้ที่สุด (accuracy ต่ำสุด)
       result.beacons.sort((a, b) => a.accuracy.compareTo(b.accuracy));
@@ -41,7 +43,7 @@ Future startScanningBeacon(BuildContext context, String? currentUserDisplayName,
         initialPageName: 'scan_beacon',
         parameterData: {},
       );
-
+      _streamRanging!.cancel();
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
