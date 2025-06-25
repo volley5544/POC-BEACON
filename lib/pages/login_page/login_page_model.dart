@@ -15,6 +15,8 @@ class LoginPageModel extends FlutterFlowModel<LoginPageWidget> {
   TextEditingController? passwordTextController;
   late bool passwordVisibility;
   String? Function(BuildContext, String?)? passwordTextControllerValidator;
+  // Stores action output result for [Custom Action - checkPermissionsBeacon] action in Button widget.
+  bool? check;
   // Stores action output result for [Custom Action - scanNearestBeacon] action in Button widget.
   String? beaconInfo;
 

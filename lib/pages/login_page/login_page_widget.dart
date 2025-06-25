@@ -463,6 +463,9 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                         child: FFButtonWidget(
                           key: ValueKey('Login'),
                           onPressed: () async {
+                            await requestPermission(notificationsPermission);
+                            _model.check =
+                                await actions.checkPermissionsBeacon();
                             GoRouter.of(context).prepareAuthEvent();
 
                             final user = await authManager.signInWithEmail(
@@ -476,6 +479,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
 
                             context.goNamedAuth(
                                 ScanBeaconWidget.routeName, context.mounted);
+
+                            safeSetState(() {});
                           },
                           text: 'Sign In',
                           options: FFButtonOptions(

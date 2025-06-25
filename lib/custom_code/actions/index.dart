@@ -8,3 +8,4 @@ export 'scan_b_l_e_beacon_action.dart' show scanBLEBeaconAction;
 export 'check_permissions_beacon.dart' show checkPermissionsBeacon;
 export 'start_scanning_beacon.dart' show startScanningBeacon;
 export 'scan_nearest_beacon.dart' show scanNearestBeacon;
+export 'periodic_scan_beacon.dart' show periodicScanBeacon;
