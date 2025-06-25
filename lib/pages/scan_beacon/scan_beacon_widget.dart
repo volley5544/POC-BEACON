@@ -52,11 +52,6 @@ class _ScanBeaconWidgetState extends State<ScanBeaconWidget> {
         );
         return;
       }
-      await actions.startScanningBeacon(
-        context,
-        currentUserDisplayName,
-        currentUserReference,
-      );
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
