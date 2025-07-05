@@ -194,7 +194,7 @@ class _ScanBeaconWidgetState extends State<ScanBeaconWidget> {
                     );
                     if (_shouldSetState) safeSetState(() {});
                   },
-                  text: 'ค้นหา Beacon',
+                  text: 'ค้นหา Beacon.',
                   icon: Icon(
                     Icons.search_outlined,
                     size: 30.0,
