@@ -18,5 +18,6 @@ Future periodicScanBeacon(
   // Add your function code here!
   Timer.periodic(const Duration(seconds: 5), (timer) async {
     startScanningBeacon(context, userName!, userDocRef!);
+    // startScanningBeacon(context);
   });
 }

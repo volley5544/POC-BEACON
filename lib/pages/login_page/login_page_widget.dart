@@ -519,6 +519,60 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                         ),
                       ),
                     ),
+
+                    // You will have to add an action on this rich text to go to your login page.
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 12.0),
+                      child: RichText(
+                        textScaler: MediaQuery.of(context).textScaler,
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Don\'t have an account?  ',
+                              style: TextStyle(),
+                            ),
+                            TextSpan(
+                              text: 'Sign Up here',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    font: GoogleFonts.readexPro(
+                                      fontWeight: FontWeight.w600,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    color: FlutterFlowTheme.of(context).primary,
+                                    letterSpacing: 0.0,
+                                    fontWeight: FontWeight.w600,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                            )
+                          ],
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    font: GoogleFonts.readexPro(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                        ),
+                      ),
+                    ),
                     Align(
                       alignment: AlignmentDirectional(0.0, 0.0),
                       child: Padding(
@@ -536,7 +590,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                 0.0, 0.0, 0.0, 0.0),
                             iconPadding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 0.0, 0.0, 0.0),
-                            color: Colors.white,
+                            color: Color(0xFFE4E7E7),
                             textStyle: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -556,7 +610,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                 ),
                             elevation: 0.0,
                             borderSide: BorderSide(
-                              color: Colors.white,
+                              color: Color(0xFFAAA6A6),
                               width: 2.0,
                             ),
                             borderRadius: BorderRadius.circular(12.0),
@@ -741,27 +795,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0.0, 0.0, 0.0, 16.0),
                                   child: FFButtonWidget(
-                                    onPressed: () async {
-                                      _model.beaconInfo =
-                                          await actions.scanNearestBeacon();
-                                      await showDialog(
-                                        context: context,
-                                        builder: (alertDialogContext) {
-                                          return AlertDialog(
-                                            title: Text(_model.beaconInfo!),
-                                            content: Text(_model.beaconInfo!),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () => Navigator.pop(
-                                                    alertDialogContext),
-                                                child: Text('Ok'),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-
-                                      safeSetState(() {});
+                                    onPressed: () {
+                                      print('Button pressed ...');
                                     },
                                     text: 'Beacon',
                                     options: FFButtonOptions(

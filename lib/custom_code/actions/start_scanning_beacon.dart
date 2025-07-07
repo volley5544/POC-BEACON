@@ -12,10 +12,13 @@ import 'package:dchs_flutter_beacon/dchs_flutter_beacon.dart';
 import '/backend/push_notifications/push_notifications_util.dart';
 import 'dart:async';
 
-Future startScanningBeacon(BuildContext context, String? currentUserDisplayName,
-    DocumentReference? currentUserReference) async {
+Future<void> startScanningBeacon(
+  BuildContext context,
+  String? currentUserDisplayName,
+  DocumentReference? currentUserReference,
+) async {
   // Add your function code here!
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
   await flutterBeacon.initializeScanning;
 
   StreamSubscription<RangingResult>? _streamRanging;
@@ -25,15 +28,13 @@ Future startScanningBeacon(BuildContext context, String? currentUserDisplayName,
     Region(identifier: 'any'),
   ];
   print('Timer 5 sec');
-  _streamRanging =
-      await flutterBeacon.ranging(regions).listen((RangingResult result) {
+  StreamSubscription<RangingResult>? streamRanging;
+  streamRanging = flutterBeacon.ranging(regions).listen((result) {
     if (result.beacons.isNotEmpty) {
-      // && !_alertShown
-      // _alertShown = true;
-
-      // หาตัวที่ใกล้ที่สุด (accuracy ต่ำสุด)
       result.beacons.sort((a, b) => a.accuracy.compareTo(b.accuracy));
       final nearest = result.beacons.first;
+
+      /* niruemon.n comment ชั่วคราว 2035-06-05*/
       triggerPushNotification(
         notificationTitle: 'Test Notification Title',
         notificationText:
@@ -43,7 +44,8 @@ Future startScanningBeacon(BuildContext context, String? currentUserDisplayName,
         initialPageName: 'scan_beacon',
         parameterData: {},
       );
-      _streamRanging!.cancel();
+
+      streamRanging?.cancel(); // หยุดหลังเจอ
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
@@ -59,9 +61,7 @@ Future startScanningBeacon(BuildContext context, String? currentUserDisplayName,
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).pop(),
               child: const Text('OK'),
             ),
           ],

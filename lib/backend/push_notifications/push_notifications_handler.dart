@@ -119,6 +119,7 @@ final parametersBuilderMap =
   'LoginPage': ParameterData.none(),
   'PracticePage': ParameterData.none(),
   'scan_beacon': ParameterData.none(),
+  'signIn': ParameterData.none(),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

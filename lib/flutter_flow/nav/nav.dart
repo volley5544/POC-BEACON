@@ -117,6 +117,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => params.isEmpty
               ? NavBarPage(initialPage: 'scan_beacon')
               : ScanBeaconWidget(),
+        ),
+        FFRoute(
+          name: SignInWidget.routeName,
+          path: SignInWidget.routePath,
+          builder: (context, params) => SignInWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

@@ -1,9 +1,9 @@
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
-import 'login_page_widget.dart' show LoginPageWidget;
+import 'sign_in_widget.dart' show SignInWidget;
 import 'package:flutter/material.dart';
 
-class LoginPageModel extends FlutterFlowModel<LoginPageWidget> {
+class SignInModel extends FlutterFlowModel<SignInWidget> {
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for emailAddress widget.
@@ -15,8 +15,6 @@ class LoginPageModel extends FlutterFlowModel<LoginPageWidget> {
   TextEditingController? passwordTextController;
   late bool passwordVisibility;
   String? Function(BuildContext, String?)? passwordTextControllerValidator;
-  // Stores action output result for [Custom Action - checkPermissionsBeacon] action in Button widget.
-  bool? check;
 
   @override
   void initState(BuildContext context) {
