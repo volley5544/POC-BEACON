@@ -1,4 +1,6 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/api_requests/api_calls.dart';
+import '/backend/push_notifications/push_notifications_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
@@ -102,10 +104,34 @@ class _PracticePageWidgetState extends State<PracticePageWidget> {
                   size: 40.0,
                 ),
               ),
-              title: Text(
-                'หน้าฝึกสอนสร้างแอพ',
-                style: FlutterFlowTheme.of(context).headlineMedium.override(
-                      font: GoogleFonts.outfit(
+              title: InkWell(
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: () async {
+                  triggerPushNotification(
+                    notificationTitle: 'title',
+                    notificationText: 'body',
+                    userRefs: [currentUserReference!],
+                    initialPageName: 'HomePage',
+                    parameterData: {},
+                  );
+                },
+                child: Text(
+                  'หน้าฝึกสอนสร้างแอพ',
+                  style: FlutterFlowTheme.of(context).headlineMedium.override(
+                        font: GoogleFonts.outfit(
+                          fontWeight: FlutterFlowTheme.of(context)
+                              .headlineMedium
+                              .fontWeight,
+                          fontStyle: FlutterFlowTheme.of(context)
+                              .headlineMedium
+                              .fontStyle,
+                        ),
+                        color: Colors.white,
+                        fontSize: 22.0,
+                        letterSpacing: 0.0,
                         fontWeight: FlutterFlowTheme.of(context)
                             .headlineMedium
                             .fontWeight,
@@ -113,15 +139,7 @@ class _PracticePageWidgetState extends State<PracticePageWidget> {
                             .headlineMedium
                             .fontStyle,
                       ),
-                      color: Colors.white,
-                      fontSize: 22.0,
-                      letterSpacing: 0.0,
-                      fontWeight: FlutterFlowTheme.of(context)
-                          .headlineMedium
-                          .fontWeight,
-                      fontStyle:
-                          FlutterFlowTheme.of(context).headlineMedium.fontStyle,
-                    ),
+                ),
               ),
               actions: [
                 InkWell(
