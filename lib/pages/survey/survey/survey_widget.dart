@@ -159,7 +159,159 @@ class _SurveyWidgetState extends State<SurveyWidget>
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   16.0, 12.0, 0.0, 0.0),
                               child: Text(
-                                'กิจกรรมบูธ xxx ?',
+                                'กิจกรรมบูธโยนบอลใส่ตระกร้า',
+                                style: FlutterFlowTheme.of(context)
+                                    .labelMedium
+                                    .override(
+                                      font: GoogleFonts.readexPro(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .labelMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .labelMedium
+                                            .fontStyle,
+                                      ),
+                                      letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .labelMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .labelMedium
+                                          .fontStyle,
+                                    ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                16.0, 20.0, 16.0, 0.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Image.network(
+                                  'https://cdn-icons-png.flaticon.com/512/6637/6637186.png',
+                                  width: 50.0,
+                                  height: 50.0,
+                                  fit: BoxFit.cover,
+                                ),
+                                Image.network(
+                                  'https://cdn-icons-png.flaticon.com/512/6637/6637209.png',
+                                  width: 50.0,
+                                  height: 50.0,
+                                  fit: BoxFit.cover,
+                                ),
+                                Image.network(
+                                  'https://cdn-icons-png.flaticon.com/512/6637/6637207.png',
+                                  width: 50.0,
+                                  height: 50.0,
+                                  fit: BoxFit.cover,
+                                ),
+                                Image.network(
+                                  'https://cdn-icons-png.flaticon.com/512/6637/6637188.png',
+                                  width: 50.0,
+                                  height: 50.0,
+                                  fit: BoxFit.cover,
+                                ),
+                                Image.network(
+                                  'https://cdn-icons-png.flaticon.com/512/6637/6637197.png',
+                                  width: 50.0,
+                                  height: 50.0,
+                                  fit: BoxFit.cover,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      ListView(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        children: [
+                          Align(
+                            alignment: AlignmentDirectional(-1.0, 0.0),
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  16.0, 12.0, 0.0, 0.0),
+                              child: Text(
+                                'กิจกรรมบูธปาเป้า',
+                                style: FlutterFlowTheme.of(context)
+                                    .labelMedium
+                                    .override(
+                                      font: GoogleFonts.readexPro(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .labelMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .labelMedium
+                                            .fontStyle,
+                                      ),
+                                      letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .labelMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .labelMedium
+                                          .fontStyle,
+                                    ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                16.0, 20.0, 16.0, 0.0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Image.network(
+                                  'https://cdn-icons-png.flaticon.com/512/6637/6637186.png',
+                                  width: 50.0,
+                                  height: 50.0,
+                                  fit: BoxFit.cover,
+                                ),
+                                Image.network(
+                                  'https://cdn-icons-png.flaticon.com/512/6637/6637209.png',
+                                  width: 50.0,
+                                  height: 50.0,
+                                  fit: BoxFit.cover,
+                                ),
+                                Image.network(
+                                  'https://cdn-icons-png.flaticon.com/512/6637/6637207.png',
+                                  width: 50.0,
+                                  height: 50.0,
+                                  fit: BoxFit.cover,
+                                ),
+                                Image.network(
+                                  'https://cdn-icons-png.flaticon.com/512/6637/6637188.png',
+                                  width: 50.0,
+                                  height: 50.0,
+                                  fit: BoxFit.cover,
+                                ),
+                                Image.network(
+                                  'https://cdn-icons-png.flaticon.com/512/6637/6637197.png',
+                                  width: 50.0,
+                                  height: 50.0,
+                                  fit: BoxFit.cover,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      ListView(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        children: [
+                          Align(
+                            alignment: AlignmentDirectional(-1.0, 0.0),
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  16.0, 12.0, 0.0, 0.0),
+                              child: Text(
+                                'กิจกรรมบูธจับฉลาก',
                                 style: FlutterFlowTheme.of(context)
                                     .labelMedium
                                     .override(

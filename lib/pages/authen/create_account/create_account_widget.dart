@@ -869,8 +869,8 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                                         .text,
                                                   ));
 
-                                              context.goNamedAuth(
-                                                  ScanBeaconWidget.routeName,
+                                              context.pushNamedAuth(
+                                                  HomeWidget.routeName,
                                                   context.mounted);
                                             } else {
                                               ScaffoldMessenger.of(context)

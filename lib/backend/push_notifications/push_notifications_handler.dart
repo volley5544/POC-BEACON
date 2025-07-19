@@ -141,6 +141,8 @@ final parametersBuilderMap =
   'SettingEvent': ParameterData.none(),
   'SettingBoothList': ParameterData.none(),
   'SettingBooth': ParameterData.none(),
+  'Onboarding05': ParameterData.none(),
+  'SettingEventListCopy': ParameterData.none(),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

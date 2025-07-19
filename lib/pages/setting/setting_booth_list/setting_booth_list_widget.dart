@@ -202,7 +202,7 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8.0),
                                     child: Image.network(
-                                      'https://images.unsplash.com/photo-1574914629385-46448b767aec?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bGF0dGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60',
+                                      'https://firebasestorage.googleapis.com/v0/b/poc-beacon-firebase.firebasestorage.app/o/joystick.jpeg?alt=media&token=420111f8-8d8e-49eb-aa7f-b9207718d8dd',
                                       width: 70.0,
                                       height: 100.0,
                                       fit: BoxFit.cover,
@@ -220,12 +220,33 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          listViewEventsRecord.eventName,
-                                          style: FlutterFlowTheme.of(context)
-                                              .titleLarge
-                                              .override(
-                                                font: GoogleFonts.outfit(
+                                        InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            context.pushNamed(
+                                                SettingBoothWidget.routeName);
+                                          },
+                                          child: Text(
+                                            listViewEventsRecord.eventName,
+                                            style: FlutterFlowTheme.of(context)
+                                                .titleLarge
+                                                .override(
+                                                  font: GoogleFonts.outfit(
+                                                    fontWeight:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .titleLarge
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .titleLarge
+                                                            .fontStyle,
+                                                  ),
+                                                  letterSpacing: 0.0,
                                                   fontWeight:
                                                       FlutterFlowTheme.of(
                                                               context)
@@ -237,16 +258,7 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                                           .titleLarge
                                                           .fontStyle,
                                                 ),
-                                                letterSpacing: 0.0,
-                                                fontWeight:
-                                                    FlutterFlowTheme.of(context)
-                                                        .titleLarge
-                                                        .fontWeight,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .titleLarge
-                                                        .fontStyle,
-                                              ),
+                                          ),
                                         ),
                                         Padding(
                                           padding:
@@ -346,11 +358,21 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0.0, 4.0, 0.0, 0.0),
-                                      child: Icon(
-                                        Icons.chevron_right_rounded,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        size: 24.0,
+                                      child: InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          context.pushNamed(
+                                              SettingBoothWidget.routeName);
+                                        },
+                                        child: Icon(
+                                          Icons.edit_note_outlined,
+                                          color: FlutterFlowTheme.of(context)
+                                              .success,
+                                          size: 24.0,
+                                        ),
                                       ),
                                     ),
                                     Padding(

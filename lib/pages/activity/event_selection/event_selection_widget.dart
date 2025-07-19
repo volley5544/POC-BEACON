@@ -205,7 +205,7 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8.0),
                                     child: Image.network(
-                                      'https://images.unsplash.com/photo-1574914629385-46448b767aec?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bGF0dGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60',
+                                      'https://firebasestorage.googleapis.com/v0/b/poc-beacon-firebase.firebasestorage.app/o/event.jpg?alt=media&token=f2bcd7e5-11fc-4601-a690-f5719c733bdc',
                                       width: 70.0,
                                       height: 100.0,
                                       fit: BoxFit.cover,

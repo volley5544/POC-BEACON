@@ -182,7 +182,13 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                       ],
                       controller: _model.tabBarController,
                       onTap: (i) async {
-                        [() async {}, () async {}][i]();
+                        [
+                          () async {},
+                          () async {
+                            context.pushNamed(
+                                SettingEventListCopyWidget.routeName);
+                          }
+                        ][i]();
                       },
                     ),
                   ),
@@ -966,16 +972,40 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        Text(
-                                                          listViewEventsRecord
-                                                              .eventName,
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .titleLarge
-                                                              .override(
-                                                                font:
-                                                                    GoogleFonts
-                                                                        .outfit(
+                                                        InkWell(
+                                                          splashColor: Colors
+                                                              .transparent,
+                                                          focusColor: Colors
+                                                              .transparent,
+                                                          hoverColor: Colors
+                                                              .transparent,
+                                                          highlightColor: Colors
+                                                              .transparent,
+                                                          onTap: () async {
+                                                            context.pushNamed(
+                                                                SettingBoothListWidget
+                                                                    .routeName);
+                                                          },
+                                                          child: Text(
+                                                            listViewEventsRecord
+                                                                .eventName,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .titleLarge
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .outfit(
+                                                                    fontWeight: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .titleLarge
+                                                                        .fontWeight,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .titleLarge
+                                                                        .fontStyle,
+                                                                  ),
+                                                                  letterSpacing:
+                                                                      0.0,
                                                                   fontWeight: FlutterFlowTheme.of(
                                                                           context)
                                                                       .titleLarge
@@ -985,17 +1015,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                       .titleLarge
                                                                       .fontStyle,
                                                                 ),
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleLarge
-                                                                    .fontWeight,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleLarge
-                                                                    .fontStyle,
-                                                              ),
+                                                          ),
                                                         ),
                                                         Padding(
                                                           padding:
@@ -1116,14 +1136,28 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                   4.0,
                                                                   0.0,
                                                                   0.0),
-                                                      child: Icon(
-                                                        Icons
-                                                            .chevron_right_rounded,
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .secondaryText,
-                                                        size: 24.0,
+                                                      child: InkWell(
+                                                        splashColor:
+                                                            Colors.transparent,
+                                                        focusColor:
+                                                            Colors.transparent,
+                                                        hoverColor:
+                                                            Colors.transparent,
+                                                        highlightColor:
+                                                            Colors.transparent,
+                                                        onTap: () async {
+                                                          context.pushNamed(
+                                                              SettingEventWidget
+                                                                  .routeName);
+                                                        },
+                                                        child: Icon(
+                                                          Icons
+                                                              .edit_note_outlined,
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .success,
+                                                          size: 24.0,
+                                                        ),
                                                       ),
                                                     ),
                                                     Padding(

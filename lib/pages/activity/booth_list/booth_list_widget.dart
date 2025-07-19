@@ -681,13 +681,29 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                   .fontStyle,
                                                         ),
                                                   ),
-                                                  Icon(
-                                                    Icons
-                                                        .keyboard_arrow_right_rounded,
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .secondaryText,
-                                                    size: 24.0,
+                                                  InkWell(
+                                                    splashColor:
+                                                        Colors.transparent,
+                                                    focusColor:
+                                                        Colors.transparent,
+                                                    hoverColor:
+                                                        Colors.transparent,
+                                                    highlightColor:
+                                                        Colors.transparent,
+                                                    onTap: () async {
+                                                      context.pushNamed(
+                                                          BoothDetailWidget
+                                                              .routeName);
+                                                    },
+                                                    child: Icon(
+                                                      Icons
+                                                          .keyboard_arrow_right_rounded,
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryText,
+                                                      size: 24.0,
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -718,7 +734,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                             BorderRadius
                                                                 .circular(20.0),
                                                         child: Image.network(
-                                                          'https://images.unsplash.com/photo-1502462041640-b3d7e50d0662?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwyM3x8Y29mZmVlfGVufDB8fHx8MTc1MjY3MDY4N3ww&ixlib=rb-4.1.0&q=80&w=1080',
+                                                          'https://firebasestorage.googleapis.com/v0/b/poc-beacon-firebase.firebasestorage.app/o/joystick.jpeg?alt=media&token=420111f8-8d8e-49eb-aa7f-b9207718d8dd',
                                                           width: 100.0,
                                                           height: 100.0,
                                                           fit: BoxFit.cover,
@@ -903,7 +919,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          'โยนบอลใส่ตระกร้า',
+                                                          'ปาเป้า',
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .headlineSmall
@@ -1006,7 +1022,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                             BorderRadius
                                                                 .circular(20.0),
                                                         child: Image.network(
-                                                          'https://images.unsplash.com/photo-1502462041640-b3d7e50d0662?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwyM3x8Y29mZmVlfGVufDB8fHx8MTc1MjY3MDY4N3ww&ixlib=rb-4.1.0&q=80&w=1080',
+                                                          'https://firebasestorage.googleapis.com/v0/b/poc-beacon-firebase.firebasestorage.app/o/joystick.jpeg?alt=media&token=420111f8-8d8e-49eb-aa7f-b9207718d8dd',
                                                           width: 100.0,
                                                           height: 100.0,
                                                           fit: BoxFit.cover,
@@ -1191,7 +1207,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          'โยนบอลใส่ตระกร้า',
+                                                          'จับฉลาก',
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .headlineSmall
@@ -1294,7 +1310,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                             BorderRadius
                                                                 .circular(20.0),
                                                         child: Image.network(
-                                                          'https://images.unsplash.com/photo-1502462041640-b3d7e50d0662?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwyM3x8Y29mZmVlfGVufDB8fHx8MTc1MjY3MDY4N3ww&ixlib=rb-4.1.0&q=80&w=1080',
+                                                          'https://firebasestorage.googleapis.com/v0/b/poc-beacon-firebase.firebasestorage.app/o/joystick.jpeg?alt=media&token=420111f8-8d8e-49eb-aa7f-b9207718d8dd',
                                                           width: 100.0,
                                                           height: 100.0,
                                                           fit: BoxFit.cover,

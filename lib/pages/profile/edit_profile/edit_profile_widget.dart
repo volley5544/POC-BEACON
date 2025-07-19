@@ -235,7 +235,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                             fadeInDuration: Duration(milliseconds: 500),
                             fadeOutDuration: Duration(milliseconds: 500),
                             imageUrl:
-                                'https://images.unsplash.com/photo-1536164261511-3a17e671d380?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=630&q=80',
+                                'https://firebasestorage.googleapis.com/v0/b/poc-beacon-firebase.firebasestorage.app/o/bow.jpeg?alt=media&token=4c37ad8a-c646-4f6f-9ab9-5a0033d45cbd',
                             fit: BoxFit.fitWidth,
                           ),
                         ),

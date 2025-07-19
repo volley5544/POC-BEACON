@@ -130,7 +130,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                 fadeInDuration: Duration(milliseconds: 500),
                                 fadeOutDuration: Duration(milliseconds: 500),
                                 imageUrl:
-                                    'https://images.unsplash.com/photo-1531123414780-f74242c2b052?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDV8fHByb2ZpbGV8ZW58MHx8MHx8&auto=format&fit=crop&w=900&q=60',
+                                    'https://firebasestorage.googleapis.com/v0/b/poc-beacon-firebase.firebasestorage.app/o/bow.jpeg?alt=media&token=4c37ad8a-c646-4f6f-9ab9-5a0033d45cbd',
                                 width: 60.0,
                                 height: 60.0,
                                 fit: BoxFit.cover,
@@ -147,7 +147,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Joy Augustin',
+                                'นิฤมล เนมียะ',
                                 style: FlutterFlowTheme.of(context)
                                     .headlineSmall
                                     .override(
@@ -172,7 +172,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     0.0, 4.0, 0.0, 0.0),
                                 child: Text(
-                                  'joy@augustin.com',
+                                  '2669600724@stou.ac.th',
                                   style: FlutterFlowTheme.of(context)
                                       .labelMedium
                                       .override(

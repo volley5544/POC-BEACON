@@ -33,3 +33,6 @@ export '/pages/setting/setting_booth_list/setting_booth_list_widget.dart'
     show SettingBoothListWidget;
 export '/pages/setting/setting_booth/setting_booth_widget.dart'
     show SettingBoothWidget;
+export '/onboarding05/onboarding05_widget.dart' show Onboarding05Widget;
+export '/pages/setting/setting_event_list_copy/setting_event_list_copy_widget.dart'
+    show SettingEventListCopyWidget;
