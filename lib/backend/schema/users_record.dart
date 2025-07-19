@@ -70,6 +70,16 @@ class UsersRecord extends FirestoreRecord {
   String get fcmToken => _fcmToken ?? '';
   bool hasFcmToken() => _fcmToken != null;
 
+  // "first_name" field.
+  String? _firstName;
+  String get firstName => _firstName ?? '';
+  bool hasFirstName() => _firstName != null;
+
+  // "last_name" field.
+  String? _lastName;
+  String get lastName => _lastName ?? '';
+  bool hasLastName() => _lastName != null;
+
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
     _displayName = snapshotData['display_name'] as String?;
@@ -82,6 +92,8 @@ class UsersRecord extends FirestoreRecord {
     _userName = snapshotData['user_name'] as String?;
     _password = snapshotData['password'] as String?;
     _fcmToken = snapshotData['fcm_token'] as String?;
+    _firstName = snapshotData['first_name'] as String?;
+    _lastName = snapshotData['last_name'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -129,6 +141,8 @@ Map<String, dynamic> createUsersRecordData({
   String? userName,
   String? password,
   String? fcmToken,
+  String? firstName,
+  String? lastName,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -143,6 +157,8 @@ Map<String, dynamic> createUsersRecordData({
       'user_name': userName,
       'password': password,
       'fcm_token': fcmToken,
+      'first_name': firstName,
+      'last_name': lastName,
     }.withoutNulls,
   );
 
@@ -164,7 +180,9 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e1?.bio == e2?.bio &&
         e1?.userName == e2?.userName &&
         e1?.password == e2?.password &&
-        e1?.fcmToken == e2?.fcmToken;
+        e1?.fcmToken == e2?.fcmToken &&
+        e1?.firstName == e2?.firstName &&
+        e1?.lastName == e2?.lastName;
   }
 
   @override
@@ -179,7 +197,9 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e?.bio,
         e?.userName,
         e?.password,
-        e?.fcmToken
+        e?.fcmToken,
+        e?.firstName,
+        e?.lastName
       ]);
 
   @override

@@ -79,20 +79,18 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       refreshListenable: appStateNotifier,
       navigatorKey: appNavigatorKey,
       errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? NavBarPage() : LoginPageWidget(),
+          appStateNotifier.loggedIn ? NavBarPage() : LoginWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? NavBarPage() : LoginPageWidget(),
+              appStateNotifier.loggedIn ? NavBarPage() : LoginWidget(),
         ),
         FFRoute(
           name: HomePageWidget.routeName,
           path: HomePageWidget.routePath,
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'HomePage')
-              : HomePageWidget(),
+          builder: (context, params) => HomePageWidget(),
         ),
         FFRoute(
           name: TestWidget.routeName,
@@ -105,24 +103,103 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => LoginPageWidget(),
         ),
         FFRoute(
-            name: PracticePageWidget.routeName,
-            path: PracticePageWidget.routePath,
-            builder: (context, params) => NavBarPage(
-                  initialPage: '',
-                  page: PracticePageWidget(),
-                )),
+          name: PracticePageWidget.routeName,
+          path: PracticePageWidget.routePath,
+          builder: (context, params) => PracticePageWidget(),
+        ),
         FFRoute(
           name: ScanBeaconWidget.routeName,
           path: ScanBeaconWidget.routePath,
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'scan_beacon')
-              : ScanBeaconWidget(),
+          builder: (context, params) => ScanBeaconWidget(),
         ),
         FFRoute(
-          name: SignInWidget.routeName,
-          path: SignInWidget.routePath,
-          builder: (context, params) => SignInWidget(),
-        )
+          name: Checkout3Widget.routeName,
+          path: Checkout3Widget.routePath,
+          builder: (context, params) => Checkout3Widget(),
+        ),
+        FFRoute(
+          name: CreateAccountWidget.routeName,
+          path: CreateAccountWidget.routePath,
+          builder: (context, params) => CreateAccountWidget(),
+        ),
+        FFRoute(
+          name: LoginWidget.routeName,
+          path: LoginWidget.routePath,
+          builder: (context, params) => LoginWidget(),
+        ),
+        FFRoute(
+          name: ForgotPasswordWidget.routeName,
+          path: ForgotPasswordWidget.routePath,
+          builder: (context, params) => ForgotPasswordWidget(),
+        ),
+        FFRoute(
+          name: EventSelectionWidget.routeName,
+          path: EventSelectionWidget.routePath,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'EventSelection')
+              : EventSelectionWidget(),
+        ),
+        FFRoute(
+          name: HomeWidget.routeName,
+          path: HomeWidget.routePath,
+          builder: (context, params) =>
+              params.isEmpty ? NavBarPage(initialPage: 'Home') : HomeWidget(),
+        ),
+        FFRoute(
+          name: EditProfileWidget.routeName,
+          path: EditProfileWidget.routePath,
+          builder: (context, params) => EditProfileWidget(),
+        ),
+        FFRoute(
+          name: ProfileWidget.routeName,
+          path: ProfileWidget.routePath,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'Profile')
+              : ProfileWidget(),
+        ),
+        FFRoute(
+            name: ActivityListWidget.routeName,
+            path: ActivityListWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: ActivityListWidget(
+                    eventId: params.getParam(
+                      'eventId',
+                      ParamType.int,
+                    ),
+                  ),
+                )),
+        FFRoute(
+          name: ActivityDetailWidget.routeName,
+          path: ActivityDetailWidget.routePath,
+          builder: (context, params) => ActivityDetailWidget(),
+        ),
+        FFRoute(
+          name: SuccessInprocessWidget.routeName,
+          path: SuccessInprocessWidget.routePath,
+          builder: (context, params) => SuccessInprocessWidget(),
+        ),
+        FFRoute(
+            name: SuccessSurveyWidget.routeName,
+            path: SuccessSurveyWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SuccessSurveyWidget(),
+                )),
+        FFRoute(
+            name: SurveyWidget.routeName,
+            path: SurveyWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SurveyWidget(),
+                )),
+        FFRoute(
+            name: SettingDetailWidget.routeName,
+            path: SettingDetailWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SettingDetailWidget(),
+                ))
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
 
@@ -292,7 +369,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
-            return '/loginPage';
+            return '/login';
           }
           return null;
         },
