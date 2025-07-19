@@ -4,28 +4,28 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'activity_detail_model.dart';
-export 'activity_detail_model.dart';
+import 'booth_detail_model.dart';
+export 'booth_detail_model.dart';
 
-class ActivityDetailWidget extends StatefulWidget {
-  const ActivityDetailWidget({super.key});
+class BoothDetailWidget extends StatefulWidget {
+  const BoothDetailWidget({super.key});
 
-  static String routeName = 'ActivityDetail';
-  static String routePath = '/activityDetail';
+  static String routeName = 'BoothDetail';
+  static String routePath = '/boothDetail';
 
   @override
-  State<ActivityDetailWidget> createState() => _ActivityDetailWidgetState();
+  State<BoothDetailWidget> createState() => _BoothDetailWidgetState();
 }
 
-class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
-  late ActivityDetailModel _model;
+class _BoothDetailWidgetState extends State<BoothDetailWidget> {
+  late BoothDetailModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => ActivityDetailModel());
+    _model = createModel(context, () => BoothDetailModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -65,7 +65,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
             },
           ),
           title: Text(
-            'รายละเอียดกิจกรรม',
+            'รายละเอียดบูธ',
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   font: GoogleFonts.outfit(
                     fontWeight:
@@ -217,7 +217,7 @@ class _ActivityDetailWidgetState extends State<ActivityDetailWidget> {
                             onPressed: () {
                               print('Button pressed ...');
                             },
-                            text: 'ทำกิจกรรม',
+                            text: 'เช็คอิน',
                             options: FFButtonOptions(
                               width: double.infinity,
                               height: 48.0,

@@ -158,11 +158,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               : ProfileWidget(),
         ),
         FFRoute(
-            name: ActivityListWidget.routeName,
-            path: ActivityListWidget.routePath,
+            name: BoothListWidget.routeName,
+            path: BoothListWidget.routePath,
             builder: (context, params) => NavBarPage(
                   initialPage: '',
-                  page: ActivityListWidget(
+                  page: BoothListWidget(
                     eventId: params.getParam(
                       'eventId',
                       ParamType.int,
@@ -170,9 +170,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   ),
                 )),
         FFRoute(
-          name: ActivityDetailWidget.routeName,
-          path: ActivityDetailWidget.routePath,
-          builder: (context, params) => ActivityDetailWidget(),
+          name: BoothDetailWidget.routeName,
+          path: BoothDetailWidget.routePath,
+          builder: (context, params) => BoothDetailWidget(),
         ),
         FFRoute(
           name: SuccessInprocessWidget.routeName,
@@ -194,11 +194,32 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   page: SurveyWidget(),
                 )),
         FFRoute(
-            name: SettingDetailWidget.routeName,
-            path: SettingDetailWidget.routePath,
+            name: SettingEventListWidget.routeName,
+            path: SettingEventListWidget.routePath,
             builder: (context, params) => NavBarPage(
                   initialPage: '',
-                  page: SettingDetailWidget(),
+                  page: SettingEventListWidget(),
+                )),
+        FFRoute(
+            name: SettingEventWidget.routeName,
+            path: SettingEventWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SettingEventWidget(),
+                )),
+        FFRoute(
+          name: SettingBoothListWidget.routeName,
+          path: SettingBoothListWidget.routePath,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'SettingBoothList')
+              : SettingBoothListWidget(),
+        ),
+        FFRoute(
+            name: SettingBoothWidget.routeName,
+            path: SettingBoothWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SettingBoothWidget(),
                 ))
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

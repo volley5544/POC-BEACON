@@ -1,4 +1,5 @@
 import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
@@ -6,28 +7,28 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'event_selection_model.dart';
-export 'event_selection_model.dart';
+import 'setting_booth_list_model.dart';
+export 'setting_booth_list_model.dart';
 
-class EventSelectionWidget extends StatefulWidget {
-  const EventSelectionWidget({super.key});
+class SettingBoothListWidget extends StatefulWidget {
+  const SettingBoothListWidget({super.key});
 
-  static String routeName = 'EventSelection';
-  static String routePath = '/eventSelection';
+  static String routeName = 'SettingBoothList';
+  static String routePath = '/settingActivityList';
 
   @override
-  State<EventSelectionWidget> createState() => _EventSelectionWidgetState();
+  State<SettingBoothListWidget> createState() => _SettingBoothListWidgetState();
 }
 
-class _EventSelectionWidgetState extends State<EventSelectionWidget> {
-  late EventSelectionModel _model;
+class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
+  late SettingBoothListModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => EventSelectionModel());
+    _model = createModel(context, () => SettingBoothListModel());
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -49,11 +50,23 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            context.pushNamed(SettingEventWidget.routeName);
+          },
+          backgroundColor: FlutterFlowTheme.of(context).primary,
+          elevation: 8.0,
+          child: Icon(
+            Icons.add_rounded,
+            color: FlutterFlowTheme.of(context).info,
+            size: 24.0,
+          ),
+        ),
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
           title: Text(
-            'เลือกกิจกรรม',
+            'จัดการบูธ​ (กิจกรรม 1)',
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   font: GoogleFonts.outfit(
                     fontWeight:
@@ -70,23 +83,7 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
                       FlutterFlowTheme.of(context).headlineMedium.fontStyle,
                 ),
           ),
-          actions: [
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Container(
-                width: 60.0,
-                height: 60.0,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: Image.network(
-                  'https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTR8fHVzZXJ8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ],
+          actions: [],
           centerTitle: false,
           elevation: 0.0,
         ),
@@ -98,7 +95,7 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 0.0, 0.0),
                 child: Text(
-                  'เลือกกิจกรรมที่คุณสนใจ',
+                  'เลือกบูธที่ต้องการจัดการ',
                   style: FlutterFlowTheme.of(context).titleMedium.override(
                         font: GoogleFonts.readexPro(
                           fontWeight: FlutterFlowTheme.of(context)
@@ -386,6 +383,19 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
                                                       .fontStyle,
                                             ),
                                       ),
+                                    ),
+                                    FlutterFlowIconButton(
+                                      borderRadius: 8.0,
+                                      buttonSize: 30.0,
+                                      icon: Icon(
+                                        Icons.delete_forever,
+                                        color:
+                                            FlutterFlowTheme.of(context).error,
+                                        size: 24.0,
+                                      ),
+                                      onPressed: () {
+                                        print('IconButton pressed ...');
+                                      },
                                     ),
                                   ],
                                 ),

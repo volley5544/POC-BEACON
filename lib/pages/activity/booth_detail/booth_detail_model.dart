@@ -1,8 +1,8 @@
 import '/flutter_flow/flutter_flow_util.dart';
-import 'activity_detail_widget.dart' show ActivityDetailWidget;
+import 'booth_detail_widget.dart' show BoothDetailWidget;
 import 'package:flutter/material.dart';
 
-class ActivityDetailModel extends FlutterFlowModel<ActivityDetailWidget> {
+class BoothDetailModel extends FlutterFlowModel<BoothDetailWidget> {
   @override
   void initState(BuildContext context) {}
 

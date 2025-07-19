@@ -297,7 +297,7 @@ class _SuccessSurveyWidgetState extends State<SuccessSurveyWidget>
                               alignment: AlignmentDirectional(0.0, -1.0),
                               child: Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 44.0, 0.0, 0.0),
+                                    0.0, 4.0, 0.0, 0.0),
                                 child: Container(
                                   width: 120.0,
                                   height: 120.0,
@@ -398,7 +398,7 @@ class _SuccessSurveyWidgetState extends State<SuccessSurveyWidget>
                             FFButtonWidget(
                               onPressed: () async {
                                 context.pushNamed(
-                                  ActivityListWidget.routeName,
+                                  BoothListWidget.routeName,
                                   queryParameters: {
                                     'eventId': serializeParam(
                                       0,

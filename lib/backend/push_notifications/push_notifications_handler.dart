@@ -128,16 +128,19 @@ final parametersBuilderMap =
   'Home': ParameterData.none(),
   'EditProfile': ParameterData.none(),
   'Profile': ParameterData.none(),
-  'ActivityList': (data) async => ParameterData(
+  'BoothList': (data) async => ParameterData(
         allParams: {
           'eventId': getParameter<int>(data, 'eventId'),
         },
       ),
-  'ActivityDetail': ParameterData.none(),
+  'BoothDetail': ParameterData.none(),
   'SuccessInprocess': ParameterData.none(),
   'SuccessSurvey': ParameterData.none(),
   'Survey': ParameterData.none(),
-  'SettingDetail': ParameterData.none(),
+  'SettingEventList': ParameterData.none(),
+  'SettingEvent': ParameterData.none(),
+  'SettingBoothList': ParameterData.none(),
+  'SettingBooth': ParameterData.none(),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

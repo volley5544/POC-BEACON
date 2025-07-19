@@ -232,7 +232,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                   hoverColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onTap: () async {
-                    context.pushNamed(SettingDetailWidget.routeName);
+                    context.pushNamed(SettingEventListWidget.routeName);
                   },
                   child: Container(
                     width: double.infinity,
@@ -267,7 +267,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   12.0, 0.0, 0.0, 0.0),
                               child: Text(
-                                'แดชบอร์ด & ตั้งค่าผู้ดูแล',
+                                'แดชบอร์ด & จัดการ',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyLarge
                                     .override(

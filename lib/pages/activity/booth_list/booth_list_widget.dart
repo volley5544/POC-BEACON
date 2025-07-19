@@ -7,27 +7,27 @@ import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'activity_list_model.dart';
-export 'activity_list_model.dart';
+import 'booth_list_model.dart';
+export 'booth_list_model.dart';
 
-class ActivityListWidget extends StatefulWidget {
-  const ActivityListWidget({
+class BoothListWidget extends StatefulWidget {
+  const BoothListWidget({
     super.key,
     int? eventId,
   }) : this.eventId = eventId ?? 1;
 
   final int eventId;
 
-  static String routeName = 'ActivityList';
-  static String routePath = '/activityList';
+  static String routeName = 'BoothList';
+  static String routePath = '/boothList';
 
   @override
-  State<ActivityListWidget> createState() => _ActivityListWidgetState();
+  State<BoothListWidget> createState() => _BoothListWidgetState();
 }
 
-class _ActivityListWidgetState extends State<ActivityListWidget>
+class _BoothListWidgetState extends State<BoothListWidget>
     with TickerProviderStateMixin {
-  late ActivityListModel _model;
+  late BoothListModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -36,7 +36,7 @@ class _ActivityListWidgetState extends State<ActivityListWidget>
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => ActivityListModel());
+    _model = createModel(context, () => BoothListModel());
 
     animationsMap.addAll({
       'containerOnPageLoadAnimation4': AnimationInfo(

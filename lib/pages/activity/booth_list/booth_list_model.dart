@@ -1,9 +1,9 @@
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
-import 'activity_list_widget.dart' show ActivityListWidget;
+import 'booth_list_widget.dart' show BoothListWidget;
 import 'package:flutter/material.dart';
 
-class ActivityListModel extends FlutterFlowModel<ActivityListWidget> {
+class BoothListModel extends FlutterFlowModel<BoothListWidget> {
   @override
   void initState(BuildContext context) {}
 

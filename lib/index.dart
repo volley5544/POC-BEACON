@@ -17,14 +17,19 @@ export '/pages/authen/home/home_widget.dart' show HomeWidget;
 export '/pages/profile/edit_profile/edit_profile_widget.dart'
     show EditProfileWidget;
 export '/pages/profile/profile/profile_widget.dart' show ProfileWidget;
-export '/pages/activity/activity_list/activity_list_widget.dart'
-    show ActivityListWidget;
-export '/pages/activity/activity_detail/activity_detail_widget.dart'
-    show ActivityDetailWidget;
+export '/pages/activity/booth_list/booth_list_widget.dart' show BoothListWidget;
+export '/pages/activity/booth_detail/booth_detail_widget.dart'
+    show BoothDetailWidget;
 export '/pages/activity/success_inprocess/success_inprocess_widget.dart'
     show SuccessInprocessWidget;
 export '/pages/survey/success_survey/success_survey_widget.dart'
     show SuccessSurveyWidget;
 export '/pages/survey/survey/survey_widget.dart' show SurveyWidget;
-export '/pages/setting/setting_detail/setting_detail_widget.dart'
-    show SettingDetailWidget;
+export '/pages/setting/setting_event_list/setting_event_list_widget.dart'
+    show SettingEventListWidget;
+export '/pages/setting/setting_event/setting_event_widget.dart'
+    show SettingEventWidget;
+export '/pages/setting/setting_booth_list/setting_booth_list_widget.dart'
+    show SettingBoothListWidget;
+export '/pages/setting/setting_booth/setting_booth_widget.dart'
+    show SettingBoothWidget;
