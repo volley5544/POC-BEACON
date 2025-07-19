@@ -234,6 +234,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             builder: (context, params) => NavBarPage(
                   initialPage: '',
                   page: SettingEventListCopyWidget(),
+                )),
+        FFRoute(
+            name: SettingEventListCopy2Widget.routeName,
+            path: SettingEventListCopy2Widget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SettingEventListCopy2Widget(),
                 ))
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

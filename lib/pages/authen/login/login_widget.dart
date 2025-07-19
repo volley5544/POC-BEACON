@@ -452,6 +452,7 @@ class _LoginWidgetState extends State<LoginWidget>
                                 size: 15.0,
                               ),
                               options: FFButtonOptions(
+                                width: double.infinity,
                                 height: 40.0,
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     200.0, 0.0, 6.0, 0.0),

@@ -54,7 +54,6 @@ class SettingEventListCopyModel
     return controller
       ..addPageRequestListener(
         (nextPageMarker) => queryEventsRecordPage(
-          queryBuilder: (_) => listViewPagingQuery2 ??= query,
           nextPageMarker: nextPageMarker,
           streamSubscriptions: listViewStreamSubscriptions2,
           controller: controller,

@@ -15,47 +15,55 @@ class BoothsRecord extends FirestoreRecord {
     _initializeFields();
   }
 
-  // "id" field.
-  String? _id;
-  String get id => _id ?? '';
-  bool hasId() => _id != null;
+  // "booth_id" field.
+  int? _boothId;
+  int get boothId => _boothId ?? 0;
+  bool hasBoothId() => _boothId != null;
 
-  // "name" field.
-  String? _name;
-  String get name => _name ?? '';
-  bool hasName() => _name != null;
-
-  // "location" field.
-  LatLng? _location;
-  LatLng? get location => _location;
-  bool hasLocation() => _location != null;
+  // "booth_name" field.
+  String? _boothName;
+  String get boothName => _boothName ?? '';
+  bool hasBoothName() => _boothName != null;
 
   // "description" field.
   String? _description;
   String get description => _description ?? '';
   bool hasDescription() => _description != null;
 
-  // "visitor_count" field.
-  int? _visitorCount;
-  int get visitorCount => _visitorCount ?? 0;
-  bool hasVisitorCount() => _visitorCount != null;
+  // "notification_distance" field.
+  int? _notificationDistance;
+  int get notificationDistance => _notificationDistance ?? 0;
+  bool hasNotificationDistance() => _notificationDistance != null;
 
-  // "last_updated" field.
-  DateTime? _lastUpdated;
-  DateTime? get lastUpdated => _lastUpdated;
-  bool hasLastUpdated() => _lastUpdated != null;
+  // "associated_event_id" field.
+  String? _associatedEventId;
+  String get associatedEventId => _associatedEventId ?? '';
+  bool hasAssociatedEventId() => _associatedEventId != null;
+
+  // "created_at" field.
+  DateTime? _createdAt;
+  DateTime? get createdAt => _createdAt;
+  bool hasCreatedAt() => _createdAt != null;
+
+  DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
-    _id = snapshotData['id'] as String?;
-    _name = snapshotData['name'] as String?;
-    _location = snapshotData['location'] as LatLng?;
+    _boothId = castToType<int>(snapshotData['booth_id']);
+    _boothName = snapshotData['booth_name'] as String?;
     _description = snapshotData['description'] as String?;
-    _visitorCount = castToType<int>(snapshotData['visitor_count']);
-    _lastUpdated = snapshotData['last_updated'] as DateTime?;
+    _notificationDistance =
+        castToType<int>(snapshotData['notification_distance']);
+    _associatedEventId = snapshotData['associated_event_id'] as String?;
+    _createdAt = snapshotData['created_at'] as DateTime?;
   }
 
-  static CollectionReference get collection =>
-      FirebaseFirestore.instance.collection('Booths');
+  static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
+      parent != null
+          ? parent.collection('booths')
+          : FirebaseFirestore.instance.collectionGroup('booths');
+
+  static DocumentReference createDoc(DocumentReference parent, {String? id}) =>
+      parent.collection('booths').doc(id);
 
   static Stream<BoothsRecord> getDocument(DocumentReference ref) =>
       ref.snapshots().map((s) => BoothsRecord.fromSnapshot(s));
@@ -88,21 +96,21 @@ class BoothsRecord extends FirestoreRecord {
 }
 
 Map<String, dynamic> createBoothsRecordData({
-  String? id,
-  String? name,
-  LatLng? location,
+  int? boothId,
+  String? boothName,
   String? description,
-  int? visitorCount,
-  DateTime? lastUpdated,
+  int? notificationDistance,
+  String? associatedEventId,
+  DateTime? createdAt,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
-      'id': id,
-      'name': name,
-      'location': location,
+      'booth_id': boothId,
+      'booth_name': boothName,
       'description': description,
-      'visitor_count': visitorCount,
-      'last_updated': lastUpdated,
+      'notification_distance': notificationDistance,
+      'associated_event_id': associatedEventId,
+      'created_at': createdAt,
     }.withoutNulls,
   );
 
@@ -114,22 +122,22 @@ class BoothsRecordDocumentEquality implements Equality<BoothsRecord> {
 
   @override
   bool equals(BoothsRecord? e1, BoothsRecord? e2) {
-    return e1?.id == e2?.id &&
-        e1?.name == e2?.name &&
-        e1?.location == e2?.location &&
+    return e1?.boothId == e2?.boothId &&
+        e1?.boothName == e2?.boothName &&
         e1?.description == e2?.description &&
-        e1?.visitorCount == e2?.visitorCount &&
-        e1?.lastUpdated == e2?.lastUpdated;
+        e1?.notificationDistance == e2?.notificationDistance &&
+        e1?.associatedEventId == e2?.associatedEventId &&
+        e1?.createdAt == e2?.createdAt;
   }
 
   @override
   int hash(BoothsRecord? e) => const ListEquality().hash([
-        e?.id,
-        e?.name,
-        e?.location,
+        e?.boothId,
+        e?.boothName,
         e?.description,
-        e?.visitorCount,
-        e?.lastUpdated
+        e?.notificationDistance,
+        e?.associatedEventId,
+        e?.createdAt
       ]);
 
   @override

@@ -36,3 +36,5 @@ export '/pages/setting/setting_booth/setting_booth_widget.dart'
 export '/onboarding05/onboarding05_widget.dart' show Onboarding05Widget;
 export '/pages/setting/setting_event_list_copy/setting_event_list_copy_widget.dart'
     show SettingEventListCopyWidget;
+export '/setting_event_list_copy2/setting_event_list_copy2_widget.dart'
+    show SettingEventListCopy2Widget;

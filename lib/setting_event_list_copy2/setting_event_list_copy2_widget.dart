@@ -12,22 +12,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'setting_event_list_model.dart';
-export 'setting_event_list_model.dart';
+import 'setting_event_list_copy2_model.dart';
+export 'setting_event_list_copy2_model.dart';
 
-class SettingEventListWidget extends StatefulWidget {
-  const SettingEventListWidget({super.key});
+class SettingEventListCopy2Widget extends StatefulWidget {
+  const SettingEventListCopy2Widget({super.key});
 
-  static String routeName = 'SettingEventList';
-  static String routePath = '/settingEventList';
+  static String routeName = 'SettingEventListCopy2';
+  static String routePath = '/settingEventListCopy2';
 
   @override
-  State<SettingEventListWidget> createState() => _SettingEventListWidgetState();
+  State<SettingEventListCopy2Widget> createState() =>
+      _SettingEventListCopy2WidgetState();
 }
 
-class _SettingEventListWidgetState extends State<SettingEventListWidget>
-    with TickerProviderStateMixin {
-  late SettingEventListModel _model;
+class _SettingEventListCopy2WidgetState
+    extends State<SettingEventListCopy2Widget> with TickerProviderStateMixin {
+  late SettingEventListCopy2Model _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -36,7 +37,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => SettingEventListModel());
+    _model = createModel(context, () => SettingEventListCopy2Model());
 
     _model.tabBarController = TabController(
       vsync: this,

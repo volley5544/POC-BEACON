@@ -1,5 +1,4 @@
 import '/auth/firebase_auth/auth_util.dart';
-import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -852,22 +851,6 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                               if (user == null) {
                                                 return;
                                               }
-
-                                              await UsersRecord.collection
-                                                  .doc(user.uid)
-                                                  .update(createUsersRecordData(
-                                                    email: _model
-                                                        .emailAddressTextController
-                                                        .text,
-                                                    displayName:
-                                                        '${_model.firstNameTextController.text} ${_model.lastNameTextController.text}',
-                                                    firstName: _model
-                                                        .firstNameTextController
-                                                        .text,
-                                                    lastName: _model
-                                                        .lastNameTextController
-                                                        .text,
-                                                  ));
 
                                               context.pushNamedAuth(
                                                   HomeWidget.routeName,

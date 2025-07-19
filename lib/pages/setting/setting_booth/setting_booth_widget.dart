@@ -28,9 +28,9 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget> {
     super.initState();
     _model = createModel(context, () => SettingBoothModel());
 
-    _model.eventNameTextController ??= TextEditingController();
-    _model.eventNameFocusNode ??= FocusNode();
-    _model.eventNameFocusNode!.addListener(() => safeSetState(() {}));
+    _model.boothNameTextController ??= TextEditingController();
+    _model.boothNameFocusNode ??= FocusNode();
+    _model.boothNameFocusNode!.addListener(() => safeSetState(() {}));
     _model.descriptionTextController ??= TextEditingController();
     _model.descriptionFocusNode ??= FocusNode();
     _model.descriptionFocusNode!.addListener(() => safeSetState(() {}));
@@ -138,8 +138,8 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   TextFormField(
-                                    controller: _model.eventNameTextController,
-                                    focusNode: _model.eventNameFocusNode,
+                                    controller: _model.boothNameTextController,
+                                    focusNode: _model.boothNameFocusNode,
                                     autofocus: true,
                                     textCapitalization:
                                         TextCapitalization.words,
@@ -258,7 +258,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget> {
                                             BorderRadius.circular(12.0),
                                       ),
                                       filled: true,
-                                      fillColor: (_model.eventNameFocusNode
+                                      fillColor: (_model.boothNameFocusNode
                                                   ?.hasFocus ??
                                               false)
                                           ? FlutterFlowTheme.of(context).accent1
@@ -294,7 +294,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget> {
                                     cursorColor:
                                         FlutterFlowTheme.of(context).primary,
                                     validator: _model
-                                        .eventNameTextControllerValidator
+                                        .boothNameTextControllerValidator
                                         .asValidator(context),
                                     inputFormatters: [
                                       if (!isAndroid && !isiOS)
@@ -733,11 +733,8 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget> {
                     padding:
                         EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 12.0),
                     child: FFButtonWidget(
-                      onPressed: () async {
-                        if (_model.formKey.currentState == null ||
-                            !_model.formKey.currentState!.validate()) {
-                          return;
-                        }
+                      onPressed: () {
+                        print('Button pressed ...');
                       },
                       text: 'บันทึก',
                       options: FFButtonOptions(

@@ -185,8 +185,7 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
                               PagedListView<DocumentSnapshot<Object?>?,
                                   EventsRecord>(
                                 pagingController: _model.setListViewController2(
-                                  EventsRecord.collection
-                                      .orderBy('start_date', descending: true),
+                                  EventsRecord.collection,
                                 ),
                                 padding: EdgeInsets.zero,
                                 primary: false,
@@ -406,16 +405,7 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
                                                                       8.0,
                                                                       0.0),
                                                           child: AutoSizeText(
-                                                            valueOrDefault<
-                                                                String>(
-                                                              listViewEventsRecord
-                                                                  .startDate
-                                                                  ?.toString(),
-                                                              '1',
-                                                            ).maybeHandleOverflow(
-                                                              maxChars: 70,
-                                                              replacement: '…',
-                                                            ),
+                                                            'bb',
                                                             textAlign:
                                                                 TextAlign.start,
                                                             style: FlutterFlowTheme

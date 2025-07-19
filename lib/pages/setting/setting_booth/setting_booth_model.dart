@@ -6,11 +6,11 @@ class SettingBoothModel extends FlutterFlowModel<SettingBoothWidget> {
   ///  State fields for stateful widgets in this page.
 
   final formKey = GlobalKey<FormState>();
-  // State field(s) for eventName widget.
-  FocusNode? eventNameFocusNode;
-  TextEditingController? eventNameTextController;
-  String? Function(BuildContext, String?)? eventNameTextControllerValidator;
-  String? _eventNameTextControllerValidator(BuildContext context, String? val) {
+  // State field(s) for boothName widget.
+  FocusNode? boothNameFocusNode;
+  TextEditingController? boothNameTextController;
+  String? Function(BuildContext, String?)? boothNameTextControllerValidator;
+  String? _boothNameTextControllerValidator(BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
       return 'Please enter the patients full name.';
     }
@@ -40,14 +40,14 @@ class SettingBoothModel extends FlutterFlowModel<SettingBoothWidget> {
 
   @override
   void initState(BuildContext context) {
-    eventNameTextControllerValidator = _eventNameTextControllerValidator;
+    boothNameTextControllerValidator = _boothNameTextControllerValidator;
     remindAmountTextControllerValidator = _remindAmountTextControllerValidator;
   }
 
   @override
   void dispose() {
-    eventNameFocusNode?.dispose();
-    eventNameTextController?.dispose();
+    boothNameFocusNode?.dispose();
+    boothNameTextController?.dispose();
 
     descriptionFocusNode?.dispose();
     descriptionTextController?.dispose();
