@@ -1,3 +1,4 @@
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'setting_booth_widget.dart' show SettingBoothWidget;
 import 'package:flutter/material.dart';
@@ -37,6 +38,8 @@ class SettingBoothModel extends FlutterFlowModel<SettingBoothWidget> {
 
   // State field(s) for Switch widget.
   bool? switchValue;
+  // Stores action output result for [Backend Call - Create Document] action in Button widget.
+  BoothsRecord? createBoothDoc;
 
   @override
   void initState(BuildContext context) {

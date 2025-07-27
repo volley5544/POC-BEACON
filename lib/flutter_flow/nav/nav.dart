@@ -88,9 +88,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               appStateNotifier.loggedIn ? NavBarPage() : LoginWidget(),
         ),
         FFRoute(
-          name: HomePageWidget.routeName,
-          path: HomePageWidget.routePath,
-          builder: (context, params) => HomePageWidget(),
+          name: HomePagexxxxWidget.routeName,
+          path: HomePagexxxxWidget.routePath,
+          builder: (context, params) => HomePagexxxxWidget(),
         ),
         FFRoute(
           name: TestWidget.routeName,
@@ -140,24 +140,44 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               : EventSelectionWidget(),
         ),
         FFRoute(
-          name: HomeWidget.routeName,
-          path: HomeWidget.routePath,
-          builder: (context, params) =>
-              params.isEmpty ? NavBarPage(initialPage: 'Home') : HomeWidget(),
-        ),
+            name: HomeWidget.routeName,
+            path: HomeWidget.routePath,
+            requireAuth: true,
+            builder: (context, params) => params.isEmpty
+                ? NavBarPage(initialPage: 'Home')
+                : NavBarPage(
+                    initialPage: 'Home',
+                    page: HomeWidget(
+                      uid: params.getParam(
+                        'uid',
+                        ParamType.String,
+                      ),
+                    ),
+                  )),
         FFRoute(
             name: EditProfileWidget.routeName,
             path: EditProfileWidget.routePath,
             builder: (context, params) => NavBarPage(
                   initialPage: '',
-                  page: EditProfileWidget(),
+                  page: EditProfileWidget(
+                    uid: params.getParam(
+                      'uid',
+                      ParamType.String,
+                    ),
+                  ),
                 )),
         FFRoute(
           name: ProfileWidget.routeName,
           path: ProfileWidget.routePath,
+          requireAuth: true,
           builder: (context, params) => params.isEmpty
               ? NavBarPage(initialPage: 'Profile')
-              : ProfileWidget(),
+              : ProfileWidget(
+                  uid: params.getParam(
+                    'uid',
+                    ParamType.String,
+                  ),
+                ),
         ),
         FFRoute(
             name: BoothListWidget.routeName,
@@ -214,14 +234,42 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             path: SettingBoothListWidget.routePath,
             builder: (context, params) => NavBarPage(
                   initialPage: '',
-                  page: SettingBoothListWidget(),
+                  page: SettingBoothListWidget(
+                    eventId: params.getParam(
+                      'eventId',
+                      ParamType.int,
+                    ),
+                    eventDocRef: params.getParam(
+                      'eventDocRef',
+                      ParamType.DocumentReference,
+                      isList: false,
+                      collectionNamePath: ['events'],
+                    ),
+                  ),
                 )),
         FFRoute(
             name: SettingBoothWidget.routeName,
             path: SettingBoothWidget.routePath,
             builder: (context, params) => NavBarPage(
                   initialPage: '',
-                  page: SettingBoothWidget(),
+                  page: SettingBoothWidget(
+                    booth: params.getParam(
+                      'booth',
+                      ParamType.DocumentReference,
+                      isList: false,
+                      collectionNamePath: ['events'],
+                    ),
+                    eventId: params.getParam(
+                      'eventId',
+                      ParamType.int,
+                    ),
+                    eventDocRef: params.getParam(
+                      'eventDocRef',
+                      ParamType.DocumentReference,
+                      isList: false,
+                      collectionNamePath: ['events'],
+                    ),
+                  ),
                 )),
         FFRoute(
           name: Onboarding05Widget.routeName,

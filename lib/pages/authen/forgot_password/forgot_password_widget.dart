@@ -163,7 +163,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16.0, 8.0, 16.0, 16.0),
                 child: Text(
-                  'We will send you an email with a link to reset your password, please enter the email associated with your account below.',
+                  'เราจะส่งอีเมลที่มีลิงก์สำหรับรีเซ็ตรหัสผ่านให้คุณ กรุณากรอกอีเมลที่เชื่อมกับบัญชีของคุณด้านล่าง',
                   style: FlutterFlowTheme.of(context).labelMedium.override(
                         font: GoogleFonts.readexPro(
                           fontWeight: FlutterFlowTheme.of(context)
@@ -191,7 +191,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                     autofillHints: [AutofillHints.email],
                     obscureText: false,
                     decoration: InputDecoration(
-                      labelText: 'Your email address...',
+                      labelText: 'อีเมลของคุณ',
                       labelStyle:
                           FlutterFlowTheme.of(context).labelMedium.override(
                                 font: GoogleFonts.readexPro(
@@ -210,7 +210,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                                     .labelMedium
                                     .fontStyle,
                               ),
-                      hintText: 'Enter your email...',
+                      hintText: 'กรอก อีเมล',
                       hintStyle:
                           FlutterFlowTheme.of(context).labelMedium.override(
                                 font: GoogleFonts.readexPro(
@@ -294,20 +294,55 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                       EdgeInsetsDirectional.fromSTEB(16.0, 24.0, 16.0, 0.0),
                   child: FFButtonWidget(
                     onPressed: () async {
-                      if (_model.emailAddressTextController.text.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'Email required!',
+                      if (_model.emailAddressTextController.text != '') {
+                        if (_model.emailAddressTextController.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Email required!',
+                              ),
                             ),
-                          ),
+                          );
+                          return;
+                        }
+                        await authManager.resetPassword(
+                          email: _model.emailAddressTextController.text,
+                          context: context,
                         );
-                        return;
+                        await showDialog(
+                          context: context,
+                          builder: (alertDialogContext) {
+                            return AlertDialog(
+                              content: Text(
+                                  'ได้ส่งลิงก์สำหรับรีเซ็ตรหัสผ่านไปยังอีเมลของคุณแล้ว กรุณาตรวจสอบกล่องจดหมายหรืออีเมลขยะ'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(alertDialogContext),
+                                  child: Text('Ok'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } else {
+                        await showDialog(
+                          context: context,
+                          builder: (alertDialogContext) {
+                            return AlertDialog(
+                              title: Text('ข้อมูลไม่ครบถ้วน'),
+                              content: Text('กรุณากรอก อีเมล'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(alertDialogContext),
+                                  child: Text('Ok'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       }
-                      await authManager.resetPassword(
-                        email: _model.emailAddressTextController.text,
-                        context: context,
-                      );
                     },
                     text: 'ส่งลิงค์',
                     options: FFButtonOptions(

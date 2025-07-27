@@ -1,4 +1,5 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -219,7 +220,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 12.0, 0.0, 24.0),
                                         child: Text(
-                                          'Let\'s get started by filling out the form below.',
+                                          'กรอกแบบฟอร์มลงทะเบียนด้านล่าง',
                                           textAlign: TextAlign.center,
                                           style: FlutterFlowTheme.of(context)
                                               .labelLarge
@@ -260,7 +261,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                             ],
                                             obscureText: false,
                                             decoration: InputDecoration(
-                                              labelText: 'First Name',
+                                              labelText: 'ชื่อ',
                                               labelStyle: FlutterFlowTheme.of(
                                                       context)
                                                   .labelLarge
@@ -366,7 +367,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                             ],
                                             obscureText: false,
                                             decoration: InputDecoration(
-                                              labelText: 'Last Name',
+                                              labelText: 'นามสกุล',
                                               labelStyle: FlutterFlowTheme.of(
                                                       context)
                                                   .labelLarge
@@ -473,7 +474,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                             ],
                                             obscureText: false,
                                             decoration: InputDecoration(
-                                              labelText: 'Email',
+                                              labelText: 'อีเมล',
                                               labelStyle: FlutterFlowTheme.of(
                                                       context)
                                                   .labelLarge
@@ -580,7 +581,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                             obscureText:
                                                 !_model.passwordVisibility,
                                             decoration: InputDecoration(
-                                              labelText: 'Password',
+                                              labelText: 'รหัสผ่าน',
                                               labelStyle: FlutterFlowTheme.of(
                                                       context)
                                                   .labelLarge
@@ -705,7 +706,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                             obscureText: !_model
                                                 .passwordConfirmVisibility,
                                             decoration: InputDecoration(
-                                              labelText: 'Confirm Password',
+                                              labelText: 'ยืนยันรหัสผ่าน',
                                               labelStyle: FlutterFlowTheme.of(
                                                       context)
                                                   .labelLarge
@@ -818,9 +819,139 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                             0.0, 0.0, 0.0, 16.0),
                                         child: FFButtonWidget(
                                           onPressed: () async {
-                                            if (_model.emailAddressTextController
+                                            if (_model.firstNameTextController
                                                         .text !=
                                                     '') {
+                                              if (_model.lastNameTextController
+                                                          .text !=
+                                                      '') {
+                                                if (_model.emailAddressTextController
+                                                            .text !=
+                                                        '') {
+                                                  if (_model.passwordTextController
+                                                              .text !=
+                                                          '') {
+                                                    if (_model.passwordConfirmTextController
+                                                                .text !=
+                                                            '') {
+                                                      if (_model
+                                                              .passwordTextController
+                                                              .text !=
+                                                          _model
+                                                              .passwordConfirmTextController
+                                                              .text) {
+                                                        await showDialog(
+                                                          context: context,
+                                                          builder:
+                                                              (alertDialogContext) {
+                                                            return AlertDialog(
+                                                              title: Text(
+                                                                  'ตรวจสอบรหัสผ่าน'),
+                                                              content: Text(
+                                                                  'รหัสผ่านและการยืนยันรหัสผ่านไม่ตรงกัน กรุณากรอกใหม่อีกครั้ง'),
+                                                              actions: [
+                                                                TextButton(
+                                                                  onPressed: () =>
+                                                                      Navigator.pop(
+                                                                          alertDialogContext),
+                                                                  child: Text(
+                                                                      'Ok'),
+                                                                ),
+                                                              ],
+                                                            );
+                                                          },
+                                                        );
+                                                      }
+                                                    } else {
+                                                      await showDialog(
+                                                        context: context,
+                                                        builder:
+                                                            (alertDialogContext) {
+                                                          return AlertDialog(
+                                                            title: Text(
+                                                                'ข้อมูลไม่ครบถ้วน'),
+                                                            content: Text(
+                                                                'กรุณายืนยันรหัสผ่าน'),
+                                                            actions: [
+                                                              TextButton(
+                                                                onPressed: () =>
+                                                                    Navigator.pop(
+                                                                        alertDialogContext),
+                                                                child:
+                                                                    Text('Ok'),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        },
+                                                      );
+                                                    }
+                                                  } else {
+                                                    await showDialog(
+                                                      context: context,
+                                                      builder:
+                                                          (alertDialogContext) {
+                                                        return AlertDialog(
+                                                          title: Text(
+                                                              'ข้อมูลไม่ครบถ้วน'),
+                                                          content: Text(
+                                                              'กรุณากรอก รหัสผ่าน'),
+                                                          actions: [
+                                                            TextButton(
+                                                              onPressed: () =>
+                                                                  Navigator.pop(
+                                                                      alertDialogContext),
+                                                              child: Text('Ok'),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  }
+                                                } else {
+                                                  await showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (alertDialogContext) {
+                                                      return AlertDialog(
+                                                        title: Text(
+                                                            'ข้อมูลไม่ครบถ้วน'),
+                                                        content: Text(
+                                                            'กรุณากรอก อีเมล'),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    alertDialogContext),
+                                                            child: Text('Ok'),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                }
+                                              } else {
+                                                await showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (alertDialogContext) {
+                                                    return AlertDialog(
+                                                      title: Text(
+                                                          'ข้อมูลไม่ครบถ้วน'),
+                                                      content: Text(
+                                                          'กรุณากรอก นามสกุล'),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  alertDialogContext),
+                                                          child: Text('Ok'),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+                                              }
+
                                               GoRouter.of(context)
                                                   .prepareAuthEvent();
                                               if (_model.passwordTextController
@@ -852,29 +983,54 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                                 return;
                                               }
 
+                                              await UsersRecord.collection
+                                                  .doc(user.uid)
+                                                  .update(createUsersRecordData(
+                                                    firstName: _model
+                                                        .firstNameTextController
+                                                        .text,
+                                                    lastName: _model
+                                                        .lastNameTextController
+                                                        .text,
+                                                    password: _model
+                                                        .passwordTextController
+                                                        .text,
+                                                    displayName:
+                                                        '${_model.firstNameTextController.text} ${_model.lastNameTextController.text}',
+                                                  ));
+
                                               context.pushNamedAuth(
-                                                  HomeWidget.routeName,
-                                                  context.mounted);
-                                            } else {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                SnackBar(
-                                                  content: Text(
-                                                    'กรุณากรอก Email',
-                                                    style: TextStyle(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryText,
+                                                HomeWidget.routeName,
+                                                context.mounted,
+                                                queryParameters: {
+                                                  'uid': serializeParam(
+                                                    valueOrDefault<String>(
+                                                      currentUserReference?.id,
+                                                      'xx',
                                                     ),
+                                                    ParamType.String,
                                                   ),
-                                                  duration: Duration(
-                                                      milliseconds: 4000),
-                                                  backgroundColor:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .secondary,
-                                                ),
+                                                }.withoutNulls,
+                                              );
+                                            } else {
+                                              await showDialog(
+                                                context: context,
+                                                builder: (alertDialogContext) {
+                                                  return AlertDialog(
+                                                    title: Text(
+                                                        'ข้อมูลไม่ครบถ้วน'),
+                                                    content:
+                                                        Text('กรุณากรอก ชื่อ'),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                alertDialogContext),
+                                                        child: Text('Ok'),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
                                               );
                                             }
                                           },
@@ -926,7 +1082,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             16.0, 0.0, 16.0, 24.0),
                                         child: Text(
-                                          'Or sign up with',
+                                          'หรือสมัครด้วย',
                                           textAlign: TextAlign.center,
                                           style: FlutterFlowTheme.of(context)
                                               .labelLarge

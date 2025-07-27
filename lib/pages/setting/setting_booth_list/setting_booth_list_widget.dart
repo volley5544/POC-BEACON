@@ -11,7 +11,14 @@ import 'setting_booth_list_model.dart';
 export 'setting_booth_list_model.dart';
 
 class SettingBoothListWidget extends StatefulWidget {
-  const SettingBoothListWidget({super.key});
+  const SettingBoothListWidget({
+    super.key,
+    required this.eventId,
+    required this.eventDocRef,
+  });
+
+  final int? eventId;
+  final DocumentReference? eventDocRef;
 
   static String routeName = 'SettingBoothList';
   static String routePath = '/settingActivityList';
@@ -52,7 +59,19 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            context.pushNamed(SettingEventWidget.routeName);
+            context.pushNamed(
+              SettingBoothWidget.routeName,
+              queryParameters: {
+                'eventDocRef': serializeParam(
+                  widget.eventDocRef,
+                  ParamType.DocumentReference,
+                ),
+                'eventId': serializeParam(
+                  widget.eventId,
+                  ParamType.int,
+                ),
+              }.withoutNulls,
+            );
           },
           backgroundColor: FlutterFlowTheme.of(context).primary,
           elevation: 8.0,
@@ -220,33 +239,12 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        InkWell(
-                                          splashColor: Colors.transparent,
-                                          focusColor: Colors.transparent,
-                                          hoverColor: Colors.transparent,
-                                          highlightColor: Colors.transparent,
-                                          onTap: () async {
-                                            context.pushNamed(
-                                                SettingBoothWidget.routeName);
-                                          },
-                                          child: Text(
-                                            listViewEventsRecord.eventName,
-                                            style: FlutterFlowTheme.of(context)
-                                                .titleLarge
-                                                .override(
-                                                  font: GoogleFonts.outfit(
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .titleLarge
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .titleLarge
-                                                            .fontStyle,
-                                                  ),
-                                                  letterSpacing: 0.0,
+                                        Text(
+                                          listViewEventsRecord.eventName,
+                                          style: FlutterFlowTheme.of(context)
+                                              .titleLarge
+                                              .override(
+                                                font: GoogleFonts.outfit(
                                                   fontWeight:
                                                       FlutterFlowTheme.of(
                                                               context)
@@ -258,7 +256,16 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                                           .titleLarge
                                                           .fontStyle,
                                                 ),
-                                          ),
+                                                letterSpacing: 0.0,
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleLarge
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleLarge
+                                                        .fontStyle,
+                                              ),
                                         ),
                                         Padding(
                                           padding:
@@ -358,21 +365,11 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0.0, 4.0, 0.0, 0.0),
-                                      child: InkWell(
-                                        splashColor: Colors.transparent,
-                                        focusColor: Colors.transparent,
-                                        hoverColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onTap: () async {
-                                          context.pushNamed(
-                                              SettingBoothWidget.routeName);
-                                        },
-                                        child: Icon(
-                                          Icons.edit_note_outlined,
-                                          color: FlutterFlowTheme.of(context)
-                                              .success,
-                                          size: 24.0,
-                                        ),
+                                      child: Icon(
+                                        Icons.edit_note_outlined,
+                                        color: FlutterFlowTheme.of(context)
+                                            .success,
+                                        size: 24.0,
                                       ),
                                     ),
                                     Padding(

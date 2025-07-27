@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'serialization_util.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '../../flutter_flow/flutter_flow_util.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -115,7 +116,7 @@ class ParameterData {
 
 final parametersBuilderMap =
     <String, Future<ParameterData> Function(Map<String, dynamic>)>{
-  'HomePage': ParameterData.none(),
+  'HomePagexxxx': ParameterData.none(),
   'test': ParameterData.none(),
   'LoginPage': ParameterData.none(),
   'PracticePage': ParameterData.none(),
@@ -125,9 +126,21 @@ final parametersBuilderMap =
   'Login': ParameterData.none(),
   'ForgotPassword': ParameterData.none(),
   'EventSelection': ParameterData.none(),
-  'Home': ParameterData.none(),
-  'EditProfile': ParameterData.none(),
-  'Profile': ParameterData.none(),
+  'Home': (data) async => ParameterData(
+        allParams: {
+          'uid': getParameter<String>(data, 'uid'),
+        },
+      ),
+  'EditProfile': (data) async => ParameterData(
+        allParams: {
+          'uid': getParameter<String>(data, 'uid'),
+        },
+      ),
+  'Profile': (data) async => ParameterData(
+        allParams: {
+          'uid': getParameter<String>(data, 'uid'),
+        },
+      ),
   'BoothList': (data) async => ParameterData(
         allParams: {
           'eventId': getParameter<int>(data, 'eventId'),
@@ -139,8 +152,19 @@ final parametersBuilderMap =
   'Survey': ParameterData.none(),
   'SettingEventList': ParameterData.none(),
   'SettingEvent': ParameterData.none(),
-  'SettingBoothList': ParameterData.none(),
-  'SettingBooth': ParameterData.none(),
+  'SettingBoothList': (data) async => ParameterData(
+        allParams: {
+          'eventId': getParameter<int>(data, 'eventId'),
+          'eventDocRef': getParameter<DocumentReference>(data, 'eventDocRef'),
+        },
+      ),
+  'SettingBooth': (data) async => ParameterData(
+        allParams: {
+          'booth': getParameter<DocumentReference>(data, 'booth'),
+          'eventId': getParameter<int>(data, 'eventId'),
+          'eventDocRef': getParameter<DocumentReference>(data, 'eventDocRef'),
+        },
+      ),
   'Onboarding05': ParameterData.none(),
   'SettingEventListCopy': ParameterData.none(),
   'SettingEventListCopy2': ParameterData.none(),

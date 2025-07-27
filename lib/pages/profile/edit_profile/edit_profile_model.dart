@@ -10,6 +10,11 @@ class EditProfileModel extends FlutterFlowModel<EditProfileWidget> {
       FFUploadedFile(bytes: Uint8List.fromList([]));
   String uploadedFileUrl_uploadData1mc = '';
 
+  bool isDataUploading_photoProfile = false;
+  FFUploadedFile uploadedLocalFile_photoProfile =
+      FFUploadedFile(bytes: Uint8List.fromList([]));
+  String uploadedFileUrl_photoProfile = '';
+
   // State field(s) for firstName widget.
   FocusNode? firstNameFocusNode;
   TextEditingController? firstNameTextController;
@@ -27,10 +32,17 @@ class EditProfileModel extends FlutterFlowModel<EditProfileWidget> {
   TextEditingController? passwordTextController;
   late bool passwordVisibility;
   String? Function(BuildContext, String?)? passwordTextControllerValidator;
+  // State field(s) for passwordConfirm widget.
+  FocusNode? passwordConfirmFocusNode;
+  TextEditingController? passwordConfirmTextController;
+  late bool passwordConfirmVisibility;
+  String? Function(BuildContext, String?)?
+      passwordConfirmTextControllerValidator;
 
   @override
   void initState(BuildContext context) {
     passwordVisibility = false;
+    passwordConfirmVisibility = false;
   }
 
   @override
@@ -46,5 +58,8 @@ class EditProfileModel extends FlutterFlowModel<EditProfileWidget> {
 
     passwordFocusNode?.dispose();
     passwordTextController?.dispose();
+
+    passwordConfirmFocusNode?.dispose();
+    passwordConfirmTextController?.dispose();
   }
 }

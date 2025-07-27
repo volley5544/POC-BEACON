@@ -181,13 +181,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                       ],
                       controller: _model.tabBarController,
                       onTap: (i) async {
-                        [
-                          () async {},
-                          () async {
-                            context.pushNamed(
-                                SettingEventListCopyWidget.routeName);
-                          }
-                        ][i]();
+                        [() async {}, () async {}][i]();
                       },
                     ),
                   ),
@@ -848,11 +842,15 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                         highlightColor: Colors.transparent,
                                         onTap: () async {
                                           context.pushNamed(
-                                            BoothListWidget.routeName,
+                                            SettingBoothListWidget.routeName,
                                             queryParameters: {
                                               'eventId': serializeParam(
                                                 listViewEventsRecord.eventId,
                                                 ParamType.int,
+                                              ),
+                                              'eventDocRef': serializeParam(
+                                                listViewEventsRecord.reference,
+                                                ParamType.DocumentReference,
                                               ),
                                             }.withoutNulls,
                                           );
@@ -915,40 +913,16 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
-                                                        InkWell(
-                                                          splashColor: Colors
-                                                              .transparent,
-                                                          focusColor: Colors
-                                                              .transparent,
-                                                          hoverColor: Colors
-                                                              .transparent,
-                                                          highlightColor: Colors
-                                                              .transparent,
-                                                          onTap: () async {
-                                                            context.pushNamed(
-                                                                SettingBoothListWidget
-                                                                    .routeName);
-                                                          },
-                                                          child: Text(
-                                                            listViewEventsRecord
-                                                                .eventName,
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .titleLarge
-                                                                .override(
-                                                                  font: GoogleFonts
-                                                                      .outfit(
-                                                                    fontWeight: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .titleLarge
-                                                                        .fontWeight,
-                                                                    fontStyle: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .titleLarge
-                                                                        .fontStyle,
-                                                                  ),
-                                                                  letterSpacing:
-                                                                      0.0,
+                                                        Text(
+                                                          listViewEventsRecord
+                                                              .eventName,
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .titleLarge
+                                                              .override(
+                                                                font:
+                                                                    GoogleFonts
+                                                                        .outfit(
                                                                   fontWeight: FlutterFlowTheme.of(
                                                                           context)
                                                                       .titleLarge
@@ -958,7 +932,17 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                       .titleLarge
                                                                       .fontStyle,
                                                                 ),
-                                                          ),
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .titleLarge
+                                                                    .fontWeight,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .titleLarge
+                                                                    .fontStyle,
+                                                              ),
                                                         ),
                                                         Padding(
                                                           padding:

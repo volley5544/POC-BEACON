@@ -40,7 +40,7 @@ class _PracticePageWidgetState extends State<PracticePageWidget> {
       if ('${getJsonField(
             (_model.testApiOutput?.jsonBody ?? ''),
             r'''$.code''',
-          ).toString().toString()}' !=
+          ).toString()}' !=
           '200') {
         await showDialog(
           context: context,
@@ -49,7 +49,7 @@ class _PracticePageWidgetState extends State<PracticePageWidget> {
               content: Text('พบข้อผิดพลาดConnection (${getJsonField(
                 (_model.testApiOutput?.jsonBody ?? ''),
                 r'''$.code''',
-              ).toString().toString()})'),
+              ).toString()})'),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(alertDialogContext),
@@ -114,7 +114,7 @@ class _PracticePageWidgetState extends State<PracticePageWidget> {
                     notificationTitle: 'title',
                     notificationText: 'body',
                     userRefs: [currentUserReference!],
-                    initialPageName: 'HomePage',
+                    initialPageName: 'HomePagexxxx',
                     parameterData: {},
                   );
                 },

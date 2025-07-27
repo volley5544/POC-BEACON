@@ -1,3 +1,4 @@
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -9,7 +10,16 @@ import 'setting_booth_model.dart';
 export 'setting_booth_model.dart';
 
 class SettingBoothWidget extends StatefulWidget {
-  const SettingBoothWidget({super.key});
+  const SettingBoothWidget({
+    super.key,
+    this.booth,
+    this.eventId,
+    required this.eventDocRef,
+  });
+
+  final DocumentReference? booth;
+  final int? eventId;
+  final DocumentReference? eventDocRef;
 
   static String routeName = 'SettingBooth';
   static String routePath = '/settingBooth';
@@ -724,30 +734,79 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget> {
                     ),
                   ),
                 ),
-                Container(
-                  constraints: BoxConstraints(
-                    maxWidth: 770.0,
-                  ),
-                  decoration: BoxDecoration(),
-                  child: Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 12.0),
-                    child: FFButtonWidget(
-                      onPressed: () {
-                        print('Button pressed ...');
-                      },
-                      text: 'บันทึก',
-                      options: FFButtonOptions(
-                        width: double.infinity,
-                        height: 48.0,
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            24.0, 0.0, 24.0, 0.0),
-                        iconPadding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        color: FlutterFlowTheme.of(context).primary,
-                        textStyle:
-                            FlutterFlowTheme.of(context).titleSmall.override(
-                                  font: GoogleFonts.readexPro(
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 30.0),
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: 770.0,
+                    ),
+                    decoration: BoxDecoration(),
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(
+                          16.0, 12.0, 16.0, 12.0),
+                      child: FFButtonWidget(
+                        onPressed: () async {
+                          var boothsRecordReference =
+                              BoothsRecord.createDoc(widget.eventDocRef!);
+                          await boothsRecordReference
+                              .set(createBoothsRecordData(
+                            boothName: _model.boothNameTextController.text,
+                            description: _model.descriptionTextController.text,
+                            notificationDistance: int.tryParse(
+                                _model.remindAmountTextController.text),
+                            associatedEventId: '1',
+                          ));
+                          _model.createBoothDoc =
+                              BoothsRecord.getDocumentFromData(
+                                  createBoothsRecordData(
+                                    boothName:
+                                        _model.boothNameTextController.text,
+                                    description:
+                                        _model.descriptionTextController.text,
+                                    notificationDistance: int.tryParse(
+                                        _model.remindAmountTextController.text),
+                                    associatedEventId: '1',
+                                  ),
+                                  boothsRecordReference);
+                          await showDialog(
+                            context: context,
+                            builder: (alertDialogContext) {
+                              return AlertDialog(
+                                content: Text('สำเร็จ'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(alertDialogContext),
+                                    child: Text('Ok'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+
+                          safeSetState(() {});
+                        },
+                        text: 'บันทึก',
+                        options: FFButtonOptions(
+                          width: double.infinity,
+                          height: 48.0,
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              24.0, 0.0, 24.0, 0.0),
+                          iconPadding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 0.0),
+                          color: FlutterFlowTheme.of(context).primary,
+                          textStyle:
+                              FlutterFlowTheme.of(context).titleSmall.override(
+                                    font: GoogleFonts.readexPro(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontStyle,
+                                    ),
+                                    color: Colors.white,
+                                    letterSpacing: 0.0,
                                     fontWeight: FlutterFlowTheme.of(context)
                                         .titleSmall
                                         .fontWeight,
@@ -755,21 +814,13 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget> {
                                         .titleSmall
                                         .fontStyle,
                                   ),
-                                  color: Colors.white,
-                                  letterSpacing: 0.0,
-                                  fontWeight: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .fontWeight,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .fontStyle,
-                                ),
-                        elevation: 3.0,
-                        borderSide: BorderSide(
-                          color: Colors.transparent,
-                          width: 1.0,
+                          elevation: 3.0,
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
-                        borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
                   ),
