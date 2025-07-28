@@ -60,6 +60,21 @@ class UserActivitiesRecord extends FirestoreRecord {
   int get activityId => _activityId ?? 0;
   bool hasActivityId() => _activityId != null;
 
+  // "is_active" field.
+  int? _isActive;
+  int get isActive => _isActive ?? 0;
+  bool hasIsActive() => _isActive != null;
+
+  // "updated_at" field.
+  DateTime? _updatedAt;
+  DateTime? get updatedAt => _updatedAt;
+  bool hasUpdatedAt() => _updatedAt != null;
+
+  // "updated_by" field.
+  String? _updatedBy;
+  String get updatedBy => _updatedBy ?? '';
+  bool hasUpdatedBy() => _updatedBy != null;
+
   void _initializeFields() {
     _uid = snapshotData['uid'] as String?;
     _eventId = snapshotData['event_id'] as String?;
@@ -70,6 +85,9 @@ class UserActivitiesRecord extends FirestoreRecord {
     _createdAt = snapshotData['created_at'] as DateTime?;
     _createdBy = snapshotData['created_by'] as String?;
     _activityId = castToType<int>(snapshotData['activity_id']);
+    _isActive = castToType<int>(snapshotData['is_active']);
+    _updatedAt = snapshotData['updated_at'] as DateTime?;
+    _updatedBy = snapshotData['updated_by'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -116,6 +134,9 @@ Map<String, dynamic> createUserActivitiesRecordData({
   DateTime? createdAt,
   String? createdBy,
   int? activityId,
+  int? isActive,
+  DateTime? updatedAt,
+  String? updatedBy,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -128,6 +149,9 @@ Map<String, dynamic> createUserActivitiesRecordData({
       'created_at': createdAt,
       'created_by': createdBy,
       'activity_id': activityId,
+      'is_active': isActive,
+      'updated_at': updatedAt,
+      'updated_by': updatedBy,
     }.withoutNulls,
   );
 
@@ -148,7 +172,10 @@ class UserActivitiesRecordDocumentEquality
         e1?.isCompleted == e2?.isCompleted &&
         e1?.createdAt == e2?.createdAt &&
         e1?.createdBy == e2?.createdBy &&
-        e1?.activityId == e2?.activityId;
+        e1?.activityId == e2?.activityId &&
+        e1?.isActive == e2?.isActive &&
+        e1?.updatedAt == e2?.updatedAt &&
+        e1?.updatedBy == e2?.updatedBy;
   }
 
   @override
@@ -161,7 +188,10 @@ class UserActivitiesRecordDocumentEquality
         e?.isCompleted,
         e?.createdAt,
         e?.createdBy,
-        e?.activityId
+        e?.activityId,
+        e?.isActive,
+        e?.updatedAt,
+        e?.updatedBy
       ]);
 
   @override

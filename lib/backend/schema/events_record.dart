@@ -55,6 +55,21 @@ class EventsRecord extends FirestoreRecord {
   String get createdBy => _createdBy ?? '';
   bool hasCreatedBy() => _createdBy != null;
 
+  // "is_active" field.
+  int? _isActive;
+  int get isActive => _isActive ?? 0;
+  bool hasIsActive() => _isActive != null;
+
+  // "updated_at" field.
+  DateTime? _updatedAt;
+  DateTime? get updatedAt => _updatedAt;
+  bool hasUpdatedAt() => _updatedAt != null;
+
+  // "updated_by" field.
+  String? _updatedBy;
+  String get updatedBy => _updatedBy ?? '';
+  bool hasUpdatedBy() => _updatedBy != null;
+
   void _initializeFields() {
     _eventId = castToType<int>(snapshotData['event_id']);
     _eventName = snapshotData['event_name'] as String?;
@@ -65,6 +80,9 @@ class EventsRecord extends FirestoreRecord {
         castToType<int>(snapshotData['notification_frequency']);
     _createdAt = snapshotData['created_at'] as DateTime?;
     _createdBy = snapshotData['created_by'] as String?;
+    _isActive = castToType<int>(snapshotData['is_active']);
+    _updatedAt = snapshotData['updated_at'] as DateTime?;
+    _updatedBy = snapshotData['updated_by'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -109,6 +127,9 @@ Map<String, dynamic> createEventsRecordData({
   int? notificationFrequency,
   DateTime? createdAt,
   String? createdBy,
+  int? isActive,
+  DateTime? updatedAt,
+  String? updatedBy,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -120,6 +141,9 @@ Map<String, dynamic> createEventsRecordData({
       'notification_frequency': notificationFrequency,
       'created_at': createdAt,
       'created_by': createdBy,
+      'is_active': isActive,
+      'updated_at': updatedAt,
+      'updated_by': updatedBy,
     }.withoutNulls,
   );
 
@@ -138,7 +162,10 @@ class EventsRecordDocumentEquality implements Equality<EventsRecord> {
         e1?.endDate == e2?.endDate &&
         e1?.notificationFrequency == e2?.notificationFrequency &&
         e1?.createdAt == e2?.createdAt &&
-        e1?.createdBy == e2?.createdBy;
+        e1?.createdBy == e2?.createdBy &&
+        e1?.isActive == e2?.isActive &&
+        e1?.updatedAt == e2?.updatedAt &&
+        e1?.updatedBy == e2?.updatedBy;
   }
 
   @override
@@ -150,7 +177,10 @@ class EventsRecordDocumentEquality implements Equality<EventsRecord> {
         e?.endDate,
         e?.notificationFrequency,
         e?.createdAt,
-        e?.createdBy
+        e?.createdBy,
+        e?.isActive,
+        e?.updatedAt,
+        e?.updatedBy
       ]);
 
   @override

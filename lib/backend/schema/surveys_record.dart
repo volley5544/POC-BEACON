@@ -50,6 +50,26 @@ class SurveysRecord extends FirestoreRecord {
   DateTime? get createdAt => _createdAt;
   bool hasCreatedAt() => _createdAt != null;
 
+  // "created_by" field.
+  String? _createdBy;
+  String get createdBy => _createdBy ?? '';
+  bool hasCreatedBy() => _createdBy != null;
+
+  // "is_active" field.
+  int? _isActive;
+  int get isActive => _isActive ?? 0;
+  bool hasIsActive() => _isActive != null;
+
+  // "updated_at" field.
+  DateTime? _updatedAt;
+  DateTime? get updatedAt => _updatedAt;
+  bool hasUpdatedAt() => _updatedAt != null;
+
+  // "updated_by" field.
+  String? _updatedBy;
+  String get updatedBy => _updatedBy ?? '';
+  bool hasUpdatedBy() => _updatedBy != null;
+
   void _initializeFields() {
     _surveyId = castToType<int>(snapshotData['survey_id']);
     _uid = snapshotData['uid'] as String?;
@@ -58,6 +78,10 @@ class SurveysRecord extends FirestoreRecord {
     _rating = castToType<int>(snapshotData['rating']);
     _feedback = snapshotData['feedback'] as String?;
     _createdAt = snapshotData['created_at'] as DateTime?;
+    _createdBy = snapshotData['created_by'] as String?;
+    _isActive = castToType<int>(snapshotData['is_active']);
+    _updatedAt = snapshotData['updated_at'] as DateTime?;
+    _updatedBy = snapshotData['updated_by'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -102,6 +126,10 @@ Map<String, dynamic> createSurveysRecordData({
   int? rating,
   String? feedback,
   DateTime? createdAt,
+  String? createdBy,
+  int? isActive,
+  DateTime? updatedAt,
+  String? updatedBy,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -112,6 +140,10 @@ Map<String, dynamic> createSurveysRecordData({
       'rating': rating,
       'feedback': feedback,
       'created_at': createdAt,
+      'created_by': createdBy,
+      'is_active': isActive,
+      'updated_at': updatedAt,
+      'updated_by': updatedBy,
     }.withoutNulls,
   );
 
@@ -129,7 +161,11 @@ class SurveysRecordDocumentEquality implements Equality<SurveysRecord> {
         e1?.boothId == e2?.boothId &&
         e1?.rating == e2?.rating &&
         e1?.feedback == e2?.feedback &&
-        e1?.createdAt == e2?.createdAt;
+        e1?.createdAt == e2?.createdAt &&
+        e1?.createdBy == e2?.createdBy &&
+        e1?.isActive == e2?.isActive &&
+        e1?.updatedAt == e2?.updatedAt &&
+        e1?.updatedBy == e2?.updatedBy;
   }
 
   @override
@@ -140,7 +176,11 @@ class SurveysRecordDocumentEquality implements Equality<SurveysRecord> {
         e?.boothId,
         e?.rating,
         e?.feedback,
-        e?.createdAt
+        e?.createdAt,
+        e?.createdBy,
+        e?.isActive,
+        e?.updatedAt,
+        e?.updatedBy
       ]);
 
   @override

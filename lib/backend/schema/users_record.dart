@@ -80,6 +80,36 @@ class UsersRecord extends FirestoreRecord {
   String get lastName => _lastName ?? '';
   bool hasLastName() => _lastName != null;
 
+  // "created_at" field.
+  DateTime? _createdAt;
+  DateTime? get createdAt => _createdAt;
+  bool hasCreatedAt() => _createdAt != null;
+
+  // "created_by" field.
+  String? _createdBy;
+  String get createdBy => _createdBy ?? '';
+  bool hasCreatedBy() => _createdBy != null;
+
+  // "updated_at" field.
+  DateTime? _updatedAt;
+  DateTime? get updatedAt => _updatedAt;
+  bool hasUpdatedAt() => _updatedAt != null;
+
+  // "updated_by" field.
+  String? _updatedBy;
+  String get updatedBy => _updatedBy ?? '';
+  bool hasUpdatedBy() => _updatedBy != null;
+
+  // "is_active" field.
+  int? _isActive;
+  int get isActive => _isActive ?? 0;
+  bool hasIsActive() => _isActive != null;
+
+  // "photo_updated_at" field.
+  DateTime? _photoUpdatedAt;
+  DateTime? get photoUpdatedAt => _photoUpdatedAt;
+  bool hasPhotoUpdatedAt() => _photoUpdatedAt != null;
+
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
     _displayName = snapshotData['display_name'] as String?;
@@ -94,6 +124,12 @@ class UsersRecord extends FirestoreRecord {
     _fcmToken = snapshotData['fcm_token'] as String?;
     _firstName = snapshotData['first_name'] as String?;
     _lastName = snapshotData['last_name'] as String?;
+    _createdAt = snapshotData['created_at'] as DateTime?;
+    _createdBy = snapshotData['created_by'] as String?;
+    _updatedAt = snapshotData['updated_at'] as DateTime?;
+    _updatedBy = snapshotData['updated_by'] as String?;
+    _isActive = castToType<int>(snapshotData['is_active']);
+    _photoUpdatedAt = snapshotData['photo_updated_at'] as DateTime?;
   }
 
   static CollectionReference get collection =>
@@ -143,6 +179,12 @@ Map<String, dynamic> createUsersRecordData({
   String? fcmToken,
   String? firstName,
   String? lastName,
+  DateTime? createdAt,
+  String? createdBy,
+  DateTime? updatedAt,
+  String? updatedBy,
+  int? isActive,
+  DateTime? photoUpdatedAt,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -159,6 +201,12 @@ Map<String, dynamic> createUsersRecordData({
       'fcm_token': fcmToken,
       'first_name': firstName,
       'last_name': lastName,
+      'created_at': createdAt,
+      'created_by': createdBy,
+      'updated_at': updatedAt,
+      'updated_by': updatedBy,
+      'is_active': isActive,
+      'photo_updated_at': photoUpdatedAt,
     }.withoutNulls,
   );
 
@@ -182,7 +230,13 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e1?.password == e2?.password &&
         e1?.fcmToken == e2?.fcmToken &&
         e1?.firstName == e2?.firstName &&
-        e1?.lastName == e2?.lastName;
+        e1?.lastName == e2?.lastName &&
+        e1?.createdAt == e2?.createdAt &&
+        e1?.createdBy == e2?.createdBy &&
+        e1?.updatedAt == e2?.updatedAt &&
+        e1?.updatedBy == e2?.updatedBy &&
+        e1?.isActive == e2?.isActive &&
+        e1?.photoUpdatedAt == e2?.photoUpdatedAt;
   }
 
   @override
@@ -199,7 +253,13 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e?.password,
         e?.fcmToken,
         e?.firstName,
-        e?.lastName
+        e?.lastName,
+        e?.createdAt,
+        e?.createdBy,
+        e?.updatedAt,
+        e?.updatedBy,
+        e?.isActive,
+        e?.photoUpdatedAt
       ]);
 
   @override

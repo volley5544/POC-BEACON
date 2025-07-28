@@ -1,4 +1,5 @@
 import '/flutter_flow/flutter_flow_util.dart';
+import '/index.dart';
 import 'setting_event_widget.dart' show SettingEventWidget;
 import 'package:flutter/material.dart';
 
@@ -41,8 +42,6 @@ class SettingEventModel extends FlutterFlowModel<SettingEventWidget> {
   String? Function(BuildContext, String?)? periodTimeTextControllerValidator;
   DateTime? datePicked1;
   DateTime? datePicked2;
-  // State field(s) for Switch widget.
-  bool? switchValue;
 
   @override
   void initState(BuildContext context) {

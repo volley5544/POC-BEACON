@@ -2,11 +2,12 @@ import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/form_field_controller.dart';
 import '/index.dart';
-import 'setting_event_list_widget.dart' show SettingEventListWidget;
+import 'setting_event_list_copy3_widget.dart' show SettingEventListCopy3Widget;
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class SettingEventListModel extends FlutterFlowModel<SettingEventListWidget> {
+class SettingEventListCopy3Model
+    extends FlutterFlowModel<SettingEventListCopy3Widget> {
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for TabBar widget.
@@ -70,7 +71,7 @@ class SettingEventListModel extends FlutterFlowModel<SettingEventListWidget> {
           nextPageMarker: nextPageMarker,
           streamSubscriptions: listViewStreamSubscriptions3,
           controller: controller,
-          pageSize: 10,
+          pageSize: 25,
           isStream: true,
         ),
       );

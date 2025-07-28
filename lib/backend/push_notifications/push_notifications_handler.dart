@@ -151,7 +151,11 @@ final parametersBuilderMap =
   'SuccessSurvey': ParameterData.none(),
   'Survey': ParameterData.none(),
   'SettingEventList': ParameterData.none(),
-  'SettingEvent': ParameterData.none(),
+  'SettingEvent': (data) async => ParameterData(
+        allParams: {
+          'eventId': getParameter<int>(data, 'eventId'),
+        },
+      ),
   'SettingBoothList': (data) async => ParameterData(
         allParams: {
           'eventId': getParameter<int>(data, 'eventId'),
@@ -166,8 +170,8 @@ final parametersBuilderMap =
         },
       ),
   'Onboarding05': ParameterData.none(),
-  'SettingEventListCopy': ParameterData.none(),
   'SettingEventListCopy2': ParameterData.none(),
+  'SettingEventListCopy3': ParameterData.none(),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

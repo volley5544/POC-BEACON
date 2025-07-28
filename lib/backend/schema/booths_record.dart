@@ -45,6 +45,26 @@ class BoothsRecord extends FirestoreRecord {
   DateTime? get createdAt => _createdAt;
   bool hasCreatedAt() => _createdAt != null;
 
+  // "created_by" field.
+  String? _createdBy;
+  String get createdBy => _createdBy ?? '';
+  bool hasCreatedBy() => _createdBy != null;
+
+  // "is_active" field.
+  int? _isActive;
+  int get isActive => _isActive ?? 0;
+  bool hasIsActive() => _isActive != null;
+
+  // "updated_at" field.
+  DateTime? _updatedAt;
+  DateTime? get updatedAt => _updatedAt;
+  bool hasUpdatedAt() => _updatedAt != null;
+
+  // "updated_by" field.
+  String? _updatedBy;
+  String get updatedBy => _updatedBy ?? '';
+  bool hasUpdatedBy() => _updatedBy != null;
+
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
@@ -55,6 +75,10 @@ class BoothsRecord extends FirestoreRecord {
         castToType<int>(snapshotData['notification_distance']);
     _associatedEventId = snapshotData['associated_event_id'] as String?;
     _createdAt = snapshotData['created_at'] as DateTime?;
+    _createdBy = snapshotData['created_by'] as String?;
+    _isActive = castToType<int>(snapshotData['is_active']);
+    _updatedAt = snapshotData['updated_at'] as DateTime?;
+    _updatedBy = snapshotData['updated_by'] as String?;
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -102,6 +126,10 @@ Map<String, dynamic> createBoothsRecordData({
   int? notificationDistance,
   String? associatedEventId,
   DateTime? createdAt,
+  String? createdBy,
+  int? isActive,
+  DateTime? updatedAt,
+  String? updatedBy,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -111,6 +139,10 @@ Map<String, dynamic> createBoothsRecordData({
       'notification_distance': notificationDistance,
       'associated_event_id': associatedEventId,
       'created_at': createdAt,
+      'created_by': createdBy,
+      'is_active': isActive,
+      'updated_at': updatedAt,
+      'updated_by': updatedBy,
     }.withoutNulls,
   );
 
@@ -127,7 +159,11 @@ class BoothsRecordDocumentEquality implements Equality<BoothsRecord> {
         e1?.description == e2?.description &&
         e1?.notificationDistance == e2?.notificationDistance &&
         e1?.associatedEventId == e2?.associatedEventId &&
-        e1?.createdAt == e2?.createdAt;
+        e1?.createdAt == e2?.createdAt &&
+        e1?.createdBy == e2?.createdBy &&
+        e1?.isActive == e2?.isActive &&
+        e1?.updatedAt == e2?.updatedAt &&
+        e1?.updatedBy == e2?.updatedBy;
   }
 
   @override
@@ -137,7 +173,11 @@ class BoothsRecordDocumentEquality implements Equality<BoothsRecord> {
         e?.description,
         e?.notificationDistance,
         e?.associatedEventId,
-        e?.createdAt
+        e?.createdAt,
+        e?.createdBy,
+        e?.isActive,
+        e?.updatedAt,
+        e?.updatedBy
       ]);
 
   @override

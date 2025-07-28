@@ -227,7 +227,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             path: SettingEventWidget.routePath,
             builder: (context, params) => NavBarPage(
                   initialPage: '',
-                  page: SettingEventWidget(),
+                  page: SettingEventWidget(
+                    eventId: params.getParam(
+                      'eventId',
+                      ParamType.int,
+                    ),
+                  ),
                 )),
         FFRoute(
             name: SettingBoothListWidget.routeName,
@@ -277,18 +282,18 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => Onboarding05Widget(),
         ),
         FFRoute(
-            name: SettingEventListCopyWidget.routeName,
-            path: SettingEventListCopyWidget.routePath,
-            builder: (context, params) => NavBarPage(
-                  initialPage: '',
-                  page: SettingEventListCopyWidget(),
-                )),
-        FFRoute(
             name: SettingEventListCopy2Widget.routeName,
             path: SettingEventListCopy2Widget.routePath,
             builder: (context, params) => NavBarPage(
                   initialPage: '',
                   page: SettingEventListCopy2Widget(),
+                )),
+        FFRoute(
+            name: SettingEventListCopy3Widget.routeName,
+            path: SettingEventListCopy3Widget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SettingEventListCopy3Widget(),
                 ))
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

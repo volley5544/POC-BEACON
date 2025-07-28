@@ -24,7 +24,7 @@ service cloud.firestore {
       allow create: if true;
       allow read: if true;
       allow write: if true;
-      allow delete: if true;
+      allow delete: if request.auth != null;
     }
 
     match /userActivities/{document} {
@@ -45,13 +45,20 @@ service cloud.firestore {
       allow create: if true;
       allow read: if true;
       allow write: if true;
-      allow delete: if true;
+      allow delete: if request.auth != null;
     }
 
     match /{path=**}/booths/{document} {
       allow read: if true;
     }
 
+
+    match /mediaFiles/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if false;
+      allow delete: if request.auth != null;
+    }
 
     match /ff_user_push_notifications/{id} {
       allow read, update, delete: if false;

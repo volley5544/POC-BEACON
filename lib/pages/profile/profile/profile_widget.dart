@@ -162,8 +162,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                     fadeInDuration: Duration(milliseconds: 500),
                                     fadeOutDuration:
                                         Duration(milliseconds: 500),
-                                    imageUrl:
-                                        'https://firebasestorage.googleapis.com/v0/b/poc-beacon-firebase.firebasestorage.app/o/bow.jpeg?alt=media&token=4c37ad8a-c646-4f6f-9ab9-5a0033d45cbd',
+                                    imageUrl: profileUsersRecord.photoUrl,
                                     width: 60.0,
                                     height: 60.0,
                                     fit: BoxFit.cover,

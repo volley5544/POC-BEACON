@@ -327,10 +327,18 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                                   }
                                 }
 
-                                await currentUserReference!
-                                    .update(createUsersRecordData(
-                                  photoUrl: _model.uploadedFileUrl_photoProfile,
-                                ));
+                                await currentUserReference!.update({
+                                  ...createUsersRecordData(
+                                    photoUrl:
+                                        _model.uploadedFileUrl_photoProfile,
+                                  ),
+                                  ...mapToFirestore(
+                                    {
+                                      'photo_updated_at':
+                                          FieldValue.serverTimestamp(),
+                                    },
+                                  ),
+                                });
                                 await showDialog(
                                   context: context,
                                   builder: (alertDialogContext) {
@@ -715,7 +723,9 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                     builder: (context) => TextFormField(
                       controller: _model.passwordTextController,
                       focusNode: _model.passwordFocusNode,
-                      textCapitalization: TextCapitalization.words,
+                      autofocus: true,
+                      autofillHints: [AutofillHints.password],
+                      textCapitalization: TextCapitalization.none,
                       obscureText: !_model.passwordVisibility,
                       decoration: InputDecoration(
                         labelText: 'รหัสผ่าน',
@@ -828,7 +838,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                             return TextEditingValue(
                               selection: newValue.selection,
                               text: newValue.text
-                                  .toCapitalization(TextCapitalization.words),
+                                  .toCapitalization(TextCapitalization.none),
                             );
                           }),
                       ],
@@ -967,37 +977,187 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                     child: FFButtonWidget(
                       onPressed: () async {
                         if (_model.firstNameTextController.text != '') {
-                          await currentUserReference!.update({
-                            ...createUsersRecordData(
-                              email: _model.emailAddressTextController.text,
-                              displayName:
-                                  '${_model.firstNameTextController.text} ${_model.lastNameTextController.text}',
-                              firstName: _model.firstNameTextController.text,
-                              lastName: _model.lastNameTextController.text,
-                              password: _model.passwordTextController.text,
-                            ),
-                            ...mapToFirestore(
-                              {
-                                'edited_time': FieldValue.serverTimestamp(),
-                              },
-                            ),
-                          });
-                          await showDialog(
-                            context: context,
-                            builder: (alertDialogContext) {
-                              return AlertDialog(
-                                title: Text('บันทึกสำเร็จ'),
-                                content: Text('บันทึกข้อมูลเรียบร้อย'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(alertDialogContext),
-                                    child: Text('Ok'),
+                          if (_model.lastNameTextController.text != '') {
+                            if (_model.emailAddressTextController.text != '') {
+                              if ((_model.passwordTextController.text ==
+                                      editProfileUsersRecord.password) &&
+                                  (_model.passwordConfirmTextController
+                                              .text ==
+                                          '')) {
+                                await currentUserReference!.update({
+                                  ...createUsersRecordData(
+                                    email:
+                                        _model.emailAddressTextController.text,
+                                    displayName:
+                                        '${_model.firstNameTextController.text} ${_model.lastNameTextController.text}',
+                                    firstName:
+                                        _model.firstNameTextController.text,
+                                    lastName:
+                                        _model.lastNameTextController.text,
+                                    password:
+                                        _model.passwordTextController.text,
                                   ),
-                                ],
+                                  ...mapToFirestore(
+                                    {
+                                      'edited_time':
+                                          FieldValue.serverTimestamp(),
+                                    },
+                                  ),
+                                });
+                                await showDialog(
+                                  context: context,
+                                  builder: (alertDialogContext) {
+                                    return AlertDialog(
+                                      title: Text('บันทึกสำเร็จ'),
+                                      content: Text('บันทึกข้อมูลเรียบร้อย'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(alertDialogContext),
+                                          child: Text('Ok'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              } else {
+                                if (_model.passwordTextController.text != '') {
+                                  if (_model.passwordConfirmTextController
+                                              .text !=
+                                          '') {
+                                    if (_model.passwordTextController.text ==
+                                        _model.passwordConfirmTextController
+                                            .text) {
+                                      await currentUserReference!.update({
+                                        ...createUsersRecordData(
+                                          email: _model
+                                              .emailAddressTextController.text,
+                                          displayName:
+                                              '${_model.firstNameTextController.text} ${_model.lastNameTextController.text}',
+                                          firstName: _model
+                                              .firstNameTextController.text,
+                                          lastName: _model
+                                              .lastNameTextController.text,
+                                          password: _model
+                                              .passwordTextController.text,
+                                          updatedBy: editProfileUsersRecord.uid,
+                                        ),
+                                        ...mapToFirestore(
+                                          {
+                                            'updated_at':
+                                                FieldValue.serverTimestamp(),
+                                          },
+                                        ),
+                                      });
+                                      await showDialog(
+                                        context: context,
+                                        builder: (alertDialogContext) {
+                                          return AlertDialog(
+                                            title: Text('บันทึกสำเร็จ'),
+                                            content:
+                                                Text('บันทึกข้อมูลเรียบร้อย'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(
+                                                    alertDialogContext),
+                                                child: Text('Ok'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      await showDialog(
+                                        context: context,
+                                        builder: (alertDialogContext) {
+                                          return AlertDialog(
+                                            title: Text('ข้อมูลไม่ครบถ้วน'),
+                                            content: Text(
+                                                'กรุณากรอกรหัสผ่านและยืนยันรหัสผ่านให้ตรงกัน'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(
+                                                    alertDialogContext),
+                                                child: Text('Ok'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
+                                  } else {
+                                    await showDialog(
+                                      context: context,
+                                      builder: (alertDialogContext) {
+                                        return AlertDialog(
+                                          title: Text('ข้อมูลไม่ครบถ้วน'),
+                                          content: Text('กรุณายืนยัน รหัสผ่าน'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () => Navigator.pop(
+                                                  alertDialogContext),
+                                              child: Text('Ok'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
+                                } else {
+                                  await showDialog(
+                                    context: context,
+                                    builder: (alertDialogContext) {
+                                      return AlertDialog(
+                                        title: Text('ข้อมูลไม่ครบถ้วน'),
+                                        content: Text('กรุณากรอก รหัสผ่าน'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(
+                                                alertDialogContext),
+                                            child: Text('Ok'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
+                              }
+                            } else {
+                              await showDialog(
+                                context: context,
+                                builder: (alertDialogContext) {
+                                  return AlertDialog(
+                                    title: Text('ข้อมูลไม่ครบถ้วน'),
+                                    content: Text('กรุณากรอก อีเมล'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(alertDialogContext),
+                                        child: Text('Ok'),
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
-                            },
-                          );
+                            }
+                          } else {
+                            await showDialog(
+                              context: context,
+                              builder: (alertDialogContext) {
+                                return AlertDialog(
+                                  title: Text('ข้อมูลไม่ครบถ้วน'),
+                                  content: Text('กรุณากรอก นามสกุล'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(alertDialogContext),
+                                      child: Text('Ok'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
                         } else {
                           await showDialog(
                             context: context,

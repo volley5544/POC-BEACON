@@ -182,13 +182,7 @@ class _SettingEventListCopy2WidgetState
                       ],
                       controller: _model.tabBarController,
                       onTap: (i) async {
-                        [
-                          () async {},
-                          () async {
-                            context.pushNamed(
-                                SettingEventListCopyWidget.routeName);
-                          }
-                        ][i]();
+                        [() async {}, () async {}][i]();
                       },
                     ),
                   ),
@@ -1003,7 +997,11 @@ class _SettingEventListCopy2WidgetState
                                                                       8.0,
                                                                       0.0),
                                                           child: AutoSizeText(
-                                                            'aa',
+                                                            '${dateTimeFormat("d/M/y", listViewEventsRecord.startDate)}${dateTimeFormat("Hm", listViewEventsRecord.startDate)} - ${dateTimeFormat("d/M/y", listViewEventsRecord.endDate)}${dateTimeFormat("Hm", listViewEventsRecord.endDate)}'
+                                                                .maybeHandleOverflow(
+                                                              maxChars: 70,
+                                                              replacement: '…',
+                                                            ),
                                                             textAlign:
                                                                 TextAlign.start,
                                                             style: FlutterFlowTheme

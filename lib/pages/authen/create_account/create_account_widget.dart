@@ -985,19 +985,27 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
 
                                               await UsersRecord.collection
                                                   .doc(user.uid)
-                                                  .update(createUsersRecordData(
-                                                    firstName: _model
-                                                        .firstNameTextController
-                                                        .text,
-                                                    lastName: _model
-                                                        .lastNameTextController
-                                                        .text,
-                                                    password: _model
-                                                        .passwordTextController
-                                                        .text,
-                                                    displayName:
-                                                        '${_model.firstNameTextController.text} ${_model.lastNameTextController.text}',
-                                                  ));
+                                                  .update({
+                                                ...createUsersRecordData(
+                                                  firstName: _model
+                                                      .firstNameTextController
+                                                      .text,
+                                                  lastName: _model
+                                                      .lastNameTextController
+                                                      .text,
+                                                  password: _model
+                                                      .passwordTextController
+                                                      .text,
+                                                  displayName:
+                                                      '${_model.firstNameTextController.text} ${_model.lastNameTextController.text}',
+                                                ),
+                                                ...mapToFirestore(
+                                                  {
+                                                    'created_at': FieldValue
+                                                        .serverTimestamp(),
+                                                  },
+                                                ),
+                                              });
 
                                               context.pushNamedAuth(
                                                 HomeWidget.routeName,
