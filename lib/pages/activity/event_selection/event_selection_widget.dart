@@ -104,8 +104,7 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
               ),
               PagedListView<DocumentSnapshot<Object?>?, EventsRecord>(
                 pagingController: _model.setListViewController(
-                  EventsRecord.collection
-                      .orderBy('start_date', descending: true),
+                  EventsRecord.collection,
                 ),
                 padding: EdgeInsets.zero,
                 primary: false,
@@ -282,7 +281,7 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
                                                   0.0, 4.0, 8.0, 0.0),
                                           child: AutoSizeText(
                                             valueOrDefault<String>(
-                                              listViewEventsRecord.startDate
+                                              listViewEventsRecord.startDatetime
                                                   ?.toString(),
                                               '1',
                                             ).maybeHandleOverflow(

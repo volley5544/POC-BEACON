@@ -30,21 +30,6 @@ class EventsRecord extends FirestoreRecord {
   String get description => _description ?? '';
   bool hasDescription() => _description != null;
 
-  // "start_date" field.
-  DateTime? _startDate;
-  DateTime? get startDate => _startDate;
-  bool hasStartDate() => _startDate != null;
-
-  // "end_date" field.
-  DateTime? _endDate;
-  DateTime? get endDate => _endDate;
-  bool hasEndDate() => _endDate != null;
-
-  // "notification_frequency" field.
-  int? _notificationFrequency;
-  int get notificationFrequency => _notificationFrequency ?? 0;
-  bool hasNotificationFrequency() => _notificationFrequency != null;
-
   // "created_at" field.
   DateTime? _createdAt;
   DateTime? get createdAt => _createdAt;
@@ -70,19 +55,41 @@ class EventsRecord extends FirestoreRecord {
   String get updatedBy => _updatedBy ?? '';
   bool hasUpdatedBy() => _updatedBy != null;
 
+  // "notification_frequency_amount" field.
+  int? _notificationFrequencyAmount;
+  int get notificationFrequencyAmount => _notificationFrequencyAmount ?? 0;
+  bool hasNotificationFrequencyAmount() => _notificationFrequencyAmount != null;
+
+  // "notification_frequency_minute" field.
+  int? _notificationFrequencyMinute;
+  int get notificationFrequencyMinute => _notificationFrequencyMinute ?? 0;
+  bool hasNotificationFrequencyMinute() => _notificationFrequencyMinute != null;
+
+  // "start_datetime" field.
+  DateTime? _startDatetime;
+  DateTime? get startDatetime => _startDatetime;
+  bool hasStartDatetime() => _startDatetime != null;
+
+  // "end_datetime" field.
+  DateTime? _endDatetime;
+  DateTime? get endDatetime => _endDatetime;
+  bool hasEndDatetime() => _endDatetime != null;
+
   void _initializeFields() {
     _eventId = castToType<int>(snapshotData['event_id']);
     _eventName = snapshotData['event_name'] as String?;
     _description = snapshotData['description'] as String?;
-    _startDate = snapshotData['start_date'] as DateTime?;
-    _endDate = snapshotData['end_date'] as DateTime?;
-    _notificationFrequency =
-        castToType<int>(snapshotData['notification_frequency']);
     _createdAt = snapshotData['created_at'] as DateTime?;
     _createdBy = snapshotData['created_by'] as String?;
     _isActive = castToType<int>(snapshotData['is_active']);
     _updatedAt = snapshotData['updated_at'] as DateTime?;
     _updatedBy = snapshotData['updated_by'] as String?;
+    _notificationFrequencyAmount =
+        castToType<int>(snapshotData['notification_frequency_amount']);
+    _notificationFrequencyMinute =
+        castToType<int>(snapshotData['notification_frequency_minute']);
+    _startDatetime = snapshotData['start_datetime'] as DateTime?;
+    _endDatetime = snapshotData['end_datetime'] as DateTime?;
   }
 
   static CollectionReference get collection =>
@@ -122,28 +129,30 @@ Map<String, dynamic> createEventsRecordData({
   int? eventId,
   String? eventName,
   String? description,
-  DateTime? startDate,
-  DateTime? endDate,
-  int? notificationFrequency,
   DateTime? createdAt,
   String? createdBy,
   int? isActive,
   DateTime? updatedAt,
   String? updatedBy,
+  int? notificationFrequencyAmount,
+  int? notificationFrequencyMinute,
+  DateTime? startDatetime,
+  DateTime? endDatetime,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
       'event_id': eventId,
       'event_name': eventName,
       'description': description,
-      'start_date': startDate,
-      'end_date': endDate,
-      'notification_frequency': notificationFrequency,
       'created_at': createdAt,
       'created_by': createdBy,
       'is_active': isActive,
       'updated_at': updatedAt,
       'updated_by': updatedBy,
+      'notification_frequency_amount': notificationFrequencyAmount,
+      'notification_frequency_minute': notificationFrequencyMinute,
+      'start_datetime': startDatetime,
+      'end_datetime': endDatetime,
     }.withoutNulls,
   );
 
@@ -158,14 +167,15 @@ class EventsRecordDocumentEquality implements Equality<EventsRecord> {
     return e1?.eventId == e2?.eventId &&
         e1?.eventName == e2?.eventName &&
         e1?.description == e2?.description &&
-        e1?.startDate == e2?.startDate &&
-        e1?.endDate == e2?.endDate &&
-        e1?.notificationFrequency == e2?.notificationFrequency &&
         e1?.createdAt == e2?.createdAt &&
         e1?.createdBy == e2?.createdBy &&
         e1?.isActive == e2?.isActive &&
         e1?.updatedAt == e2?.updatedAt &&
-        e1?.updatedBy == e2?.updatedBy;
+        e1?.updatedBy == e2?.updatedBy &&
+        e1?.notificationFrequencyAmount == e2?.notificationFrequencyAmount &&
+        e1?.notificationFrequencyMinute == e2?.notificationFrequencyMinute &&
+        e1?.startDatetime == e2?.startDatetime &&
+        e1?.endDatetime == e2?.endDatetime;
   }
 
   @override
@@ -173,14 +183,15 @@ class EventsRecordDocumentEquality implements Equality<EventsRecord> {
         e?.eventId,
         e?.eventName,
         e?.description,
-        e?.startDate,
-        e?.endDate,
-        e?.notificationFrequency,
         e?.createdAt,
         e?.createdBy,
         e?.isActive,
         e?.updatedAt,
-        e?.updatedBy
+        e?.updatedBy,
+        e?.notificationFrequencyAmount,
+        e?.notificationFrequencyMinute,
+        e?.startDatetime,
+        e?.endDatetime
       ]);
 
   @override

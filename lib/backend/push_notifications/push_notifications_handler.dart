@@ -150,10 +150,15 @@ final parametersBuilderMap =
   'SuccessInprocess': ParameterData.none(),
   'SuccessSurvey': ParameterData.none(),
   'Survey': ParameterData.none(),
-  'SettingEventList': ParameterData.none(),
+  'SettingEventList': (data) async => ParameterData(
+        allParams: {
+          'isActive': getParameter<int>(data, 'isActive'),
+        },
+      ),
   'SettingEvent': (data) async => ParameterData(
         allParams: {
           'eventId': getParameter<int>(data, 'eventId'),
+          'typePage': getParameter<String>(data, 'typePage'),
         },
       ),
   'SettingBoothList': (data) async => ParameterData(

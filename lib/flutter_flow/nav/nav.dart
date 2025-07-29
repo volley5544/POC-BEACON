@@ -220,7 +220,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             path: SettingEventListWidget.routePath,
             builder: (context, params) => NavBarPage(
                   initialPage: '',
-                  page: SettingEventListWidget(),
+                  page: SettingEventListWidget(
+                    isActive: params.getParam(
+                      'isActive',
+                      ParamType.int,
+                    ),
+                  ),
                 )),
         FFRoute(
             name: SettingEventWidget.routeName,
@@ -231,6 +236,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                     eventId: params.getParam(
                       'eventId',
                       ParamType.int,
+                    ),
+                    typePage: params.getParam(
+                      'typePage',
+                      ParamType.String,
                     ),
                   ),
                 )),

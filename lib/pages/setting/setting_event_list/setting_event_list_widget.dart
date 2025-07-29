@@ -16,7 +16,12 @@ import 'setting_event_list_model.dart';
 export 'setting_event_list_model.dart';
 
 class SettingEventListWidget extends StatefulWidget {
-  const SettingEventListWidget({super.key});
+  const SettingEventListWidget({
+    super.key,
+    int? isActive,
+  }) : this.isActive = isActive ?? 0;
+
+  final int isActive;
 
   static String routeName = 'SettingEventList';
   static String routePath = '/settingEventList';
@@ -101,24 +106,22 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primary,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            context.pushNamed(
-              SettingEventWidget.routeName,
-              queryParameters: {
-                'eventId': serializeParam(
-                  0,
-                  ParamType.int,
-                ),
-              }.withoutNulls,
-            );
-          },
-          backgroundColor: FlutterFlowTheme.of(context).primary,
-          elevation: 8.0,
-          child: Icon(
-            Icons.add_rounded,
-            color: FlutterFlowTheme.of(context).info,
-            size: 24.0,
+        floatingActionButton: Align(
+          alignment: AlignmentDirectional(1.0, 1.0),
+          child: Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 50.0),
+            child: FloatingActionButton(
+              onPressed: () async {
+                context.pushNamed(SettingEventWidget.routeName);
+              },
+              backgroundColor: FlutterFlowTheme.of(context).primary,
+              elevation: 8.0,
+              child: Icon(
+                Icons.add_rounded,
+                color: FlutterFlowTheme.of(context).info,
+                size: 24.0,
+              ),
+            ),
           ),
         ),
         appBar: AppBar(
@@ -800,9 +803,9 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                   EventsRecord.collection
                                       .where(
                                         'is_active',
-                                        isEqualTo: 0,
+                                        isEqualTo: widget.isActive,
                                       )
-                                      .orderBy('start_date', descending: true),
+                                      .orderBy('event_id', descending: true),
                                 ),
                                 padding: EdgeInsets.zero,
                                 primary: false,
@@ -814,13 +817,18 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                   // Customize what your widget looks like when it's loading the first page.
                                   firstPageProgressIndicatorBuilder: (_) =>
                                       Center(
-                                    child: SizedBox(
-                                      width: 50.0,
-                                      height: 50.0,
-                                      child: CircularProgressIndicator(
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                          FlutterFlowTheme.of(context).primary,
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 0.0, 0.0, 50.0),
+                                      child: SizedBox(
+                                        width: 50.0,
+                                        height: 50.0,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            FlutterFlowTheme.of(context)
+                                                .primary,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -828,13 +836,18 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                   // Customize what your widget looks like when it's loading another page.
                                   newPageProgressIndicatorBuilder: (_) =>
                                       Center(
-                                    child: SizedBox(
-                                      width: 50.0,
-                                      height: 50.0,
-                                      child: CircularProgressIndicator(
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                          FlutterFlowTheme.of(context).primary,
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 0.0, 0.0, 50.0),
+                                      child: SizedBox(
+                                        width: 50.0,
+                                        height: 50.0,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            FlutterFlowTheme.of(context)
+                                                .primary,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -1020,7 +1033,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                       8.0,
                                                                       0.0),
                                                           child: AutoSizeText(
-                                                            '${dateTimeFormat("d/M/y", listViewEventsRecord.startDate)} (${dateTimeFormat("Hm", listViewEventsRecord.startDate)}) - ${dateTimeFormat("d/M/y", listViewEventsRecord.endDate)} (${dateTimeFormat("Hm", listViewEventsRecord.endDate)})'
+                                                            '${dateTimeFormat("d/M/y", listViewEventsRecord.startDatetime)} (${dateTimeFormat("Hm", listViewEventsRecord.startDatetime)}) - ${dateTimeFormat("d/M/y", listViewEventsRecord.endDatetime)} (${dateTimeFormat("Hm", listViewEventsRecord.endDatetime)})'
                                                                 .maybeHandleOverflow(
                                                               maxChars: 70,
                                                               replacement: '…',
@@ -1292,7 +1305,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                       valueOrDefault<
                                                                           String>(
                                                                     currentUserReference
-                                                                        ?.id,
+                                                                        ?.path,
                                                                     '0',
                                                                   ),
                                                                 ),
@@ -1304,6 +1317,31 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                   },
                                                                 ),
                                                               });
+                                                              await showDialog(
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (alertDialogContext) {
+                                                                  return AlertDialog(
+                                                                    title: Text(
+                                                                        'สำเร็จ'),
+                                                                    content: Text(
+                                                                        'ลบกิจกรรมสำเร็จ'),
+                                                                    actions: [
+                                                                      TextButton(
+                                                                        onPressed:
+                                                                            () =>
+                                                                                Navigator.pop(alertDialogContext),
+                                                                        child: Text(
+                                                                            'Ok'),
+                                                                      ),
+                                                                    ],
+                                                                  );
+                                                                },
+                                                              );
+
+                                                              safeSetState(
+                                                                  () {});
                                                             }
                                                           },
                                                           child: Row(
@@ -1405,6 +1443,22 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                       ),
                                     );
                                   },
+                                ),
+                              ),
+                              Container(
+                                constraints: BoxConstraints(
+                                  maxWidth: 770.0,
+                                ),
+                                decoration: BoxDecoration(),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [],
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],

@@ -789,8 +789,9 @@ class _SettingEventListCopy3WidgetState
                               PagedListView<DocumentSnapshot<Object?>?,
                                   EventsRecord>(
                                 pagingController: _model.setListViewController3(
-                                  EventsRecord.collection
-                                      .orderBy('start_date', descending: true),
+                                  EventsRecord.collection.orderBy(
+                                      'start_datetime',
+                                      descending: true),
                                 ),
                                 padding: EdgeInsets.zero,
                                 primary: false,

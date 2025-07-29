@@ -65,6 +65,11 @@ class BoothsRecord extends FirestoreRecord {
   String get updatedBy => _updatedBy ?? '';
   bool hasUpdatedBy() => _updatedBy != null;
 
+  // "event_id" field.
+  DocumentReference? _eventId;
+  DocumentReference? get eventId => _eventId;
+  bool hasEventId() => _eventId != null;
+
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
@@ -79,6 +84,7 @@ class BoothsRecord extends FirestoreRecord {
     _isActive = castToType<int>(snapshotData['is_active']);
     _updatedAt = snapshotData['updated_at'] as DateTime?;
     _updatedBy = snapshotData['updated_by'] as String?;
+    _eventId = snapshotData['event_id'] as DocumentReference?;
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -130,6 +136,7 @@ Map<String, dynamic> createBoothsRecordData({
   int? isActive,
   DateTime? updatedAt,
   String? updatedBy,
+  DocumentReference? eventId,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -143,6 +150,7 @@ Map<String, dynamic> createBoothsRecordData({
       'is_active': isActive,
       'updated_at': updatedAt,
       'updated_by': updatedBy,
+      'event_id': eventId,
     }.withoutNulls,
   );
 
@@ -163,7 +171,8 @@ class BoothsRecordDocumentEquality implements Equality<BoothsRecord> {
         e1?.createdBy == e2?.createdBy &&
         e1?.isActive == e2?.isActive &&
         e1?.updatedAt == e2?.updatedAt &&
-        e1?.updatedBy == e2?.updatedBy;
+        e1?.updatedBy == e2?.updatedBy &&
+        e1?.eventId == e2?.eventId;
   }
 
   @override
@@ -177,7 +186,8 @@ class BoothsRecordDocumentEquality implements Equality<BoothsRecord> {
         e?.createdBy,
         e?.isActive,
         e?.updatedAt,
-        e?.updatedBy
+        e?.updatedBy,
+        e?.eventId
       ]);
 
   @override

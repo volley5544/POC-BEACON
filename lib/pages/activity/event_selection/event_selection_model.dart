@@ -45,7 +45,6 @@ class EventSelectionModel extends FlutterFlowModel<EventSelectionWidget> {
     return controller
       ..addPageRequestListener(
         (nextPageMarker) => queryEventsRecordPage(
-          queryBuilder: (_) => listViewPagingQuery ??= query,
           nextPageMarker: nextPageMarker,
           streamSubscriptions: listViewStreamSubscriptions,
           controller: controller,

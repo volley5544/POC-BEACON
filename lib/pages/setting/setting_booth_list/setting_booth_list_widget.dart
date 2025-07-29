@@ -137,7 +137,7 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
               PagedListView<DocumentSnapshot<Object?>?, EventsRecord>(
                 pagingController: _model.setListViewController(
                   EventsRecord.collection
-                      .orderBy('start_date', descending: true),
+                      .orderBy('start_datetime', descending: true),
                 ),
                 padding: EdgeInsets.zero,
                 primary: false,
@@ -314,7 +314,7 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                                   0.0, 4.0, 8.0, 0.0),
                                           child: AutoSizeText(
                                             valueOrDefault<String>(
-                                              listViewEventsRecord.startDate
+                                              listViewEventsRecord.startDatetime
                                                   ?.toString(),
                                               '1',
                                             ).maybeHandleOverflow(

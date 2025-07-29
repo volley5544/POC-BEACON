@@ -15,9 +15,11 @@ class SettingEventWidget extends StatefulWidget {
   const SettingEventWidget({
     super.key,
     this.eventId,
+    this.typePage,
   });
 
   final int? eventId;
+  final String? typePage;
 
   static String routeName = 'SettingEvent';
   static String routePath = '/settingEvent';
@@ -42,11 +44,11 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
     _model.descriptionFocusNode ??= FocusNode();
     _model.descriptionFocusNode!.addListener(() => safeSetState(() {}));
 
-    _model.remindAmountFocusNode ??= FocusNode();
-    _model.remindAmountFocusNode!.addListener(() => safeSetState(() {}));
-    _model.periodTimeTextController ??= TextEditingController();
-    _model.periodTimeFocusNode ??= FocusNode();
-    _model.periodTimeFocusNode!.addListener(() => safeSetState(() {}));
+    _model.frequencyAmountFocusNode ??= FocusNode();
+    _model.frequencyAmountFocusNode!.addListener(() => safeSetState(() {}));
+
+    _model.frequencyMinuteFocusNode ??= FocusNode();
+    _model.frequencyMinuteFocusNode!.addListener(() => safeSetState(() {}));
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
@@ -61,15 +63,10 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
   Widget build(BuildContext context) {
     return StreamBuilder<List<EventsRecord>>(
       stream: queryEventsRecord(
-        queryBuilder: (eventsRecord) => eventsRecord
-            .where(
-              'event_id',
-              isEqualTo: widget.eventId,
-            )
-            .where(
-              'is_active',
-              isEqualTo: 0,
-            ),
+        queryBuilder: (eventsRecord) => eventsRecord.where(
+          'event_id',
+          isEqualTo: widget.eventId,
+        ),
         singleRecord: true,
       ),
       builder: (context, snapshot) {
@@ -91,10 +88,6 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
           );
         }
         List<EventsRecord> settingEventEventsRecordList = snapshot.data!;
-        // Return an empty Container when the item does not exist.
-        if (snapshot.data!.isEmpty) {
-          return Container();
-        }
         final settingEventEventsRecord = settingEventEventsRecordList.isNotEmpty
             ? settingEventEventsRecordList.first
             : null;
@@ -115,7 +108,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'จัดการกิจกรรม',
+                    '${widget.eventId != null ? 'แก้ไขกิจกรรม' : 'เพิ่มกิจกรรม'}',
                     style: FlutterFlowTheme.of(context).headlineMedium.override(
                           font: GoogleFonts.outfit(
                             fontWeight: FlutterFlowTheme.of(context)
@@ -582,13 +575,14 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                       ),
                                       TextFormField(
                                         controller: _model
-                                                .remindAmountTextController ??=
+                                                .frequencyAmountTextController ??=
                                             TextEditingController(
                                           text: settingEventEventsRecord
-                                              ?.notificationFrequency
+                                              ?.notificationFrequencyAmount
                                               .toString(),
                                         ),
-                                        focusNode: _model.remindAmountFocusNode,
+                                        focusNode:
+                                            _model.frequencyAmountFocusNode,
                                         autofocus: true,
                                         textCapitalization:
                                             TextCapitalization.words,
@@ -755,7 +749,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                             FlutterFlowTheme.of(context)
                                                 .primary,
                                         validator: _model
-                                            .remindAmountTextControllerValidator
+                                            .frequencyAmountTextControllerValidator
                                             .asValidator(context),
                                         inputFormatters: [
                                           if (!isAndroid && !isiOS)
@@ -770,13 +764,19 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                               );
                                             }),
                                           FilteringTextInputFormatter.allow(
-                                              RegExp('[a-zA-Z0-9]'))
+                                              RegExp('[0-9]'))
                                         ],
                                       ),
                                       TextFormField(
-                                        controller:
-                                            _model.periodTimeTextController,
-                                        focusNode: _model.periodTimeFocusNode,
+                                        controller: _model
+                                                .frequencyMinuteTextController ??=
+                                            TextEditingController(
+                                          text: settingEventEventsRecord
+                                              ?.notificationFrequencyMinute
+                                              .toString(),
+                                        ),
+                                        focusNode:
+                                            _model.frequencyMinuteFocusNode,
                                         autofocus: true,
                                         textCapitalization:
                                             TextCapitalization.words,
@@ -907,7 +907,8 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                 BorderRadius.circular(12.0),
                                           ),
                                           filled: true,
-                                          fillColor: (_model.periodTimeFocusNode
+                                          fillColor: (_model
+                                                      .frequencyMinuteFocusNode
                                                       ?.hasFocus ??
                                                   false)
                                               ? FlutterFlowTheme.of(context)
@@ -946,7 +947,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                             FlutterFlowTheme.of(context)
                                                 .primary,
                                         validator: _model
-                                            .periodTimeTextControllerValidator
+                                            .frequencyMinuteTextControllerValidator
                                             .asValidator(context),
                                         inputFormatters: [
                                           if (!isAndroid && !isiOS)
@@ -961,7 +962,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                               );
                                             }),
                                           FilteringTextInputFormatter.allow(
-                                              RegExp('[a-zA-Z0-9]'))
+                                              RegExp('[0-9]'))
                                         ],
                                       ),
                                       Divider(
@@ -980,7 +981,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  'วันที่เริ่มต้น',
+                                                  'วันที่เริ่มต้น*',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .labelMedium
@@ -1025,7 +1026,9 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         await showDatePicker(
                                                       context: context,
                                                       initialDate:
-                                                          getCurrentTimestamp,
+                                                          (settingEventEventsRecord
+                                                                  .startDatetime ??
+                                                              DateTime.now()),
                                                       firstDate: DateTime(1900),
                                                       lastDate: DateTime(2050),
                                                       builder:
@@ -1101,7 +1104,10 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         context: context,
                                                         initialTime: TimeOfDay
                                                             .fromDateTime(
-                                                                getCurrentTimestamp),
+                                                                (settingEventEventsRecord
+                                                                        .startDatetime ??
+                                                                    DateTime
+                                                                        .now())),
                                                         builder:
                                                             (context, child) {
                                                           return wrapInMaterialTimePickerTheme(
@@ -1188,7 +1194,8 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         null) {
                                                       safeSetState(() {
                                                         _model.datePicked1 =
-                                                            getCurrentTimestamp;
+                                                            settingEventEventsRecord
+                                                                .startDatetime;
                                                       });
                                                     }
                                                   },
@@ -1224,9 +1231,9 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                                     0.0),
                                                         child: Text(
                                                           dateTimeFormat(
-                                                              "MMMEd",
-                                                              _model
-                                                                  .datePicked1),
+                                                              "d/M/y",
+                                                              settingEventEventsRecord!
+                                                                  .startDatetime!),
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .bodyLarge
@@ -1268,7 +1275,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  'เวลาเริ่มต้น',
+                                                  'เวลาเริ่มต้น*',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .labelMedium
@@ -1330,8 +1337,10 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                                   0.0,
                                                                   0.0),
                                                       child: Text(
-                                                        dateTimeFormat("jm",
-                                                            _model.datePicked1),
+                                                        dateTimeFormat(
+                                                            "Hm",
+                                                            settingEventEventsRecord
+                                                                .startDatetime!),
                                                         style:
                                                             FlutterFlowTheme.of(
                                                                     context)
@@ -1378,7 +1387,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  'วันที่สิ้นสุด',
+                                                  'วันที่สิ้นสุด*',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .labelMedium
@@ -1423,7 +1432,9 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         await showDatePicker(
                                                       context: context,
                                                       initialDate:
-                                                          getCurrentTimestamp,
+                                                          (settingEventEventsRecord
+                                                                  .endDatetime ??
+                                                              DateTime.now()),
                                                       firstDate: DateTime(1900),
                                                       lastDate: DateTime(2050),
                                                       builder:
@@ -1499,7 +1510,10 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         context: context,
                                                         initialTime: TimeOfDay
                                                             .fromDateTime(
-                                                                getCurrentTimestamp),
+                                                                (settingEventEventsRecord
+                                                                        .endDatetime ??
+                                                                    DateTime
+                                                                        .now())),
                                                         builder:
                                                             (context, child) {
                                                           return wrapInMaterialTimePickerTheme(
@@ -1586,7 +1600,8 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         null) {
                                                       safeSetState(() {
                                                         _model.datePicked2 =
-                                                            getCurrentTimestamp;
+                                                            settingEventEventsRecord
+                                                                .endDatetime;
                                                       });
                                                     }
                                                   },
@@ -1622,9 +1637,9 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                                     0.0),
                                                         child: Text(
                                                           dateTimeFormat(
-                                                              "MMMEd",
-                                                              _model
-                                                                  .datePicked2),
+                                                              "d/M/y",
+                                                              settingEventEventsRecord
+                                                                  .endDatetime!),
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .bodyLarge
@@ -1666,7 +1681,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  'เวลาสิ้นสุด',
+                                                  'เวลาสิ้นสุด*',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .labelMedium
@@ -1728,8 +1743,10 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                                   0.0,
                                                                   0.0),
                                                       child: Text(
-                                                        dateTimeFormat("jm",
-                                                            _model.datePicked2),
+                                                        dateTimeFormat(
+                                                            "Hm",
+                                                            settingEventEventsRecord
+                                                                .endDatetime!),
                                                         style:
                                                             FlutterFlowTheme.of(
                                                                     context)
@@ -1773,129 +1790,151 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                 ),
                               ),
                             ),
+                            Text(
+                              widget.eventId.toString(),
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    font: GoogleFonts.readexPro(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .fontStyle,
+                                  ),
+                            ),
                           ],
                         ),
                       ),
                     ),
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 30.0),
-                      child: Container(
-                        constraints: BoxConstraints(
-                          maxWidth: 770.0,
-                        ),
-                        decoration: BoxDecoration(),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              16.0, 12.0, 16.0, 12.0),
-                          child: FFButtonWidget(
-                            onPressed: () async {
-                              if (settingEventEventsRecord?.eventName != null &&
-                                  settingEventEventsRecord?.eventName != '') {
-                                if (widget.eventId == null) {
-                                  await EventsRecord.collection.doc().set({
-                                    ...createEventsRecordData(
-                                      eventId: 3,
-                                      eventName:
-                                          _model.eventNameTextController.text,
-                                      description:
-                                          _model.descriptionTextController.text,
-                                      startDate: _model.datePicked1,
-                                      endDate: _model.datePicked2,
-                                      notificationFrequency: int.tryParse(_model
-                                          .remindAmountTextController.text),
-                                      createdBy: currentUserReference?.id,
-                                    ),
-                                    ...mapToFirestore(
-                                      {
-                                        'created_at':
-                                            FieldValue.serverTimestamp(),
-                                      },
-                                    ),
-                                  });
-                                } else {
-                                  await settingEventEventsRecord!.reference
-                                      .update({
-                                    ...createEventsRecordData(
-                                      eventName:
-                                          _model.eventNameTextController.text,
-                                      description:
-                                          _model.descriptionTextController.text,
-                                      startDate: _model.datePicked1,
-                                      endDate: _model.datePicked2,
-                                      notificationFrequency: int.tryParse(_model
-                                          .remindAmountTextController.text),
-                                      updatedBy: currentUserReference?.id,
-                                    ),
-                                    ...mapToFirestore(
-                                      {
-                                        'updated_at':
-                                            FieldValue.serverTimestamp(),
-                                      },
-                                    ),
-                                  });
-                                }
-
-                                await showDialog(
-                                  context: context,
-                                  builder: (alertDialogContext) {
-                                    return AlertDialog(
-                                      title: Text('สำเร็จ'),
-                                      content: Text('บันทึกข้อมูลสำเร็จ'),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(alertDialogContext),
-                                          child: Text('Ok'),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-
-                                context.pushNamed(
-                                    SettingEventListWidget.routeName);
+                    Container(
+                      constraints: BoxConstraints(
+                        maxWidth: 770.0,
+                      ),
+                      decoration: BoxDecoration(),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            16.0, 12.0, 16.0, 12.0),
+                        child: FFButtonWidget(
+                          onPressed: () async {
+                            if (settingEventEventsRecord.eventName != '') {
+                              if ((widget.eventId == null) ||
+                                  (widget.eventId == 0)) {
+                                await EventsRecord.collection
+                                    .doc(settingEventEventsRecord.reference.id)
+                                    .set({
+                                  ...createEventsRecordData(
+                                    eventId: 4,
+                                    eventName:
+                                        _model.eventNameTextController.text,
+                                    description:
+                                        _model.descriptionTextController.text,
+                                    createdBy: currentUserReference?.path,
+                                    startDatetime: _model.datePicked1,
+                                    notificationFrequencyAmount: int.tryParse(
+                                        _model.frequencyAmountTextController
+                                            .text),
+                                    notificationFrequencyMinute: int.tryParse(
+                                        _model.frequencyMinuteTextController
+                                            .text),
+                                    isActive: 0,
+                                    endDatetime: _model.datePicked2,
+                                  ),
+                                  ...mapToFirestore(
+                                    {
+                                      'created_at':
+                                          FieldValue.serverTimestamp(),
+                                    },
+                                  ),
+                                });
                               } else {
-                                await showDialog(
-                                  context: context,
-                                  builder: (alertDialogContext) {
-                                    return AlertDialog(
-                                      title: Text('ข้อมูลไม่ครบถ้วน'),
-                                      content: Text('กรุณากรอก ชื่อกิจกรรม'),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(alertDialogContext),
-                                          child: Text('Ok'),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
+                                await settingEventEventsRecord.reference
+                                    .update({
+                                  ...createEventsRecordData(
+                                    eventName:
+                                        _model.eventNameTextController.text,
+                                    description:
+                                        _model.descriptionTextController.text,
+                                    updatedBy: currentUserReference?.path,
+                                    startDatetime: _model.datePicked1,
+                                    endDatetime: _model.datePicked2,
+                                    notificationFrequencyAmount: int.tryParse(
+                                        _model.frequencyAmountTextController
+                                            .text),
+                                    notificationFrequencyMinute: int.tryParse(
+                                        _model.frequencyMinuteTextController
+                                            .text),
+                                    isActive: 0,
+                                  ),
+                                  ...mapToFirestore(
+                                    {
+                                      'updated_at':
+                                          FieldValue.serverTimestamp(),
+                                    },
+                                  ),
+                                });
                               }
-                            },
-                            text: 'บันทึก',
-                            options: FFButtonOptions(
-                              width: double.infinity,
-                              height: 48.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  24.0, 0.0, 24.0, 0.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              color: FlutterFlowTheme.of(context).primary,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .titleSmall
-                                  .override(
-                                    font: GoogleFonts.readexPro(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .fontStyle,
-                                    ),
-                                    color: Colors.white,
-                                    letterSpacing: 0.0,
+
+                              await showDialog(
+                                context: context,
+                                builder: (alertDialogContext) {
+                                  return AlertDialog(
+                                    title: Text('สำเร็จ'),
+                                    content: Text('บันทึกข้อมูลสำเร็จ'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(alertDialogContext),
+                                        child: Text('Ok'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+
+                              context
+                                  .pushNamed(SettingEventListWidget.routeName);
+                            } else {
+                              await showDialog(
+                                context: context,
+                                builder: (alertDialogContext) {
+                                  return AlertDialog(
+                                    title: Text('ข้อมูลไม่ครบถ้วน'),
+                                    content: Text('กรุณากรอก ชื่อกิจกรรม'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(alertDialogContext),
+                                        child: Text('Ok'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                          },
+                          text: 'บันทึก',
+                          options: FFButtonOptions(
+                            width: double.infinity,
+                            height: 48.0,
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                24.0, 0.0, 24.0, 0.0),
+                            iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            color: FlutterFlowTheme.of(context).primary,
+                            textStyle: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .override(
+                                  font: GoogleFonts.readexPro(
                                     fontWeight: FlutterFlowTheme.of(context)
                                         .titleSmall
                                         .fontWeight,
@@ -1903,13 +1942,21 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                         .titleSmall
                                         .fontStyle,
                                   ),
-                              elevation: 3.0,
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(8.0),
+                                  color: Colors.white,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .fontStyle,
+                                ),
+                            elevation: 3.0,
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 1.0,
                             ),
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
                       ),

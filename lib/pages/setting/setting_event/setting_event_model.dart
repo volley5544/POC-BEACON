@@ -23,11 +23,12 @@ class SettingEventModel extends FlutterFlowModel<SettingEventWidget> {
   FocusNode? descriptionFocusNode;
   TextEditingController? descriptionTextController;
   String? Function(BuildContext, String?)? descriptionTextControllerValidator;
-  // State field(s) for remindAmount widget.
-  FocusNode? remindAmountFocusNode;
-  TextEditingController? remindAmountTextController;
-  String? Function(BuildContext, String?)? remindAmountTextControllerValidator;
-  String? _remindAmountTextControllerValidator(
+  // State field(s) for frequencyAmount widget.
+  FocusNode? frequencyAmountFocusNode;
+  TextEditingController? frequencyAmountTextController;
+  String? Function(BuildContext, String?)?
+      frequencyAmountTextControllerValidator;
+  String? _frequencyAmountTextControllerValidator(
       BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
       return 'Please enter an age for the patient.';
@@ -36,17 +37,19 @@ class SettingEventModel extends FlutterFlowModel<SettingEventWidget> {
     return null;
   }
 
-  // State field(s) for periodTime widget.
-  FocusNode? periodTimeFocusNode;
-  TextEditingController? periodTimeTextController;
-  String? Function(BuildContext, String?)? periodTimeTextControllerValidator;
+  // State field(s) for frequencyMinute widget.
+  FocusNode? frequencyMinuteFocusNode;
+  TextEditingController? frequencyMinuteTextController;
+  String? Function(BuildContext, String?)?
+      frequencyMinuteTextControllerValidator;
   DateTime? datePicked1;
   DateTime? datePicked2;
 
   @override
   void initState(BuildContext context) {
     eventNameTextControllerValidator = _eventNameTextControllerValidator;
-    remindAmountTextControllerValidator = _remindAmountTextControllerValidator;
+    frequencyAmountTextControllerValidator =
+        _frequencyAmountTextControllerValidator;
   }
 
   @override
@@ -57,10 +60,10 @@ class SettingEventModel extends FlutterFlowModel<SettingEventWidget> {
     descriptionFocusNode?.dispose();
     descriptionTextController?.dispose();
 
-    remindAmountFocusNode?.dispose();
-    remindAmountTextController?.dispose();
+    frequencyAmountFocusNode?.dispose();
+    frequencyAmountTextController?.dispose();
 
-    periodTimeFocusNode?.dispose();
-    periodTimeTextController?.dispose();
+    frequencyMinuteFocusNode?.dispose();
+    frequencyMinuteTextController?.dispose();
   }
 }

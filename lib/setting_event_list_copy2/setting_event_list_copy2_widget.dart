@@ -791,7 +791,12 @@ class _SettingEventListCopy2WidgetState
                                   EventsRecord>(
                                 pagingController: _model.setListViewController3(
                                   EventsRecord.collection
-                                      .orderBy('start_date', descending: true),
+                                      .where(
+                                        'is_active',
+                                        isEqualTo: 0,
+                                      )
+                                      .orderBy('start_datetime',
+                                          descending: true),
                                 ),
                                 padding: EdgeInsets.zero,
                                 primary: false,
@@ -997,7 +1002,7 @@ class _SettingEventListCopy2WidgetState
                                                                       8.0,
                                                                       0.0),
                                                           child: AutoSizeText(
-                                                            '${dateTimeFormat("d/M/y", listViewEventsRecord.startDate)}${dateTimeFormat("Hm", listViewEventsRecord.startDate)} - ${dateTimeFormat("d/M/y", listViewEventsRecord.endDate)}${dateTimeFormat("Hm", listViewEventsRecord.endDate)}'
+                                                            '${dateTimeFormat("d/M/y", listViewEventsRecord.startDatetime)}${dateTimeFormat("Hm", listViewEventsRecord.startDatetime)} - ${dateTimeFormat("d/M/y", listViewEventsRecord.endDatetime)}${dateTimeFormat("Hm", listViewEventsRecord.endDatetime)}'
                                                                 .maybeHandleOverflow(
                                                               maxChars: 70,
                                                               replacement: '…',
