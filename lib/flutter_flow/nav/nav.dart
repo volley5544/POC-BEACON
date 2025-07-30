@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '/backend/backend.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
@@ -230,6 +231,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
             name: SettingEventWidget.routeName,
             path: SettingEventWidget.routePath,
+            requireAuth: true,
+            asyncParams: {
+              'eventDocRef': getDoc(['events'], EventsRecord.fromSnapshot),
+            },
             builder: (context, params) => NavBarPage(
                   initialPage: '',
                   page: SettingEventWidget(
@@ -240,6 +245,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                     typePage: params.getParam(
                       'typePage',
                       ParamType.String,
+                    ),
+                    eventDocRef: params.getParam(
+                      'eventDocRef',
+                      ParamType.Document,
                     ),
                   ),
                 )),
@@ -303,6 +312,40 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             builder: (context, params) => NavBarPage(
                   initialPage: '',
                   page: SettingEventListCopy3Widget(),
+                )),
+        FFRoute(
+            name: SettingEventCopyWidget.routeName,
+            path: SettingEventCopyWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SettingEventCopyWidget(
+                    eventId: params.getParam(
+                      'eventId',
+                      ParamType.int,
+                    ),
+                    typePage: params.getParam(
+                      'typePage',
+                      ParamType.String,
+                    ),
+                    eventDocRef: params.getParam(
+                      'eventDocRef',
+                      ParamType.DocumentReference,
+                      isList: false,
+                      collectionNamePath: ['events'],
+                    ),
+                  ),
+                )),
+        FFRoute(
+            name: SettingEventListCopyWidget.routeName,
+            path: SettingEventListCopyWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SettingEventListCopyWidget(
+                    isActive: params.getParam(
+                      'isActive',
+                      ParamType.int,
+                    ),
+                  ),
                 ))
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

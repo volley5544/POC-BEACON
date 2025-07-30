@@ -8,11 +8,11 @@ import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'setting_event_model.dart';
-export 'setting_event_model.dart';
+import 'setting_event_copy_model.dart';
+export 'setting_event_copy_model.dart';
 
-class SettingEventWidget extends StatefulWidget {
-  const SettingEventWidget({
+class SettingEventCopyWidget extends StatefulWidget {
+  const SettingEventCopyWidget({
     super.key,
     this.eventId,
     this.typePage,
@@ -21,24 +21,24 @@ class SettingEventWidget extends StatefulWidget {
 
   final int? eventId;
   final String? typePage;
-  final EventsRecord? eventDocRef;
+  final DocumentReference? eventDocRef;
 
-  static String routeName = 'SettingEvent';
-  static String routePath = '/settingEvent';
+  static String routeName = 'SettingEventCopy';
+  static String routePath = '/settingEventCopy';
 
   @override
-  State<SettingEventWidget> createState() => _SettingEventWidgetState();
+  State<SettingEventCopyWidget> createState() => _SettingEventCopyWidgetState();
 }
 
-class _SettingEventWidgetState extends State<SettingEventWidget> {
-  late SettingEventModel _model;
+class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
+  late SettingEventCopyModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => SettingEventModel());
+    _model = createModel(context, () => SettingEventCopyModel());
 
     _model.eventNameFocusNode ??= FocusNode();
     _model.eventNameFocusNode!.addListener(() => safeSetState(() {}));
@@ -64,7 +64,9 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<EventsRecord>(
-      stream: EventsRecord.getDocument(widget.eventDocRef!.reference),
+      stream: FFAppState().getEventById(
+        requestFn: () => EventsRecord.getDocument(widget.eventDocRef!),
+      ),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
@@ -84,7 +86,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
           );
         }
 
-        final settingEventEventsRecord = snapshot.data!;
+        final settingEventCopyEventsRecord = snapshot.data!;
 
         return GestureDetector(
           onTap: () {
@@ -175,223 +177,25 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      StreamBuilder<List<EventsRecord>>(
-                                        stream: queryEventsRecord(
-                                          singleRecord: true,
-                                        ),
-                                        builder: (context, snapshot) {
-                                          // Customize what your widget looks like when it's loading.
-                                          if (!snapshot.hasData) {
-                                            return Center(
-                                              child: SizedBox(
-                                                width: 50.0,
-                                                height: 50.0,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  valueColor:
-                                                      AlwaysStoppedAnimation<
-                                                          Color>(
-                                                    FlutterFlowTheme.of(context)
-                                                        .primary,
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                          List<EventsRecord>
-                                              eventNameEventsRecordList =
-                                              snapshot.data!;
-                                          // Return an empty Container when the item does not exist.
-                                          if (snapshot.data!.isEmpty) {
-                                            return Container();
-                                          }
-                                          final eventNameEventsRecord =
-                                              eventNameEventsRecordList
-                                                      .isNotEmpty
-                                                  ? eventNameEventsRecordList
-                                                      .first
-                                                  : null;
-
-                                          return TextFormField(
-                                            controller: _model
-                                                    .eventNameTextController ??=
+                                      TextFormField(
+                                        controller:
+                                            _model.eventNameTextController ??=
                                                 TextEditingController(
-                                              text: widget.typePage == 'add'
-                                                  ? ''
-                                                  : eventNameEventsRecord
-                                                      ?.eventName,
-                                            ),
-                                            focusNode:
-                                                _model.eventNameFocusNode,
-                                            autofocus: true,
-                                            textCapitalization:
-                                                TextCapitalization.words,
-                                            obscureText: false,
-                                            decoration: InputDecoration(
-                                              labelText: 'ชื่อกิจกรรม*',
-                                              labelStyle: FlutterFlowTheme.of(
-                                                      context)
-                                                  .headlineMedium
-                                                  .override(
-                                                    font: GoogleFonts.outfit(
-                                                      fontWeight:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .headlineMedium
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .headlineMedium
-                                                              .fontStyle,
-                                                    ),
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .secondaryText,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .headlineMedium
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .headlineMedium
-                                                            .fontStyle,
-                                                  ),
-                                              alignLabelWithHint: false,
-                                              hintStyle: FlutterFlowTheme.of(
-                                                      context)
-                                                  .labelMedium
-                                                  .override(
-                                                    font: GoogleFonts.readexPro(
-                                                      fontWeight:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .labelMedium
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .labelMedium
-                                                              .fontStyle,
-                                                    ),
-                                                    letterSpacing: 0.0,
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .labelMedium
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .labelMedium
-                                                            .fontStyle,
-                                                  ),
-                                              errorStyle: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    font: GoogleFonts.readexPro(
-                                                      fontWeight:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .error,
-                                                    fontSize: 12.0,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontStyle,
-                                                  ),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .alternate,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primary,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                              ),
-                                              errorBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .error,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                              ),
-                                              focusedErrorBorder:
-                                                  OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .error,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                              ),
-                                              filled: true,
-                                              fillColor: (_model
-                                                          .eventNameFocusNode
-                                                          ?.hasFocus ??
-                                                      false)
-                                                  ? FlutterFlowTheme.of(context)
-                                                      .accent1
-                                                  : FlutterFlowTheme.of(context)
-                                                      .secondaryBackground,
-                                              contentPadding:
-                                                  EdgeInsetsDirectional
-                                                      .fromSTEB(16.0, 20.0,
-                                                          16.0, 20.0),
-                                            ),
-                                            style: FlutterFlowTheme.of(context)
-                                                .headlineMedium
-                                                .override(
-                                                  font: GoogleFonts.outfit(
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .headlineMedium
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .headlineMedium
-                                                            .fontStyle,
-                                                  ),
-                                                  letterSpacing: 0.0,
+                                          text: settingEventCopyEventsRecord
+                                              .eventName,
+                                        ),
+                                        focusNode: _model.eventNameFocusNode,
+                                        autofocus: true,
+                                        textCapitalization:
+                                            TextCapitalization.words,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'ชื่อกิจกรรม*',
+                                          labelStyle: FlutterFlowTheme.of(
+                                                  context)
+                                              .headlineMedium
+                                              .override(
+                                                font: GoogleFonts.outfit(
                                                   fontWeight:
                                                       FlutterFlowTheme.of(
                                                               context)
@@ -403,34 +207,177 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                           .headlineMedium
                                                           .fontStyle,
                                                 ),
-                                            cursorColor:
-                                                FlutterFlowTheme.of(context)
-                                                    .primary,
-                                            validator: _model
-                                                .eventNameTextControllerValidator
-                                                .asValidator(context),
-                                            inputFormatters: [
-                                              if (!isAndroid && !isiOS)
-                                                TextInputFormatter.withFunction(
-                                                    (oldValue, newValue) {
-                                                  return TextEditingValue(
-                                                    selection:
-                                                        newValue.selection,
-                                                    text: newValue.text
-                                                        .toCapitalization(
-                                                            TextCapitalization
-                                                                .words),
-                                                  );
-                                                }),
-                                            ],
-                                          );
-                                        },
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                letterSpacing: 0.0,
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .headlineMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .headlineMedium
+                                                        .fontStyle,
+                                              ),
+                                          alignLabelWithHint: false,
+                                          hintStyle: FlutterFlowTheme.of(
+                                                  context)
+                                              .labelMedium
+                                              .override(
+                                                font: GoogleFonts.readexPro(
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .labelMedium
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .labelMedium
+                                                          .fontStyle,
+                                                ),
+                                                letterSpacing: 0.0,
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelMedium
+                                                        .fontStyle,
+                                              ),
+                                          errorStyle: FlutterFlowTheme.of(
+                                                  context)
+                                              .bodyMedium
+                                              .override(
+                                                font: GoogleFonts.readexPro(
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .error,
+                                                fontSize: 12.0,
+                                                letterSpacing: 0.0,
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .alternate,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primary,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .error,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .error,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                          ),
+                                          filled: true,
+                                          fillColor: (_model.eventNameFocusNode
+                                                      ?.hasFocus ??
+                                                  false)
+                                              ? FlutterFlowTheme.of(context)
+                                                  .accent1
+                                              : FlutterFlowTheme.of(context)
+                                                  .secondaryBackground,
+                                          contentPadding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  16.0, 20.0, 16.0, 20.0),
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .headlineMedium
+                                            .override(
+                                              font: GoogleFonts.outfit(
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .headlineMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .headlineMedium
+                                                        .fontStyle,
+                                              ),
+                                              letterSpacing: 0.0,
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .headlineMedium
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .headlineMedium
+                                                      .fontStyle,
+                                            ),
+                                        cursorColor:
+                                            FlutterFlowTheme.of(context)
+                                                .primary,
+                                        validator: _model
+                                            .eventNameTextControllerValidator
+                                            .asValidator(context),
+                                        inputFormatters: [
+                                          if (!isAndroid && !isiOS)
+                                            TextInputFormatter.withFunction(
+                                                (oldValue, newValue) {
+                                              return TextEditingValue(
+                                                selection: newValue.selection,
+                                                text: newValue.text
+                                                    .toCapitalization(
+                                                        TextCapitalization
+                                                            .words),
+                                              );
+                                            }),
+                                        ],
                                       ),
                                       TextFormField(
                                         controller:
                                             _model.descriptionTextController ??=
                                                 TextEditingController(
-                                          text: settingEventEventsRecord
+                                          text: settingEventCopyEventsRecord
                                               .description,
                                         ),
                                         focusNode: _model.descriptionFocusNode,
@@ -626,7 +573,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                         controller: _model
                                                 .frequencyAmountTextController ??=
                                             TextEditingController(
-                                          text: settingEventEventsRecord
+                                          text: settingEventCopyEventsRecord
                                               .notificationFrequencyAmount
                                               .toString(),
                                         ),
@@ -820,7 +767,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                         controller: _model
                                                 .frequencyMinuteTextController ??=
                                             TextEditingController(
-                                          text: settingEventEventsRecord
+                                          text: settingEventCopyEventsRecord
                                               .notificationFrequencyMinute
                                               .toString(),
                                         ),
@@ -1075,7 +1022,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         await showDatePicker(
                                                       context: context,
                                                       initialDate:
-                                                          (settingEventEventsRecord
+                                                          (settingEventCopyEventsRecord
                                                                   .startDatetime ??
                                                               DateTime.now()),
                                                       firstDate: DateTime(1900),
@@ -1153,7 +1100,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         context: context,
                                                         initialTime: TimeOfDay
                                                             .fromDateTime(
-                                                                (settingEventEventsRecord
+                                                                (settingEventCopyEventsRecord
                                                                         .startDatetime ??
                                                                     DateTime
                                                                         .now())),
@@ -1243,7 +1190,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         null) {
                                                       safeSetState(() {
                                                         _model.datePicked1 =
-                                                            settingEventEventsRecord
+                                                            settingEventCopyEventsRecord
                                                                 .startDatetime;
                                                       });
                                                     }
@@ -1281,7 +1228,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         child: Text(
                                                           dateTimeFormat(
                                                               "d/M/y",
-                                                              settingEventEventsRecord
+                                                              settingEventCopyEventsRecord
                                                                   .startDatetime!),
                                                           style: FlutterFlowTheme
                                                                   .of(context)
@@ -1388,7 +1335,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                       child: Text(
                                                         dateTimeFormat(
                                                             "Hm",
-                                                            settingEventEventsRecord
+                                                            settingEventCopyEventsRecord
                                                                 .startDatetime!),
                                                         style:
                                                             FlutterFlowTheme.of(
@@ -1481,7 +1428,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         await showDatePicker(
                                                       context: context,
                                                       initialDate:
-                                                          (settingEventEventsRecord
+                                                          (settingEventCopyEventsRecord
                                                                   .endDatetime ??
                                                               DateTime.now()),
                                                       firstDate: DateTime(1900),
@@ -1559,7 +1506,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         context: context,
                                                         initialTime: TimeOfDay
                                                             .fromDateTime(
-                                                                (settingEventEventsRecord
+                                                                (settingEventCopyEventsRecord
                                                                         .endDatetime ??
                                                                     DateTime
                                                                         .now())),
@@ -1649,7 +1596,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         null) {
                                                       safeSetState(() {
                                                         _model.datePicked2 =
-                                                            settingEventEventsRecord
+                                                            settingEventCopyEventsRecord
                                                                 .endDatetime;
                                                       });
                                                     }
@@ -1687,7 +1634,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         child: Text(
                                                           dateTimeFormat(
                                                               "d/M/y",
-                                                              settingEventEventsRecord
+                                                              settingEventCopyEventsRecord
                                                                   .endDatetime!),
                                                           style: FlutterFlowTheme
                                                                   .of(context)
@@ -1794,7 +1741,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                       child: Text(
                                                         dateTimeFormat(
                                                             "Hm",
-                                                            settingEventEventsRecord
+                                                            settingEventCopyEventsRecord
                                                                 .endDatetime!),
                                                         style:
                                                             FlutterFlowTheme.of(
@@ -1833,7 +1780,8 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                         ].divide(SizedBox(width: 12.0)),
                                       ),
                                       Text(
-                                        widget.eventId.toString(),
+                                        settingEventCopyEventsRecord
+                                            .reference.id,
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -1859,7 +1807,36 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                             ),
                                       ),
                                       Text(
-                                        widget.eventDocRef!.reference.id,
+                                        valueOrDefault<String>(
+                                          widget.eventDocRef?.path,
+                                          '0',
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.readexPro(
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                              letterSpacing: 0.0,
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
+                                            ),
+                                      ),
+                                      Text(
+                                        widget.eventId.toString(),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -1905,7 +1882,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                             16.0, 12.0, 16.0, 12.0),
                         child: FFButtonWidget(
                           onPressed: () async {
-                            if (settingEventEventsRecord.eventName != '') {
+                            if (settingEventCopyEventsRecord.eventName != '') {
                               if ((widget.eventId == null) ||
                                   (widget.eventId == 0)) {
                                 await EventsRecord.collection.doc().set({
@@ -1934,7 +1911,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                   ),
                                 });
                               } else {
-                                await settingEventEventsRecord.reference
+                                await settingEventCopyEventsRecord.reference
                                     .update({
                                   ...createEventsRecordData(
                                     eventName:

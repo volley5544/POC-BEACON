@@ -1028,6 +1028,13 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                                     if (_model.passwordTextController.text ==
                                         _model.passwordConfirmTextController
                                             .text) {
+                                      await authManager.updatePassword(
+                                        newPassword:
+                                            _model.passwordTextController.text,
+                                        context: context,
+                                      );
+                                      safeSetState(() {});
+
                                       await currentUserReference!.update({
                                         ...createUsersRecordData(
                                           email: _model
@@ -1084,6 +1091,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                                           );
                                         },
                                       );
+                                      return;
                                     }
                                   } else {
                                     await showDialog(
@@ -1102,6 +1110,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                                         );
                                       },
                                     );
+                                    return;
                                   }
                                 } else {
                                   await showDialog(
@@ -1120,6 +1129,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                                       );
                                     },
                                   );
+                                  return;
                                 }
                               }
                             } else {
@@ -1139,6 +1149,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                                   );
                                 },
                               );
+                              return;
                             }
                           } else {
                             await showDialog(
@@ -1157,6 +1168,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                                 );
                               },
                             );
+                            return;
                           }
                         } else {
                           await showDialog(
@@ -1175,6 +1187,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                               );
                             },
                           );
+                          return;
                         }
                       },
                       text: 'บันทึก',

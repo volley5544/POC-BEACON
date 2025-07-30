@@ -836,10 +836,90 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                                             '') {
                                                       if (_model
                                                               .passwordTextController
-                                                              .text !=
+                                                              .text ==
                                                           _model
                                                               .passwordConfirmTextController
                                                               .text) {
+                                                        GoRouter.of(context)
+                                                            .prepareAuthEvent();
+                                                        if (_model
+                                                                .passwordTextController
+                                                                .text !=
+                                                            _model
+                                                                .passwordConfirmTextController
+                                                                .text) {
+                                                          ScaffoldMessenger.of(
+                                                                  context)
+                                                              .showSnackBar(
+                                                            SnackBar(
+                                                              content: Text(
+                                                                'Passwords don\'t match!',
+                                                              ),
+                                                            ),
+                                                          );
+                                                          return;
+                                                        }
+
+                                                        final user =
+                                                            await authManager
+                                                                .createAccountWithEmail(
+                                                          context,
+                                                          _model
+                                                              .emailAddressTextController
+                                                              .text,
+                                                          _model
+                                                              .passwordTextController
+                                                              .text,
+                                                        );
+                                                        if (user == null) {
+                                                          return;
+                                                        }
+
+                                                        await UsersRecord
+                                                            .collection
+                                                            .doc(user.uid)
+                                                            .update({
+                                                          ...createUsersRecordData(
+                                                            firstName: _model
+                                                                .firstNameTextController
+                                                                .text,
+                                                            lastName: _model
+                                                                .lastNameTextController
+                                                                .text,
+                                                            password: _model
+                                                                .passwordTextController
+                                                                .text,
+                                                            displayName:
+                                                                '${_model.firstNameTextController.text} ${_model.lastNameTextController.text}',
+                                                          ),
+                                                          ...mapToFirestore(
+                                                            {
+                                                              'created_at':
+                                                                  FieldValue
+                                                                      .serverTimestamp(),
+                                                            },
+                                                          ),
+                                                        });
+
+                                                        context.pushNamedAuth(
+                                                          HomeWidget.routeName,
+                                                          context.mounted,
+                                                          queryParameters: {
+                                                            'uid':
+                                                                serializeParam(
+                                                              valueOrDefault<
+                                                                  String>(
+                                                                currentUserReference
+                                                                    ?.id,
+                                                                'xx',
+                                                              ),
+                                                              ParamType.String,
+                                                            ),
+                                                          }.withoutNulls,
+                                                        );
+
+                                                        return;
+                                                      } else {
                                                         await showDialog(
                                                           context: context,
                                                           builder:
@@ -861,6 +941,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                                             );
                                                           },
                                                         );
+                                                        return;
                                                       }
                                                     } else {
                                                       await showDialog(
@@ -884,6 +965,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                                           );
                                                         },
                                                       );
+                                                      return;
                                                     }
                                                   } else {
                                                     await showDialog(
@@ -906,6 +988,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                                         );
                                                       },
                                                     );
+                                                    return;
                                                   }
                                                 } else {
                                                   await showDialog(
@@ -928,6 +1011,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                                       );
                                                     },
                                                   );
+                                                  return;
                                                 }
                                               } else {
                                                 await showDialog(
@@ -950,76 +1034,8 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                                     );
                                                   },
                                                 );
-                                              }
-
-                                              GoRouter.of(context)
-                                                  .prepareAuthEvent();
-                                              if (_model.passwordTextController
-                                                      .text !=
-                                                  _model
-                                                      .passwordConfirmTextController
-                                                      .text) {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  SnackBar(
-                                                    content: Text(
-                                                      'Passwords don\'t match!',
-                                                    ),
-                                                  ),
-                                                );
                                                 return;
                                               }
-
-                                              final user = await authManager
-                                                  .createAccountWithEmail(
-                                                context,
-                                                _model
-                                                    .emailAddressTextController
-                                                    .text,
-                                                _model.passwordTextController
-                                                    .text,
-                                              );
-                                              if (user == null) {
-                                                return;
-                                              }
-
-                                              await UsersRecord.collection
-                                                  .doc(user.uid)
-                                                  .update({
-                                                ...createUsersRecordData(
-                                                  firstName: _model
-                                                      .firstNameTextController
-                                                      .text,
-                                                  lastName: _model
-                                                      .lastNameTextController
-                                                      .text,
-                                                  password: _model
-                                                      .passwordTextController
-                                                      .text,
-                                                  displayName:
-                                                      '${_model.firstNameTextController.text} ${_model.lastNameTextController.text}',
-                                                ),
-                                                ...mapToFirestore(
-                                                  {
-                                                    'created_at': FieldValue
-                                                        .serverTimestamp(),
-                                                  },
-                                                ),
-                                              });
-
-                                              context.pushNamedAuth(
-                                                HomeWidget.routeName,
-                                                context.mounted,
-                                                queryParameters: {
-                                                  'uid': serializeParam(
-                                                    valueOrDefault<String>(
-                                                      currentUserReference?.id,
-                                                      'xx',
-                                                    ),
-                                                    ParamType.String,
-                                                  ),
-                                                }.withoutNulls,
-                                              );
                                             } else {
                                               await showDialog(
                                                 context: context,
@@ -1040,6 +1056,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                                   );
                                                 },
                                               );
+                                              return;
                                             }
                                           },
                                           text: 'ลงทะเบียน',

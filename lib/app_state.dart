@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'flutter_flow/request_manager.dart';
+import '/backend/backend.dart';
 
 class FFAppState extends ChangeNotifier {
   static FFAppState _instance = FFAppState._internal();
@@ -54,4 +56,19 @@ class FFAppState extends ChangeNotifier {
   void insertAtIndexInListStringTemp(int index, String value) {
     listStringTemp.insert(index, value);
   }
+
+  final _getEventByIdManager = StreamRequestManager<EventsRecord>();
+  Stream<EventsRecord> getEventById({
+    String? uniqueQueryKey,
+    bool? overrideCache,
+    required Stream<EventsRecord> Function() requestFn,
+  }) =>
+      _getEventByIdManager.performRequest(
+        uniqueQueryKey: uniqueQueryKey,
+        overrideCache: overrideCache,
+        requestFn: requestFn,
+      );
+  void clearGetEventByIdCache() => _getEventByIdManager.clear();
+  void clearGetEventByIdCacheKey(String? uniqueKey) =>
+      _getEventByIdManager.clearRequest(uniqueKey);
 }

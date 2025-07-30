@@ -1,4 +1,5 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -517,20 +518,17 @@ class _LoginWidgetState extends State<LoginWidget>
                                         return;
                                       }
 
+                                      await currentUserReference!
+                                          .update(createUsersRecordData(
+                                        password:
+                                            _model.passwordTextController.text,
+                                      ));
                                       context.pushNamedAuth(
-                                        HomeWidget.routeName,
-                                        context.mounted,
-                                        queryParameters: {
-                                          'uid': serializeParam(
-                                            valueOrDefault<String>(
-                                              currentUserReference?.id,
-                                              '1',
-                                            ),
-                                            ParamType.String,
-                                          ),
-                                        }.withoutNulls,
-                                      );
-                                    } else {
+                                          HomeWidget.routeName,
+                                          context.mounted);
+
+                                      return;
+                                                                        } else {
                                       await showDialog(
                                         context: context,
                                         builder: (alertDialogContext) {
@@ -547,6 +545,7 @@ class _LoginWidgetState extends State<LoginWidget>
                                           );
                                         },
                                       );
+                                      return;
                                     }
                                   } else {
                                     await showDialog(
@@ -565,6 +564,7 @@ class _LoginWidgetState extends State<LoginWidget>
                                         );
                                       },
                                     );
+                                    return;
                                   }
                                 },
                                 text: 'เข้าสู่ระบบ',

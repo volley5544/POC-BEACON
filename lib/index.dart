@@ -38,3 +38,7 @@ export '/setting_event_list_copy2/setting_event_list_copy2_widget.dart'
     show SettingEventListCopy2Widget;
 export '/pages/setting/setting_event_list_copy3/setting_event_list_copy3_widget.dart'
     show SettingEventListCopy3Widget;
+export '/pages/setting/setting_event_copy/setting_event_copy_widget.dart'
+    show SettingEventCopyWidget;
+export '/pages/setting/setting_event_list_copy/setting_event_list_copy_widget.dart'
+    show SettingEventListCopyWidget;

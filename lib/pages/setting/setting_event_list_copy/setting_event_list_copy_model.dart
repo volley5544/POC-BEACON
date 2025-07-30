@@ -2,23 +2,12 @@ import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/form_field_controller.dart';
 import '/index.dart';
-import 'setting_event_list_widget.dart' show SettingEventListWidget;
+import 'setting_event_list_copy_widget.dart' show SettingEventListCopyWidget;
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class SettingEventListModel extends FlutterFlowModel<SettingEventListWidget> {
-  ///  Local state fields for this page.
-
-  List<String> uploadImageTemp = [];
-  void addToUploadImageTemp(String item) => uploadImageTemp.add(item);
-  void removeFromUploadImageTemp(String item) => uploadImageTemp.remove(item);
-  void removeAtIndexFromUploadImageTemp(int index) =>
-      uploadImageTemp.removeAt(index);
-  void insertAtIndexInUploadImageTemp(int index, String item) =>
-      uploadImageTemp.insert(index, item);
-  void updateUploadImageTempAtIndex(int index, Function(String) updateFn) =>
-      uploadImageTemp[index] = updateFn(uploadImageTemp[index]);
-
+class SettingEventListCopyModel
+    extends FlutterFlowModel<SettingEventListCopyWidget> {
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for TabBar widget.
@@ -40,15 +29,11 @@ class SettingEventListModel extends FlutterFlowModel<SettingEventListWidget> {
   // State field(s) for DropDown widget.
   String? dropDownValue4;
   FormFieldController<String>? dropDownValueController4;
-  bool isDataUploading_uploadData4ps = false;
-  List<FFUploadedFile> uploadedLocalFiles_uploadData4ps = [];
-  List<String> uploadedFileUrls_uploadData4ps = [];
-
   // State field(s) for ListView widget.
 
-  PagingController<DocumentSnapshot?, EventsRecord>? listViewPagingController4;
-  Query? listViewPagingQuery4;
-  List<StreamSubscription?> listViewStreamSubscriptions4 = [];
+  PagingController<DocumentSnapshot?, EventsRecord>? listViewPagingController3;
+  Query? listViewPagingQuery3;
+  List<StreamSubscription?> listViewStreamSubscriptions3 = [];
 
   @override
   void initState(BuildContext context) {}
@@ -56,24 +41,24 @@ class SettingEventListModel extends FlutterFlowModel<SettingEventListWidget> {
   @override
   void dispose() {
     tabBarController?.dispose();
-    listViewStreamSubscriptions4.forEach((s) => s?.cancel());
-    listViewPagingController4?.dispose();
+    listViewStreamSubscriptions3.forEach((s) => s?.cancel());
+    listViewPagingController3?.dispose();
   }
 
   /// Additional helper methods.
-  PagingController<DocumentSnapshot?, EventsRecord> setListViewController4(
+  PagingController<DocumentSnapshot?, EventsRecord> setListViewController3(
     Query query, {
     DocumentReference<Object?>? parent,
   }) {
-    listViewPagingController4 ??= _createListViewController4(query, parent);
-    if (listViewPagingQuery4 != query) {
-      listViewPagingQuery4 = query;
-      listViewPagingController4?.refresh();
+    listViewPagingController3 ??= _createListViewController3(query, parent);
+    if (listViewPagingQuery3 != query) {
+      listViewPagingQuery3 = query;
+      listViewPagingController3?.refresh();
     }
-    return listViewPagingController4!;
+    return listViewPagingController3!;
   }
 
-  PagingController<DocumentSnapshot?, EventsRecord> _createListViewController4(
+  PagingController<DocumentSnapshot?, EventsRecord> _createListViewController3(
     Query query,
     DocumentReference<Object?>? parent,
   ) {
@@ -82,9 +67,9 @@ class SettingEventListModel extends FlutterFlowModel<SettingEventListWidget> {
     return controller
       ..addPageRequestListener(
         (nextPageMarker) => queryEventsRecordPage(
-          queryBuilder: (_) => listViewPagingQuery4 ??= query,
+          queryBuilder: (_) => listViewPagingQuery3 ??= query,
           nextPageMarker: nextPageMarker,
-          streamSubscriptions: listViewStreamSubscriptions4,
+          streamSubscriptions: listViewStreamSubscriptions3,
           controller: controller,
           pageSize: 10,
           isStream: true,
