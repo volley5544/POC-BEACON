@@ -1,24 +1,13 @@
-import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
-import 'setting_event_widget.dart' show SettingEventWidget;
+import 'setting_event_copy3_widget.dart' show SettingEventCopy3Widget;
 import 'package:flutter/material.dart';
 
-class SettingEventModel extends FlutterFlowModel<SettingEventWidget> {
-  ///  Local state fields for this page.
-
-  int? statusCode;
-
-  String? statusMessage;
-
-  String? statusDescription;
-
+class SettingEventCopy3Model extends FlutterFlowModel<SettingEventCopy3Widget> {
   ///  State fields for stateful widgets in this page.
 
   final formKey = GlobalKey<FormState>();
-  // Stores action output result for [Firestore Query - Query a collection] action in SettingEvent widget.
-  EventsRecord? dataEvent;
   // State field(s) for eventName widget.
   FocusNode? eventNameFocusNode;
   TextEditingController? eventNameTextController;
@@ -56,10 +45,8 @@ class SettingEventModel extends FlutterFlowModel<SettingEventWidget> {
       frequencyMinuteTextControllerValidator;
   DateTime? datePicked1;
   DateTime? datePicked2;
-  // Stores action output result for [Backend Call - API (createEvent)] action in Button widget.
-  ApiCallResponse? responseCreated;
-  // Stores action output result for [Backend Call - API (updateEvent)] action in Button widget.
-  ApiCallResponse? responseUpdated;
+  // Stores action output result for [Firestore Query - Query a collection] action in Button widget.
+  EventsRecord? maxEventId;
 
   @override
   void initState(BuildContext context) {

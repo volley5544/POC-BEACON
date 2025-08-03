@@ -1,13 +1,17 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/index.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'setting_event_model.dart';
 export 'setting_event_model.dart';
 
@@ -15,13 +19,15 @@ class SettingEventWidget extends StatefulWidget {
   const SettingEventWidget({
     super.key,
     this.eventId,
-    this.typePage,
-    this.eventDocRef,
+    required this.typePage,
+    this.newEventId,
+    this.responseUpdated,
   });
 
   final int? eventId;
   final String? typePage;
-  final EventsRecord? eventDocRef;
+  final int? newEventId;
+  final bool? responseUpdated;
 
   static String routeName = 'SettingEvent';
   static String routePath = '/settingEvent';
@@ -39,6 +45,17 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => SettingEventModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.dataEvent = await queryEventsRecordOnce(
+        queryBuilder: (eventsRecord) => eventsRecord.where(
+          'event_id',
+          isEqualTo: widget.eventId,
+        ),
+        singleRecord: true,
+      ).then((s) => s.firstOrNull);
+    });
 
     _model.eventNameFocusNode ??= FocusNode();
     _model.eventNameFocusNode!.addListener(() => safeSetState(() {}));
@@ -63,8 +80,16 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<EventsRecord>(
-      stream: EventsRecord.getDocument(widget.eventDocRef!.reference),
+    context.watch<FFAppState>();
+
+    return StreamBuilder<List<EventsRecord>>(
+      stream: queryEventsRecord(
+        queryBuilder: (eventsRecord) => eventsRecord.where(
+          'event_id',
+          isEqualTo: widget.eventId,
+        ),
+        singleRecord: true,
+      ),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
@@ -83,8 +108,10 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
             ),
           );
         }
-
-        final settingEventEventsRecord = snapshot.data!;
+        List<EventsRecord> settingEventEventsRecordList = snapshot.data!;
+        final settingEventEventsRecord = settingEventEventsRecordList.isNotEmpty
+            ? settingEventEventsRecordList.first
+            : null;
 
         return GestureDetector(
           onTap: () {
@@ -102,7 +129,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${widget.eventId != null ? 'แก้ไขกิจกรรม' : 'เพิ่มกิจกรรม'}',
+                    '${widget.typePage == 'edit' ? 'แก้ไขกิจกรรม' : 'เพิ่มกิจกรรม'}',
                     style: FlutterFlowTheme.of(context).headlineMedium.override(
                           font: GoogleFonts.outfit(
                             fontWeight: FlutterFlowTheme.of(context)
@@ -175,223 +202,27 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      StreamBuilder<List<EventsRecord>>(
-                                        stream: queryEventsRecord(
-                                          singleRecord: true,
-                                        ),
-                                        builder: (context, snapshot) {
-                                          // Customize what your widget looks like when it's loading.
-                                          if (!snapshot.hasData) {
-                                            return Center(
-                                              child: SizedBox(
-                                                width: 50.0,
-                                                height: 50.0,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  valueColor:
-                                                      AlwaysStoppedAnimation<
-                                                          Color>(
-                                                    FlutterFlowTheme.of(context)
-                                                        .primary,
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                          List<EventsRecord>
-                                              eventNameEventsRecordList =
-                                              snapshot.data!;
-                                          // Return an empty Container when the item does not exist.
-                                          if (snapshot.data!.isEmpty) {
-                                            return Container();
-                                          }
-                                          final eventNameEventsRecord =
-                                              eventNameEventsRecordList
-                                                      .isNotEmpty
-                                                  ? eventNameEventsRecordList
-                                                      .first
-                                                  : null;
-
-                                          return TextFormField(
-                                            controller: _model
-                                                    .eventNameTextController ??=
+                                      TextFormField(
+                                        controller:
+                                            _model.eventNameTextController ??=
                                                 TextEditingController(
-                                              text: widget.typePage == 'add'
-                                                  ? ''
-                                                  : eventNameEventsRecord
-                                                      ?.eventName,
-                                            ),
-                                            focusNode:
-                                                _model.eventNameFocusNode,
-                                            autofocus: true,
-                                            textCapitalization:
-                                                TextCapitalization.words,
-                                            obscureText: false,
-                                            decoration: InputDecoration(
-                                              labelText: 'ชื่อกิจกรรม*',
-                                              labelStyle: FlutterFlowTheme.of(
-                                                      context)
-                                                  .headlineMedium
-                                                  .override(
-                                                    font: GoogleFonts.outfit(
-                                                      fontWeight:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .headlineMedium
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .headlineMedium
-                                                              .fontStyle,
-                                                    ),
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .secondaryText,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .headlineMedium
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .headlineMedium
-                                                            .fontStyle,
-                                                  ),
-                                              alignLabelWithHint: false,
-                                              hintStyle: FlutterFlowTheme.of(
-                                                      context)
-                                                  .labelMedium
-                                                  .override(
-                                                    font: GoogleFonts.readexPro(
-                                                      fontWeight:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .labelMedium
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .labelMedium
-                                                              .fontStyle,
-                                                    ),
-                                                    letterSpacing: 0.0,
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .labelMedium
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .labelMedium
-                                                            .fontStyle,
-                                                  ),
-                                              errorStyle: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    font: GoogleFonts.readexPro(
-                                                      fontWeight:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .fontStyle,
-                                                    ),
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .error,
-                                                    fontSize: 12.0,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontStyle,
-                                                  ),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .alternate,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primary,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                              ),
-                                              errorBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .error,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                              ),
-                                              focusedErrorBorder:
-                                                  OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .error,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                              ),
-                                              filled: true,
-                                              fillColor: (_model
-                                                          .eventNameFocusNode
-                                                          ?.hasFocus ??
-                                                      false)
-                                                  ? FlutterFlowTheme.of(context)
-                                                      .accent1
-                                                  : FlutterFlowTheme.of(context)
-                                                      .secondaryBackground,
-                                              contentPadding:
-                                                  EdgeInsetsDirectional
-                                                      .fromSTEB(16.0, 20.0,
-                                                          16.0, 20.0),
-                                            ),
-                                            style: FlutterFlowTheme.of(context)
-                                                .headlineMedium
-                                                .override(
-                                                  font: GoogleFonts.outfit(
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .headlineMedium
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .headlineMedium
-                                                            .fontStyle,
-                                                  ),
-                                                  letterSpacing: 0.0,
+                                          text: widget.typePage == 'edit'
+                                              ? settingEventEventsRecord
+                                                  ?.eventName
+                                              : '',
+                                        ),
+                                        focusNode: _model.eventNameFocusNode,
+                                        autofocus: true,
+                                        textCapitalization:
+                                            TextCapitalization.words,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'ชื่อกิจกรรม*',
+                                          labelStyle: FlutterFlowTheme.of(
+                                                  context)
+                                              .headlineMedium
+                                              .override(
+                                                font: GoogleFonts.outfit(
                                                   fontWeight:
                                                       FlutterFlowTheme.of(
                                                               context)
@@ -403,35 +234,180 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                           .headlineMedium
                                                           .fontStyle,
                                                 ),
-                                            cursorColor:
-                                                FlutterFlowTheme.of(context)
-                                                    .primary,
-                                            validator: _model
-                                                .eventNameTextControllerValidator
-                                                .asValidator(context),
-                                            inputFormatters: [
-                                              if (!isAndroid && !isiOS)
-                                                TextInputFormatter.withFunction(
-                                                    (oldValue, newValue) {
-                                                  return TextEditingValue(
-                                                    selection:
-                                                        newValue.selection,
-                                                    text: newValue.text
-                                                        .toCapitalization(
-                                                            TextCapitalization
-                                                                .words),
-                                                  );
-                                                }),
-                                            ],
-                                          );
-                                        },
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                letterSpacing: 0.0,
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .headlineMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .headlineMedium
+                                                        .fontStyle,
+                                              ),
+                                          alignLabelWithHint: false,
+                                          hintStyle: FlutterFlowTheme.of(
+                                                  context)
+                                              .labelMedium
+                                              .override(
+                                                font: GoogleFonts.readexPro(
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .labelMedium
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .labelMedium
+                                                          .fontStyle,
+                                                ),
+                                                letterSpacing: 0.0,
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelMedium
+                                                        .fontStyle,
+                                              ),
+                                          errorStyle: FlutterFlowTheme.of(
+                                                  context)
+                                              .bodyMedium
+                                              .override(
+                                                font: GoogleFonts.readexPro(
+                                                  fontWeight:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontWeight,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .fontStyle,
+                                                ),
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .error,
+                                                fontSize: 12.0,
+                                                letterSpacing: 0.0,
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .alternate,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primary,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .error,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                          ),
+                                          focusedErrorBorder:
+                                              OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .error,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                          ),
+                                          filled: true,
+                                          fillColor: (_model.eventNameFocusNode
+                                                      ?.hasFocus ??
+                                                  false)
+                                              ? FlutterFlowTheme.of(context)
+                                                  .accent1
+                                              : FlutterFlowTheme.of(context)
+                                                  .secondaryBackground,
+                                          contentPadding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  16.0, 20.0, 16.0, 20.0),
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .headlineMedium
+                                            .override(
+                                              font: GoogleFonts.outfit(
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .headlineMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .headlineMedium
+                                                        .fontStyle,
+                                              ),
+                                              letterSpacing: 0.0,
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .headlineMedium
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .headlineMedium
+                                                      .fontStyle,
+                                            ),
+                                        cursorColor:
+                                            FlutterFlowTheme.of(context)
+                                                .primary,
+                                        validator: _model
+                                            .eventNameTextControllerValidator
+                                            .asValidator(context),
+                                        inputFormatters: [
+                                          if (!isAndroid && !isiOS)
+                                            TextInputFormatter.withFunction(
+                                                (oldValue, newValue) {
+                                              return TextEditingValue(
+                                                selection: newValue.selection,
+                                                text: newValue.text
+                                                    .toCapitalization(
+                                                        TextCapitalization
+                                                            .words),
+                                              );
+                                            }),
+                                        ],
                                       ),
                                       TextFormField(
                                         controller:
                                             _model.descriptionTextController ??=
                                                 TextEditingController(
-                                          text: settingEventEventsRecord
-                                              .description,
+                                          text: widget.typePage == 'edit'
+                                              ? settingEventEventsRecord
+                                                  ?.description
+                                              : '',
                                         ),
                                         focusNode: _model.descriptionFocusNode,
                                         autofocus: true,
@@ -626,9 +602,11 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                         controller: _model
                                                 .frequencyAmountTextController ??=
                                             TextEditingController(
-                                          text: settingEventEventsRecord
-                                              .notificationFrequencyAmount
-                                              .toString(),
+                                          text: widget.typePage == 'edit'
+                                              ? settingEventEventsRecord
+                                                  ?.notificationFrequencyAmount
+                                                  .toString()
+                                              : '',
                                         ),
                                         focusNode:
                                             _model.frequencyAmountFocusNode,
@@ -820,9 +798,11 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                         controller: _model
                                                 .frequencyMinuteTextController ??=
                                             TextEditingController(
-                                          text: settingEventEventsRecord
-                                              .notificationFrequencyMinute
-                                              .toString(),
+                                          text: widget.typePage == 'edit'
+                                              ? settingEventEventsRecord
+                                                  ?.notificationFrequencyMinute
+                                                  .toString()
+                                              : '',
                                         ),
                                         focusNode:
                                             _model.frequencyMinuteFocusNode,
@@ -1075,8 +1055,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         await showDatePicker(
                                                       context: context,
                                                       initialDate:
-                                                          (settingEventEventsRecord
-                                                                  .startDatetime ??
+                                                          (_model.datePicked1 ??
                                                               DateTime.now()),
                                                       firstDate: DateTime(1900),
                                                       lastDate: DateTime(2050),
@@ -1135,7 +1114,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                           selectedDateTimeForegroundColor:
                                                               FlutterFlowTheme.of(
                                                                       context)
-                                                                  .info,
+                                                                  .primaryText,
                                                           actionButtonForegroundColor:
                                                               FlutterFlowTheme.of(
                                                                       context)
@@ -1152,11 +1131,10 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                           await showTimePicker(
                                                         context: context,
                                                         initialTime: TimeOfDay
-                                                            .fromDateTime(
-                                                                (settingEventEventsRecord
-                                                                        .startDatetime ??
-                                                                    DateTime
-                                                                        .now())),
+                                                            .fromDateTime((_model
+                                                                    .datePicked1 ??
+                                                                DateTime
+                                                                    .now())),
                                                         builder:
                                                             (context, child) {
                                                           return wrapInMaterialTimePickerTheme(
@@ -1210,7 +1188,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                             selectedDateTimeForegroundColor:
                                                                 FlutterFlowTheme.of(
                                                                         context)
-                                                                    .info,
+                                                                    .primaryText,
                                                             actionButtonForegroundColor:
                                                                 FlutterFlowTheme.of(
                                                                         context)
@@ -1243,8 +1221,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         null) {
                                                       safeSetState(() {
                                                         _model.datePicked1 =
-                                                            settingEventEventsRecord
-                                                                .startDatetime;
+                                                            _model.datePicked1;
                                                       });
                                                     }
                                                   },
@@ -1266,51 +1243,97 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         width: 2.0,
                                                       ),
                                                     ),
-                                                    child: Align(
-                                                      alignment:
-                                                          AlignmentDirectional(
-                                                              -1.0, 0.0),
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    12.0,
-                                                                    0.0,
-                                                                    0.0,
-                                                                    0.0),
-                                                        child: Text(
-                                                          dateTimeFormat(
-                                                              "d/M/y",
-                                                              settingEventEventsRecord
-                                                                  .startDatetime!),
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyLarge
-                                                              .override(
-                                                                font: GoogleFonts
-                                                                    .readexPro(
-                                                                  fontWeight: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyLarge
-                                                                      .fontWeight,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyLarge
-                                                                      .fontStyle,
-                                                                ),
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyLarge
-                                                                    .fontWeight,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyLarge
-                                                                    .fontStyle,
+                                                    child: Stack(
+                                                      children: [
+                                                        Align(
+                                                          alignment:
+                                                              AlignmentDirectional(
+                                                                  -1.0, 0.0),
+                                                          child: Padding(
+                                                            padding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        12.0,
+                                                                        0.0,
+                                                                        0.0,
+                                                                        0.0),
+                                                            child:
+                                                                SelectionArea(
+                                                                    child: Text(
+                                                              valueOrDefault<
+                                                                  String>(
+                                                                widget.typePage !=
+                                                                        'edit'
+                                                                    ? (_model.datePicked1 !=
+                                                                            null
+                                                                        ? dateTimeFormat(
+                                                                            "d/M/y",
+                                                                            _model
+                                                                                .datePicked1)
+                                                                        : '')
+                                                                    : (_model.datePicked1 !=
+                                                                            null
+                                                                        ? dateTimeFormat(
+                                                                            "d/M/y",
+                                                                            _model
+                                                                                .datePicked1)
+                                                                        : dateTimeFormat(
+                                                                            "d/M/y",
+                                                                            settingEventEventsRecord?.startDatetime)),
+                                                                'กรุณาเลือกวัน',
                                                               ),
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyLarge
+                                                                  .override(
+                                                                    font: GoogleFonts
+                                                                        .readexPro(
+                                                                      fontWeight: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyLarge
+                                                                          .fontWeight,
+                                                                      fontStyle: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyLarge
+                                                                          .fontStyle,
+                                                                    ),
+                                                                    letterSpacing:
+                                                                        0.0,
+                                                                    fontWeight: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyLarge
+                                                                        .fontWeight,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyLarge
+                                                                        .fontStyle,
+                                                                  ),
+                                                            )),
+                                                          ),
                                                         ),
-                                                      ),
+                                                        Align(
+                                                          alignment:
+                                                              AlignmentDirectional(
+                                                                  1.0, 0.0),
+                                                          child: Padding(
+                                                            padding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        0.0,
+                                                                        0.0,
+                                                                        5.0,
+                                                                        0.0),
+                                                            child: Icon(
+                                                              Icons
+                                                                  .edit_calendar,
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .secondaryText,
+                                                              size: 24.0,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
                                                 ),
@@ -1385,11 +1408,30 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                                   0.0,
                                                                   0.0,
                                                                   0.0),
-                                                      child: Text(
-                                                        dateTimeFormat(
-                                                            "Hm",
-                                                            settingEventEventsRecord
-                                                                .startDatetime!),
+                                                      child: SelectionArea(
+                                                          child: Text(
+                                                        valueOrDefault<String>(
+                                                          widget.typePage !=
+                                                                  'edit'
+                                                              ? (_model.datePicked1 !=
+                                                                      null
+                                                                  ? dateTimeFormat(
+                                                                      "Hm",
+                                                                      _model
+                                                                          .datePicked1)
+                                                                  : '')
+                                                              : (_model.datePicked1 !=
+                                                                      null
+                                                                  ? dateTimeFormat(
+                                                                      "Hm",
+                                                                      _model
+                                                                          .datePicked1)
+                                                                  : dateTimeFormat(
+                                                                      "Hm",
+                                                                      settingEventEventsRecord
+                                                                          ?.startDatetime)),
+                                                          'กรุณาเลือกวัน',
+                                                        ),
                                                         style:
                                                             FlutterFlowTheme.of(
                                                                     context)
@@ -1417,7 +1459,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                                       .bodyLarge
                                                                       .fontStyle,
                                                                 ),
-                                                      ),
+                                                      )),
                                                     ),
                                                   ),
                                                 ),
@@ -1481,8 +1523,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         await showDatePicker(
                                                       context: context,
                                                       initialDate:
-                                                          (settingEventEventsRecord
-                                                                  .endDatetime ??
+                                                          (_model.datePicked2 ??
                                                               DateTime.now()),
                                                       firstDate: DateTime(1900),
                                                       lastDate: DateTime(2050),
@@ -1558,11 +1599,10 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                           await showTimePicker(
                                                         context: context,
                                                         initialTime: TimeOfDay
-                                                            .fromDateTime(
-                                                                (settingEventEventsRecord
-                                                                        .endDatetime ??
-                                                                    DateTime
-                                                                        .now())),
+                                                            .fromDateTime((_model
+                                                                    .datePicked2 ??
+                                                                DateTime
+                                                                    .now())),
                                                         builder:
                                                             (context, child) {
                                                           return wrapInMaterialTimePickerTheme(
@@ -1649,8 +1689,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         null) {
                                                       safeSetState(() {
                                                         _model.datePicked2 =
-                                                            settingEventEventsRecord
-                                                                .endDatetime;
+                                                            _model.datePicked2;
                                                       });
                                                     }
                                                   },
@@ -1672,51 +1711,97 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         width: 2.0,
                                                       ),
                                                     ),
-                                                    child: Align(
-                                                      alignment:
-                                                          AlignmentDirectional(
-                                                              -1.0, 0.0),
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    12.0,
-                                                                    0.0,
-                                                                    0.0,
-                                                                    0.0),
-                                                        child: Text(
-                                                          dateTimeFormat(
-                                                              "d/M/y",
-                                                              settingEventEventsRecord
-                                                                  .endDatetime!),
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyLarge
-                                                              .override(
-                                                                font: GoogleFonts
-                                                                    .readexPro(
-                                                                  fontWeight: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyLarge
-                                                                      .fontWeight,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyLarge
-                                                                      .fontStyle,
-                                                                ),
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyLarge
-                                                                    .fontWeight,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyLarge
-                                                                    .fontStyle,
+                                                    child: Stack(
+                                                      children: [
+                                                        Align(
+                                                          alignment:
+                                                              AlignmentDirectional(
+                                                                  -1.0, 0.0),
+                                                          child: Padding(
+                                                            padding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        12.0,
+                                                                        0.0,
+                                                                        0.0,
+                                                                        0.0),
+                                                            child:
+                                                                SelectionArea(
+                                                                    child: Text(
+                                                              valueOrDefault<
+                                                                  String>(
+                                                                widget.typePage !=
+                                                                        'edit'
+                                                                    ? (_model.datePicked2 !=
+                                                                            null
+                                                                        ? dateTimeFormat(
+                                                                            "d/M/y",
+                                                                            _model
+                                                                                .datePicked2)
+                                                                        : '')
+                                                                    : (_model.datePicked2 !=
+                                                                            null
+                                                                        ? dateTimeFormat(
+                                                                            "d/M/y",
+                                                                            _model
+                                                                                .datePicked2)
+                                                                        : dateTimeFormat(
+                                                                            "d/M/y",
+                                                                            settingEventEventsRecord?.endDatetime)),
+                                                                'กรุณาเลือกวัน',
                                                               ),
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyLarge
+                                                                  .override(
+                                                                    font: GoogleFonts
+                                                                        .readexPro(
+                                                                      fontWeight: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyLarge
+                                                                          .fontWeight,
+                                                                      fontStyle: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyLarge
+                                                                          .fontStyle,
+                                                                    ),
+                                                                    letterSpacing:
+                                                                        0.0,
+                                                                    fontWeight: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyLarge
+                                                                        .fontWeight,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyLarge
+                                                                        .fontStyle,
+                                                                  ),
+                                                            )),
+                                                          ),
                                                         ),
-                                                      ),
+                                                        Align(
+                                                          alignment:
+                                                              AlignmentDirectional(
+                                                                  1.0, 0.0),
+                                                          child: Padding(
+                                                            padding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        0.0,
+                                                                        0.0,
+                                                                        5.0,
+                                                                        0.0),
+                                                            child: Icon(
+                                                              Icons
+                                                                  .edit_calendar,
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .secondaryText,
+                                                              size: 24.0,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
                                                 ),
@@ -1779,26 +1864,47 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                       width: 2.0,
                                                     ),
                                                   ),
-                                                  child: Align(
-                                                    alignment:
-                                                        AlignmentDirectional(
-                                                            -1.0, 0.0),
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  12.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
-                                                      child: Text(
-                                                        dateTimeFormat(
-                                                            "Hm",
-                                                            settingEventEventsRecord
-                                                                .endDatetime!),
-                                                        style:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
+                                                  child: Stack(
+                                                    children: [
+                                                      Align(
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                -1.0, 0.0),
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      12.0,
+                                                                      0.0,
+                                                                      0.0,
+                                                                      0.0),
+                                                          child: SelectionArea(
+                                                              child: Text(
+                                                            valueOrDefault<
+                                                                String>(
+                                                              widget.typePage !=
+                                                                      'edit'
+                                                                  ? (_model.datePicked2 !=
+                                                                          null
+                                                                      ? dateTimeFormat(
+                                                                          "Hm",
+                                                                          _model
+                                                                              .datePicked2)
+                                                                      : '')
+                                                                  : (_model.datePicked2 !=
+                                                                          null
+                                                                      ? dateTimeFormat(
+                                                                          "Hm",
+                                                                          _model
+                                                                              .datePicked2)
+                                                                      : dateTimeFormat(
+                                                                          "Hm",
+                                                                          settingEventEventsRecord
+                                                                              ?.endDatetime)),
+                                                              'กรุณาเลือกวัน',
+                                                            ),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
                                                                 .bodyLarge
                                                                 .override(
                                                                   font: GoogleFonts
@@ -1823,8 +1929,10 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                                       .bodyLarge
                                                                       .fontStyle,
                                                                 ),
+                                                          )),
+                                                        ),
                                                       ),
-                                                    ),
+                                                    ],
                                                   ),
                                                 ),
                                               ].divide(SizedBox(height: 4.0)),
@@ -1833,33 +1941,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                         ].divide(SizedBox(width: 12.0)),
                                       ),
                                       Text(
-                                        widget.eventId.toString(),
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              font: GoogleFonts.readexPro(
-                                                fontWeight:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontWeight,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                              letterSpacing: 0.0,
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                            ),
-                                      ),
-                                      Text(
-                                        widget.eventDocRef!.reference.id,
+                                        widget.eventId!.toString(),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -1900,140 +1982,260 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                         maxWidth: 770.0,
                       ),
                       decoration: BoxDecoration(),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            16.0, 12.0, 16.0, 12.0),
-                        child: FFButtonWidget(
-                          onPressed: () async {
-                            if (settingEventEventsRecord.eventName != '') {
-                              if ((widget.eventId == null) ||
-                                  (widget.eventId == 0)) {
-                                await EventsRecord.collection.doc().set({
-                                  ...createEventsRecordData(
-                                    eventId: 5,
-                                    eventName:
-                                        _model.eventNameTextController.text,
-                                    description:
-                                        _model.descriptionTextController.text,
-                                    createdBy: currentUserReference?.path,
-                                    startDatetime: _model.datePicked1,
-                                    notificationFrequencyAmount: int.tryParse(
-                                        _model.frequencyAmountTextController
-                                            .text),
-                                    notificationFrequencyMinute: int.tryParse(
-                                        _model.frequencyMinuteTextController
-                                            .text),
-                                    isActive: 0,
-                                    endDatetime: _model.datePicked2,
-                                  ),
-                                  ...mapToFirestore(
-                                    {
-                                      'created_at':
-                                          FieldValue.serverTimestamp(),
-                                    },
-                                  ),
-                                });
-                              } else {
-                                await settingEventEventsRecord.reference
-                                    .update({
-                                  ...createEventsRecordData(
-                                    eventName:
-                                        _model.eventNameTextController.text,
-                                    description:
-                                        _model.descriptionTextController.text,
-                                    updatedBy: currentUserReference?.path,
-                                    startDatetime: _model.datePicked1,
-                                    endDatetime: _model.datePicked2,
-                                    notificationFrequencyAmount: int.tryParse(
-                                        _model.frequencyAmountTextController
-                                            .text),
-                                    notificationFrequencyMinute: int.tryParse(
-                                        _model.frequencyMinuteTextController
-                                            .text),
-                                    isActive: 0,
-                                  ),
-                                  ...mapToFirestore(
-                                    {
-                                      'updated_at':
-                                          FieldValue.serverTimestamp(),
-                                    },
-                                  ),
-                                });
-                              }
+                      alignment: AlignmentDirectional(0.0, -1.0),
+                      child: Align(
+                        alignment: AlignmentDirectional(0.0, -1.0),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 50.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16.0, 12.0, 16.0, 12.0),
+                                child: FFButtonWidget(
+                                  onPressed: () async {
+                                    var _shouldSetState = false;
+                                    if (_model.eventNameTextController.text !=
+                                            '') {
+                                      if ((widget.eventId == null) ||
+                                          (widget.eventId == 0)) {
+                                        _model.responseCreated = await RasGroup
+                                            .createEventCall
+                                            .call();
 
-                              await showDialog(
-                                context: context,
-                                builder: (alertDialogContext) {
-                                  return AlertDialog(
-                                    title: Text('สำเร็จ'),
-                                    content: Text('บันทึกข้อมูลสำเร็จ'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.pop(alertDialogContext),
-                                        child: Text('Ok'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
+                                        _shouldSetState = true;
+                                        await showDialog(
+                                          context: context,
+                                          builder: (alertDialogContext) {
+                                            return AlertDialog(
+                                              content: Text((_model
+                                                          .responseCreated
+                                                          ?.jsonBody ??
+                                                      '')
+                                                  .toString()),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          alertDialogContext),
+                                                  child: Text('Ok'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      } else {
+                                        await showDialog(
+                                          context: context,
+                                          builder: (alertDialogContext) {
+                                            return AlertDialog(
+                                              title: Text('StartDate'),
+                                              content: Text(_model.datePicked1!
+                                                  .toString()),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          alertDialogContext),
+                                                  child: Text('Ok'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                        await showDialog(
+                                          context: context,
+                                          builder: (alertDialogContext) {
+                                            return AlertDialog(
+                                              title: Text('EndDate'),
+                                              content: Text(_model.datePicked2!
+                                                  .toString()),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          alertDialogContext),
+                                                  child: Text('Ok'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                        _model.responseUpdated =
+                                            await RasGroup.updateEventCall.call(
+                                          eventName: _model
+                                              .eventNameTextController.text,
+                                          description: _model
+                                              .descriptionTextController.text,
+                                          notificationFrequencyAmount:
+                                              int.tryParse(_model
+                                                  .frequencyAmountTextController
+                                                  .text),
+                                          notificationFrequencyMinute:
+                                              int.tryParse(_model
+                                                  .frequencyMinuteTextController
+                                                  .text),
+                                          startDatetime:
+                                              _model.datePicked1?.toString(),
+                                          endDatetime:
+                                              _model.datePicked2?.toString(),
+                                          isActive: 0,
+                                          updatedBy: currentUserReference?.path,
+                                          authToken: FFAppState().token,
+                                          docRef: settingEventEventsRecord
+                                              ?.reference.id,
+                                        );
 
-                              context
-                                  .pushNamed(SettingEventListWidget.routeName);
-                            } else {
-                              await showDialog(
-                                context: context,
-                                builder: (alertDialogContext) {
-                                  return AlertDialog(
-                                    title: Text('ข้อมูลไม่ครบถ้วน'),
-                                    content: Text('กรุณากรอก ชื่อกิจกรรม'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.pop(alertDialogContext),
-                                        child: Text('Ok'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            }
-                          },
-                          text: 'บันทึก',
-                          options: FFButtonOptions(
-                            width: double.infinity,
-                            height: 48.0,
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                24.0, 0.0, 24.0, 0.0),
-                            iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            color: FlutterFlowTheme.of(context).primary,
-                            textStyle: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .override(
-                                  font: GoogleFonts.readexPro(
-                                    fontWeight: FlutterFlowTheme.of(context)
+                                        _shouldSetState = true;
+                                        _model.statusCode = getJsonField(
+                                          (_model.responseUpdated?.jsonBody ??
+                                              ''),
+                                          r'''$.status_code''',
+                                        );
+                                        _model.statusMessage = getJsonField(
+                                          (_model.responseUpdated?.jsonBody ??
+                                              ''),
+                                          r'''$.status_message''',
+                                        ).toString();
+                                        _model.statusDescription = getJsonField(
+                                          (_model.responseUpdated?.jsonBody ??
+                                              ''),
+                                          r'''$.description''',
+                                        ).toString();
+                                        safeSetState(() {});
+                                        if (_model.statusCode == 200) {
+                                          await showDialog(
+                                            context: context,
+                                            builder: (alertDialogContext) {
+                                              return AlertDialog(
+                                                title: Text('สำเร็จ'),
+                                                content:
+                                                    Text('แก้ไขข้อมูลสำเร็จ'),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(
+                                                            alertDialogContext),
+                                                    child: Text('Ok'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        } else {
+                                          await showDialog(
+                                            context: context,
+                                            builder: (alertDialogContext) {
+                                              return AlertDialog(
+                                                title: Text(
+                                                    'แก้ไขข้อมูลไม่สำเร็จ'),
+                                                content: Text(
+                                                    _model.statusDescription!),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(
+                                                            alertDialogContext),
+                                                    child: Text('Ok'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        }
+
+                                        if (_shouldSetState)
+                                          safeSetState(() {});
+                                        return;
+                                      }
+
+                                      await showDialog(
+                                        context: context,
+                                        builder: (alertDialogContext) {
+                                          return AlertDialog(
+                                            title: Text('สำเร็จ'),
+                                            content: Text('บันทึกข้อมูลสำเร็จ'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(
+                                                    alertDialogContext),
+                                                child: Text('Ok'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+
+                                      context.pushNamed(
+                                          SettingEventListWidget.routeName);
+                                    } else {
+                                      await showDialog(
+                                        context: context,
+                                        builder: (alertDialogContext) {
+                                          return AlertDialog(
+                                            title: Text('ข้อมูลไม่ครบถ้วน'),
+                                            content:
+                                                Text('กรุณากรอก ชื่อกิจกรรม'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(
+                                                    alertDialogContext),
+                                                child: Text('Ok'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
+
+                                    if (_shouldSetState) safeSetState(() {});
+                                  },
+                                  text: 'บันทึก',
+                                  options: FFButtonOptions(
+                                    width: double.infinity,
+                                    height: 48.0,
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        24.0, 0.0, 24.0, 0.0),
+                                    iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 0.0),
+                                    color: FlutterFlowTheme.of(context).primary,
+                                    textStyle: FlutterFlowTheme.of(context)
                                         .titleSmall
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .fontStyle,
+                                        .override(
+                                          font: GoogleFonts.readexPro(
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .titleSmall
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .titleSmall
+                                                    .fontStyle,
+                                          ),
+                                          color: Colors.white,
+                                          letterSpacing: 0.0,
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleSmall
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleSmall
+                                                  .fontStyle,
+                                        ),
+                                    elevation: 3.0,
+                                    borderSide: BorderSide(
+                                      color: Colors.transparent,
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8.0),
                                   ),
-                                  color: Colors.white,
-                                  letterSpacing: 0.0,
-                                  fontWeight: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .fontWeight,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .fontStyle,
                                 ),
-                            elevation: 3.0,
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ],
                           ),
                         ),
                       ),

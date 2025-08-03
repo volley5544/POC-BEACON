@@ -159,8 +159,8 @@ final parametersBuilderMap =
         allParams: {
           'eventId': getParameter<int>(data, 'eventId'),
           'typePage': getParameter<String>(data, 'typePage'),
-          'eventDocRef': await getDocumentParameter<EventsRecord>(
-              data, 'eventDocRef', EventsRecord.fromSnapshot),
+          'newEventId': getParameter<int>(data, 'newEventId'),
+          'responseUpdated': getParameter<bool>(data, 'responseUpdated'),
         },
       ),
   'SettingBoothList': (data) async => ParameterData(
@@ -176,19 +176,24 @@ final parametersBuilderMap =
           'eventDocRef': getParameter<DocumentReference>(data, 'eventDocRef'),
         },
       ),
-  'Onboarding05': ParameterData.none(),
   'SettingEventListCopy2': ParameterData.none(),
   'SettingEventListCopy3': ParameterData.none(),
+  'SettingEventListCopy': (data) async => ParameterData(
+        allParams: {
+          'isActive': getParameter<int>(data, 'isActive'),
+        },
+      ),
+  'SettingEventCopy3': (data) async => ParameterData(
+        allParams: {
+          'eventId': getParameter<int>(data, 'eventId'),
+          'typePage': getParameter<String>(data, 'typePage'),
+        },
+      ),
   'SettingEventCopy': (data) async => ParameterData(
         allParams: {
           'eventId': getParameter<int>(data, 'eventId'),
           'typePage': getParameter<String>(data, 'typePage'),
-          'eventDocRef': getParameter<DocumentReference>(data, 'eventDocRef'),
-        },
-      ),
-  'SettingEventListCopy': (data) async => ParameterData(
-        allParams: {
-          'isActive': getParameter<int>(data, 'isActive'),
+          'newEventId': getParameter<int>(data, 'newEventId'),
         },
       ),
 };

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'flutter_flow/request_manager.dart';
-import '/backend/backend.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FFAppState extends ChangeNotifier {
   static FFAppState _instance = FFAppState._internal();
@@ -15,12 +14,19 @@ class FFAppState extends ChangeNotifier {
     _instance = FFAppState._internal();
   }
 
-  Future initializePersistedState() async {}
+  Future initializePersistedState() async {
+    prefs = await SharedPreferences.getInstance();
+    _safeInit(() {
+      _token = prefs.getString('ff_token') ?? _token;
+    });
+  }
 
   void update(VoidCallback callback) {
     callback();
     notifyListeners();
   }
+
+  late SharedPreferences prefs;
 
   List<String> _listStringTemp = [
     'Hello World1',
@@ -57,18 +63,22 @@ class FFAppState extends ChangeNotifier {
     listStringTemp.insert(index, value);
   }
 
-  final _getEventByIdManager = StreamRequestManager<EventsRecord>();
-  Stream<EventsRecord> getEventById({
-    String? uniqueQueryKey,
-    bool? overrideCache,
-    required Stream<EventsRecord> Function() requestFn,
-  }) =>
-      _getEventByIdManager.performRequest(
-        uniqueQueryKey: uniqueQueryKey,
-        overrideCache: overrideCache,
-        requestFn: requestFn,
-      );
-  void clearGetEventByIdCache() => _getEventByIdManager.clear();
-  void clearGetEventByIdCacheKey(String? uniqueKey) =>
-      _getEventByIdManager.clearRequest(uniqueKey);
+  String _token = '';
+  String get token => _token;
+  set token(String value) {
+    _token = value;
+    prefs.setString('ff_token', value);
+  }
+}
+
+void _safeInit(Function() initializeField) {
+  try {
+    initializeField();
+  } catch (_) {}
+}
+
+Future _safeInitAsync(Function() initializeField) async {
+  try {
+    await initializeField();
+  } catch (_) {}
 }

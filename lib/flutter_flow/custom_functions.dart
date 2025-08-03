@@ -20,3 +20,11 @@ String? combineTextFullname(
 
   return outputText;
 }
+
+DateTime? parseStringToDatetime(String? datetimeString) {
+  return DateTime.parse(datetimeString!);
+}
+
+int? incrementByOne(int value) {
+  return value + 1;
+}

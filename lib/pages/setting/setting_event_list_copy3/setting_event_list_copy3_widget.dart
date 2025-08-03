@@ -103,7 +103,19 @@ class _SettingEventListCopy3WidgetState
         backgroundColor: FlutterFlowTheme.of(context).primary,
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            context.pushNamed(SettingEventWidget.routeName);
+            context.pushNamed(
+              SettingEventWidget.routeName,
+              queryParameters: {
+                'eventId': serializeParam(
+                  0,
+                  ParamType.int,
+                ),
+                'typePage': serializeParam(
+                  'add',
+                  ParamType.String,
+                ),
+              }.withoutNulls,
+            );
           },
           backgroundColor: FlutterFlowTheme.of(context).primary,
           elevation: 8.0,
@@ -1085,35 +1097,13 @@ class _SettingEventListCopy3WidgetState
                                                                           4.0,
                                                                           0.0,
                                                                           0.0),
-                                                                  child:
-                                                                      InkWell(
-                                                                    splashColor:
-                                                                        Colors
-                                                                            .transparent,
-                                                                    focusColor:
-                                                                        Colors
-                                                                            .transparent,
-                                                                    hoverColor:
-                                                                        Colors
-                                                                            .transparent,
-                                                                    highlightColor:
-                                                                        Colors
-                                                                            .transparent,
-                                                                    onTap:
-                                                                        () async {
-                                                                      context.pushNamed(
-                                                                          SettingEventWidget
-                                                                              .routeName);
-                                                                    },
-                                                                    child: Icon(
-                                                                      Icons
-                                                                          .edit_note_outlined,
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .success,
-                                                                      size:
-                                                                          24.0,
-                                                                    ),
+                                                                  child: Icon(
+                                                                    Icons
+                                                                        .edit_note_outlined,
+                                                                    color: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .success,
+                                                                    size: 24.0,
                                                                   ),
                                                                 ),
                                                                 Text(
@@ -1191,31 +1181,13 @@ class _SettingEventListCopy3WidgetState
                                                                             4.0,
                                                                             0.0,
                                                                             0.0),
-                                                                child: InkWell(
-                                                                  splashColor:
-                                                                      Colors
-                                                                          .transparent,
-                                                                  focusColor: Colors
-                                                                      .transparent,
-                                                                  hoverColor: Colors
-                                                                      .transparent,
-                                                                  highlightColor:
-                                                                      Colors
-                                                                          .transparent,
-                                                                  onTap:
-                                                                      () async {
-                                                                    context.pushNamed(
-                                                                        SettingEventWidget
-                                                                            .routeName);
-                                                                  },
-                                                                  child: Icon(
-                                                                    Icons
-                                                                        .delete_forever_rounded,
-                                                                    color: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .error,
-                                                                    size: 24.0,
-                                                                  ),
+                                                                child: Icon(
+                                                                  Icons
+                                                                      .delete_forever_rounded,
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .error,
+                                                                  size: 24.0,
                                                                 ),
                                                               ),
                                                               Text(

@@ -33,12 +33,13 @@ export '/pages/setting/setting_booth_list/setting_booth_list_widget.dart'
     show SettingBoothListWidget;
 export '/pages/setting/setting_booth/setting_booth_widget.dart'
     show SettingBoothWidget;
-export '/onboarding05/onboarding05_widget.dart' show Onboarding05Widget;
 export '/setting_event_list_copy2/setting_event_list_copy2_widget.dart'
     show SettingEventListCopy2Widget;
 export '/pages/setting/setting_event_list_copy3/setting_event_list_copy3_widget.dart'
     show SettingEventListCopy3Widget;
-export '/pages/setting/setting_event_copy/setting_event_copy_widget.dart'
-    show SettingEventCopyWidget;
 export '/pages/setting/setting_event_list_copy/setting_event_list_copy_widget.dart'
     show SettingEventListCopyWidget;
+export '/pages/setting/setting_event_copy3/setting_event_copy3_widget.dart'
+    show SettingEventCopy3Widget;
+export '/pages/setting/setting_event_copy/setting_event_copy_widget.dart'
+    show SettingEventCopyWidget;

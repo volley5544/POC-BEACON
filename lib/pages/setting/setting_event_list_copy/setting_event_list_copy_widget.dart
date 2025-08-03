@@ -120,6 +120,10 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
                       0,
                       ParamType.int,
                     ),
+                    'typePage': serializeParam(
+                      'add',
+                      ParamType.String,
+                    ),
                   }.withoutNulls,
                 );
               },
@@ -939,17 +943,12 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
                                                             ),
                                                             ParamType.int,
                                                           ),
-                                                          'eventDocRef':
+                                                          'typePage':
                                                               serializeParam(
-                                                            listViewEventsRecord,
-                                                            ParamType.Document,
+                                                            'edit',
+                                                            ParamType.String,
                                                           ),
                                                         }.withoutNulls,
-                                                        extra: <String,
-                                                            dynamic>{
-                                                          'eventDocRef':
-                                                              listViewEventsRecord,
-                                                        },
                                                       );
                                                     },
                                                     child: Column(
@@ -1171,45 +1170,13 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
                                                                           4.0,
                                                                           0.0,
                                                                           0.0),
-                                                                  child:
-                                                                      InkWell(
-                                                                    splashColor:
-                                                                        Colors
-                                                                            .transparent,
-                                                                    focusColor:
-                                                                        Colors
-                                                                            .transparent,
-                                                                    hoverColor:
-                                                                        Colors
-                                                                            .transparent,
-                                                                    highlightColor:
-                                                                        Colors
-                                                                            .transparent,
-                                                                    onTap:
-                                                                        () async {
-                                                                      context
-                                                                          .pushNamed(
-                                                                        SettingEventWidget
-                                                                            .routeName,
-                                                                        queryParameters:
-                                                                            {
-                                                                          'eventId':
-                                                                              serializeParam(
-                                                                            listViewEventsRecord.eventId,
-                                                                            ParamType.int,
-                                                                          ),
-                                                                        }.withoutNulls,
-                                                                      );
-                                                                    },
-                                                                    child: Icon(
-                                                                      Icons
-                                                                          .edit_note_outlined,
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .success,
-                                                                      size:
-                                                                          24.0,
-                                                                    ),
+                                                                  child: Icon(
+                                                                    Icons
+                                                                        .edit_note_outlined,
+                                                                    color: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .success,
+                                                                    size: 24.0,
                                                                   ),
                                                                 ),
                                                                 Text(
@@ -1379,43 +1346,13 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
                                                                             4.0,
                                                                             0.0,
                                                                             0.0),
-                                                                child: InkWell(
-                                                                  splashColor:
-                                                                      Colors
-                                                                          .transparent,
-                                                                  focusColor: Colors
-                                                                      .transparent,
-                                                                  hoverColor: Colors
-                                                                      .transparent,
-                                                                  highlightColor:
-                                                                      Colors
-                                                                          .transparent,
-                                                                  onTap:
-                                                                      () async {
-                                                                    context
-                                                                        .pushNamed(
-                                                                      SettingEventWidget
-                                                                          .routeName,
-                                                                      queryParameters:
-                                                                          {
-                                                                        'eventId':
-                                                                            serializeParam(
-                                                                          listViewEventsRecord
-                                                                              .eventId,
-                                                                          ParamType
-                                                                              .int,
-                                                                        ),
-                                                                      }.withoutNulls,
-                                                                    );
-                                                                  },
-                                                                  child: Icon(
-                                                                    Icons
-                                                                        .delete_forever_rounded,
-                                                                    color: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .error,
-                                                                    size: 24.0,
-                                                                  ),
+                                                                child: Icon(
+                                                                  Icons
+                                                                      .delete_forever_rounded,
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .error,
+                                                                  size: 24.0,
                                                                 ),
                                                               ),
                                                               Text(

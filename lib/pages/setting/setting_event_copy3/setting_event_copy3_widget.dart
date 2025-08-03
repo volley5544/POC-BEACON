@@ -4,48 +4,46 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'setting_event_copy_model.dart';
-export 'setting_event_copy_model.dart';
+import 'setting_event_copy3_model.dart';
+export 'setting_event_copy3_model.dart';
 
-class SettingEventCopyWidget extends StatefulWidget {
-  const SettingEventCopyWidget({
+class SettingEventCopy3Widget extends StatefulWidget {
+  const SettingEventCopy3Widget({
     super.key,
     this.eventId,
     required this.typePage,
-    this.newEventId,
   });
 
   final int? eventId;
   final String? typePage;
-  final int? newEventId;
 
-  static String routeName = 'SettingEventCopy';
-  static String routePath = '/settingEventCopy';
+  static String routeName = 'SettingEventCopy3';
+  static String routePath = '/settingEventCopy3';
 
   @override
-  State<SettingEventCopyWidget> createState() => _SettingEventCopyWidgetState();
+  State<SettingEventCopy3Widget> createState() =>
+      _SettingEventCopy3WidgetState();
 }
 
-class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
-  late SettingEventCopyModel _model;
+class _SettingEventCopy3WidgetState extends State<SettingEventCopy3Widget> {
+  late SettingEventCopy3Model _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => SettingEventCopyModel());
+    _model = createModel(context, () => SettingEventCopy3Model());
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.dataEvent = await queryEventsRecordOnce(
+      await queryEventsRecordOnce(
         queryBuilder: (eventsRecord) => eventsRecord.where(
           'event_id',
           isEqualTo: widget.eventId,
@@ -79,10 +77,15 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
   Widget build(BuildContext context) {
     return StreamBuilder<List<EventsRecord>>(
       stream: queryEventsRecord(
-        queryBuilder: (eventsRecord) => eventsRecord.where(
-          'event_id',
-          isEqualTo: widget.eventId,
-        ),
+        queryBuilder: (eventsRecord) => eventsRecord
+            .where(
+              'is_active',
+              isEqualTo: 0,
+            )
+            .where(
+              'event_id',
+              isEqualTo: widget.eventId,
+            ),
         singleRecord: true,
       ),
       builder: (context, snapshot) {
@@ -103,10 +106,14 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
             ),
           );
         }
-        List<EventsRecord> settingEventCopyEventsRecordList = snapshot.data!;
-        final settingEventCopyEventsRecord =
-            settingEventCopyEventsRecordList.isNotEmpty
-                ? settingEventCopyEventsRecordList.first
+        List<EventsRecord> settingEventCopy3EventsRecordList = snapshot.data!;
+        // Return an empty Container when the item does not exist.
+        if (snapshot.data!.isEmpty) {
+          return Container();
+        }
+        final settingEventCopy3EventsRecord =
+            settingEventCopy3EventsRecordList.isNotEmpty
+                ? settingEventCopy3EventsRecordList.first
                 : null;
 
         return GestureDetector(
@@ -203,7 +210,7 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
                                             _model.eventNameTextController ??=
                                                 TextEditingController(
                                           text: widget.typePage == 'edit'
-                                              ? settingEventCopyEventsRecord
+                                              ? settingEventCopy3EventsRecord
                                                   ?.eventName
                                               : '',
                                         ),
@@ -401,7 +408,7 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
                                             _model.descriptionTextController ??=
                                                 TextEditingController(
                                           text: widget.typePage == 'edit'
-                                              ? settingEventCopyEventsRecord
+                                              ? settingEventCopy3EventsRecord
                                                   ?.description
                                               : '',
                                         ),
@@ -599,7 +606,7 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
                                                 .frequencyAmountTextController ??=
                                             TextEditingController(
                                           text: widget.typePage == 'edit'
-                                              ? settingEventCopyEventsRecord
+                                              ? settingEventCopy3EventsRecord
                                                   ?.notificationFrequencyAmount
                                                   .toString()
                                               : '',
@@ -795,7 +802,7 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
                                                 .frequencyMinuteTextController ??=
                                             TextEditingController(
                                           text: widget.typePage == 'edit'
-                                              ? settingEventCopyEventsRecord
+                                              ? settingEventCopy3EventsRecord
                                                   ?.notificationFrequencyMinute
                                                   .toString()
                                               : '',
@@ -1051,7 +1058,8 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
                                                         await showDatePicker(
                                                       context: context,
                                                       initialDate:
-                                                          (_model.datePicked1 ??
+                                                          (settingEventCopy3EventsRecord
+                                                                  ?.startDatetime ??
                                                               DateTime.now()),
                                                       firstDate: DateTime(1900),
                                                       lastDate: DateTime(2050),
@@ -1127,10 +1135,11 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
                                                           await showTimePicker(
                                                         context: context,
                                                         initialTime: TimeOfDay
-                                                            .fromDateTime((_model
-                                                                    .datePicked1 ??
-                                                                DateTime
-                                                                    .now())),
+                                                            .fromDateTime(
+                                                                (settingEventCopy3EventsRecord
+                                                                        ?.startDatetime ??
+                                                                    DateTime
+                                                                        .now())),
                                                         builder:
                                                             (context, child) {
                                                           return wrapInMaterialTimePickerTheme(
@@ -1217,7 +1226,8 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
                                                         null) {
                                                       safeSetState(() {
                                                         _model.datePicked1 =
-                                                            _model.datePicked1;
+                                                            settingEventCopy3EventsRecord
+                                                                ?.startDatetime;
                                                       });
                                                     }
                                                   },
@@ -1275,7 +1285,7 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
                                                                                 .datePicked1)
                                                                         : dateTimeFormat(
                                                                             "d/M/y",
-                                                                            settingEventCopyEventsRecord?.startDatetime)),
+                                                                            settingEventCopy3EventsRecord?.startDatetime)),
                                                                 'กรุณาเลือกวัน',
                                                               ),
                                                               style: FlutterFlowTheme
@@ -1424,7 +1434,7 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
                                                                           .datePicked1)
                                                                   : dateTimeFormat(
                                                                       "Hm",
-                                                                      settingEventCopyEventsRecord
+                                                                      settingEventCopy3EventsRecord
                                                                           ?.startDatetime)),
                                                           'กรุณาเลือกวัน',
                                                         ),
@@ -1519,7 +1529,8 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
                                                         await showDatePicker(
                                                       context: context,
                                                       initialDate:
-                                                          (_model.datePicked2 ??
+                                                          (settingEventCopy3EventsRecord
+                                                                  ?.endDatetime ??
                                                               DateTime.now()),
                                                       firstDate: DateTime(1900),
                                                       lastDate: DateTime(2050),
@@ -1595,10 +1606,11 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
                                                           await showTimePicker(
                                                         context: context,
                                                         initialTime: TimeOfDay
-                                                            .fromDateTime((_model
-                                                                    .datePicked2 ??
-                                                                DateTime
-                                                                    .now())),
+                                                            .fromDateTime(
+                                                                (settingEventCopy3EventsRecord
+                                                                        ?.endDatetime ??
+                                                                    DateTime
+                                                                        .now())),
                                                         builder:
                                                             (context, child) {
                                                           return wrapInMaterialTimePickerTheme(
@@ -1685,7 +1697,8 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
                                                         null) {
                                                       safeSetState(() {
                                                         _model.datePicked2 =
-                                                            _model.datePicked2;
+                                                            settingEventCopy3EventsRecord
+                                                                ?.endDatetime;
                                                       });
                                                     }
                                                   },
@@ -1743,7 +1756,7 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
                                                                                 .datePicked2)
                                                                         : dateTimeFormat(
                                                                             "d/M/y",
-                                                                            settingEventCopyEventsRecord?.endDatetime)),
+                                                                            settingEventCopy3EventsRecord?.endDatetime)),
                                                                 'กรุณาเลือกวัน',
                                                               ),
                                                               style: FlutterFlowTheme
@@ -1895,7 +1908,7 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
                                                                               .datePicked2)
                                                                       : dateTimeFormat(
                                                                           "Hm",
-                                                                          settingEventCopyEventsRecord
+                                                                          settingEventCopy3EventsRecord
                                                                               ?.endDatetime)),
                                                               'กรุณาเลือกวัน',
                                                             ),
@@ -1935,106 +1948,6 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
                                             ),
                                           ),
                                         ].divide(SizedBox(width: 12.0)),
-                                      ),
-                                      FFButtonWidget(
-                                        onPressed: () async {
-                                          _model.newEventId =
-                                              await queryEventsRecordOnce(
-                                            queryBuilder: (eventsRecord) =>
-                                                eventsRecord.orderBy('event_id',
-                                                    descending: true),
-                                            singleRecord: true,
-                                          ).then((s) => s.firstOrNull);
-                                          if (functions
-                                                      .incrementByOne(
-                                                          widget.newEventId!)
-                                                      .toString() !=
-                                                  '') {
-                                            await showDialog(
-                                              context: context,
-                                              builder: (alertDialogContext) {
-                                                return AlertDialog(
-                                                  title: Text('AAAA'),
-                                                  content: Text(widget
-                                                      .newEventId!
-                                                      .toString()),
-                                                  actions: [
-                                                    TextButton(
-                                                      onPressed: () =>
-                                                          Navigator.pop(
-                                                              alertDialogContext),
-                                                      child: Text('Ok'),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          } else {
-                                            await showDialog(
-                                              context: context,
-                                              builder: (alertDialogContext) {
-                                                return AlertDialog(
-                                                  title: Text('BBB'),
-                                                  content: Text(widget
-                                                      .newEventId!
-                                                      .toString()),
-                                                  actions: [
-                                                    TextButton(
-                                                      onPressed: () =>
-                                                          Navigator.pop(
-                                                              alertDialogContext),
-                                                      child: Text('Ok'),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          }
-
-                                          safeSetState(() {});
-                                        },
-                                        text: 'Button',
-                                        options: FFButtonOptions(
-                                          height: 40.0,
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  16.0, 0.0, 16.0, 0.0),
-                                          iconPadding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
-                                          textStyle: FlutterFlowTheme.of(
-                                                  context)
-                                              .titleSmall
-                                              .override(
-                                                font: GoogleFonts.readexPro(
-                                                  fontWeight:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleSmall
-                                                          .fontWeight,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleSmall
-                                                          .fontStyle,
-                                                ),
-                                                color: Colors.white,
-                                                letterSpacing: 0.0,
-                                                fontWeight:
-                                                    FlutterFlowTheme.of(context)
-                                                        .titleSmall
-                                                        .fontWeight,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .titleSmall
-                                                        .fontStyle,
-                                              ),
-                                          elevation: 0.0,
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
                                       ),
                                       Text(
                                         widget.eventId!.toString(),
@@ -2093,7 +2006,11 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
                                     16.0, 12.0, 16.0, 12.0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    if (_model.eventNameTextController.text !=
+                                    if (settingEventCopy3EventsRecord
+                                                ?.eventName !=
+                                            null &&
+                                        settingEventCopy3EventsRecord
+                                                ?.eventName !=
                                             '') {
                                       if ((widget.eventId == null) ||
                                           (widget.eventId == 0)) {
@@ -2155,7 +2072,8 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
                                           ),
                                         });
                                       } else {
-                                        await _model.dataEvent!.reference
+                                        await settingEventCopy3EventsRecord!
+                                            .reference
                                             .update({
                                           ...createEventsRecordData(
                                             eventName: _model

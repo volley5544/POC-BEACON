@@ -1,3 +1,4 @@
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'setting_event_copy_widget.dart' show SettingEventCopyWidget;
@@ -7,6 +8,8 @@ class SettingEventCopyModel extends FlutterFlowModel<SettingEventCopyWidget> {
   ///  State fields for stateful widgets in this page.
 
   final formKey = GlobalKey<FormState>();
+  // Stores action output result for [Firestore Query - Query a collection] action in SettingEventCopy widget.
+  EventsRecord? dataEvent;
   // State field(s) for eventName widget.
   FocusNode? eventNameFocusNode;
   TextEditingController? eventNameTextController;
@@ -44,6 +47,10 @@ class SettingEventCopyModel extends FlutterFlowModel<SettingEventCopyWidget> {
       frequencyMinuteTextControllerValidator;
   DateTime? datePicked1;
   DateTime? datePicked2;
+  // Stores action output result for [Firestore Query - Query a collection] action in Button widget.
+  EventsRecord? newEventId;
+  // Stores action output result for [Firestore Query - Query a collection] action in Button widget.
+  EventsRecord? maxEventId;
 
   @override
   void initState(BuildContext context) {

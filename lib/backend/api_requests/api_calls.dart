@@ -8,6 +8,211 @@ export 'api_manager.dart' show ApiCallResponse;
 
 const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 
+/// Start RAS Group Code
+
+class RasGroup {
+  static String getBaseUrl() => 'https://5dc1b396baf6.ngrok-free.app';
+  static Map<String, String> headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer test-token-123456789',
+  };
+  static GetEventByIdCall getEventByIdCall = GetEventByIdCall();
+  static UpdateEventByIdCall updateEventByIdCall = UpdateEventByIdCall();
+  static CreateEventCall createEventCall = CreateEventCall();
+  static UpdateEventCall updateEventCall = UpdateEventCall();
+}
+
+class GetEventByIdCall {
+  Future<ApiCallResponse> call({
+    String? authToken = 'test-token-123456789',
+    String? docRef = '220bb192-0cc0-4180-b1bc-9e6ba3261e50',
+  }) async {
+    final baseUrl = RasGroup.getBaseUrl();
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'getEventById',
+      apiUrl: '${baseUrl}/events/event',
+      callType: ApiCallType.GET,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer test-token-123456789',
+      },
+      params: {
+        'doc_ref': "220bb192-0cc0-4180-b1bc-9e6ba3261e50",
+      },
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
+class UpdateEventByIdCall {
+  Future<ApiCallResponse> call({
+    String? authToken = 'test-token-123456789',
+    String? docRef = '220bb192-0cc0-4180-b1bc-9e6ba3261e50',
+    String? eventName = 'กิจกรรมใหม่',
+    String? description = 'กิจกรรมใหม่222',
+    int? notificationFrequencyAmount = 1,
+    int? notificationFrequencyMinute = 2,
+    String? startDatetime = '2025-02-05T10:00:00Z',
+    String? endDatetime = '2025-02-10T10:00:00Z',
+    int? isActive = 0,
+    String? updatedBy = 'users/m01gNYT1qqbOL1emlEPF4uc2b8F3',
+  }) async {
+    final baseUrl = RasGroup.getBaseUrl();
+
+    final ffApiRequestBody = '''
+{
+  "doc_ref": "c169206d-5d48-424b-a8b2-29cab964649c",
+  "event_name": "กิจกรรมใหม่",
+  "description": "อธิบายกิจกรรมใหม่",
+  "start_datetime": "2025-02-10T10:00:00Z",
+  "end_datetime": "2025-02-10T18:00:00Z",
+  "updated_by": "users/m01gNYT1qqbOL1emlEPF4uc2b8F3",
+  "is_active": 0,
+  "notification_frequency_amount": 3,
+  "notification_frequency_minute": 6
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'updateEventById',
+      apiUrl: '${baseUrl}/events/event',
+      callType: ApiCallType.PUT,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer test-token-123456789',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
+class CreateEventCall {
+  Future<ApiCallResponse> call({
+    String? authToken = 'test-token-123456789',
+    String? eventName = 'กิจกรรมใหม่',
+    String? description = 'อธิบายกิจกรรมใหม่',
+    String? startDatetime = '2025-02-10T10:00:00Z',
+    String? endDatetime = '2025-02-10T18:00:00Z',
+    int? notificationFrequencyAmount = 3,
+    int? notificationFrequencyMinute = 6,
+    int? isActive = 0,
+    String? createdBy = 'users/m01gNYT1qqbOL1emlEPF4uc2b8F3',
+    String? updatedBy = 'users/m01gNYT1qqbOL1emlEPF4uc2b8F3',
+  }) async {
+    final baseUrl = RasGroup.getBaseUrl();
+
+    final ffApiRequestBody = '''
+{
+  "event_name": "กิจกรรมใหม่",
+  "description": "อธิบายกิจกรรมใหม่",
+  "start_datetime": "2025-02-10T10:00:00Z",
+  "end_datetime": "2025-02-10T18:00:00Z",
+  "created_by": "users/m01gNYT1qqbOL1emlEPF4uc2b8F3",
+  "updated_by": "users/m01gNYT1qqbOL1emlEPF4uc2b8F3",
+  "is_active": 0,
+  "notification_frequency_amount": 3,
+  "notification_frequency_minute": 6
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'createEvent',
+      apiUrl: '${baseUrl}/events',
+      callType: ApiCallType.POST,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer test-token-123456789',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
+class UpdateEventCall {
+  Future<ApiCallResponse> call({
+    String? authToken = 'test-token-123456789',
+    String? eventName = 'กิจกรรมใหม่',
+    String? description = 'อธิบายกิจกรรมใหม่',
+    String? startDatetime = '2025-02-10T10:00:00Z',
+    String? endDatetime = '2025-02-10T18:00:00Z',
+    int? notificationFrequencyAmount = 3,
+    int? notificationFrequencyMinute = 6,
+    int? isActive = 0,
+    String? updatedBy = 'users/m01gNYT1qqbOL1emlEPF4uc2b8F3',
+    String? docRef = 'c169206d-5d48-424b-a8b2-29cab964649c',
+  }) async {
+    final baseUrl = RasGroup.getBaseUrl();
+
+    final ffApiRequestBody = '''
+{
+  "event_name": "${escapeStringForJson(eventName)}",
+  "description": "${escapeStringForJson(description)}",
+  "start_datetime": "${escapeStringForJson(startDatetime)}",
+  "end_datetime": "${escapeStringForJson(endDatetime)}",
+  "updated_by": "${escapeStringForJson(updatedBy)}",
+  "is_active": ${isActive},
+  "notification_frequency_amount": ${notificationFrequencyAmount},
+  "notification_frequency_minute": ${notificationFrequencyMinute},
+  "doc_ref": "${escapeStringForJson(docRef)}"
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'updateEvent',
+      apiUrl: '${baseUrl}/events/event',
+      callType: ApiCallType.PUT,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer test-token-123456789',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  int? statusCode(dynamic response) => castToType<int>(getJsonField(
+        response,
+        r'''$.status_code''',
+      ));
+  String? statusMessage(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.status_message''',
+      ));
+  String? description(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.description''',
+      ));
+  dynamic data(dynamic response) => getJsonField(
+        response,
+        r'''$.data''',
+      );
+}
+
+/// End RAS Group Code
+
 class TestApiCallCall {
   static Future<ApiCallResponse> call({
     String? text = '',
@@ -73,4 +278,15 @@ String _serializeJson(dynamic jsonVar, [bool isList = false]) {
     }
     return isList ? '[]' : '{}';
   }
+}
+
+String? escapeStringForJson(String? input) {
+  if (input == null) {
+    return null;
+  }
+  return input
+      .replaceAll('\\', '\\\\')
+      .replaceAll('"', '\\"')
+      .replaceAll('\n', '\\n')
+      .replaceAll('\t', '\\t');
 }

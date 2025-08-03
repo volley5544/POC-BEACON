@@ -12,7 +12,20 @@
           "package_name": "com.mycompany.pocbeacon"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "166354661539-jb48m69clr66m5qruplfpr3curprp2s9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycompany.pocbeacon",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "166354661539-a3kn8dhv2a25rh31n3vmd8bbibnb9fe5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDW53zhK_w-F_4anHuXHdaCEPRUU2KN7Q4"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "166354661539-a3kn8dhv2a25rh31n3vmd8bbibnb9fe5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "166354661539-uj6ose1arp0mcv6indvehcd80nr9ugk7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mycompany.pocbeacon"
+              }
+            }
+          ]
         }
       }
     }
