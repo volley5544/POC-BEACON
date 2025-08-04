@@ -196,6 +196,14 @@ final parametersBuilderMap =
           'newEventId': getParameter<int>(data, 'newEventId'),
         },
       ),
+  'SettingEventCopy2': (data) async => ParameterData(
+        allParams: {
+          'eventId': getParameter<int>(data, 'eventId'),
+          'typePage': getParameter<String>(data, 'typePage'),
+          'newEventId': getParameter<int>(data, 'newEventId'),
+          'responseUpdated': getParameter<bool>(data, 'responseUpdated'),
+        },
+      ),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

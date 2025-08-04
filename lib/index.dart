@@ -43,3 +43,5 @@ export '/pages/setting/setting_event_copy3/setting_event_copy3_widget.dart'
     show SettingEventCopy3Widget;
 export '/pages/setting/setting_event_copy/setting_event_copy_widget.dart'
     show SettingEventCopyWidget;
+export '/pages/setting/setting_event_copy2/setting_event_copy2_widget.dart'
+    show SettingEventCopy2Widget;

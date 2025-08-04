@@ -2,10 +2,10 @@ import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
-import 'setting_event_widget.dart' show SettingEventWidget;
+import 'setting_event_copy2_widget.dart' show SettingEventCopy2Widget;
 import 'package:flutter/material.dart';
 
-class SettingEventModel extends FlutterFlowModel<SettingEventWidget> {
+class SettingEventCopy2Model extends FlutterFlowModel<SettingEventCopy2Widget> {
   ///  Local state fields for this page.
 
   int? statusCode;
@@ -14,14 +14,10 @@ class SettingEventModel extends FlutterFlowModel<SettingEventWidget> {
 
   String? statusDescription;
 
-  String? startDateTime;
-
-  String? endDateTime;
-
   ///  State fields for stateful widgets in this page.
 
   final formKey = GlobalKey<FormState>();
-  // Stores action output result for [Firestore Query - Query a collection] action in SettingEvent widget.
+  // Stores action output result for [Firestore Query - Query a collection] action in SettingEventCopy2 widget.
   EventsRecord? dataEvent;
   // State field(s) for eventName widget.
   FocusNode? eventNameFocusNode;

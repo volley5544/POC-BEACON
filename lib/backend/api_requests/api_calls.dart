@@ -11,7 +11,7 @@ const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 /// Start RAS Group Code
 
 class RasGroup {
-  static String getBaseUrl() => 'https://5dc1b396baf6.ngrok-free.app';
+  static String getBaseUrl() => 'https://0b15f5638f57.ngrok-free.app';
   static Map<String, String> headers = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer test-token-123456789',
@@ -115,15 +115,14 @@ class CreateEventCall {
 
     final ffApiRequestBody = '''
 {
-  "event_name": "กิจกรรมใหม่",
-  "description": "อธิบายกิจกรรมใหม่",
-  "start_datetime": "2025-02-10T10:00:00Z",
-  "end_datetime": "2025-02-10T18:00:00Z",
-  "created_by": "users/m01gNYT1qqbOL1emlEPF4uc2b8F3",
-  "updated_by": "users/m01gNYT1qqbOL1emlEPF4uc2b8F3",
-  "is_active": 0,
-  "notification_frequency_amount": 3,
-  "notification_frequency_minute": 6
+  "event_name": "${escapeStringForJson(eventName)}",
+  "description": "${escapeStringForJson(description)}",
+  "start_datetime": "${escapeStringForJson(startDatetime)}",
+  "end_datetime": "${escapeStringForJson(endDatetime)}",
+  "created_by": "${escapeStringForJson(createdBy)}",
+  "is_active": ${isActive},
+  "notification_frequency_amount": ${notificationFrequencyAmount},
+  "notification_frequency_minute": ${notificationFrequencyMinute}
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'createEvent',

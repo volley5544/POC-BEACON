@@ -12,11 +12,11 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'setting_event_model.dart';
-export 'setting_event_model.dart';
+import 'setting_event_copy2_model.dart';
+export 'setting_event_copy2_model.dart';
 
-class SettingEventWidget extends StatefulWidget {
-  const SettingEventWidget({
+class SettingEventCopy2Widget extends StatefulWidget {
+  const SettingEventCopy2Widget({
     super.key,
     this.eventId,
     required this.typePage,
@@ -29,22 +29,23 @@ class SettingEventWidget extends StatefulWidget {
   final int? newEventId;
   final bool? responseUpdated;
 
-  static String routeName = 'SettingEvent';
-  static String routePath = '/settingEvent';
+  static String routeName = 'SettingEventCopy2';
+  static String routePath = '/settingEventCopy2';
 
   @override
-  State<SettingEventWidget> createState() => _SettingEventWidgetState();
+  State<SettingEventCopy2Widget> createState() =>
+      _SettingEventCopy2WidgetState();
 }
 
-class _SettingEventWidgetState extends State<SettingEventWidget> {
-  late SettingEventModel _model;
+class _SettingEventCopy2WidgetState extends State<SettingEventCopy2Widget> {
+  late SettingEventCopy2Model _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => SettingEventModel());
+    _model = createModel(context, () => SettingEventCopy2Model());
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
@@ -108,10 +109,11 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
             ),
           );
         }
-        List<EventsRecord> settingEventEventsRecordList = snapshot.data!;
-        final settingEventEventsRecord = settingEventEventsRecordList.isNotEmpty
-            ? settingEventEventsRecordList.first
-            : null;
+        List<EventsRecord> settingEventCopy2EventsRecordList = snapshot.data!;
+        final settingEventCopy2EventsRecord =
+            settingEventCopy2EventsRecordList.isNotEmpty
+                ? settingEventCopy2EventsRecordList.first
+                : null;
 
         return GestureDetector(
           onTap: () {
@@ -207,7 +209,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                             _model.eventNameTextController ??=
                                                 TextEditingController(
                                           text: widget.typePage == 'edit'
-                                              ? settingEventEventsRecord
+                                              ? settingEventCopy2EventsRecord
                                                   ?.eventName
                                               : '',
                                         ),
@@ -405,7 +407,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                             _model.descriptionTextController ??=
                                                 TextEditingController(
                                           text: widget.typePage == 'edit'
-                                              ? settingEventEventsRecord
+                                              ? settingEventCopy2EventsRecord
                                                   ?.description
                                               : '',
                                         ),
@@ -603,7 +605,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                 .frequencyAmountTextController ??=
                                             TextEditingController(
                                           text: widget.typePage == 'edit'
-                                              ? settingEventEventsRecord
+                                              ? settingEventCopy2EventsRecord
                                                   ?.notificationFrequencyAmount
                                                   .toString()
                                               : '',
@@ -799,7 +801,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                 .frequencyMinuteTextController ??=
                                             TextEditingController(
                                           text: widget.typePage == 'edit'
-                                              ? settingEventEventsRecord
+                                              ? settingEventCopy2EventsRecord
                                                   ?.notificationFrequencyMinute
                                                   .toString()
                                               : '',
@@ -1279,7 +1281,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                                                 .datePicked1)
                                                                         : dateTimeFormat(
                                                                             "d/M/y",
-                                                                            settingEventEventsRecord?.startDatetime)),
+                                                                            settingEventCopy2EventsRecord?.startDatetime)),
                                                                 'กรุณาเลือกวัน',
                                                               ),
                                                               style: FlutterFlowTheme
@@ -1428,7 +1430,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                                           .datePicked1)
                                                                   : dateTimeFormat(
                                                                       "Hm",
-                                                                      settingEventEventsRecord
+                                                                      settingEventCopy2EventsRecord
                                                                           ?.startDatetime)),
                                                           'กรุณาเลือกวัน',
                                                         ),
@@ -1747,7 +1749,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                                                 .datePicked2)
                                                                         : dateTimeFormat(
                                                                             "d/M/y",
-                                                                            settingEventEventsRecord?.endDatetime)),
+                                                                            settingEventCopy2EventsRecord?.endDatetime)),
                                                                 'กรุณาเลือกวัน',
                                                               ),
                                                               style: FlutterFlowTheme
@@ -1899,7 +1901,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                                               .datePicked2)
                                                                       : dateTimeFormat(
                                                                           "Hm",
-                                                                          settingEventEventsRecord
+                                                                          settingEventCopy2EventsRecord
                                                                               ?.endDatetime)),
                                                               'กรุณาเลือกวัน',
                                                             ),
@@ -1940,6 +1942,32 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                           ),
                                         ].divide(SizedBox(width: 12.0)),
                                       ),
+                                      Text(
+                                        widget.eventId!.toString(),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.readexPro(
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                              letterSpacing: 0.0,
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
+                                            ),
+                                      ),
                                     ]
                                         .divide(SizedBox(height: 12.0))
                                         .addToEnd(SizedBox(height: 32.0)),
@@ -1972,378 +2000,23 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                 child: FFButtonWidget(
                                   onPressed: () async {
                                     var _shouldSetState = false;
-                                    if (widget.typePage == 'edit') {
-                                      if (_model.datePicked1 != null) {
-                                        _model.startDateTime =
-                                            _model.datePicked1?.toString();
-                                        safeSetState(() {});
-                                      } else {
-                                        // setStartDate
-                                        _model.startDateTime =
-                                            settingEventEventsRecord
-                                                ?.startDatetime
-                                                ?.toString();
-                                        safeSetState(() {});
-                                      }
-
-                                      if (_model.datePicked2 != null) {
-                                        _model.endDateTime =
-                                            _model.datePicked2?.toString();
-                                        safeSetState(() {});
-                                      } else {
-                                        // setEndDate
-                                        _model.endDateTime =
-                                            settingEventEventsRecord
-                                                ?.endDatetime
-                                                ?.toString();
-                                        safeSetState(() {});
-                                      }
-                                    } else {
-                                      if (_model.datePicked1 != null) {
-                                        _model.startDateTime =
-                                            _model.datePicked1?.toString();
-                                        safeSetState(() {});
-                                      }
-                                      if (_model.datePicked2 != null) {
-                                        _model.endDateTime =
-                                            _model.datePicked2?.toString();
-                                        safeSetState(() {});
-                                      }
-                                    }
-
                                     if (_model.eventNameTextController.text !=
                                             '') {
-                                      if (_model.frequencyAmountTextController
-                                                  .text !=
-                                              '') {
-                                        if (_model.frequencyAmountTextController
-                                                    .text !=
-                                                '') {
-                                          if (_model.frequencyMinuteTextController
-                                                      .text !=
-                                                  '') {
-                                            if (_model.startDateTime != null &&
-                                                _model.startDateTime != '') {
-                                              if (_model.endDateTime != null &&
-                                                  _model.endDateTime != '') {
-                                                if ((widget.eventId == null) ||
-                                                    (widget.eventId == 0)) {
-                                                  _model.startDateTime = _model
-                                                      .datePicked1
-                                                      ?.toString();
-                                                  _model.endDateTime = _model
-                                                      .datePicked2
-                                                      ?.toString();
-                                                  safeSetState(() {});
-                                                  // createEvents
-                                                  _model.responseCreated =
-                                                      await RasGroup
-                                                          .createEventCall
-                                                          .call(
-                                                    eventName: _model
-                                                        .eventNameTextController
-                                                        .text,
-                                                    description: _model
-                                                        .descriptionTextController
-                                                        .text,
-                                                    notificationFrequencyAmount:
-                                                        int.tryParse(_model
-                                                            .frequencyAmountTextController
-                                                            .text),
-                                                    notificationFrequencyMinute:
-                                                        int.tryParse(_model
-                                                            .frequencyMinuteTextController
-                                                            .text),
-                                                    startDatetime:
-                                                        _model.startDateTime,
-                                                    endDatetime:
-                                                        _model.endDateTime,
-                                                    isActive: 0,
-                                                    createdBy:
-                                                        currentUserReference
-                                                            ?.path,
-                                                    authToken:
-                                                        FFAppState().token,
-                                                  );
+                                      if ((widget.eventId == null) ||
+                                          (widget.eventId == 0)) {
+                                        _model.responseCreated = await RasGroup
+                                            .createEventCall
+                                            .call();
 
-                                                  _shouldSetState = true;
-                                                  _model.statusCode =
-                                                      getJsonField(
-                                                    (_model.responseCreated
-                                                            ?.jsonBody ??
-                                                        ''),
-                                                    r'''$.status_code''',
-                                                  );
-                                                  _model.statusMessage =
-                                                      getJsonField(
-                                                    (_model.responseCreated
-                                                            ?.jsonBody ??
-                                                        ''),
-                                                    r'''$.status_message''',
-                                                  ).toString();
-                                                  _model.statusDescription =
-                                                      getJsonField(
-                                                    (_model.responseCreated
-                                                            ?.jsonBody ??
-                                                        ''),
-                                                    r'''$.description''',
-                                                  ).toString();
-                                                  safeSetState(() {});
-                                                  if (_model.statusCode ==
-                                                      200) {
-                                                    await showDialog(
-                                                      context: context,
-                                                      builder:
-                                                          (alertDialogContext) {
-                                                        return AlertDialog(
-                                                          title: Text('สำเร็จ'),
-                                                          content: Text(
-                                                              'เพิ่มข้อมูลสำเร็จ'),
-                                                          actions: [
-                                                            TextButton(
-                                                              onPressed: () =>
-                                                                  Navigator.pop(
-                                                                      alertDialogContext),
-                                                              child: Text('Ok'),
-                                                            ),
-                                                          ],
-                                                        );
-                                                      },
-                                                    );
-
-                                                    context.pushNamed(
-                                                        SettingEventListWidget
-                                                            .routeName);
-                                                  } else {
-                                                    await showDialog(
-                                                      context: context,
-                                                      builder:
-                                                          (alertDialogContext) {
-                                                        return AlertDialog(
-                                                          title: Text(
-                                                              'เพิ่มข้อมูลไม่สำเร็จ'),
-                                                          content: Text(_model
-                                                              .statusDescription!),
-                                                          actions: [
-                                                            TextButton(
-                                                              onPressed: () =>
-                                                                  Navigator.pop(
-                                                                      alertDialogContext),
-                                                              child: Text('Ok'),
-                                                            ),
-                                                          ],
-                                                        );
-                                                      },
-                                                    );
-                                                  }
-
-                                                  if (_shouldSetState)
-                                                    safeSetState(() {});
-                                                  return;
-                                                } else {
-                                                  // updateEvents
-                                                  _model.responseUpdated =
-                                                      await RasGroup
-                                                          .updateEventCall
-                                                          .call(
-                                                    eventName: _model
-                                                        .eventNameTextController
-                                                        .text,
-                                                    description: _model
-                                                        .descriptionTextController
-                                                        .text,
-                                                    notificationFrequencyAmount:
-                                                        int.tryParse(_model
-                                                            .frequencyAmountTextController
-                                                            .text),
-                                                    notificationFrequencyMinute:
-                                                        int.tryParse(_model
-                                                            .frequencyMinuteTextController
-                                                            .text),
-                                                    startDatetime:
-                                                        _model.startDateTime,
-                                                    isActive: 0,
-                                                    updatedBy:
-                                                        currentUserReference
-                                                            ?.path,
-                                                    authToken:
-                                                        FFAppState().token,
-                                                    docRef:
-                                                        settingEventEventsRecord
-                                                            ?.reference.id,
-                                                    endDatetime:
-                                                        _model.endDateTime,
-                                                  );
-
-                                                  _shouldSetState = true;
-                                                  _model.statusCode =
-                                                      getJsonField(
-                                                    (_model.responseUpdated
-                                                            ?.jsonBody ??
-                                                        ''),
-                                                    r'''$.status_code''',
-                                                  );
-                                                  _model.statusMessage =
-                                                      getJsonField(
-                                                    (_model.responseUpdated
-                                                            ?.jsonBody ??
-                                                        ''),
-                                                    r'''$.status_message''',
-                                                  ).toString();
-                                                  _model.statusDescription =
-                                                      getJsonField(
-                                                    (_model.responseUpdated
-                                                            ?.jsonBody ??
-                                                        ''),
-                                                    r'''$.description''',
-                                                  ).toString();
-                                                  safeSetState(() {});
-                                                  if (_model.statusCode ==
-                                                      200) {
-                                                    await showDialog(
-                                                      context: context,
-                                                      builder:
-                                                          (alertDialogContext) {
-                                                        return AlertDialog(
-                                                          title: Text('สำเร็จ'),
-                                                          content: Text(
-                                                              'แก้ไขข้อมูลสำเร็จ'),
-                                                          actions: [
-                                                            TextButton(
-                                                              onPressed: () =>
-                                                                  Navigator.pop(
-                                                                      alertDialogContext),
-                                                              child: Text('Ok'),
-                                                            ),
-                                                          ],
-                                                        );
-                                                      },
-                                                    );
-                                                  } else {
-                                                    await showDialog(
-                                                      context: context,
-                                                      builder:
-                                                          (alertDialogContext) {
-                                                        return AlertDialog(
-                                                          title: Text(
-                                                              'แก้ไขข้อมูลไม่สำเร็จ'),
-                                                          content: Text(_model
-                                                              .statusDescription!),
-                                                          actions: [
-                                                            TextButton(
-                                                              onPressed: () =>
-                                                                  Navigator.pop(
-                                                                      alertDialogContext),
-                                                              child: Text('Ok'),
-                                                            ),
-                                                          ],
-                                                        );
-                                                      },
-                                                    );
-                                                  }
-
-                                                  if (_shouldSetState)
-                                                    safeSetState(() {});
-                                                  return;
-                                                }
-                                              } else {
-                                                await showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (alertDialogContext) {
-                                                    return AlertDialog(
-                                                      title: Text(
-                                                          'ข้อมูลไม่ครบถ้วน'),
-                                                      content: Text(
-                                                          'กรุณากรอก วันเวลาที่สิ้นสุด'),
-                                                      actions: [
-                                                        TextButton(
-                                                          onPressed: () =>
-                                                              Navigator.pop(
-                                                                  alertDialogContext),
-                                                          child: Text('Ok'),
-                                                        ),
-                                                      ],
-                                                    );
-                                                  },
-                                                );
-                                              }
-                                            } else {
-                                              await showDialog(
-                                                context: context,
-                                                builder: (alertDialogContext) {
-                                                  return AlertDialog(
-                                                    title: Text(
-                                                        'ข้อมูลไม่ครบถ้วน'),
-                                                    content: Text(
-                                                        'กรุณากรอก วันเวลาที่เริ่มต้น'),
-                                                    actions: [
-                                                      TextButton(
-                                                        onPressed: () =>
-                                                            Navigator.pop(
-                                                                alertDialogContext),
-                                                        child: Text('Ok'),
-                                                      ),
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                            }
-                                          } else {
-                                            await showDialog(
-                                              context: context,
-                                              builder: (alertDialogContext) {
-                                                return AlertDialog(
-                                                  title:
-                                                      Text('ข้อมูลไม่ครบถ้วน'),
-                                                  content: Text(
-                                                      'กรุณากรอก จำนวนนาทีที่แจ้งเตือนซ้ำ'),
-                                                  actions: [
-                                                    TextButton(
-                                                      onPressed: () =>
-                                                          Navigator.pop(
-                                                              alertDialogContext),
-                                                      child: Text('Ok'),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                            if (_shouldSetState)
-                                              safeSetState(() {});
-                                            return;
-                                          }
-                                        } else {
-                                          await showDialog(
-                                            context: context,
-                                            builder: (alertDialogContext) {
-                                              return AlertDialog(
-                                                title: Text('ข้อมูลไม่ครบถ้วน'),
-                                                content: Text(
-                                                    'กรุณากรอก จำนวนครั้งที่แจ้งเตือนซ้ำ'),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.pop(
-                                                            alertDialogContext),
-                                                    child: Text('Ok'),
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          );
-                                          if (_shouldSetState)
-                                            safeSetState(() {});
-                                          return;
-                                        }
+                                        _shouldSetState = true;
                                       } else {
                                         await showDialog(
                                           context: context,
                                           builder: (alertDialogContext) {
                                             return AlertDialog(
-                                              title: Text('ข้อมูลไม่ครบถ้วน'),
-                                              content: Text(
-                                                  'กรุณากรอก จำนวนครั้งแจ้งเตือนซ้ำ'),
+                                              title: Text('StartDate'),
+                                              content: Text(_model.datePicked1!
+                                                  .toString()),
                                               actions: [
                                                 TextButton(
                                                   onPressed: () =>
@@ -2355,10 +2028,131 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                             );
                                           },
                                         );
+                                        await showDialog(
+                                          context: context,
+                                          builder: (alertDialogContext) {
+                                            return AlertDialog(
+                                              title: Text('EndDate'),
+                                              content: Text(_model.datePicked2!
+                                                  .toString()),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          alertDialogContext),
+                                                  child: Text('Ok'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                        _model.responseUpdated =
+                                            await RasGroup.updateEventCall.call(
+                                          eventName: _model
+                                              .eventNameTextController.text,
+                                          description: _model
+                                              .descriptionTextController.text,
+                                          notificationFrequencyAmount:
+                                              int.tryParse(_model
+                                                  .frequencyAmountTextController
+                                                  .text),
+                                          notificationFrequencyMinute:
+                                              int.tryParse(_model
+                                                  .frequencyMinuteTextController
+                                                  .text),
+                                          startDatetime:
+                                              _model.datePicked1?.toString(),
+                                          endDatetime:
+                                              _model.datePicked2?.toString(),
+                                          isActive: 0,
+                                          updatedBy: currentUserReference?.path,
+                                          authToken: FFAppState().token,
+                                          docRef: settingEventCopy2EventsRecord
+                                              ?.reference.id,
+                                        );
+
+                                        _shouldSetState = true;
+                                        _model.statusCode = getJsonField(
+                                          (_model.responseUpdated?.jsonBody ??
+                                              ''),
+                                          r'''$.status_code''',
+                                        );
+                                        _model.statusMessage = getJsonField(
+                                          (_model.responseUpdated?.jsonBody ??
+                                              ''),
+                                          r'''$.status_message''',
+                                        ).toString();
+                                        _model.statusDescription = getJsonField(
+                                          (_model.responseUpdated?.jsonBody ??
+                                              ''),
+                                          r'''$.description''',
+                                        ).toString();
+                                        safeSetState(() {});
+                                        if (_model.statusCode == 200) {
+                                          await showDialog(
+                                            context: context,
+                                            builder: (alertDialogContext) {
+                                              return AlertDialog(
+                                                title: Text('สำเร็จ'),
+                                                content:
+                                                    Text('แก้ไขข้อมูลสำเร็จ'),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(
+                                                            alertDialogContext),
+                                                    child: Text('Ok'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        } else {
+                                          await showDialog(
+                                            context: context,
+                                            builder: (alertDialogContext) {
+                                              return AlertDialog(
+                                                title: Text(
+                                                    'แก้ไขข้อมูลไม่สำเร็จ'),
+                                                content: Text(
+                                                    _model.statusDescription!),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(
+                                                            alertDialogContext),
+                                                    child: Text('Ok'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        }
+
                                         if (_shouldSetState)
                                           safeSetState(() {});
                                         return;
                                       }
+
+                                      await showDialog(
+                                        context: context,
+                                        builder: (alertDialogContext) {
+                                          return AlertDialog(
+                                            title: Text('สำเร็จ'),
+                                            content: Text('บันทึกข้อมูลสำเร็จ'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(
+                                                    alertDialogContext),
+                                                child: Text('Ok'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+
+                                      context.pushNamed(
+                                          SettingEventListWidget.routeName);
                                     } else {
                                       await showDialog(
                                         context: context,
@@ -2377,8 +2171,6 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                           );
                                         },
                                       );
-                                      if (_shouldSetState) safeSetState(() {});
-                                      return;
                                     }
 
                                     if (_shouldSetState) safeSetState(() {});

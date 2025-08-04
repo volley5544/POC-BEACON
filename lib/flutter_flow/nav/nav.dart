@@ -357,6 +357,31 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                       ParamType.int,
                     ),
                   ),
+                )),
+        FFRoute(
+            name: SettingEventCopy2Widget.routeName,
+            path: SettingEventCopy2Widget.routePath,
+            requireAuth: true,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SettingEventCopy2Widget(
+                    eventId: params.getParam(
+                      'eventId',
+                      ParamType.int,
+                    ),
+                    typePage: params.getParam(
+                      'typePage',
+                      ParamType.String,
+                    ),
+                    newEventId: params.getParam(
+                      'newEventId',
+                      ParamType.int,
+                    ),
+                    responseUpdated: params.getParam(
+                      'responseUpdated',
+                      ParamType.bool,
+                    ),
+                  ),
                 ))
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
