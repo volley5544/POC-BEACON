@@ -80,6 +80,11 @@ class MediaFilesRecord extends FirestoreRecord {
   String get updatedBy => _updatedBy ?? '';
   bool hasUpdatedBy() => _updatedBy != null;
 
+  // "related_doc_ref" field.
+  String? _relatedDocRef;
+  String get relatedDocRef => _relatedDocRef ?? '';
+  bool hasRelatedDocRef() => _relatedDocRef != null;
+
   void _initializeFields() {
     _fileId = castToType<int>(snapshotData['file_id']);
     _fileName = snapshotData['file_name'] as String?;
@@ -94,6 +99,7 @@ class MediaFilesRecord extends FirestoreRecord {
     _createdBy = snapshotData['created_by'] as String?;
     _updatedAt = snapshotData['updated_at'] as DateTime?;
     _updatedBy = snapshotData['updated_by'] as String?;
+    _relatedDocRef = snapshotData['related_doc_ref'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -144,6 +150,7 @@ Map<String, dynamic> createMediaFilesRecordData({
   String? createdBy,
   DateTime? updatedAt,
   String? updatedBy,
+  String? relatedDocRef,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -160,6 +167,7 @@ Map<String, dynamic> createMediaFilesRecordData({
       'created_by': createdBy,
       'updated_at': updatedAt,
       'updated_by': updatedBy,
+      'related_doc_ref': relatedDocRef,
     }.withoutNulls,
   );
 
@@ -183,7 +191,8 @@ class MediaFilesRecordDocumentEquality implements Equality<MediaFilesRecord> {
         e1?.createdAt == e2?.createdAt &&
         e1?.createdBy == e2?.createdBy &&
         e1?.updatedAt == e2?.updatedAt &&
-        e1?.updatedBy == e2?.updatedBy;
+        e1?.updatedBy == e2?.updatedBy &&
+        e1?.relatedDocRef == e2?.relatedDocRef;
   }
 
   @override
@@ -200,7 +209,8 @@ class MediaFilesRecordDocumentEquality implements Equality<MediaFilesRecord> {
         e?.createdAt,
         e?.createdBy,
         e?.updatedAt,
-        e?.updatedBy
+        e?.updatedBy,
+        e?.relatedDocRef
       ]);
 
   @override

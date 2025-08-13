@@ -1,4 +1,3 @@
-import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -746,28 +745,6 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget> {
                           16.0, 12.0, 16.0, 12.0),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          var boothsRecordReference =
-                              BoothsRecord.createDoc(widget.eventDocRef!);
-                          await boothsRecordReference
-                              .set(createBoothsRecordData(
-                            boothName: _model.boothNameTextController.text,
-                            description: _model.descriptionTextController.text,
-                            notificationDistance: int.tryParse(
-                                _model.remindAmountTextController.text),
-                            associatedEventId: '1',
-                          ));
-                          _model.createBoothDoc =
-                              BoothsRecord.getDocumentFromData(
-                                  createBoothsRecordData(
-                                    boothName:
-                                        _model.boothNameTextController.text,
-                                    description:
-                                        _model.descriptionTextController.text,
-                                    notificationDistance: int.tryParse(
-                                        _model.remindAmountTextController.text),
-                                    associatedEventId: '1',
-                                  ),
-                                  boothsRecordReference);
                           await showDialog(
                             context: context,
                             builder: (alertDialogContext) {
@@ -783,8 +760,6 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget> {
                               );
                             },
                           );
-
-                          safeSetState(() {});
                         },
                         text: 'บันทึก',
                         options: FFButtonOptions(

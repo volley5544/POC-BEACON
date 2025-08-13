@@ -1,12 +1,16 @@
+import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:provider/provider.dart';
 import 'setting_booth_list_model.dart';
 export 'setting_booth_list_model.dart';
 
@@ -37,6 +41,83 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
     super.initState();
     _model = createModel(context, () => SettingBoothListModel());
 
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.apiResultoee = await RasGroup.getAllBoothsCall.call(
+        authToken: FFAppState().token,
+        eventRef: widget.eventDocRef?.id,
+      );
+
+      if ((_model.apiResultoee?.succeeded ?? true)) {
+        if (RasGroup.getAllBoothsCall.description(
+              (_model.apiResultoee?.jsonBody ?? ''),
+            ) !=
+            'ไม่พบบูธ') {
+          _model.boothName = RasGroup.getAllBoothsCall
+              .boothName(
+                (_model.apiResultoee?.jsonBody ?? ''),
+              )!
+              .toList()
+              .cast<String>();
+          _model.boothDescription = RasGroup.getAllBoothsCall
+              .boothDescription(
+                (_model.apiResultoee?.jsonBody ?? ''),
+              )!
+              .toList()
+              .cast<String>();
+          _model.notiDistance = RasGroup.getAllBoothsCall
+              .notificationDistance(
+                (_model.apiResultoee?.jsonBody ?? ''),
+              )!
+              .toList()
+              .cast<int>();
+          safeSetState(() {});
+          _model.dataEvent = await queryEventsRecordOnce(
+            queryBuilder: (eventsRecord) => eventsRecord.where(
+              'event_id',
+              isEqualTo: widget.eventId,
+            ),
+            singleRecord: true,
+          ).then((s) => s.firstOrNull);
+          _model.eventName = _model.dataEvent?.eventName;
+          safeSetState(() {});
+        } else {
+          await showDialog(
+            context: context,
+            builder: (alertDialogContext) {
+              return AlertDialog(
+                content: Text(RasGroup.getAllBoothsCall.description(
+                  (_model.apiResultoee?.jsonBody ?? ''),
+                )!),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(alertDialogContext),
+                    child: Text('Ok'),
+                  ),
+                ],
+              );
+            },
+          );
+          return;
+        }
+      } else {
+        await showDialog(
+          context: context,
+          builder: (alertDialogContext) {
+            return AlertDialog(
+              title: Text('ดึงข้อมูลบูธไม่สำเร็จ'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(alertDialogContext),
+                  child: Text('Ok'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
@@ -49,6 +130,8 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -85,7 +168,7 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
           title: Text(
-            'จัดการบูธ​ (กิจกรรม 1)',
+            'จัดการบูธ (${_model.eventName})',
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   font: GoogleFonts.outfit(
                     fontWeight:
@@ -221,7 +304,7 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8.0),
                                     child: Image.network(
-                                      'https://firebasestorage.googleapis.com/v0/b/poc-beacon-firebase.firebasestorage.app/o/joystick.jpeg?alt=media&token=420111f8-8d8e-49eb-aa7f-b9207718d8dd',
+                                      '',
                                       width: 70.0,
                                       height: 100.0,
                                       fit: BoxFit.cover,
@@ -240,7 +323,11 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          listViewEventsRecord.eventName,
+                                          valueOrDefault<String>(
+                                            _model.boothName
+                                                .elementAtOrNull(listViewIndex),
+                                            '-',
+                                          ),
                                           style: FlutterFlowTheme.of(context)
                                               .titleLarge
                                               .override(
@@ -272,8 +359,12 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0.0, 4.0, 8.0, 0.0),
                                           child: AutoSizeText(
-                                            listViewEventsRecord.description
-                                                .maybeHandleOverflow(
+                                            valueOrDefault<String>(
+                                              _model.boothDescription
+                                                  .elementAtOrNull(
+                                                      listViewIndex),
+                                              '-',
+                                            ).maybeHandleOverflow(
                                               maxChars: 70,
                                               replacement: '…',
                                             ),
@@ -314,9 +405,11 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                                   0.0, 4.0, 8.0, 0.0),
                                           child: AutoSizeText(
                                             valueOrDefault<String>(
-                                              listViewEventsRecord.startDatetime
+                                              _model.notiDistance
+                                                  .elementAtOrNull(
+                                                      listViewIndex)
                                                   ?.toString(),
-                                              '1',
+                                              '0',
                                             ).maybeHandleOverflow(
                                               maxChars: 70,
                                               replacement: '…',
@@ -362,16 +455,6 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                       MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 4.0, 0.0, 0.0),
-                                      child: Icon(
-                                        Icons.edit_note_outlined,
-                                        color: FlutterFlowTheme.of(context)
-                                            .success,
-                                        size: 24.0,
-                                      ),
-                                    ),
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0.0, 0.0, 4.0, 8.0),

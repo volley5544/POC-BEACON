@@ -66,8 +66,8 @@ class BoothsRecord extends FirestoreRecord {
   bool hasUpdatedBy() => _updatedBy != null;
 
   // "event_id" field.
-  DocumentReference? _eventId;
-  DocumentReference? get eventId => _eventId;
+  int? _eventId;
+  int get eventId => _eventId ?? 0;
   bool hasEventId() => _eventId != null;
 
   DocumentReference get parentReference => reference.parent.parent!;
@@ -84,7 +84,7 @@ class BoothsRecord extends FirestoreRecord {
     _isActive = castToType<int>(snapshotData['is_active']);
     _updatedAt = snapshotData['updated_at'] as DateTime?;
     _updatedBy = snapshotData['updated_by'] as String?;
-    _eventId = snapshotData['event_id'] as DocumentReference?;
+    _eventId = castToType<int>(snapshotData['event_id']);
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -136,7 +136,7 @@ Map<String, dynamic> createBoothsRecordData({
   int? isActive,
   DateTime? updatedAt,
   String? updatedBy,
-  DocumentReference? eventId,
+  int? eventId,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{

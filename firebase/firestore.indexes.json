@@ -13,20 +13,6 @@
           "order": "DESCENDING"
         }
       ]
-    },
-    {
-      "collectionGroup": "events",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "is_active",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "start_datetime",
-          "order": "DESCENDING"
-        }
-      ]
     }
   ],
   "fieldOverrides": [

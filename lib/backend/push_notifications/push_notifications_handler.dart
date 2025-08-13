@@ -176,27 +176,13 @@ final parametersBuilderMap =
           'eventDocRef': getParameter<DocumentReference>(data, 'eventDocRef'),
         },
       ),
-  'SettingEventListCopy2': ParameterData.none(),
   'SettingEventListCopy3': ParameterData.none(),
   'SettingEventListCopy': (data) async => ParameterData(
         allParams: {
           'isActive': getParameter<int>(data, 'isActive'),
         },
       ),
-  'SettingEventCopy3': (data) async => ParameterData(
-        allParams: {
-          'eventId': getParameter<int>(data, 'eventId'),
-          'typePage': getParameter<String>(data, 'typePage'),
-        },
-      ),
   'SettingEventCopy': (data) async => ParameterData(
-        allParams: {
-          'eventId': getParameter<int>(data, 'eventId'),
-          'typePage': getParameter<String>(data, 'typePage'),
-          'newEventId': getParameter<int>(data, 'newEventId'),
-        },
-      ),
-  'SettingEventCopy2': (data) async => ParameterData(
         allParams: {
           'eventId': getParameter<int>(data, 'eventId'),
           'typePage': getParameter<String>(data, 'typePage'),

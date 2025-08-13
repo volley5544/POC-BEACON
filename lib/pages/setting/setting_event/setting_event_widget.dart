@@ -1,15 +1,22 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
+import '/backend/firebase_storage/storage.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
+import '/flutter_flow/flutter_flow_expanded_image_view.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/upload_data.dart';
 import '/index.dart';
 import 'package:collection/collection.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'setting_event_model.dart';
@@ -22,12 +29,14 @@ class SettingEventWidget extends StatefulWidget {
     required this.typePage,
     this.newEventId,
     this.responseUpdated,
+    this.pathFileImages,
   });
 
   final int? eventId;
   final String? typePage;
   final int? newEventId;
   final bool? responseUpdated;
+  final List<String>? pathFileImages;
 
   static String routeName = 'SettingEvent';
   static String routePath = '/settingEvent';
@@ -36,10 +45,13 @@ class SettingEventWidget extends StatefulWidget {
   State<SettingEventWidget> createState() => _SettingEventWidgetState();
 }
 
-class _SettingEventWidgetState extends State<SettingEventWidget> {
+class _SettingEventWidgetState extends State<SettingEventWidget>
+    with TickerProviderStateMixin {
   late SettingEventModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void initState() {
@@ -68,6 +80,43 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
 
     _model.frequencyMinuteFocusNode ??= FocusNode();
     _model.frequencyMinuteFocusNode!.addListener(() => safeSetState(() {}));
+    animationsMap.addAll({
+      'iconButtonOnPageLoadAnimation': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          VisibilityEffect(duration: 350.ms),
+          FadeEffect(
+            curve: Curves.easeInOut,
+            delay: 350.0.ms,
+            duration: 300.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          ScaleEffect(
+            curve: Curves.easeInOut,
+            delay: 350.0.ms,
+            duration: 300.0.ms,
+            begin: Offset(0.8, 0.8),
+            end: Offset(1.0, 1.0),
+          ),
+          TiltEffect(
+            curve: Curves.easeInOut,
+            delay: 350.0.ms,
+            duration: 300.0.ms,
+            begin: Offset(1.222, 0),
+            end: Offset(0, 0),
+          ),
+          MoveEffect(
+            curve: Curves.easeInOut,
+            delay: 350.0.ms,
+            duration: 300.0.ms,
+            begin: Offset(0.0, 40.0),
+            end: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
@@ -1940,6 +1989,258 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                           ),
                                         ].divide(SizedBox(width: 12.0)),
                                       ),
+                                      Align(
+                                        alignment:
+                                            AlignmentDirectional(1.0, -1.0),
+                                        child: Container(
+                                          width: 100.0,
+                                          height: 50.0,
+                                          decoration: BoxDecoration(
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryBackground,
+                                          ),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    24.0, 0.0, 24.0, 0.0),
+                                            child: FlutterFlowIconButton(
+                                              borderColor: Colors.transparent,
+                                              borderRadius: 8.0,
+                                              borderWidth: 1.0,
+                                              buttonSize: 30.0,
+                                              icon: FaIcon(
+                                                FontAwesomeIcons.fileImage,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primary,
+                                                size: 24.0,
+                                              ),
+                                              onPressed: () async {
+                                                final selectedMedia =
+                                                    await selectMedia(
+                                                  includeBlurHash: true,
+                                                  mediaSource:
+                                                      MediaSource.photoGallery,
+                                                  multiImage: true,
+                                                );
+                                                if (selectedMedia != null &&
+                                                    selectedMedia.every((m) =>
+                                                        validateFileFormat(
+                                                            m.storagePath,
+                                                            context))) {
+                                                  safeSetState(() => _model
+                                                          .isDataUploading_uploadData4p =
+                                                      true);
+                                                  var selectedUploadedFiles =
+                                                      <FFUploadedFile>[];
+
+                                                  var downloadUrls = <String>[];
+                                                  try {
+                                                    selectedUploadedFiles =
+                                                        selectedMedia
+                                                            .map((m) =>
+                                                                FFUploadedFile(
+                                                                  name: m
+                                                                      .storagePath
+                                                                      .split(
+                                                                          '/')
+                                                                      .last,
+                                                                  bytes:
+                                                                      m.bytes,
+                                                                  height: m
+                                                                      .dimensions
+                                                                      ?.height,
+                                                                  width: m
+                                                                      .dimensions
+                                                                      ?.width,
+                                                                  blurHash: m
+                                                                      .blurHash,
+                                                                ))
+                                                            .toList();
+
+                                                    downloadUrls = (await Future
+                                                            .wait(
+                                                      selectedMedia.map(
+                                                        (m) async =>
+                                                            await uploadData(
+                                                                m.storagePath,
+                                                                m.bytes),
+                                                      ),
+                                                    ))
+                                                        .where((u) => u != null)
+                                                        .map((u) => u!)
+                                                        .toList();
+                                                  } finally {
+                                                    _model.isDataUploading_uploadData4p =
+                                                        false;
+                                                  }
+                                                  if (selectedUploadedFiles
+                                                              .length ==
+                                                          selectedMedia
+                                                              .length &&
+                                                      downloadUrls.length ==
+                                                          selectedMedia
+                                                              .length) {
+                                                    safeSetState(() {
+                                                      _model.uploadedLocalFiles_uploadData4p =
+                                                          selectedUploadedFiles;
+                                                      _model.uploadedFileUrls_uploadData4p =
+                                                          downloadUrls;
+                                                    });
+                                                  } else {
+                                                    safeSetState(() {});
+                                                    return;
+                                                  }
+                                                }
+
+                                                _model.uploadImageTemp = _model
+                                                    .uploadedFileUrls_uploadData4p
+                                                    .toList()
+                                                    .cast<String>();
+                                                safeSetState(() {});
+                                              },
+                                            ).animateOnPageLoad(animationsMap[
+                                                'iconButtonOnPageLoadAnimation']!),
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: double.infinity,
+                                        height: 120.0,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                        ),
+                                        child: Builder(
+                                          builder: (context) {
+                                            final uploadImageList =
+                                                _model.uploadImageTemp.toList();
+
+                                            return ListView.builder(
+                                              padding: EdgeInsets.zero,
+                                              shrinkWrap: true,
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount: uploadImageList.length,
+                                              itemBuilder: (context,
+                                                  uploadImageListIndex) {
+                                                final uploadImageListItem =
+                                                    uploadImageList[
+                                                        uploadImageListIndex];
+                                                return Align(
+                                                  alignment:
+                                                      AlignmentDirectional(
+                                                          -1.0, -1.0),
+                                                  child: Container(
+                                                    width: 100.0,
+                                                    height: 100.0,
+                                                    decoration: BoxDecoration(),
+                                                    child: Container(
+                                                      width: double.infinity,
+                                                      height: double.infinity,
+                                                      child: Stack(
+                                                        children: [
+                                                          InkWell(
+                                                            splashColor: Colors
+                                                                .transparent,
+                                                            focusColor: Colors
+                                                                .transparent,
+                                                            hoverColor: Colors
+                                                                .transparent,
+                                                            highlightColor:
+                                                                Colors
+                                                                    .transparent,
+                                                            onTap: () async {
+                                                              await Navigator
+                                                                  .push(
+                                                                context,
+                                                                PageTransition(
+                                                                  type:
+                                                                      PageTransitionType
+                                                                          .fade,
+                                                                  child:
+                                                                      FlutterFlowExpandedImageView(
+                                                                    image: Image
+                                                                        .network(
+                                                                      uploadImageListItem,
+                                                                      fit: BoxFit
+                                                                          .contain,
+                                                                    ),
+                                                                    allowRotation:
+                                                                        false,
+                                                                    tag:
+                                                                        uploadImageListItem,
+                                                                    useHeroAnimation:
+                                                                        true,
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            },
+                                                            child: Hero(
+                                                              tag:
+                                                                  uploadImageListItem,
+                                                              transitionOnUserGestures:
+                                                                  true,
+                                                              child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8.0),
+                                                                child: Image
+                                                                    .network(
+                                                                  uploadImageListItem,
+                                                                  width: 100.0,
+                                                                  height: 100.0,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Align(
+                                                            alignment:
+                                                                AlignmentDirectional(
+                                                                    1.0, -1.0),
+                                                            child: InkWell(
+                                                              splashColor: Colors
+                                                                  .transparent,
+                                                              focusColor: Colors
+                                                                  .transparent,
+                                                              hoverColor: Colors
+                                                                  .transparent,
+                                                              highlightColor:
+                                                                  Colors
+                                                                      .transparent,
+                                                              onTap: () async {
+                                                                await FirebaseStorage
+                                                                    .instance
+                                                                    .refFromURL(
+                                                                        uploadImageListItem)
+                                                                    .delete();
+                                                                _model.removeAtIndexFromUploadImageTemp(
+                                                                    uploadImageListIndex);
+                                                                safeSetState(
+                                                                    () {});
+                                                              },
+                                                              child: Icon(
+                                                                Icons
+                                                                    .clear_outlined,
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .error,
+                                                                size: 24.0,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      ),
                                     ]
                                         .divide(SizedBox(height: 12.0))
                                         .addToEnd(SizedBox(height: 32.0)),
@@ -2088,7 +2389,42 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                         ''),
                                                     r'''$.description''',
                                                   ).toString();
+                                                  _model.responseEventId =
+                                                      getJsonField(
+                                                    (_model.responseCreated
+                                                            ?.jsonBody ??
+                                                        ''),
+                                                    r'''$.data.event_id''',
+                                                  );
+                                                  _model.responseEventDocRefPath =
+                                                      getJsonField(
+                                                    (_model.responseCreated
+                                                            ?.jsonBody ??
+                                                        ''),
+                                                    r'''$.data.event_doc_ref_path''',
+                                                  ).toString();
                                                   safeSetState(() {});
+                                                  await showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (alertDialogContext) {
+                                                      return AlertDialog(
+                                                        title: Text(_model
+                                                            .responseEventId!
+                                                            .toString()),
+                                                        content: Text(_model
+                                                            .responseEventDocRefPath!),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    alertDialogContext),
+                                                            child: Text('Ok'),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
                                                   if (_model.statusCode ==
                                                       200) {
                                                     await showDialog(
@@ -2196,6 +2532,20 @@ class _SettingEventWidgetState extends State<SettingEventWidget> {
                                                             ?.jsonBody ??
                                                         ''),
                                                     r'''$.description''',
+                                                  ).toString();
+                                                  _model.responseEventId =
+                                                      getJsonField(
+                                                    (_model.responseUpdated
+                                                            ?.jsonBody ??
+                                                        ''),
+                                                    r'''$.data.event_id''',
+                                                  );
+                                                  _model.responseEventDocRefPath =
+                                                      getJsonField(
+                                                    (_model.responseUpdated
+                                                            ?.jsonBody ??
+                                                        ''),
+                                                    r'''$.data.event_doc_ref_path''',
                                                   ).toString();
                                                   safeSetState(() {});
                                                   if (_model.statusCode ==

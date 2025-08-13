@@ -250,6 +250,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                       'responseUpdated',
                       ParamType.bool,
                     ),
+                    pathFileImages: params.getParam<String>(
+                      'pathFileImages',
+                      ParamType.String,
+                      isList: true,
+                    ),
                   ),
                 )),
         FFRoute(
@@ -295,13 +300,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   ),
                 )),
         FFRoute(
-            name: SettingEventListCopy2Widget.routeName,
-            path: SettingEventListCopy2Widget.routePath,
-            builder: (context, params) => NavBarPage(
-                  initialPage: '',
-                  page: SettingEventListCopy2Widget(),
-                )),
-        FFRoute(
             name: SettingEventListCopy3Widget.routeName,
             path: SettingEventListCopy3Widget.routePath,
             builder: (context, params) => NavBarPage(
@@ -321,50 +319,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   ),
                 )),
         FFRoute(
-            name: SettingEventCopy3Widget.routeName,
-            path: SettingEventCopy3Widget.routePath,
-            requireAuth: true,
-            builder: (context, params) => NavBarPage(
-                  initialPage: '',
-                  page: SettingEventCopy3Widget(
-                    eventId: params.getParam(
-                      'eventId',
-                      ParamType.int,
-                    ),
-                    typePage: params.getParam(
-                      'typePage',
-                      ParamType.String,
-                    ),
-                  ),
-                )),
-        FFRoute(
             name: SettingEventCopyWidget.routeName,
             path: SettingEventCopyWidget.routePath,
             requireAuth: true,
             builder: (context, params) => NavBarPage(
                   initialPage: '',
                   page: SettingEventCopyWidget(
-                    eventId: params.getParam(
-                      'eventId',
-                      ParamType.int,
-                    ),
-                    typePage: params.getParam(
-                      'typePage',
-                      ParamType.String,
-                    ),
-                    newEventId: params.getParam(
-                      'newEventId',
-                      ParamType.int,
-                    ),
-                  ),
-                )),
-        FFRoute(
-            name: SettingEventCopy2Widget.routeName,
-            path: SettingEventCopy2Widget.routePath,
-            requireAuth: true,
-            builder: (context, params) => NavBarPage(
-                  initialPage: '',
-                  page: SettingEventCopy2Widget(
                     eventId: params.getParam(
                       'eventId',
                       ParamType.int,

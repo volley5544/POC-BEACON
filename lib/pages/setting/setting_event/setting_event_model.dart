@@ -18,6 +18,33 @@ class SettingEventModel extends FlutterFlowModel<SettingEventWidget> {
 
   String? endDateTime;
 
+  List<String> uploadImageTemp = [];
+  void addToUploadImageTemp(String item) => uploadImageTemp.add(item);
+  void removeFromUploadImageTemp(String item) => uploadImageTemp.remove(item);
+  void removeAtIndexFromUploadImageTemp(int index) =>
+      uploadImageTemp.removeAt(index);
+  void insertAtIndexInUploadImageTemp(int index, String item) =>
+      uploadImageTemp.insert(index, item);
+  void updateUploadImageTempAtIndex(int index, Function(String) updateFn) =>
+      uploadImageTemp[index] = updateFn(uploadImageTemp[index]);
+
+  List<FFUploadedFile> uploadImageLocalTemp = [];
+  void addToUploadImageLocalTemp(FFUploadedFile item) =>
+      uploadImageLocalTemp.add(item);
+  void removeFromUploadImageLocalTemp(FFUploadedFile item) =>
+      uploadImageLocalTemp.remove(item);
+  void removeAtIndexFromUploadImageLocalTemp(int index) =>
+      uploadImageLocalTemp.removeAt(index);
+  void insertAtIndexInUploadImageLocalTemp(int index, FFUploadedFile item) =>
+      uploadImageLocalTemp.insert(index, item);
+  void updateUploadImageLocalTempAtIndex(
+          int index, Function(FFUploadedFile) updateFn) =>
+      uploadImageLocalTemp[index] = updateFn(uploadImageLocalTemp[index]);
+
+  int? responseEventId;
+
+  String? responseEventDocRefPath;
+
   ///  State fields for stateful widgets in this page.
 
   final formKey = GlobalKey<FormState>();
@@ -60,6 +87,10 @@ class SettingEventModel extends FlutterFlowModel<SettingEventWidget> {
       frequencyMinuteTextControllerValidator;
   DateTime? datePicked1;
   DateTime? datePicked2;
+  bool isDataUploading_uploadData4p = false;
+  List<FFUploadedFile> uploadedLocalFiles_uploadData4p = [];
+  List<String> uploadedFileUrls_uploadData4p = [];
+
   // Stores action output result for [Backend Call - API (createEvent)] action in Button widget.
   ApiCallResponse? responseCreated;
   // Stores action output result for [Backend Call - API (updateEvent)] action in Button widget.
