@@ -281,21 +281,30 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             builder: (context, params) => NavBarPage(
                   initialPage: '',
                   page: SettingBoothWidget(
-                    booth: params.getParam(
-                      'booth',
-                      ParamType.DocumentReference,
-                      isList: false,
-                      collectionNamePath: ['events'],
-                    ),
                     eventId: params.getParam(
                       'eventId',
                       ParamType.int,
                     ),
-                    eventDocRef: params.getParam(
-                      'eventDocRef',
-                      ParamType.DocumentReference,
-                      isList: false,
-                      collectionNamePath: ['events'],
+                    typePage: params.getParam(
+                      'typePage',
+                      ParamType.String,
+                    ),
+                    newEventId: params.getParam(
+                      'newEventId',
+                      ParamType.int,
+                    ),
+                    responseUpdated: params.getParam(
+                      'responseUpdated',
+                      ParamType.bool,
+                    ),
+                    pathFileImages: params.getParam<String>(
+                      'pathFileImages',
+                      ParamType.String,
+                      isList: true,
+                    ),
+                    boothId: params.getParam(
+                      'boothId',
+                      ParamType.int,
                     ),
                   ),
                 )),
@@ -340,6 +349,36 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                     responseUpdated: params.getParam(
                       'responseUpdated',
                       ParamType.bool,
+                    ),
+                  ),
+                )),
+        FFRoute(
+            name: SettingBoothListCopyWidget.routeName,
+            path: SettingBoothListCopyWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SettingBoothListCopyWidget(
+                    eventId: params.getParam(
+                      'eventId',
+                      ParamType.int,
+                    ),
+                    eventDocRef: params.getParam(
+                      'eventDocRef',
+                      ParamType.DocumentReference,
+                      isList: false,
+                      collectionNamePath: ['events'],
+                    ),
+                  ),
+                )),
+        FFRoute(
+            name: SettingBoothList2Widget.routeName,
+            path: SettingBoothList2Widget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SettingBoothList2Widget(
+                    isActive: params.getParam(
+                      'isActive',
+                      ParamType.int,
                     ),
                   ),
                 ))

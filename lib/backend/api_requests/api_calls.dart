@@ -20,6 +20,8 @@ class RasGroup {
   static GetAllBoothsCall getAllBoothsCall = GetAllBoothsCall();
   static UpdateEventByIdCall updateEventByIdCall = UpdateEventByIdCall();
   static CreateEventCall createEventCall = CreateEventCall();
+  static UpdateBoothsCall updateBoothsCall = UpdateBoothsCall();
+  static CreateBoothsCall createBoothsCall = CreateBoothsCall();
   static UploadFileCall uploadFileCall = UploadFileCall();
   static GetMediaFilesByRelatedCall getMediaFilesByRelatedCall =
       GetMediaFilesByRelatedCall();
@@ -327,6 +329,174 @@ class CreateEventCall {
     return ApiManager.instance.makeApiCall(
       callName: 'createEvent',
       apiUrl: '${baseUrl}/events',
+      callType: ApiCallType.POST,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer test-token-123456789',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  int? statusCode(dynamic response) => castToType<int>(getJsonField(
+        response,
+        r'''$.status_code''',
+      ));
+  String? statusMessage(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.status_message''',
+      ));
+  String? description(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.description''',
+      ));
+  dynamic data(dynamic response) => getJsonField(
+        response,
+        r'''$.data''',
+      );
+  int? eventId(dynamic response) => castToType<int>(getJsonField(
+        response,
+        r'''$.data.event_id''',
+      ));
+  String? eventDocRef(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data.event_doc_ref''',
+      ));
+  String? eventDocRefPath(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data.event_doc_ref_path''',
+      ));
+  int? isActive(dynamic response) => castToType<int>(getJsonField(
+        response,
+        r'''$.data.is_active''',
+      ));
+  String? createdAt(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data.created_at''',
+      ));
+  String? createdBy(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data.created_by''',
+      ));
+}
+
+class UpdateBoothsCall {
+  Future<ApiCallResponse> call({
+    String? authToken = 'test-token-123456789',
+    String? boothName = 'บูธใหม่',
+    String? description = 'อธิบายบูธใหม่',
+    int? notificationDistance = 3,
+    int? isActive = 0,
+    String? updatedBy = 'users/m01gNYT1qqbOL1emlEPF4uc2b8F3',
+    String? eventRef = '10b6e505-bba3-4079-bc7f-24cf07cb0ecf',
+    String? boothRef = '804a7646-6139-4196-8650-d764dd9d37e1',
+  }) async {
+    final baseUrl = RasGroup.getBaseUrl();
+
+    final ffApiRequestBody = '''
+{
+  "booth_name": "${escapeStringForJson(boothName)}",
+  "description": "${escapeStringForJson(description)}",
+  "notification_distance": ${notificationDistance},
+  "is_active": ${isActive},
+  "updated_by": "${escapeStringForJson(updatedBy)}",
+  "event_ref": "${escapeStringForJson(eventRef)}",
+  "booth_ref": "${escapeStringForJson(boothRef)}"
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'updateBooths',
+      apiUrl: '${baseUrl}/booths',
+      callType: ApiCallType.PUT,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer test-token-123456789',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  int? statusCode(dynamic response) => castToType<int>(getJsonField(
+        response,
+        r'''$.status_code''',
+      ));
+  String? statusMessage(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.status_message''',
+      ));
+  String? description(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.description''',
+      ));
+  dynamic data(dynamic response) => getJsonField(
+        response,
+        r'''$.data''',
+      );
+  int? eventId(dynamic response) => castToType<int>(getJsonField(
+        response,
+        r'''$.data.event_id''',
+      ));
+  String? eventDocRef(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data.event_doc_ref''',
+      ));
+  String? eventDocRefPath(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data.event_doc_ref_path''',
+      ));
+  int? isActive(dynamic response) => castToType<int>(getJsonField(
+        response,
+        r'''$.data.is_active''',
+      ));
+  String? createdAt(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data.created_at''',
+      ));
+  String? createdBy(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data.created_by''',
+      ));
+}
+
+class CreateBoothsCall {
+  Future<ApiCallResponse> call({
+    String? authToken = 'test-token-123456789',
+    String? boothName = 'บูธใหม่',
+    String? description = 'อธิบายบูธใหม่',
+    int? notificationDistance = 3,
+    int? isActive = 0,
+    String? createdBy = 'users/m01gNYT1qqbOL1emlEPF4uc2b8F3',
+    String? eventRef = '10b6e505-bba3-4079-bc7f-24cf07cb0ecf',
+  }) async {
+    final baseUrl = RasGroup.getBaseUrl();
+
+    final ffApiRequestBody = '''
+{
+  "booth_name": "${escapeStringForJson(boothName)}",
+  "description": "${escapeStringForJson(description)}",
+  "notification_distance": ${notificationDistance},
+  "is_active": ${isActive},
+  "created_by": "${escapeStringForJson(createdBy)}",
+  "event_ref": "${escapeStringForJson(eventRef)}"
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'createBooths',
+      apiUrl: '${baseUrl}/booths/new',
       callType: ApiCallType.POST,
       headers: {
         'Content-Type': 'application/json',

@@ -1,24 +1,36 @@
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/api_requests/api_calls.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'setting_booth_model.dart';
 export 'setting_booth_model.dart';
 
 class SettingBoothWidget extends StatefulWidget {
   const SettingBoothWidget({
     super.key,
-    this.booth,
     this.eventId,
-    required this.eventDocRef,
+    required this.typePage,
+    this.newEventId,
+    this.responseUpdated,
+    this.pathFileImages,
+    this.boothId,
   });
 
-  final DocumentReference? booth;
   final int? eventId;
-  final DocumentReference? eventDocRef;
+  final String? typePage;
+  final int? newEventId;
+  final bool? responseUpdated;
+  final List<String>? pathFileImages;
+  final int? boothId;
 
   static String routeName = 'SettingBooth';
   static String routePath = '/settingBooth';
@@ -37,13 +49,29 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget> {
     super.initState();
     _model = createModel(context, () => SettingBoothModel());
 
-    _model.boothNameTextController ??= TextEditingController();
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.queryBooth = await queryBoothsRecordOnce(
+        queryBuilder: (boothsRecord) => boothsRecord.where(
+          'booth_id',
+          isEqualTo: widget.boothId,
+        ),
+        singleRecord: true,
+      ).then((s) => s.firstOrNull);
+    });
+
+    _model.boothNameTextController ??= TextEditingController(
+        text: widget.typePage == 'edit' ? _model.queryBooth?.boothName : '');
     _model.boothNameFocusNode ??= FocusNode();
     _model.boothNameFocusNode!.addListener(() => safeSetState(() {}));
-    _model.descriptionTextController ??= TextEditingController();
+    _model.descriptionTextController ??= TextEditingController(
+        text: widget.typePage == 'edit' ? _model.queryBooth?.description : '');
     _model.descriptionFocusNode ??= FocusNode();
     _model.descriptionFocusNode!.addListener(() => safeSetState(() {}));
-    _model.remindAmountTextController ??= TextEditingController();
+    _model.remindAmountTextController ??= TextEditingController(
+        text: widget.typePage == 'edit'
+            ? _model.queryBooth?.notificationDistance.toString()
+            : '');
     _model.remindAmountFocusNode ??= FocusNode();
     _model.remindAmountFocusNode!.addListener(() => safeSetState(() {}));
     _model.switchValue = true;
@@ -59,6 +87,8 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -745,21 +775,93 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget> {
                           16.0, 12.0, 16.0, 12.0),
                       child: FFButtonWidget(
                         onPressed: () async {
-                          await showDialog(
-                            context: context,
-                            builder: (alertDialogContext) {
-                              return AlertDialog(
-                                content: Text('สำเร็จ'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(alertDialogContext),
-                                    child: Text('Ok'),
-                                  ),
-                                ],
+                          var _shouldSetState = false;
+                          if (_model.boothNameTextController.text != '') {
+                            if (_model.remindAmountTextController.text != '') {
+                              if ((widget.boothId == null) ||
+                                  (widget.boothId == 0)) {
+                                // createEvents
+                                _model.responseCreated =
+                                    await RasGroup.createBoothsCall.call(
+                                  boothName:
+                                      _model.boothNameTextController.text,
+                                  description:
+                                      _model.descriptionTextController.text,
+                                  notificationDistance: int.tryParse(
+                                      _model.remindAmountTextController.text),
+                                  isActive: 0,
+                                  createdBy: currentUserReference?.path,
+                                  eventRef:
+                                      _model.queryBooth?.associatedEventId,
+                                );
+
+                                _shouldSetState = true;
+                                if (_shouldSetState) safeSetState(() {});
+                                return;
+                              } else {
+                                // updateEvents
+                                _model.responseUpdated =
+                                    await RasGroup.updateBoothsCall.call(
+                                  boothName:
+                                      _model.boothNameTextController.text,
+                                  description:
+                                      _model.descriptionTextController.text,
+                                  notificationDistance: int.tryParse(
+                                      _model.remindAmountTextController.text),
+                                  isActive: 0,
+                                  updatedBy: currentUserReference?.path,
+                                  eventRef:
+                                      _model.queryBooth?.associatedEventId,
+                                  boothRef: _model.queryBooth?.reference.id,
+                                );
+
+                                _shouldSetState = true;
+                                if (_shouldSetState) safeSetState(() {});
+                                return;
+                              }
+                            } else {
+                              await showDialog(
+                                context: context,
+                                builder: (alertDialogContext) {
+                                  return AlertDialog(
+                                    title: Text('ข้อมูลไม่ครบถ้วน'),
+                                    content:
+                                        Text('กรุณากรอก ระยะส่ง Beacon (เมตร)'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(alertDialogContext),
+                                        child: Text('Ok'),
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
-                            },
-                          );
+                              if (_shouldSetState) safeSetState(() {});
+                              return;
+                            }
+                          } else {
+                            await showDialog(
+                              context: context,
+                              builder: (alertDialogContext) {
+                                return AlertDialog(
+                                  title: Text('ข้อมูลไม่ครบถ้วน'),
+                                  content: Text('กรุณากรอก ชื่อบูธ'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(alertDialogContext),
+                                      child: Text('Ok'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                            if (_shouldSetState) safeSetState(() {});
+                            return;
+                          }
+
+                          if (_shouldSetState) safeSetState(() {});
                         },
                         text: 'บันทึก',
                         options: FFButtonOptions(

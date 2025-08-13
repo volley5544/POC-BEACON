@@ -1,3 +1,5 @@
+import '/backend/api_requests/api_calls.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'setting_booth_widget.dart' show SettingBoothWidget;
 import 'package:flutter/material.dart';
@@ -6,6 +8,8 @@ class SettingBoothModel extends FlutterFlowModel<SettingBoothWidget> {
   ///  State fields for stateful widgets in this page.
 
   final formKey = GlobalKey<FormState>();
+  // Stores action output result for [Firestore Query - Query a collection] action in SettingBooth widget.
+  BoothsRecord? queryBooth;
   // State field(s) for boothName widget.
   FocusNode? boothNameFocusNode;
   TextEditingController? boothNameTextController;
@@ -37,6 +41,10 @@ class SettingBoothModel extends FlutterFlowModel<SettingBoothWidget> {
 
   // State field(s) for Switch widget.
   bool? switchValue;
+  // Stores action output result for [Backend Call - API (createBooths)] action in Button widget.
+  ApiCallResponse? responseCreated;
+  // Stores action output result for [Backend Call - API (updateBooths)] action in Button widget.
+  ApiCallResponse? responseUpdated;
 
   @override
   void initState(BuildContext context) {

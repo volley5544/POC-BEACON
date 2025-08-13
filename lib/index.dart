@@ -39,3 +39,7 @@ export '/pages/setting/setting_event_list_copy/setting_event_list_copy_widget.da
     show SettingEventListCopyWidget;
 export '/pages/setting/setting_event_copy/setting_event_copy_widget.dart'
     show SettingEventCopyWidget;
+export '/pages/setting/setting_booth_list_copy/setting_booth_list_copy_widget.dart'
+    show SettingBoothListCopyWidget;
+export '/pages/setting/setting_booth_list2/setting_booth_list2_widget.dart'
+    show SettingBoothList2Widget;

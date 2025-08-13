@@ -1,11 +1,12 @@
 import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/index.dart';
-import 'setting_booth_list_widget.dart' show SettingBoothListWidget;
+import 'setting_booth_list_copy_widget.dart' show SettingBoothListCopyWidget;
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class SettingBoothListModel extends FlutterFlowModel<SettingBoothListWidget> {
+class SettingBoothListCopyModel
+    extends FlutterFlowModel<SettingBoothListCopyWidget> {
   ///  Local state fields for this page.
 
   List<String> boothName = [];
@@ -47,47 +48,56 @@ class SettingBoothListModel extends FlutterFlowModel<SettingBoothListWidget> {
 
   String? eventName;
 
-  List<int> boothId = [];
-  void addToBoothId(int item) => boothId.add(item);
-  void removeFromBoothId(int item) => boothId.remove(item);
-  void removeAtIndexFromBoothId(int index) => boothId.removeAt(index);
-  void insertAtIndexInBoothId(int index, int item) =>
-      boothId.insert(index, item);
-  void updateBoothIdAtIndex(int index, Function(int) updateFn) =>
-      boothId[index] = updateFn(boothId[index]);
-
-  List<String> boothDocRef = [];
-  void addToBoothDocRef(String item) => boothDocRef.add(item);
-  void removeFromBoothDocRef(String item) => boothDocRef.remove(item);
-  void removeAtIndexFromBoothDocRef(int index) => boothDocRef.removeAt(index);
-  void insertAtIndexInBoothDocRef(int index, String item) =>
-      boothDocRef.insert(index, item);
-  void updateBoothDocRefAtIndex(int index, Function(String) updateFn) =>
-      boothDocRef[index] = updateFn(boothDocRef[index]);
-
-  int? boothIdSelect;
-
-  String? boothDocRefSelect;
-
-  List<dynamic> responseData = [];
-  void addToResponseData(dynamic item) => responseData.add(item);
-  void removeFromResponseData(dynamic item) => responseData.remove(item);
-  void removeAtIndexFromResponseData(int index) => responseData.removeAt(index);
-  void insertAtIndexInResponseData(int index, dynamic item) =>
-      responseData.insert(index, item);
-  void updateResponseDataAtIndex(int index, Function(dynamic) updateFn) =>
-      responseData[index] = updateFn(responseData[index]);
-
   ///  State fields for stateful widgets in this page.
 
-  // Stores action output result for [Backend Call - API (getAllBooths)] action in SettingBoothList widget.
+  // Stores action output result for [Backend Call - API (getAllBooths)] action in SettingBoothListCopy widget.
   ApiCallResponse? apiResultoee;
-  // Stores action output result for [Firestore Query - Query a collection] action in SettingBoothList widget.
+  // Stores action output result for [Firestore Query - Query a collection] action in SettingBoothListCopy widget.
   EventsRecord? dataEvent;
+  // State field(s) for ListView widget.
+
+  PagingController<DocumentSnapshot?, EventsRecord>? listViewPagingController;
+  Query? listViewPagingQuery;
+  List<StreamSubscription?> listViewStreamSubscriptions = [];
 
   @override
   void initState(BuildContext context) {}
 
   @override
-  void dispose() {}
+  void dispose() {
+    listViewStreamSubscriptions.forEach((s) => s?.cancel());
+    listViewPagingController?.dispose();
+  }
+
+  /// Additional helper methods.
+  PagingController<DocumentSnapshot?, EventsRecord> setListViewController(
+    Query query, {
+    DocumentReference<Object?>? parent,
+  }) {
+    listViewPagingController ??= _createListViewController(query, parent);
+    if (listViewPagingQuery != query) {
+      listViewPagingQuery = query;
+      listViewPagingController?.refresh();
+    }
+    return listViewPagingController!;
+  }
+
+  PagingController<DocumentSnapshot?, EventsRecord> _createListViewController(
+    Query query,
+    DocumentReference<Object?>? parent,
+  ) {
+    final controller =
+        PagingController<DocumentSnapshot?, EventsRecord>(firstPageKey: null);
+    return controller
+      ..addPageRequestListener(
+        (nextPageMarker) => queryEventsRecordPage(
+          queryBuilder: (_) => listViewPagingQuery ??= query,
+          nextPageMarker: nextPageMarker,
+          streamSubscriptions: listViewStreamSubscriptions,
+          controller: controller,
+          pageSize: 25,
+          isStream: true,
+        ),
+      );
+  }
 }
