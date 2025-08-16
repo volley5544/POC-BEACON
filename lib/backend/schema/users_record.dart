@@ -110,6 +110,11 @@ class UsersRecord extends FirestoreRecord {
   DateTime? get photoUpdatedAt => _photoUpdatedAt;
   bool hasPhotoUpdatedAt() => _photoUpdatedAt != null;
 
+  // "roles_ref" field.
+  DocumentReference? _rolesRef;
+  DocumentReference? get rolesRef => _rolesRef;
+  bool hasRolesRef() => _rolesRef != null;
+
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
     _displayName = snapshotData['display_name'] as String?;
@@ -130,6 +135,7 @@ class UsersRecord extends FirestoreRecord {
     _updatedBy = snapshotData['updated_by'] as String?;
     _isActive = castToType<int>(snapshotData['is_active']);
     _photoUpdatedAt = snapshotData['photo_updated_at'] as DateTime?;
+    _rolesRef = snapshotData['roles_ref'] as DocumentReference?;
   }
 
   static CollectionReference get collection =>
@@ -185,6 +191,7 @@ Map<String, dynamic> createUsersRecordData({
   String? updatedBy,
   int? isActive,
   DateTime? photoUpdatedAt,
+  DocumentReference? rolesRef,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -207,6 +214,7 @@ Map<String, dynamic> createUsersRecordData({
       'updated_by': updatedBy,
       'is_active': isActive,
       'photo_updated_at': photoUpdatedAt,
+      'roles_ref': rolesRef,
     }.withoutNulls,
   );
 
@@ -236,7 +244,8 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e1?.updatedAt == e2?.updatedAt &&
         e1?.updatedBy == e2?.updatedBy &&
         e1?.isActive == e2?.isActive &&
-        e1?.photoUpdatedAt == e2?.photoUpdatedAt;
+        e1?.photoUpdatedAt == e2?.photoUpdatedAt &&
+        e1?.rolesRef == e2?.rolesRef;
   }
 
   @override
@@ -259,7 +268,8 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e?.updatedAt,
         e?.updatedBy,
         e?.isActive,
-        e?.photoUpdatedAt
+        e?.photoUpdatedAt,
+        e?.rolesRef
       ]);
 
   @override

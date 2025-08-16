@@ -10,6 +10,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/upload_data.dart';
 import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
+import '/index.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -61,6 +62,19 @@ class _SettingEventWidgetState extends State<SettingEventWidget>
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
+      if (FFAppState().rolesID != 1) {
+        context.pushNamed(
+          HomeWidget.routeName,
+          queryParameters: {
+            'uid': serializeParam(
+              currentUserUid,
+              ParamType.String,
+            ),
+          }.withoutNulls,
+        );
+
+        return;
+      }
       if (widget.typePage != 'edit') {
         return;
       }
@@ -2685,7 +2699,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget>
                                                     return AlertDialog(
                                                       title: Text('สำเร็จ'),
                                                       content: Text(
-                                                          'เพิ่มบูธกิจกรรมสำเร็จ'),
+                                                          'เพิ่มกิจกรรมสำเร็จ'),
                                                       actions: [
                                                         TextButton(
                                                           onPressed: () =>
@@ -2761,7 +2775,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget>
                                                     return AlertDialog(
                                                       title: Text('สำเร็จ'),
                                                       content: Text(
-                                                          'แก้ไขข้อมูลสำเร็จ'),
+                                                          'แก้ไขกิจกรรมสำเร็จ'),
                                                       actions: [
                                                         TextButton(
                                                           onPressed: () =>

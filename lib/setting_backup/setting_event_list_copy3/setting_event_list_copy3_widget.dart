@@ -1,4 +1,3 @@
-import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
@@ -12,28 +11,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'setting_event_list_copy_model.dart';
-export 'setting_event_list_copy_model.dart';
+import 'setting_event_list_copy3_model.dart';
+export 'setting_event_list_copy3_model.dart';
 
-class SettingEventListCopyWidget extends StatefulWidget {
-  const SettingEventListCopyWidget({
-    super.key,
-    int? isActive,
-  }) : this.isActive = isActive ?? 0;
+class SettingEventListCopy3Widget extends StatefulWidget {
+  const SettingEventListCopy3Widget({super.key});
 
-  final int isActive;
-
-  static String routeName = 'SettingEventListCopy';
-  static String routePath = '/settingEventListCopy';
+  static String routeName = 'SettingEventListCopy3';
+  static String routePath = '/settingEventListCopy3';
 
   @override
-  State<SettingEventListCopyWidget> createState() =>
-      _SettingEventListCopyWidgetState();
+  State<SettingEventListCopy3Widget> createState() =>
+      _SettingEventListCopy3WidgetState();
 }
 
-class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
-    with TickerProviderStateMixin {
-  late SettingEventListCopyModel _model;
+class _SettingEventListCopy3WidgetState
+    extends State<SettingEventListCopy3Widget> with TickerProviderStateMixin {
+  late SettingEventListCopy3Model _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -42,7 +36,7 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => SettingEventListCopyModel());
+    _model = createModel(context, () => SettingEventListCopy3Model());
 
     _model.tabBarController = TabController(
       vsync: this,
@@ -107,34 +101,28 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primary,
-        floatingActionButton: Align(
-          alignment: AlignmentDirectional(1.0, 1.0),
-          child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 50.0),
-            child: FloatingActionButton(
-              onPressed: () async {
-                context.pushNamed(
-                  SettingEventWidget.routeName,
-                  queryParameters: {
-                    'eventId': serializeParam(
-                      0,
-                      ParamType.int,
-                    ),
-                    'typePage': serializeParam(
-                      'add',
-                      ParamType.String,
-                    ),
-                  }.withoutNulls,
-                );
-              },
-              backgroundColor: FlutterFlowTheme.of(context).primary,
-              elevation: 8.0,
-              child: Icon(
-                Icons.add_rounded,
-                color: FlutterFlowTheme.of(context).info,
-                size: 24.0,
-              ),
-            ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            context.pushNamed(
+              SettingEventWidget.routeName,
+              queryParameters: {
+                'eventId': serializeParam(
+                  0,
+                  ParamType.int,
+                ),
+                'typePage': serializeParam(
+                  'add',
+                  ParamType.String,
+                ),
+              }.withoutNulls,
+            );
+          },
+          backgroundColor: FlutterFlowTheme.of(context).primary,
+          elevation: 8.0,
+          child: Icon(
+            Icons.add_rounded,
+            color: FlutterFlowTheme.of(context).info,
+            size: 24.0,
           ),
         ),
         appBar: AppBar(
@@ -813,12 +801,9 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
                               PagedListView<DocumentSnapshot<Object?>?,
                                   EventsRecord>(
                                 pagingController: _model.setListViewController3(
-                                  EventsRecord.collection
-                                      .where(
-                                        'is_active',
-                                        isEqualTo: widget.isActive,
-                                      )
-                                      .orderBy('event_id', descending: true),
+                                  EventsRecord.collection.orderBy(
+                                      'start_datetime',
+                                      descending: true),
                                 ),
                                 padding: EdgeInsets.zero,
                                 primary: false,
@@ -830,18 +815,13 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
                                   // Customize what your widget looks like when it's loading the first page.
                                   firstPageProgressIndicatorBuilder: (_) =>
                                       Center(
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 0.0, 50.0),
-                                      child: SizedBox(
-                                        width: 50.0,
-                                        height: 50.0,
-                                        child: CircularProgressIndicator(
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                            FlutterFlowTheme.of(context)
-                                                .primary,
-                                          ),
+                                    child: SizedBox(
+                                      width: 50.0,
+                                      height: 50.0,
+                                      child: CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                          FlutterFlowTheme.of(context).primary,
                                         ),
                                       ),
                                     ),
@@ -849,18 +829,13 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
                                   // Customize what your widget looks like when it's loading another page.
                                   newPageProgressIndicatorBuilder: (_) =>
                                       Center(
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 0.0, 50.0),
-                                      child: SizedBox(
-                                        width: 50.0,
-                                        height: 50.0,
-                                        child: CircularProgressIndicator(
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                            FlutterFlowTheme.of(context)
-                                                .primary,
-                                          ),
+                                    child: SizedBox(
+                                      width: 50.0,
+                                      height: 50.0,
+                                      child: CircularProgressIndicator(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                          FlutterFlowTheme.of(context).primary,
                                         ),
                                       ),
                                     ),
@@ -873,84 +848,74 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
                                     return Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           16.0, 12.0, 16.0, 0.0),
-                                      child: Container(
-                                        width:
-                                            MediaQuery.sizeOf(context).width *
-                                                1.0,
-                                        height: 100.0,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              blurRadius: 3.0,
-                                              color: Color(0x411D2429),
-                                              offset: Offset(
-                                                0.0,
-                                                1.0,
+                                      child: InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          context.pushNamed(
+                                            SettingBoothListOldWidget.routeName,
+                                            queryParameters: {
+                                              'eventId': serializeParam(
+                                                listViewEventsRecord.eventId,
+                                                ParamType.int,
                                               ),
-                                            )
-                                          ],
-                                          borderRadius:
-                                              BorderRadius.circular(12.0),
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 1.0, 1.0, 1.0),
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0),
-                                                  child: Image.network(
-                                                    'https://images.unsplash.com/photo-1574914629385-46448b767aec?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bGF0dGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60',
-                                                    width: 70.0,
-                                                    height: 100.0,
-                                                    fit: BoxFit.cover,
-                                                  ),
+                                              'eventDocRef': serializeParam(
+                                                listViewEventsRecord.reference,
+                                                ParamType.DocumentReference,
+                                              ),
+                                            }.withoutNulls,
+                                          );
+                                        },
+                                        child: Container(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  1.0,
+                                          height: 100.0,
+                                          decoration: BoxDecoration(
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryBackground,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                blurRadius: 3.0,
+                                                color: Color(0x411D2429),
+                                                offset: Offset(
+                                                  0.0,
+                                                  1.0,
                                                 ),
-                                              ),
-                                              Expanded(
-                                                child: Padding(
+                                              )
+                                            ],
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                Padding(
                                                   padding: EdgeInsetsDirectional
                                                       .fromSTEB(
-                                                          8.0, 0.0, 4.0, 0.0),
-                                                  child: InkWell(
-                                                    splashColor:
-                                                        Colors.transparent,
-                                                    focusColor:
-                                                        Colors.transparent,
-                                                    hoverColor:
-                                                        Colors.transparent,
-                                                    highlightColor:
-                                                        Colors.transparent,
-                                                    onTap: () async {
-                                                      context.pushNamed(
-                                                        SettingEventWidget
-                                                            .routeName,
-                                                        queryParameters: {
-                                                          'eventId':
-                                                              serializeParam(
-                                                            valueOrDefault<int>(
-                                                              listViewEventsRecord
-                                                                  .eventId,
-                                                              0,
-                                                            ),
-                                                            ParamType.int,
-                                                          ),
-                                                          'typePage':
-                                                              serializeParam(
-                                                            'edit',
-                                                            ParamType.String,
-                                                          ),
-                                                        }.withoutNulls,
-                                                      );
-                                                    },
+                                                          0.0, 1.0, 1.0, 1.0),
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8.0),
+                                                    child: Image.network(
+                                                      'https://images.unsplash.com/photo-1574914629385-46448b767aec?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8bGF0dGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60',
+                                                      width: 70.0,
+                                                      height: 100.0,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(8.0, 0.0,
+                                                                4.0, 0.0),
                                                     child: Column(
                                                       mainAxisSize:
                                                           MainAxisSize.max,
@@ -1051,11 +1016,7 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
                                                                       8.0,
                                                                       0.0),
                                                           child: AutoSizeText(
-                                                            '${dateTimeFormat("d/M/y", listViewEventsRecord.startDatetime)} (${dateTimeFormat("Hm", listViewEventsRecord.startDatetime)}) - ${dateTimeFormat("d/M/y", listViewEventsRecord.endDatetime)} (${dateTimeFormat("Hm", listViewEventsRecord.endDatetime)})'
-                                                                .maybeHandleOverflow(
-                                                              maxChars: 70,
-                                                              replacement: '…',
-                                                            ),
+                                                            'aa',
                                                             textAlign:
                                                                 TextAlign.start,
                                                             style: FlutterFlowTheme
@@ -1092,66 +1053,32 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              Container(
-                                                width: 100.0,
-                                                height: 100.0,
-                                                decoration: BoxDecoration(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondaryBackground,
-                                                ),
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  children: [
-                                                    Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Align(
-                                                          alignment:
-                                                              AlignmentDirectional(
-                                                                  -1.0, -1.0),
-                                                          child: InkWell(
-                                                            splashColor: Colors
-                                                                .transparent,
-                                                            focusColor: Colors
-                                                                .transparent,
-                                                            hoverColor: Colors
-                                                                .transparent,
-                                                            highlightColor:
-                                                                Colors
-                                                                    .transparent,
-                                                            onTap: () async {
-                                                              context.pushNamed(
-                                                                SettingBoothListWidget
-                                                                    .routeName,
-                                                                queryParameters:
-                                                                    {
-                                                                  'eventId':
-                                                                      serializeParam(
-                                                                    listViewEventsRecord
-                                                                        .eventId,
-                                                                    ParamType
-                                                                        .int,
-                                                                  ),
-                                                                  'eventDocRef':
-                                                                      serializeParam(
-                                                                    listViewEventsRecord
-                                                                        .reference,
-                                                                    ParamType
-                                                                        .DocumentReference,
-                                                                  ),
-                                                                }.withoutNulls,
-                                                              );
-                                                            },
+                                                Container(
+                                                  width: 100.0,
+                                                  height: 100.0,
+                                                  decoration: BoxDecoration(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .secondaryBackground,
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: [
+                                                      Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Align(
+                                                            alignment:
+                                                                AlignmentDirectional(
+                                                                    -1.0, -1.0),
                                                             child: Row(
                                                               mainAxisSize:
                                                                   MainAxisSize
@@ -1161,7 +1088,7 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
                                                                       .start,
                                                               crossAxisAlignment:
                                                                   CrossAxisAlignment
-                                                                      .end,
+                                                                      .center,
                                                               children: [
                                                                 Padding(
                                                                   padding: EdgeInsetsDirectional
@@ -1194,8 +1121,6 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
                                                                               .bodyMedium
                                                                               .fontStyle,
                                                                         ),
-                                                                        color: FlutterFlowTheme.of(context)
-                                                                            .success,
                                                                         letterSpacing:
                                                                             0.0,
                                                                         fontWeight: FlutterFlowTheme.of(context)
@@ -1209,19 +1134,28 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
                                                               ],
                                                             ),
                                                           ),
-                                                        ),
-                                                        Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          children: [
-                                                            Text(
-                                                              ' ',
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyMedium
-                                                                  .override(
-                                                                    font: GoogleFonts
-                                                                        .readexPro(
+                                                          Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .max,
+                                                            children: [
+                                                              Text(
+                                                                ' ',
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .override(
+                                                                      font: GoogleFonts
+                                                                          .readexPro(
+                                                                        fontWeight: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontWeight,
+                                                                        fontStyle: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontStyle,
+                                                                      ),
+                                                                      letterSpacing:
+                                                                          0.0,
                                                                       fontWeight: FlutterFlowTheme.of(
                                                                               context)
                                                                           .bodyMedium
@@ -1231,112 +1165,13 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
                                                                           .bodyMedium
                                                                           .fontStyle,
                                                                     ),
-                                                                    letterSpacing:
-                                                                        0.0,
-                                                                    fontWeight: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontWeight,
-                                                                    fontStyle: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontStyle,
-                                                                  ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        InkWell(
-                                                          splashColor: Colors
-                                                              .transparent,
-                                                          focusColor: Colors
-                                                              .transparent,
-                                                          hoverColor: Colors
-                                                              .transparent,
-                                                          highlightColor: Colors
-                                                              .transparent,
-                                                          onTap: () async {
-                                                            var confirmDialogResponse =
-                                                                await showDialog<
-                                                                        bool>(
-                                                                      context:
-                                                                          context,
-                                                                      builder:
-                                                                          (alertDialogContext) {
-                                                                        return AlertDialog(
-                                                                          title:
-                                                                              Text('Confirm'),
-                                                                          content:
-                                                                              Text('คุณต้องการลบกิจกรรมนี้ใช่หรือไม่ ?'),
-                                                                          actions: [
-                                                                            TextButton(
-                                                                              onPressed: () => Navigator.pop(alertDialogContext, false),
-                                                                              child: Text('Cancel'),
-                                                                            ),
-                                                                            TextButton(
-                                                                              onPressed: () => Navigator.pop(alertDialogContext, true),
-                                                                              child: Text('Confirm'),
-                                                                            ),
-                                                                          ],
-                                                                        );
-                                                                      },
-                                                                    ) ??
-                                                                    false;
-                                                            if (confirmDialogResponse) {
-                                                              await listViewEventsRecord
-                                                                  .reference
-                                                                  .update({
-                                                                ...createEventsRecordData(
-                                                                  isActive: 1,
-                                                                  updatedBy:
-                                                                      valueOrDefault<
-                                                                          String>(
-                                                                    currentUserReference
-                                                                        ?.path,
-                                                                    '0',
-                                                                  ),
-                                                                ),
-                                                                ...mapToFirestore(
-                                                                  {
-                                                                    'updated_at':
-                                                                        FieldValue
-                                                                            .serverTimestamp(),
-                                                                  },
-                                                                ),
-                                                              });
-                                                              await showDialog(
-                                                                context:
-                                                                    context,
-                                                                builder:
-                                                                    (alertDialogContext) {
-                                                                  return AlertDialog(
-                                                                    title: Text(
-                                                                        'สำเร็จ'),
-                                                                    content: Text(
-                                                                        'ลบกิจกรรมสำเร็จ'),
-                                                                    actions: [
-                                                                      TextButton(
-                                                                        onPressed:
-                                                                            () =>
-                                                                                Navigator.pop(alertDialogContext),
-                                                                        child: Text(
-                                                                            'Ok'),
-                                                                      ),
-                                                                    ],
-                                                                  );
-                                                                },
-                                                              );
-
-                                                              safeSetState(
-                                                                  () {});
-                                                            }
-                                                          },
-                                                          child: Row(
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Row(
                                                             mainAxisSize:
                                                                 MainAxisSize
                                                                     .max,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .end,
                                                             children: [
                                                               Padding(
                                                                 padding:
@@ -1370,9 +1205,6 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
                                                                             .bodyMedium
                                                                             .fontStyle,
                                                                       ),
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .error,
                                                                       letterSpacing:
                                                                           0.0,
                                                                       fontWeight: FlutterFlowTheme.of(
@@ -1387,34 +1219,18 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
                                                               ),
                                                             ],
                                                           ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
                                     );
                                   },
-                                ),
-                              ),
-                              Container(
-                                constraints: BoxConstraints(
-                                  maxWidth: 770.0,
-                                ),
-                                decoration: BoxDecoration(),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [],
-                                    ),
-                                  ],
                                 ),
                               ),
                             ],

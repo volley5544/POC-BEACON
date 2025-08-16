@@ -69,6 +69,24 @@ class FFAppState extends ChangeNotifier {
     _token = value;
     prefs.setString('ff_token', value);
   }
+
+  String _rolesName = '';
+  String get rolesName => _rolesName;
+  set rolesName(String value) {
+    _rolesName = value;
+  }
+
+  String _rolesDescription = '';
+  String get rolesDescription => _rolesDescription;
+  set rolesDescription(String value) {
+    _rolesDescription = value;
+  }
+
+  int _rolesID = 0;
+  int get rolesID => _rolesID;
+  set rolesID(int value) {
+    _rolesID = value;
+  }
 }
 
 void _safeInit(Function() initializeField) {

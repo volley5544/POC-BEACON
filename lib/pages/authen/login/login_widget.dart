@@ -5,6 +5,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/index.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -511,6 +512,7 @@ class _LoginWidgetState extends State<LoginWidget>
                                   0.0, 0.0, 0.0, 16.0),
                               child: FFButtonWidget(
                                 onPressed: () async {
+                                  var _shouldSetState = false;
                                   if (_model.emailAddressTextController.text !=
                                           '') {
                                     if (_model.passwordTextController.text !=
@@ -532,10 +534,31 @@ class _LoginWidgetState extends State<LoginWidget>
                                         password:
                                             _model.passwordTextController.text,
                                       ));
-                                      context.pushNamedAuth(
-                                          HomeWidget.routeName,
-                                          context.mounted);
+                                      // getUser
+                                      _model.dataUser =
+                                          await queryUsersRecordOnce(
+                                        queryBuilder: (usersRecord) =>
+                                            usersRecord.where(
+                                          'uid',
+                                          isEqualTo: currentUserUid,
+                                        ),
+                                        singleRecord: true,
+                                      ).then((s) => s.firstOrNull);
+                                      _shouldSetState = true;
 
+                                      context.pushNamedAuth(
+                                        HomeWidget.routeName,
+                                        context.mounted,
+                                        queryParameters: {
+                                          'uid': serializeParam(
+                                            _model.dataUser?.uid,
+                                            ParamType.String,
+                                          ),
+                                        }.withoutNulls,
+                                      );
+
+                                      if (_shouldSetState)
+                                        safeSetState(() {});
                                       return;
                                                                         } else {
                                       await showDialog(
@@ -554,6 +577,7 @@ class _LoginWidgetState extends State<LoginWidget>
                                           );
                                         },
                                       );
+                                      if (_shouldSetState) safeSetState(() {});
                                       return;
                                     }
                                   } else {
@@ -573,8 +597,11 @@ class _LoginWidgetState extends State<LoginWidget>
                                         );
                                       },
                                     );
+                                    if (_shouldSetState) safeSetState(() {});
                                     return;
                                   }
+
+                                  if (_shouldSetState) safeSetState(() {});
                                 },
                                 text: 'เข้าสู่ระบบ',
                                 options: FFButtonOptions(

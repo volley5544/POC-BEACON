@@ -1,11 +1,12 @@
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
-import 'event_selection_widget.dart' show EventSelectionWidget;
+import 'event_selection_copy_widget.dart' show EventSelectionCopyWidget;
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class EventSelectionModel extends FlutterFlowModel<EventSelectionWidget> {
+class EventSelectionCopyModel
+    extends FlutterFlowModel<EventSelectionCopyWidget> {
   ///  State fields for stateful widgets in this page.
 
   // State field(s) for ListView widget.
@@ -45,11 +46,10 @@ class EventSelectionModel extends FlutterFlowModel<EventSelectionWidget> {
     return controller
       ..addPageRequestListener(
         (nextPageMarker) => queryEventsRecordPage(
-          queryBuilder: (_) => listViewPagingQuery ??= query,
           nextPageMarker: nextPageMarker,
           streamSubscriptions: listViewStreamSubscriptions,
           controller: controller,
-          pageSize: 10,
+          pageSize: 25,
           isStream: true,
         ),
       );

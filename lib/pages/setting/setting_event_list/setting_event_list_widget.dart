@@ -13,10 +13,12 @@ import '/index.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:octo_image/octo_image.dart';
+import 'package:provider/provider.dart';
 import 'setting_event_list_model.dart';
 export 'setting_event_list_model.dart';
 
@@ -47,6 +49,23 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
   void initState() {
     super.initState();
     _model = createModel(context, () => SettingEventListModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      if (FFAppState().rolesID != 1) {
+        context.pushNamed(
+          HomeWidget.routeName,
+          queryParameters: {
+            'uid': serializeParam(
+              currentUserUid,
+              ParamType.String,
+            ),
+          }.withoutNulls,
+        );
+
+        return;
+      }
+    });
 
     _model.tabBarController = TabController(
       vsync: this,
@@ -103,6 +122,8 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -141,7 +162,10 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
           backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
           automaticallyImplyLeading: false,
           title: Text(
-            'แดชบอร์ด & จัดการ',
+            valueOrDefault<String>(
+              FFAppState().rolesID == 1 ? 'แดชบอร์ด & จัดการ' : 'แดชบอร์ด',
+              '-',
+            ),
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   font: GoogleFonts.outfit(
                     fontWeight:
@@ -1339,7 +1363,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                               highlightColor: Colors.transparent,
                                                                               onTap: () async {
                                                                                 context.pushNamed(
-                                                                                  SettingBoothList5544Widget.routeName,
+                                                                                  SettingBoothListWidget.routeName,
                                                                                   queryParameters: {
                                                                                     'eventDocRef': serializeParam(
                                                                                       listViewEventsRecord.reference,

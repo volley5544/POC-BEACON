@@ -220,6 +220,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
             name: SettingEventListWidget.routeName,
             path: SettingEventListWidget.routePath,
+            requireAuth: true,
             builder: (context, params) => NavBarPage(
                   initialPage: '',
                   page: SettingEventListWidget(
@@ -260,11 +261,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   ),
                 )),
         FFRoute(
-            name: SettingBoothListWidget.routeName,
-            path: SettingBoothListWidget.routePath,
+            name: SettingBoothListOldWidget.routeName,
+            path: SettingBoothListOldWidget.routePath,
             builder: (context, params) => NavBarPage(
                   initialPage: '',
-                  page: SettingBoothListWidget(
+                  page: SettingBoothListOldWidget(
                     eventId: params.getParam(
                       'eventId',
                       ParamType.int,
@@ -282,11 +283,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   ),
                 )),
         FFRoute(
-            name: SettingBoothWidget.routeName,
-            path: SettingBoothWidget.routePath,
+            name: SettingBoothOldWidget.routeName,
+            path: SettingBoothOldWidget.routePath,
             builder: (context, params) => NavBarPage(
                   initialPage: '',
-                  page: SettingBoothWidget(
+                  page: SettingBoothOldWidget(
                     eventId: params.getParam(
                       'eventId',
                       ParamType.int,
@@ -393,32 +394,34 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   ),
                 )),
         FFRoute(
-          name: SettingBoothList5544Widget.routeName,
-          path: SettingBoothList5544Widget.routePath,
-          builder: (context, params) => SettingBoothList5544Widget(
-            eventName: params.getParam(
-              'eventName',
-              ParamType.String,
-            ),
-            eventDocRef: params.getParam(
-              'eventDocRef',
-              ParamType.DocumentReference,
-              isList: false,
-              collectionNamePath: ['events'],
-            ),
-            eventID: params.getParam(
-              'eventID',
-              ParamType.int,
-            ),
-          ),
-        ),
+            name: SettingBoothListWidget.routeName,
+            path: SettingBoothListWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SettingBoothListWidget(
+                    eventName: params.getParam(
+                      'eventName',
+                      ParamType.String,
+                    ),
+                    eventDocRef: params.getParam(
+                      'eventDocRef',
+                      ParamType.DocumentReference,
+                      isList: false,
+                      collectionNamePath: ['events'],
+                    ),
+                    eventID: params.getParam(
+                      'eventID',
+                      ParamType.int,
+                    ),
+                  ),
+                )),
         FFRoute(
-            name: SettingBooth5544Widget.routeName,
-            path: SettingBooth5544Widget.routePath,
+            name: SettingBoothWidget.routeName,
+            path: SettingBoothWidget.routePath,
             requireAuth: true,
             builder: (context, params) => NavBarPage(
                   initialPage: '',
-                  page: SettingBooth5544Widget(
+                  page: SettingBoothWidget(
                     typePage: params.getParam(
                       'typePage',
                       ParamType.String,
@@ -440,7 +443,23 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                       ParamType.int,
                     ),
                   ),
-                ))
+                )),
+        FFRoute(
+          name: ProfileCopyWidget.routeName,
+          path: ProfileCopyWidget.routePath,
+          requireAuth: true,
+          builder: (context, params) => ProfileCopyWidget(
+            uid: params.getParam(
+              'uid',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: EventSelectionCopyWidget.routeName,
+          path: EventSelectionCopyWidget.routePath,
+          builder: (context, params) => EventSelectionCopyWidget(),
+        )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
 

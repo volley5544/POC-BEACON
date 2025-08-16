@@ -5,7 +5,9 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/index.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,6 +36,24 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
   void initState() {
     super.initState();
     _model = createModel(context, () => CreateAccountModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.dataRoles1 = await queryRolesRecordOnce(
+        queryBuilder: (rolesRecord) => rolesRecord
+            .where(
+              'is_active',
+              isEqualTo: 0,
+            )
+            .where(
+              'roles_id',
+              isEqualTo: 2,
+            ),
+        singleRecord: true,
+      ).then((s) => s.firstOrNull);
+      _model.roleDocRef = _model.dataRoles1;
+      safeSetState(() {});
+    });
 
     _model.firstNameTextController ??= TextEditingController();
     _model.firstNameFocusNode ??= FocusNode();
@@ -891,6 +911,10 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                                                 .text,
                                                             displayName:
                                                                 '${_model.firstNameTextController.text} ${_model.lastNameTextController.text}',
+                                                            isActive: 0,
+                                                            rolesRef: _model
+                                                                .roleDocRef
+                                                                ?.reference,
                                                           ),
                                                           ...mapToFirestore(
                                                             {
@@ -907,12 +931,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                                           queryParameters: {
                                                             'uid':
                                                                 serializeParam(
-                                                              valueOrDefault<
-                                                                  String>(
-                                                                currentUserReference
-                                                                    ?.id,
-                                                                'xx',
-                                                              ),
+                                                              currentUserUid,
                                                               ParamType.String,
                                                             ),
                                                           }.withoutNulls,

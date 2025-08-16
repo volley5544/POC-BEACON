@@ -4,10 +4,12 @@ import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_expanded_image_view.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'home_model.dart';
 export 'home_model.dart';
 
@@ -41,6 +43,25 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       setDarkModeSetting(context, ThemeMode.light);
+      _model.dataUser = await queryUsersRecordOnce(
+        queryBuilder: (usersRecord) => usersRecord.where(
+          'uid',
+          isEqualTo: currentUserReference?.id,
+        ),
+        singleRecord: true,
+      ).then((s) => s.firstOrNull);
+      // getRole
+      _model.roleData = await queryRolesRecordOnce(
+        queryBuilder: (rolesRecord) => rolesRecord.where(
+          'roles_ref',
+          isEqualTo: _model.dataUser?.rolesRef,
+        ),
+        singleRecord: true,
+      ).then((s) => s.firstOrNull);
+      FFAppState().rolesName = _model.roleData!.rolesName;
+      FFAppState().rolesDescription = _model.roleData!.rolesDescription;
+      FFAppState().rolesID = _model.roleData!.rolesId;
+      safeSetState(() {});
     });
 
     animationsMap.addAll({
@@ -90,6 +111,8 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return StreamBuilder<UsersRecord>(
       stream: UsersRecord.getDocument(currentUserReference!),
       builder: (context, snapshot) {

@@ -29,21 +29,25 @@ export '/pages/setting/setting_event_list/setting_event_list_widget.dart'
     show SettingEventListWidget;
 export '/pages/setting/setting_event/setting_event_widget.dart'
     show SettingEventWidget;
+export '/setting_backup/setting_booth_list_old/setting_booth_list_old_widget.dart'
+    show SettingBoothListOldWidget;
+export '/setting_backup/setting_booth_old/setting_booth_old_widget.dart'
+    show SettingBoothOldWidget;
+export '/setting_backup/setting_event_list_copy3/setting_event_list_copy3_widget.dart'
+    show SettingEventListCopy3Widget;
+export '/setting_backup/setting_event_list_copy/setting_event_list_copy_widget.dart'
+    show SettingEventListCopyWidget;
+export '/setting_backup/setting_event_copy/setting_event_copy_widget.dart'
+    show SettingEventCopyWidget;
+export '/setting_backup/setting_booth_list_copy/setting_booth_list_copy_widget.dart'
+    show SettingBoothListCopyWidget;
+export '/setting_backup/setting_booth_list2/setting_booth_list2_widget.dart'
+    show SettingBoothList2Widget;
 export '/pages/setting/setting_booth_list/setting_booth_list_widget.dart'
     show SettingBoothListWidget;
 export '/pages/setting/setting_booth/setting_booth_widget.dart'
     show SettingBoothWidget;
-export '/pages/setting/setting_event_list_copy3/setting_event_list_copy3_widget.dart'
-    show SettingEventListCopy3Widget;
-export '/pages/setting/setting_event_list_copy/setting_event_list_copy_widget.dart'
-    show SettingEventListCopyWidget;
-export '/pages/setting/setting_event_copy/setting_event_copy_widget.dart'
-    show SettingEventCopyWidget;
-export '/pages/setting/setting_booth_list_copy/setting_booth_list_copy_widget.dart'
-    show SettingBoothListCopyWidget;
-export '/pages/setting/setting_booth_list2/setting_booth_list2_widget.dart'
-    show SettingBoothList2Widget;
-export '/pages/setting/setting_booth_list5544/setting_booth_list5544_widget.dart'
-    show SettingBoothList5544Widget;
-export '/pages/setting/setting_booth5544/setting_booth5544_widget.dart'
-    show SettingBooth5544Widget;
+export '/pages/profile/profile_copy/profile_copy_widget.dart'
+    show ProfileCopyWidget;
+export '/pages/activity/event_selection_copy/event_selection_copy_widget.dart'
+    show EventSelectionCopyWidget;
