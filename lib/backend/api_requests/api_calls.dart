@@ -1,4 +1,6 @@
 import 'dart:convert';
+import '../schema/structs/index.dart';
+
 import 'package:flutter/foundation.dart';
 
 import '/flutter_flow/flutter_flow_util.dart';
@@ -11,7 +13,7 @@ const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 /// Start RAS Group Code
 
 class RasGroup {
-  static String getBaseUrl() => 'https://33e0b7c39716.ngrok-free.app';
+  static String getBaseUrl() => 'https://3491823da145.ngrok-free.app';
   static Map<String, String> headers = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer test-token-123456789',
@@ -99,11 +101,15 @@ class GetAllBoothsCall {
         response,
         r'''$.description''',
       ));
-  List? data(dynamic response) => getJsonField(
+  List<BoothDataModelStruct>? data(dynamic response) => (getJsonField(
         response,
         r'''$.data''',
         true,
-      ) as List?;
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => BoothDataModelStruct.maybeFromMap(x))
+          .withoutNulls
+          .toList();
   List<String>? boothDocRef(dynamic response) => (getJsonField(
         response,
         r'''$.data[:].id''',
@@ -558,12 +564,13 @@ class CreateBoothsCall {
 
 class UploadFileCall {
   Future<ApiCallResponse> call({
-    String? fileUrl = '',
+    List<FFUploadedFile>? fileUrlList,
     String? relatedType = 'events',
     int? relatedId = 14,
     String? relatedDocRef = '/events/10b6e505-bba3-4079-bc7f-24cf07cb0ecf',
   }) async {
     final baseUrl = RasGroup.getBaseUrl();
+    final fileUrl = fileUrlList ?? [];
 
     return ApiManager.instance.makeApiCall(
       callName: 'uploadFile',

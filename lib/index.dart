@@ -43,3 +43,7 @@ export '/pages/setting/setting_booth_list_copy/setting_booth_list_copy_widget.da
     show SettingBoothListCopyWidget;
 export '/pages/setting/setting_booth_list2/setting_booth_list2_widget.dart'
     show SettingBoothList2Widget;
+export '/pages/setting/setting_booth_list5544/setting_booth_list5544_widget.dart'
+    show SettingBoothList5544Widget;
+export '/pages/setting/setting_booth5544/setting_booth5544_widget.dart'
+    show SettingBooth5544Widget;

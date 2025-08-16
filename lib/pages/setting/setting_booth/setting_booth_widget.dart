@@ -23,6 +23,7 @@ class SettingBoothWidget extends StatefulWidget {
     this.responseUpdated,
     this.pathFileImages,
     this.boothId,
+    this.eventDocRef,
   });
 
   final int? eventId;
@@ -31,6 +32,7 @@ class SettingBoothWidget extends StatefulWidget {
   final bool? responseUpdated;
   final List<String>? pathFileImages;
   final int? boothId;
+  final String? eventDocRef;
 
   static String routeName = 'SettingBooth';
   static String routePath = '/settingBooth';
@@ -780,7 +782,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget> {
                             if (_model.remindAmountTextController.text != '') {
                               if ((widget.boothId == null) ||
                                   (widget.boothId == 0)) {
-                                // createEvents
+                                // createBooths
                                 _model.responseCreated =
                                     await RasGroup.createBoothsCall.call(
                                   boothName:
@@ -791,15 +793,14 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget> {
                                       _model.remindAmountTextController.text),
                                   isActive: 0,
                                   createdBy: currentUserReference?.path,
-                                  eventRef:
-                                      _model.queryBooth?.associatedEventId,
+                                  eventRef: widget.eventDocRef,
                                 );
 
                                 _shouldSetState = true;
                                 if (_shouldSetState) safeSetState(() {});
                                 return;
                               } else {
-                                // updateEvents
+                                // updateBooths
                                 _model.responseUpdated =
                                     await RasGroup.updateBoothsCall.call(
                                   boothName:
@@ -810,8 +811,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget> {
                                       _model.remindAmountTextController.text),
                                   isActive: 0,
                                   updatedBy: currentUserReference?.path,
-                                  eventRef:
-                                      _model.queryBooth?.associatedEventId,
+                                  eventRef: widget.eventDocRef,
                                   boothRef: _model.queryBooth?.reference.id,
                                 );
 

@@ -1,20 +1,10 @@
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'setting_event_widget.dart' show SettingEventWidget;
+import 'setting_booth5544_widget.dart' show SettingBooth5544Widget;
 import 'package:flutter/material.dart';
 
-class SettingEventModel extends FlutterFlowModel<SettingEventWidget> {
+class SettingBooth5544Model extends FlutterFlowModel<SettingBooth5544Widget> {
   ///  Local state fields for this page.
-
-  int? statusCode;
-
-  String? statusMessage;
-
-  String? statusDescription;
-
-  String? startDateTime;
-
-  String? endDateTime;
 
   List<String> uploadImageTemp = [];
   void addToUploadImageTemp(String item) => uploadImageTemp.add(item);
@@ -39,15 +29,11 @@ class SettingEventModel extends FlutterFlowModel<SettingEventWidget> {
           int index, Function(FFUploadedFile) updateFn) =>
       uploadImageLocalTemp[index] = updateFn(uploadImageLocalTemp[index]);
 
-  int? responseEventId;
-
-  String? responseEventDocRefPath;
-
   ///  State fields for stateful widgets in this page.
 
   final formKey = GlobalKey<FormState>();
-  // Stores action output result for [Firestore Query - Query a collection] action in SettingEvent widget.
-  EventsRecord? queryEventAction;
+  // Stores action output result for [Backend Call - Read Document] action in SettingBooth5544 widget.
+  BoothsRecord? queryBoothAction;
   // State field(s) for eventName widget.
   FocusNode? eventNameFocusNode;
   TextEditingController? eventNameTextController;
@@ -64,13 +50,11 @@ class SettingEventModel extends FlutterFlowModel<SettingEventWidget> {
   FocusNode? descriptionFocusNode;
   TextEditingController? descriptionTextController;
   String? Function(BuildContext, String?)? descriptionTextControllerValidator;
-  // State field(s) for frequencyAmount widget.
-  FocusNode? frequencyAmountFocusNode;
-  TextEditingController? frequencyAmountTextController;
-  String? Function(BuildContext, String?)?
-      frequencyAmountTextControllerValidator;
-  String? _frequencyAmountTextControllerValidator(
-      BuildContext context, String? val) {
+  // State field(s) for Distance widget.
+  FocusNode? distanceFocusNode;
+  TextEditingController? distanceTextController;
+  String? Function(BuildContext, String?)? distanceTextControllerValidator;
+  String? _distanceTextControllerValidator(BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
       return 'Please enter an age for the patient.';
     }
@@ -78,28 +62,22 @@ class SettingEventModel extends FlutterFlowModel<SettingEventWidget> {
     return null;
   }
 
-  // State field(s) for frequencyMinute widget.
-  FocusNode? frequencyMinuteFocusNode;
-  TextEditingController? frequencyMinuteTextController;
-  String? Function(BuildContext, String?)?
-      frequencyMinuteTextControllerValidator;
-  DateTime? datePicked1;
-  DateTime? datePicked2;
-  bool isDataUploading_uploadEventImageAction = false;
-  List<FFUploadedFile> uploadedLocalFiles_uploadEventImageAction = [];
+  // State field(s) for Switch widget.
+  bool? switchValue;
+  bool isDataUploading_uploadBoothImageAction = false;
+  List<FFUploadedFile> uploadedLocalFiles_uploadBoothImageAction = [];
 
   // Stores action output result for [Firestore Query - Query a collection] action in Button widget.
-  EventsRecord? queryLastestEventAction;
+  BoothsRecord? queryLastestBoothAction;
   // Stores action output result for [Custom Action - uploadMultipleFileFirebaseStorage] action in Button widget.
   List<String>? uploadImageListToStorageOutput;
   // Stores action output result for [Backend Call - Create Document] action in Button widget.
-  EventsRecord? createEventDocOutput;
+  BoothsRecord? createBoothDocOutput;
 
   @override
   void initState(BuildContext context) {
     eventNameTextControllerValidator = _eventNameTextControllerValidator;
-    frequencyAmountTextControllerValidator =
-        _frequencyAmountTextControllerValidator;
+    distanceTextControllerValidator = _distanceTextControllerValidator;
   }
 
   @override
@@ -110,10 +88,7 @@ class SettingEventModel extends FlutterFlowModel<SettingEventWidget> {
     descriptionFocusNode?.dispose();
     descriptionTextController?.dispose();
 
-    frequencyAmountFocusNode?.dispose();
-    frequencyAmountTextController?.dispose();
-
-    frequencyMinuteFocusNode?.dispose();
-    frequencyMinuteTextController?.dispose();
+    distanceFocusNode?.dispose();
+    distanceTextController?.dispose();
   }
 }

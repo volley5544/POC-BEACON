@@ -7,3 +7,6 @@ export 'beacon2.dart' show beacon2;
 export 'check_permissions_beacon.dart' show checkPermissionsBeacon;
 export 'start_scanning_beacon.dart' show startScanningBeacon;
 export 'periodic_scan_beacon.dart' show periodicScanBeacon;
+export 'upload_file_firebase_storage.dart' show uploadFileFirebaseStorage;
+export 'upload_multiple_file_firebase_storage.dart'
+    show uploadMultipleFileFirebaseStorage;

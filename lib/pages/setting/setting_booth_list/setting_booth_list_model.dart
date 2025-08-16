@@ -1,5 +1,4 @@
 import '/backend/api_requests/api_calls.dart';
-import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'setting_booth_list_widget.dart' show SettingBoothListWidget;
@@ -82,8 +81,6 @@ class SettingBoothListModel extends FlutterFlowModel<SettingBoothListWidget> {
 
   // Stores action output result for [Backend Call - API (getAllBooths)] action in SettingBoothList widget.
   ApiCallResponse? apiResultoee;
-  // Stores action output result for [Firestore Query - Query a collection] action in SettingBoothList widget.
-  EventsRecord? dataEvent;
 
   @override
   void initState(BuildContext context) {}

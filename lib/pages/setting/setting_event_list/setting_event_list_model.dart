@@ -1,10 +1,8 @@
-import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/form_field_controller.dart';
 import '/index.dart';
 import 'setting_event_list_widget.dart' show SettingEventListWidget;
 import 'package:flutter/material.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class SettingEventListModel extends FlutterFlowModel<SettingEventListWidget> {
   ///  Local state fields for this page.
@@ -44,51 +42,11 @@ class SettingEventListModel extends FlutterFlowModel<SettingEventListWidget> {
   List<FFUploadedFile> uploadedLocalFiles_uploadData4ps = [];
   List<String> uploadedFileUrls_uploadData4ps = [];
 
-  // State field(s) for ListView widget.
-
-  PagingController<DocumentSnapshot?, EventsRecord>? listViewPagingController4;
-  Query? listViewPagingQuery4;
-  List<StreamSubscription?> listViewStreamSubscriptions4 = [];
-
   @override
   void initState(BuildContext context) {}
 
   @override
   void dispose() {
     tabBarController?.dispose();
-    listViewStreamSubscriptions4.forEach((s) => s?.cancel());
-    listViewPagingController4?.dispose();
-  }
-
-  /// Additional helper methods.
-  PagingController<DocumentSnapshot?, EventsRecord> setListViewController4(
-    Query query, {
-    DocumentReference<Object?>? parent,
-  }) {
-    listViewPagingController4 ??= _createListViewController4(query, parent);
-    if (listViewPagingQuery4 != query) {
-      listViewPagingQuery4 = query;
-      listViewPagingController4?.refresh();
-    }
-    return listViewPagingController4!;
-  }
-
-  PagingController<DocumentSnapshot?, EventsRecord> _createListViewController4(
-    Query query,
-    DocumentReference<Object?>? parent,
-  ) {
-    final controller =
-        PagingController<DocumentSnapshot?, EventsRecord>(firstPageKey: null);
-    return controller
-      ..addPageRequestListener(
-        (nextPageMarker) => queryEventsRecordPage(
-          queryBuilder: (_) => listViewPagingQuery4 ??= query,
-          nextPageMarker: nextPageMarker,
-          streamSubscriptions: listViewStreamSubscriptions4,
-          controller: controller,
-          pageSize: 10,
-          isStream: true,
-        ),
-      );
   }
 }

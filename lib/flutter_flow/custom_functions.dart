@@ -10,6 +10,7 @@ import 'place.dart';
 import 'uploaded_file.dart';
 import '/backend/backend.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '/backend/schema/structs/index.dart';
 import '/auth/firebase_auth/auth_util.dart';
 
 String? combineTextFullname(
@@ -27,4 +28,20 @@ DateTime? parseStringToDatetime(String? datetimeString) {
 
 int? incrementByOne(int value) {
   return value + 1;
+}
+
+String? stringToImgPath(String? input) {
+  return '${input!}';
+}
+
+List<String>? combine2ImagePathList(
+  List<String>? list1,
+  List<String>? list2,
+) {
+  List<String> outputList = list1! + list2!;
+  return outputList;
+}
+
+List<String>? convertListStringToListImgPath(List<String>? inputList) {
+  return inputList!;
 }

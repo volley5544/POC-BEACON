@@ -167,6 +167,7 @@ final parametersBuilderMap =
         allParams: {
           'eventId': getParameter<int>(data, 'eventId'),
           'eventDocRef': getParameter<DocumentReference>(data, 'eventDocRef'),
+          'eventName': getParameter<String>(data, 'eventName'),
         },
       ),
   'SettingBooth': (data) async => ParameterData(
@@ -176,6 +177,7 @@ final parametersBuilderMap =
           'newEventId': getParameter<int>(data, 'newEventId'),
           'responseUpdated': getParameter<bool>(data, 'responseUpdated'),
           'boothId': getParameter<int>(data, 'boothId'),
+          'eventDocRef': getParameter<String>(data, 'eventDocRef'),
         },
       ),
   'SettingEventListCopy3': ParameterData.none(),
@@ -201,6 +203,21 @@ final parametersBuilderMap =
   'SettingBoothList2': (data) async => ParameterData(
         allParams: {
           'isActive': getParameter<int>(data, 'isActive'),
+        },
+      ),
+  'SettingBoothList5544': (data) async => ParameterData(
+        allParams: {
+          'eventName': getParameter<String>(data, 'eventName'),
+          'eventDocRef': getParameter<DocumentReference>(data, 'eventDocRef'),
+          'eventID': getParameter<int>(data, 'eventID'),
+        },
+      ),
+  'SettingBooth5544': (data) async => ParameterData(
+        allParams: {
+          'typePage': getParameter<String>(data, 'typePage'),
+          'boothDocRef': getParameter<DocumentReference>(data, 'boothDocRef'),
+          'eventDocRef': getParameter<DocumentReference>(data, 'eventDocRef'),
+          'eventId': getParameter<int>(data, 'eventId'),
         },
       ),
 };

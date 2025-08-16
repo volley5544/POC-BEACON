@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '/backend/backend.dart';
+import '/backend/schema/structs/index.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
@@ -273,6 +275,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                       isList: false,
                       collectionNamePath: ['events'],
                     ),
+                    eventName: params.getParam(
+                      'eventName',
+                      ParamType.String,
+                    ),
                   ),
                 )),
         FFRoute(
@@ -305,6 +311,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                     boothId: params.getParam(
                       'boothId',
                       ParamType.int,
+                    ),
+                    eventDocRef: params.getParam(
+                      'eventDocRef',
+                      ParamType.String,
                     ),
                   ),
                 )),
@@ -378,6 +388,55 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   page: SettingBoothList2Widget(
                     isActive: params.getParam(
                       'isActive',
+                      ParamType.int,
+                    ),
+                  ),
+                )),
+        FFRoute(
+          name: SettingBoothList5544Widget.routeName,
+          path: SettingBoothList5544Widget.routePath,
+          builder: (context, params) => SettingBoothList5544Widget(
+            eventName: params.getParam(
+              'eventName',
+              ParamType.String,
+            ),
+            eventDocRef: params.getParam(
+              'eventDocRef',
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['events'],
+            ),
+            eventID: params.getParam(
+              'eventID',
+              ParamType.int,
+            ),
+          ),
+        ),
+        FFRoute(
+            name: SettingBooth5544Widget.routeName,
+            path: SettingBooth5544Widget.routePath,
+            requireAuth: true,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SettingBooth5544Widget(
+                    typePage: params.getParam(
+                      'typePage',
+                      ParamType.String,
+                    ),
+                    boothDocRef: params.getParam(
+                      'boothDocRef',
+                      ParamType.DocumentReference,
+                      isList: false,
+                      collectionNamePath: ['events', 'booths'],
+                    ),
+                    eventDocRef: params.getParam(
+                      'eventDocRef',
+                      ParamType.DocumentReference,
+                      isList: false,
+                      collectionNamePath: ['events'],
+                    ),
+                    eventId: params.getParam(
+                      'eventId',
                       ParamType.int,
                     ),
                   ),
@@ -500,6 +559,7 @@ class FFParameters {
     ParamType type, {
     bool isList = false,
     List<String>? collectionNamePath,
+    StructBuilder<T>? structBuilder,
   }) {
     if (futureParamValues.containsKey(paramName)) {
       return futureParamValues[paramName];
@@ -518,6 +578,7 @@ class FFParameters {
       type,
       isList,
       collectionNamePath: collectionNamePath,
+      structBuilder: structBuilder,
     );
   }
 }
