@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '/backend/backend.dart';
-import '/backend/schema/structs/index.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
@@ -184,9 +183,33 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
             name: BoothListWidget.routeName,
             path: BoothListWidget.routePath,
+            requireAuth: true,
+            asyncParams: {
+              'eventDocRef': getDoc(['events'], EventsRecord.fromSnapshot),
+            },
             builder: (context, params) => NavBarPage(
                   initialPage: '',
                   page: BoothListWidget(
+                    eventId: params.getParam(
+                      'eventId',
+                      ParamType.int,
+                    ),
+                    eventDocRef: params.getParam(
+                      'eventDocRef',
+                      ParamType.Document,
+                    ),
+                  ),
+                )),
+        FFRoute(
+            name: BoothDetailWidget.routeName,
+            path: BoothDetailWidget.routePath,
+            asyncParams: {
+              'boothDocRef':
+                  getDoc(['events', 'booths'], BoothsRecord.fromSnapshot),
+            },
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: BoothDetailWidget(
                     eventId: params.getParam(
                       'eventId',
                       ParamType.int,
@@ -197,14 +220,15 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                       isList: false,
                       collectionNamePath: ['events'],
                     ),
+                    boothId: params.getParam(
+                      'boothId',
+                      ParamType.int,
+                    ),
+                    boothDocRef: params.getParam(
+                      'boothDocRef',
+                      ParamType.Document,
+                    ),
                   ),
-                )),
-        FFRoute(
-            name: BoothDetailWidget.routeName,
-            path: BoothDetailWidget.routePath,
-            builder: (context, params) => NavBarPage(
-                  initialPage: '',
-                  page: BoothDetailWidget(),
                 )),
         FFRoute(
           name: SuccessInprocessWidget.routeName,
@@ -465,7 +489,25 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: EventSelectionCopy2Widget.routeName,
           path: EventSelectionCopy2Widget.routePath,
           builder: (context, params) => EventSelectionCopy2Widget(),
-        )
+        ),
+        FFRoute(
+            name: BoothListCopyWidget.routeName,
+            path: BoothListCopyWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: BoothListCopyWidget(
+                    eventId: params.getParam(
+                      'eventId',
+                      ParamType.int,
+                    ),
+                    eventDocRef: params.getParam(
+                      'eventDocRef',
+                      ParamType.DocumentReference,
+                      isList: false,
+                      collectionNamePath: ['events'],
+                    ),
+                  ),
+                ))
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
 

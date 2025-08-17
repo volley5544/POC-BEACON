@@ -144,10 +144,19 @@ final parametersBuilderMap =
   'BoothList': (data) async => ParameterData(
         allParams: {
           'eventId': getParameter<int>(data, 'eventId'),
-          'eventDocRef': getParameter<DocumentReference>(data, 'eventDocRef'),
+          'eventDocRef': await getDocumentParameter<EventsRecord>(
+              data, 'eventDocRef', EventsRecord.fromSnapshot),
         },
       ),
-  'BoothDetail': ParameterData.none(),
+  'BoothDetail': (data) async => ParameterData(
+        allParams: {
+          'eventId': getParameter<int>(data, 'eventId'),
+          'eventDocRef': getParameter<DocumentReference>(data, 'eventDocRef'),
+          'boothId': getParameter<int>(data, 'boothId'),
+          'boothDocRef': await getDocumentParameter<BoothsRecord>(
+              data, 'boothDocRef', BoothsRecord.fromSnapshot),
+        },
+      ),
   'SuccessInprocess': ParameterData.none(),
   'SuccessSurvey': ParameterData.none(),
   'Survey': ParameterData.none(),
@@ -227,6 +236,12 @@ final parametersBuilderMap =
         },
       ),
   'EventSelectionCopy2': ParameterData.none(),
+  'BoothListCopy': (data) async => ParameterData(
+        allParams: {
+          'eventId': getParameter<int>(data, 'eventId'),
+          'eventDocRef': getParameter<DocumentReference>(data, 'eventDocRef'),
+        },
+      ),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

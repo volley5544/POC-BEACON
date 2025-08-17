@@ -1,5 +1,4 @@
 import '/backend/backend.dart';
-import '/flutter_flow/flutter_flow_expanded_image_view.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
@@ -219,11 +218,14 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
                                                   ParamType.int,
                                                 ),
                                                 'eventDocRef': serializeParam(
-                                                  eventSelectionVarItem
-                                                      .reference,
-                                                  ParamType.DocumentReference,
+                                                  eventSelectionVarItem,
+                                                  ParamType.Document,
                                                 ),
                                               }.withoutNulls,
+                                              extra: <String, dynamic>{
+                                                'eventDocRef':
+                                                    eventSelectionVarItem,
+                                              },
                                             );
                                           },
                                           child: Column(
@@ -245,105 +247,32 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
                                                                   5.0,
                                                                   1.0,
                                                                   1.0),
-                                                      child: InkWell(
-                                                        splashColor:
-                                                            Colors.transparent,
-                                                        focusColor:
-                                                            Colors.transparent,
-                                                        hoverColor:
-                                                            Colors.transparent,
-                                                        highlightColor:
-                                                            Colors.transparent,
-                                                        onTap: () async {
-                                                          await Navigator.push(
-                                                            context,
-                                                            PageTransition(
-                                                              type:
-                                                                  PageTransitionType
-                                                                      .fade,
-                                                              child:
-                                                                  FlutterFlowExpandedImageView(
-                                                                image:
-                                                                    OctoImage(
-                                                                  placeholderBuilder:
-                                                                      (_) => SizedBox
-                                                                          .expand(
-                                                                    child:
-                                                                        Image(
-                                                                      image: BlurHashImage(
-                                                                          'LCPso48Y0h6+_c4U=x+s^*E*00S2'),
-                                                                      fit: BoxFit
-                                                                          .cover,
-                                                                    ),
-                                                                  ),
-                                                                  image:
-                                                                      NetworkImage(
-                                                                    eventSelectionVarItem
-                                                                            .hasEventImageList()
-                                                                        ? eventSelectionVarItem
-                                                                            .eventImageList
-                                                                            .elementAtOrNull(0)!
-                                                                        : 'https://firebasestorage.googleapis.com/v0/b/poc-beacon-firebase.firebasestorage.app/o/event.jpg?alt=media&token=f2bcd7e5-11fc-4601-a690-f5719c733bdc',
-                                                                  ),
-                                                                  fit: BoxFit
-                                                                      .contain,
-                                                                ),
-                                                                allowRotation:
-                                                                    false,
-                                                                tag: eventSelectionVarItem
-                                                                        .hasEventImageList()
-                                                                    ? eventSelectionVarItem
-                                                                        .eventImageList
-                                                                        .elementAtOrNull(
-                                                                            0)!
-                                                                    : 'https://firebasestorage.googleapis.com/v0/b/poc-beacon-firebase.firebasestorage.app/o/event.jpg?alt=media&token=f2bcd7e5-11fc-4601-a690-f5719c733bdc',
-                                                                useHeroAnimation:
-                                                                    true,
-                                                              ),
-                                                            ),
-                                                          );
-                                                        },
-                                                        child: Hero(
-                                                          tag: eventSelectionVarItem
-                                                                  .hasEventImageList()
-                                                              ? eventSelectionVarItem
-                                                                  .eventImageList
-                                                                  .elementAtOrNull(
-                                                                      0)!
-                                                              : 'https://firebasestorage.googleapis.com/v0/b/poc-beacon-firebase.firebasestorage.app/o/event.jpg?alt=media&token=f2bcd7e5-11fc-4601-a690-f5719c733bdc',
-                                                          transitionOnUserGestures:
-                                                              true,
-                                                          child: ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        8.0),
-                                                            child: OctoImage(
-                                                              placeholderBuilder:
-                                                                  (_) => SizedBox
-                                                                      .expand(
-                                                                child: Image(
-                                                                  image: BlurHashImage(
-                                                                      'LCPso48Y0h6+_c4U=x+s^*E*00S2'),
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                ),
-                                                              ),
-                                                              image:
-                                                                  NetworkImage(
-                                                                eventSelectionVarItem
-                                                                        .hasEventImageList()
-                                                                    ? eventSelectionVarItem
-                                                                        .eventImageList
-                                                                        .elementAtOrNull(
-                                                                            0)!
-                                                                    : 'https://firebasestorage.googleapis.com/v0/b/poc-beacon-firebase.firebasestorage.app/o/event.jpg?alt=media&token=f2bcd7e5-11fc-4601-a690-f5719c733bdc',
-                                                              ),
-                                                              width: 80.0,
-                                                              height: 90.0,
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.0),
+                                                        child: OctoImage(
+                                                          placeholderBuilder:
+                                                              (_) => SizedBox
+                                                                  .expand(
+                                                            child: Image(
+                                                              image: BlurHashImage(
+                                                                  'LCPso48Y0h6+_c4U=x+s^*E*00S2'),
                                                               fit: BoxFit.cover,
                                                             ),
                                                           ),
+                                                          image: NetworkImage(
+                                                            eventSelectionVarItem
+                                                                    .hasEventImageList()
+                                                                ? eventSelectionVarItem
+                                                                    .eventImageList
+                                                                    .elementAtOrNull(
+                                                                        0)!
+                                                                : 'https://firebasestorage.googleapis.com/v0/b/poc-beacon-firebase.firebasestorage.app/o/event.jpg?alt=media&token=f2bcd7e5-11fc-4601-a690-f5719c733bdc',
+                                                          ),
+                                                          width: 80.0,
+                                                          height: 90.0,
+                                                          fit: BoxFit.cover,
                                                         ),
                                                       ),
                                                     ),
@@ -641,12 +570,14 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
                                                       ),
                                                       'eventDocRef':
                                                           serializeParam(
-                                                        eventSelectionVarItem
-                                                            .reference,
-                                                        ParamType
-                                                            .DocumentReference,
+                                                        eventSelectionVarItem,
+                                                        ParamType.Document,
                                                       ),
                                                     }.withoutNulls,
+                                                    extra: <String, dynamic>{
+                                                      'eventDocRef':
+                                                          eventSelectionVarItem,
+                                                    },
                                                   );
                                                 },
                                                 child: Column(

@@ -1,15 +1,31 @@
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/index.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:octo_image/octo_image.dart';
 import 'booth_detail_model.dart';
 export 'booth_detail_model.dart';
 
 class BoothDetailWidget extends StatefulWidget {
-  const BoothDetailWidget({super.key});
+  const BoothDetailWidget({
+    super.key,
+    required this.eventId,
+    required this.eventDocRef,
+    required this.boothId,
+    required this.boothDocRef,
+  });
+
+  final int? eventId;
+  final DocumentReference? eventDocRef;
+  final int? boothId;
+  final BoothsRecord? boothDocRef;
 
   static String routeName = 'BoothDetail';
   static String routePath = '/boothDetail';
@@ -27,6 +43,64 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => BoothDetailModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      await showDialog(
+        context: context,
+        builder: (alertDialogContext) {
+          return AlertDialog(
+            title: Text(widget.eventId!.toString()),
+            content: Text(widget.eventDocRef!.path),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(alertDialogContext),
+                child: Text('Ok'),
+              ),
+            ],
+          );
+        },
+      );
+      await showDialog(
+        context: context,
+        builder: (alertDialogContext) {
+          return AlertDialog(
+            title: Text(widget.boothId!.toString()),
+            content: Text(widget.boothDocRef!.reference.id),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(alertDialogContext),
+                child: Text('Ok'),
+              ),
+            ],
+          );
+        },
+      );
+      _model.dataBooth = await queryBoothsRecordOnce(
+        queryBuilder: (boothsRecord) => boothsRecord
+            .where(
+              'booth_id',
+              isEqualTo: widget.boothId,
+            )
+            .where(
+              'is_active',
+              isEqualTo: 0,
+            ),
+        singleRecord: true,
+      ).then((s) => s.firstOrNull);
+      _model.dataEvent = await queryEventsRecordOnce(
+        queryBuilder: (eventsRecord) => eventsRecord
+            .where(
+              'event_id',
+              isEqualTo: widget.eventId,
+            )
+            .where(
+              'is_active',
+              isEqualTo: 0,
+            ),
+        singleRecord: true,
+      ).then((s) => s.firstOrNull);
+    });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -66,7 +140,10 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
             },
           ),
           title: Text(
-            'รายละเอียดบูธ',
+            valueOrDefault<String>(
+              widget.boothDocRef?.boothName,
+              '-',
+            ),
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   font: GoogleFonts.outfit(
                     fontWeight:
@@ -74,6 +151,7 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                     fontStyle:
                         FlutterFlowTheme.of(context).headlineMedium.fontStyle,
                   ),
+                  color: FlutterFlowTheme.of(context).primary,
                   letterSpacing: 0.0,
                   fontWeight:
                       FlutterFlowTheme.of(context).headlineMedium.fontWeight,
@@ -91,11 +169,24 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
             mainAxisSize: MainAxisSize.max,
             children: [
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(12.0),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(
-                    'https://firebasestorage.googleapis.com/v0/b/poc-beacon-firebase.firebasestorage.app/o/joystick.jpeg?alt=media&token=420111f8-8d8e-49eb-aa7f-b9207718d8dd',
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(8.0),
+                    bottomRight: Radius.circular(8.0),
+                    topLeft: Radius.circular(8.0),
+                    topRight: Radius.circular(8.0),
+                  ),
+                  child: OctoImage(
+                    placeholderBuilder: (_) => SizedBox.expand(
+                      child: Image(
+                        image: BlurHashImage('LCPso48Y0h6+_c4U=x+s^*E349djds'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    image: NetworkImage(
+                      widget.boothDocRef!.boothImageList.elementAtOrNull(0)!,
+                    ),
                     width: double.infinity,
                     height: 330.0,
                     fit: BoxFit.cover,
@@ -119,7 +210,7 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 8.0, 0.0, 8.0),
                           child: Text(
-                            'XXXXXX',
+                            'รายละเอียด',
                             style: FlutterFlowTheme.of(context)
                                 .headlineMedium
                                 .override(
@@ -142,12 +233,46 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                           ),
                         ),
                         Align(
+                          alignment: AlignmentDirectional(1.0, 0.0),
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 8.0, 0.0, 12.0),
+                            child: Text(
+                              'อยู่ในระยะ xxx เมตร',
+                              style: FlutterFlowTheme.of(context)
+                                  .labelMedium
+                                  .override(
+                                    font: GoogleFonts.readexPro(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .labelMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .labelMedium
+                                          .fontStyle,
+                                    ),
+                                    color:
+                                        FlutterFlowTheme.of(context).secondary,
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .labelMedium
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .labelMedium
+                                        .fontStyle,
+                                  ),
+                            ),
+                          ),
+                        ),
+                        Align(
                           alignment: AlignmentDirectional(-1.0, 0.0),
                           child: Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 8.0, 0.0, 12.0),
                             child: Text(
-                              'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+                              valueOrDefault<String>(
+                                widget.boothDocRef?.description,
+                                '-',
+                              ),
                               style: FlutterFlowTheme.of(context)
                                   .labelMedium
                                   .override(

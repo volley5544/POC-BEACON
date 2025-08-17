@@ -475,12 +475,14 @@ class _EventSelectionCopy2WidgetState extends State<EventSelectionCopy2Widget> {
                                                     ),
                                                     'eventDocRef':
                                                         serializeParam(
-                                                      eventSelectionVarItem
-                                                          .reference,
-                                                      ParamType
-                                                          .DocumentReference,
+                                                      eventSelectionVarItem,
+                                                      ParamType.Document,
                                                     ),
                                                   }.withoutNulls,
+                                                  extra: <String, dynamic>{
+                                                    'eventDocRef':
+                                                        eventSelectionVarItem,
+                                                  },
                                                 );
                                               },
                                               child: Column(
