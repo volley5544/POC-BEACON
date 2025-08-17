@@ -191,6 +191,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                       'eventId',
                       ParamType.int,
                     ),
+                    eventDocRef: params.getParam(
+                      'eventDocRef',
+                      ParamType.DocumentReference,
+                      isList: false,
+                      collectionNamePath: ['events'],
+                    ),
                   ),
                 )),
         FFRoute(
@@ -456,9 +462,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: EventSelectionCopyWidget.routeName,
-          path: EventSelectionCopyWidget.routePath,
-          builder: (context, params) => EventSelectionCopyWidget(),
+          name: EventSelectionCopy2Widget.routeName,
+          path: EventSelectionCopy2Widget.routePath,
+          builder: (context, params) => EventSelectionCopy2Widget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

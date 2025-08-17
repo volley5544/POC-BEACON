@@ -159,7 +159,7 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                     padding:
                         EdgeInsetsDirectional.fromSTEB(20.0, 10.0, 0.0, 0.0),
                     child: Text(
-                      'บูธ',
+                      'จัดการบูธ',
                       style: FlutterFlowTheme.of(context).labelLarge.override(
                             font: GoogleFonts.readexPro(
                               fontWeight: FlutterFlowTheme.of(context)
@@ -326,7 +326,7 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                               Expanded(
                                                 child: Container(
                                                   width: double.infinity,
-                                                  height: 100.0,
+                                                  height: 80.0,
                                                   decoration: BoxDecoration(),
                                                   child: Padding(
                                                     padding:
@@ -395,24 +395,157 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                                                   .infinity,
                                                               decoration:
                                                                   BoxDecoration(),
-                                                              child:
-                                                                  AutoSizeText(
-                                                                listViewBoothsRecord
-                                                                    .description
-                                                                    .maybeHandleOverflow(
-                                                                  maxChars: 70,
-                                                                  replacement:
-                                                                      '…',
+                                                              child: Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            0.0,
+                                                                            5.0,
+                                                                            0.0,
+                                                                            0.0),
+                                                                child: Row(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .max,
+                                                                  children: [
+                                                                    AutoSizeText(
+                                                                      'รายละเอียด : ',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .start,
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodySmall
+                                                                          .override(
+                                                                            font:
+                                                                                GoogleFonts.readexPro(
+                                                                              fontWeight: FontWeight.w600,
+                                                                              fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                                                            ),
+                                                                            fontSize:
+                                                                                12.0,
+                                                                            letterSpacing:
+                                                                                0.0,
+                                                                            fontWeight:
+                                                                                FontWeight.w600,
+                                                                            fontStyle:
+                                                                                FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                                                          ),
+                                                                    ),
+                                                                    AutoSizeText(
+                                                                      listViewBoothsRecord
+                                                                          .description
+                                                                          .maybeHandleOverflow(
+                                                                        maxChars:
+                                                                            70,
+                                                                        replacement:
+                                                                            '…',
+                                                                      ),
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .start,
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodySmall
+                                                                          .override(
+                                                                            font:
+                                                                                GoogleFonts.readexPro(
+                                                                              fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
+                                                                              fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                                                            ),
+                                                                            fontSize:
+                                                                                12.0,
+                                                                            letterSpacing:
+                                                                                0.0,
+                                                                            fontWeight:
+                                                                                FlutterFlowTheme.of(context).bodySmall.fontWeight,
+                                                                            fontStyle:
+                                                                                FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                                                          ),
+                                                                    ),
+                                                                  ],
                                                                 ),
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .start,
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodySmall
-                                                                    .override(
-                                                                      font: GoogleFonts
-                                                                          .readexPro(
+                                                              ),
+                                                            ),
+                                                          ].divide(SizedBox(
+                                                              height: 8.0)),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      5.0,
+                                                                      0.0,
+                                                                      0.0),
+                                                          child: Container(
+                                                            width:
+                                                                double.infinity,
+                                                            decoration:
+                                                                BoxDecoration(),
+                                                            child: Row(
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .max,
+                                                              children: [
+                                                                AutoSizeText(
+                                                                  'ระยะส่ง Beacon (เมตร) : ',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  style: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodySmall
+                                                                      .override(
+                                                                        font: GoogleFonts
+                                                                            .readexPro(
+                                                                          fontWeight:
+                                                                              FontWeight.w600,
+                                                                          fontStyle: FlutterFlowTheme.of(context)
+                                                                              .bodySmall
+                                                                              .fontStyle,
+                                                                        ),
+                                                                        fontSize:
+                                                                            12.0,
+                                                                        letterSpacing:
+                                                                            0.0,
+                                                                        fontWeight:
+                                                                            FontWeight.w600,
+                                                                        fontStyle: FlutterFlowTheme.of(context)
+                                                                            .bodySmall
+                                                                            .fontStyle,
+                                                                      ),
+                                                                ),
+                                                                AutoSizeText(
+                                                                  listViewBoothsRecord
+                                                                      .notificationDistance
+                                                                      .toString()
+                                                                      .maybeHandleOverflow(
+                                                                        maxChars:
+                                                                            70,
+                                                                        replacement:
+                                                                            '…',
+                                                                      ),
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .start,
+                                                                  style: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodySmall
+                                                                      .override(
+                                                                        font: GoogleFonts
+                                                                            .readexPro(
+                                                                          fontWeight: FlutterFlowTheme.of(context)
+                                                                              .bodySmall
+                                                                              .fontWeight,
+                                                                          fontStyle: FlutterFlowTheme.of(context)
+                                                                              .bodySmall
+                                                                              .fontStyle,
+                                                                        ),
+                                                                        fontSize:
+                                                                            12.0,
+                                                                        letterSpacing:
+                                                                            0.0,
                                                                         fontWeight: FlutterFlowTheme.of(context)
                                                                             .bodySmall
                                                                             .fontWeight,
@@ -420,68 +553,9 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                                                             .bodySmall
                                                                             .fontStyle,
                                                                       ),
-                                                                      fontSize:
-                                                                          12.0,
-                                                                      letterSpacing:
-                                                                          0.0,
-                                                                      fontWeight: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodySmall
-                                                                          .fontWeight,
-                                                                      fontStyle: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodySmall
-                                                                          .fontStyle,
-                                                                    ),
-                                                              ),
+                                                                ),
+                                                              ],
                                                             ),
-                                                          ].divide(SizedBox(
-                                                              height: 8.0)),
-                                                        ),
-                                                        Container(
-                                                          width:
-                                                              double.infinity,
-                                                          decoration:
-                                                              BoxDecoration(),
-                                                          child: AutoSizeText(
-                                                            listViewBoothsRecord
-                                                                .notificationDistance
-                                                                .toString()
-                                                                .maybeHandleOverflow(
-                                                                  maxChars: 70,
-                                                                  replacement:
-                                                                      '…',
-                                                                ),
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodySmall
-                                                                .override(
-                                                                  font: GoogleFonts
-                                                                      .readexPro(
-                                                                    fontWeight: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodySmall
-                                                                        .fontWeight,
-                                                                    fontStyle: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodySmall
-                                                                        .fontStyle,
-                                                                  ),
-                                                                  fontSize:
-                                                                      12.0,
-                                                                  letterSpacing:
-                                                                      0.0,
-                                                                  fontWeight: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodySmall
-                                                                      .fontWeight,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodySmall
-                                                                      .fontStyle,
-                                                                ),
                                                           ),
                                                         ),
                                                       ],
@@ -495,7 +569,7 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  8.0, 8.0, 8.0, 8.0),
+                                                  8.0, 0.0, 8.0, 8.0),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
@@ -517,6 +591,9 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
                                                                   .end,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
                                                           children: [
                                                             if (false)
                                                               InkWell(
@@ -672,7 +749,7 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                                                     size: 24.0,
                                                                   ),
                                                                   Text(
-                                                                    'ปิดบู๊ทกิจกรรม',
+                                                                    'ปิดบูธ',
                                                                     style: FlutterFlowTheme.of(
                                                                             context)
                                                                         .bodyMedium
@@ -895,6 +972,55 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                                         .bodyMedium
                                                         .fontStyle,
                                               ),
+                                        ),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment:
+                                          AlignmentDirectional(1.0, -1.0),
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 50.0, 8.0, 0.0),
+                                        child: InkWell(
+                                          splashColor: Colors.transparent,
+                                          focusColor: Colors.transparent,
+                                          hoverColor: Colors.transparent,
+                                          highlightColor: Colors.transparent,
+                                          onTap: () async {
+                                            if (listViewBoothsRecord.isActive !=
+                                                0) {
+                                              return;
+                                            }
+
+                                            context.pushNamed(
+                                              SettingBoothWidget.routeName,
+                                              queryParameters: {
+                                                'typePage': serializeParam(
+                                                  'edit',
+                                                  ParamType.String,
+                                                ),
+                                                'eventDocRef': serializeParam(
+                                                  widget.eventDocRef,
+                                                  ParamType.DocumentReference,
+                                                ),
+                                                'eventId': serializeParam(
+                                                  widget.eventID,
+                                                  ParamType.int,
+                                                ),
+                                                'boothDocRef': serializeParam(
+                                                  listViewBoothsRecord
+                                                      .reference,
+                                                  ParamType.DocumentReference,
+                                                ),
+                                              }.withoutNulls,
+                                            );
+                                          },
+                                          child: Icon(
+                                            Icons.chevron_right_rounded,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                            size: 24.0,
+                                          ),
                                         ),
                                       ),
                                     ),

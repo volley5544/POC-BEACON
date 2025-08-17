@@ -144,6 +144,7 @@ final parametersBuilderMap =
   'BoothList': (data) async => ParameterData(
         allParams: {
           'eventId': getParameter<int>(data, 'eventId'),
+          'eventDocRef': getParameter<DocumentReference>(data, 'eventDocRef'),
         },
       ),
   'BoothDetail': ParameterData.none(),
@@ -225,7 +226,7 @@ final parametersBuilderMap =
           'uid': getParameter<String>(data, 'uid'),
         },
       ),
-  'EventSelectionCopy': ParameterData.none(),
+  'EventSelectionCopy2': ParameterData.none(),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

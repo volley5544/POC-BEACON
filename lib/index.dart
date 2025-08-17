@@ -47,7 +47,7 @@ export '/pages/setting/setting_booth_list/setting_booth_list_widget.dart'
     show SettingBoothListWidget;
 export '/pages/setting/setting_booth/setting_booth_widget.dart'
     show SettingBoothWidget;
-export '/pages/profile/profile_copy/profile_copy_widget.dart'
+export '/setting_backup/profile_copy/profile_copy_widget.dart'
     show ProfileCopyWidget;
-export '/pages/activity/event_selection_copy/event_selection_copy_widget.dart'
-    show EventSelectionCopyWidget;
+export '/pages/activity/event_selection_copy2/event_selection_copy2_widget.dart'
+    show EventSelectionCopy2Widget;

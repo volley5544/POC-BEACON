@@ -1012,7 +1012,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         20.0, 10.0, 0.0, 0.0),
                                     child: Text(
-                                      'กิจกรรม',
+                                      'จัดการกิจกรรม',
                                       style: FlutterFlowTheme.of(context)
                                           .labelLarge
                                           .override(
@@ -1217,7 +1217,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                     Container(
                                                                   width: double
                                                                       .infinity,
-                                                                  height: 100.0,
+                                                                  height: 80.0,
                                                                   decoration:
                                                                       BoxDecoration(),
                                                                   child:
@@ -1267,22 +1267,41 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                             Container(
                                                                               width: double.infinity,
                                                                               decoration: BoxDecoration(),
-                                                                              child: AutoSizeText(
-                                                                                listViewEventsRecord.description.maybeHandleOverflow(
-                                                                                  maxChars: 70,
-                                                                                  replacement: '…',
-                                                                                ),
-                                                                                textAlign: TextAlign.start,
-                                                                                style: FlutterFlowTheme.of(context).bodySmall.override(
-                                                                                      font: GoogleFonts.readexPro(
-                                                                                        fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
-                                                                                        fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
-                                                                                      ),
-                                                                                      fontSize: 12.0,
-                                                                                      letterSpacing: 0.0,
-                                                                                      fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
-                                                                                      fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                                                              child: Row(
+                                                                                mainAxisSize: MainAxisSize.max,
+                                                                                children: [
+                                                                                  AutoSizeText(
+                                                                                    'รายละเอียด : ',
+                                                                                    textAlign: TextAlign.start,
+                                                                                    style: FlutterFlowTheme.of(context).bodySmall.override(
+                                                                                          font: GoogleFonts.readexPro(
+                                                                                            fontWeight: FontWeight.w600,
+                                                                                            fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                                                                          ),
+                                                                                          fontSize: 12.0,
+                                                                                          letterSpacing: 0.0,
+                                                                                          fontWeight: FontWeight.w600,
+                                                                                          fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                                                                        ),
+                                                                                  ),
+                                                                                  AutoSizeText(
+                                                                                    listViewEventsRecord.description.maybeHandleOverflow(
+                                                                                      maxChars: 70,
+                                                                                      replacement: '…',
                                                                                     ),
+                                                                                    textAlign: TextAlign.start,
+                                                                                    style: FlutterFlowTheme.of(context).bodySmall.override(
+                                                                                          font: GoogleFonts.readexPro(
+                                                                                            fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
+                                                                                            fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                                                                          ),
+                                                                                          fontSize: 12.0,
+                                                                                          letterSpacing: 0.0,
+                                                                                          fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
+                                                                                          fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                                                                        ),
+                                                                                  ),
+                                                                                ],
                                                                               ),
                                                                             ),
                                                                           ].divide(SizedBox(height: 8.0)),
@@ -1293,23 +1312,43 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                           decoration:
                                                                               BoxDecoration(),
                                                                           child:
+                                                                              Row(
+                                                                            mainAxisSize:
+                                                                                MainAxisSize.max,
+                                                                            children: [
                                                                               AutoSizeText(
-                                                                            '${dateTimeFormat("d/M/y", listViewEventsRecord.startDatetime)} (${dateTimeFormat("Hm", listViewEventsRecord.startDatetime)}) - ${dateTimeFormat("d/M/y", listViewEventsRecord.endDatetime)} (${dateTimeFormat("Hm", listViewEventsRecord.endDatetime)})'.maybeHandleOverflow(
-                                                                              maxChars: 70,
-                                                                              replacement: '…',
-                                                                            ),
-                                                                            textAlign:
-                                                                                TextAlign.start,
-                                                                            style: FlutterFlowTheme.of(context).bodySmall.override(
-                                                                                  font: GoogleFonts.readexPro(
-                                                                                    fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
-                                                                                    fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
-                                                                                  ),
-                                                                                  fontSize: 12.0,
-                                                                                  letterSpacing: 0.0,
-                                                                                  fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
-                                                                                  fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                                                                'วัน/เวลาที่เริ่ม : ',
+                                                                                textAlign: TextAlign.start,
+                                                                                style: FlutterFlowTheme.of(context).bodySmall.override(
+                                                                                      font: GoogleFonts.readexPro(
+                                                                                        fontWeight: FontWeight.w600,
+                                                                                        fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                                                                      ),
+                                                                                      fontSize: 12.0,
+                                                                                      letterSpacing: 0.0,
+                                                                                      fontWeight: FontWeight.w600,
+                                                                                      fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                                                                    ),
+                                                                              ),
+                                                                              AutoSizeText(
+                                                                                '${dateTimeFormat("d/M/y", listViewEventsRecord.startDatetime)} (${dateTimeFormat("Hm", listViewEventsRecord.startDatetime)}) - ${dateTimeFormat("d/M/y", listViewEventsRecord.endDatetime)} (${dateTimeFormat("Hm", listViewEventsRecord.endDatetime)})'.maybeHandleOverflow(
+                                                                                  maxChars: 70,
+                                                                                  replacement: '…',
                                                                                 ),
+                                                                                textAlign: TextAlign.start,
+                                                                                style: FlutterFlowTheme.of(context).bodySmall.override(
+                                                                                      font: GoogleFonts.readexPro(
+                                                                                        fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
+                                                                                        fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                                                                      ),
+                                                                                      color: FlutterFlowTheme.of(context).primary,
+                                                                                      fontSize: 12.0,
+                                                                                      letterSpacing: 0.0,
+                                                                                      fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
+                                                                                      fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                                                                    ),
+                                                                              ),
+                                                                            ],
                                                                           ),
                                                                         ),
                                                                       ],
@@ -1654,6 +1693,64 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                     .bodyMedium
                                                                     .fontStyle,
                                                               ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Align(
+                                                      alignment:
+                                                          AlignmentDirectional(
+                                                              1.0, 0.0),
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    0.0,
+                                                                    60.0,
+                                                                    8.0,
+                                                                    0.0),
+                                                        child: InkWell(
+                                                          splashColor: Colors
+                                                              .transparent,
+                                                          focusColor: Colors
+                                                              .transparent,
+                                                          hoverColor: Colors
+                                                              .transparent,
+                                                          highlightColor: Colors
+                                                              .transparent,
+                                                          onTap: () async {
+                                                            if (listViewEventsRecord
+                                                                    .isActive !=
+                                                                0) {
+                                                              return;
+                                                            }
+
+                                                            context.pushNamed(
+                                                              SettingEventWidget
+                                                                  .routeName,
+                                                              queryParameters: {
+                                                                'eventId':
+                                                                    serializeParam(
+                                                                  listViewEventsRecord
+                                                                      .eventId,
+                                                                  ParamType.int,
+                                                                ),
+                                                                'typePage':
+                                                                    serializeParam(
+                                                                  'edit',
+                                                                  ParamType
+                                                                      .String,
+                                                                ),
+                                                              }.withoutNulls,
+                                                            );
+                                                          },
+                                                          child: Icon(
+                                                            Icons
+                                                                .chevron_right_rounded,
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .secondaryText,
+                                                            size: 24.0,
+                                                          ),
                                                         ),
                                                       ),
                                                     ),

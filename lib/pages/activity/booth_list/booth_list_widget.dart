@@ -6,6 +6,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'booth_list_model.dart';
@@ -15,9 +16,11 @@ class BoothListWidget extends StatefulWidget {
   const BoothListWidget({
     super.key,
     int? eventId,
+    this.eventDocRef,
   }) : this.eventId = eventId ?? 1;
 
   final int eventId;
+  final DocumentReference? eventDocRef;
 
   static String routeName = 'BoothList';
   static String routePath = '/boothList';
@@ -38,6 +41,25 @@ class _BoothListWidgetState extends State<BoothListWidget>
   void initState() {
     super.initState();
     _model = createModel(context, () => BoothListModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      await showDialog(
+        context: context,
+        builder: (alertDialogContext) {
+          return AlertDialog(
+            title: Text(widget.eventId.toString()),
+            content: Text(widget.eventDocRef!.path),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(alertDialogContext),
+                child: Text('Ok'),
+              ),
+            ],
+          );
+        },
+      );
+    });
 
     animationsMap.addAll({
       'containerOnPageLoadAnimation4': AnimationInfo(

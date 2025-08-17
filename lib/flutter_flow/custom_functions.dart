@@ -45,3 +45,22 @@ List<String>? combine2ImagePathList(
 List<String>? convertListStringToListImgPath(List<String>? inputList) {
   return inputList!;
 }
+
+int getCurrentTimestamp(String type) {
+  final now = DateTime.now();
+
+  if (type.toLowerCase() == 'seconds') {
+    return now.millisecondsSinceEpoch ~/ 1000;
+  } else if (type.toLowerCase() == 'microseconds') {
+    return now.microsecondsSinceEpoch;
+  } else {
+    return now.millisecondsSinceEpoch;
+  }
+}
+
+DateTimeRange? newCustomFunction(
+  DateTime? startDate,
+  DateTime? endDate,
+) {
+  return DateTimeRange(start: startDate!, end: endDate!);
+}
