@@ -118,6 +118,20 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
+          leading: InkWell(
+            splashColor: Colors.transparent,
+            focusColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onTap: () async {
+              context.pop();
+            },
+            child: Icon(
+              Icons.arrow_back_rounded,
+              color: FlutterFlowTheme.of(context).primaryText,
+              size: 30.0,
+            ),
+          ),
           title: Text(
             valueOrDefault<String>(
               'จัดการ${widget.eventName}',
@@ -187,6 +201,8 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                   child: StreamBuilder<List<BoothsRecord>>(
                     stream: queryBoothsRecord(
                       parent: widget.eventDocRef,
+                      queryBuilder: (boothsRecord) =>
+                          boothsRecord.orderBy('booth_id', descending: true),
                     ),
                     builder: (context, snapshot) {
                       // Customize what your widget looks like when it's loading.
@@ -311,7 +327,11 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                                     ),
                                                     image: NetworkImage(
                                                       listViewBoothsRecord
-                                                              .hasBoothImageList()
+                                                                  .hasBoothImageList() &&
+                                                              (listViewBoothsRecord
+                                                                      .boothImageList
+                                                                      .length >
+                                                                  0)
                                                           ? listViewBoothsRecord
                                                               .boothImageList
                                                               .firstOrNull!
@@ -376,7 +396,7 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                                                       ),
                                                                       color: FlutterFlowTheme.of(
                                                                               context)
-                                                                          .primary,
+                                                                          .tertiary,
                                                                       letterSpacing:
                                                                           0.0,
                                                                       fontWeight: FlutterFlowTheme.of(

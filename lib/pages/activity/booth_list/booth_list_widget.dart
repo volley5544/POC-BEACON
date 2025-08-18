@@ -160,6 +160,20 @@ class _BoothListWidgetState extends State<BoothListWidget>
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
           automaticallyImplyLeading: false,
+          leading: InkWell(
+            splashColor: Colors.transparent,
+            focusColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onTap: () async {
+              context.pop();
+            },
+            child: Icon(
+              Icons.arrow_back_rounded,
+              color: FlutterFlowTheme.of(context).primaryText,
+              size: 30.0,
+            ),
+          ),
           title: Text(
             valueOrDefault<String>(
               widget.eventDocRef?.eventName,
@@ -172,6 +186,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                     fontStyle:
                         FlutterFlowTheme.of(context).headlineMedium.fontStyle,
                   ),
+                  color: FlutterFlowTheme.of(context).primary,
                   letterSpacing: 0.0,
                   fontWeight:
                       FlutterFlowTheme.of(context).headlineMedium.fontWeight,
@@ -724,7 +739,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                     ),
                                                                     color: FlutterFlowTheme.of(
                                                                             context)
-                                                                        .primary,
+                                                                        .tertiary,
                                                                     letterSpacing:
                                                                         0.0,
                                                                     fontWeight:
@@ -798,221 +813,195 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                       ),
                                                     ],
                                                   ),
-                                                  Align(
-                                                    alignment:
-                                                        AlignmentDirectional(
-                                                            0.0, -1.0),
-                                                    child: Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Align(
-                                                          alignment:
-                                                              AlignmentDirectional(
-                                                                  10.0, 10.0),
-                                                          child: Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        15.0,
-                                                                        15.0,
-                                                                        5.0,
-                                                                        15.0),
-                                                            child: ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20.0),
-                                                              child: OctoImage(
-                                                                placeholderBuilder:
-                                                                    (_) => SizedBox
-                                                                        .expand(
-                                                                  child: Image(
-                                                                    image: BlurHashImage(
-                                                                        'LCPso48Y0h6+_c4U=x+s^*E*das342234'),
-                                                                    fit: BoxFit
-                                                                        .cover,
+                                                  Stack(
+                                                    children: [
+                                                      Align(
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                0.0, -1.0),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          10.0,
+                                                                          5.0,
+                                                                          10.0,
+                                                                          10.0),
+                                                              child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8.0),
+                                                                child:
+                                                                    OctoImage(
+                                                                  placeholderBuilder:
+                                                                      (_) => SizedBox
+                                                                          .expand(
+                                                                    child:
+                                                                        Image(
+                                                                      image: BlurHashImage(
+                                                                          'UBEVpOXp4mV@bw9F8_?b00ITt7ocIA~q_48_'),
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    ),
                                                                   ),
-                                                                ),
-                                                                image:
-                                                                    NetworkImage(
-                                                                  valueOrDefault<
-                                                                      String>(
+                                                                  image:
+                                                                      NetworkImage(
                                                                     listViewBoothsRecord
                                                                         .boothImageList
-                                                                        .firstOrNull,
-                                                                    'https://firebasestorage.googleapis.com/v0/b/poc-beacon-firebase.firebasestorage.app/o/joystick.jpeg?alt=media&token=420111f8-8d8e-49eb-aa7f-b9207718d8dd',
+                                                                        .firstOrNull!,
                                                                   ),
+                                                                  width: 90.0,
+                                                                  height: 90.0,
+                                                                  fit: BoxFit
+                                                                      .cover,
                                                                 ),
-                                                                width: 100.0,
-                                                                height: 100.0,
-                                                                fit: BoxFit
-                                                                    .cover,
                                                               ),
                                                             ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          child: Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
+                                                            Expanded(
+                                                              child: Padding(
+                                                                padding: EdgeInsetsDirectional
                                                                     .fromSTEB(
                                                                         5.0,
                                                                         12.0,
                                                                         0.0,
                                                                         12.0),
-                                                            child: Column(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .max,
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Text(
-                                                                  listViewBoothsRecord
-                                                                      .description,
-                                                                  style: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .displaySmall
-                                                                      .override(
-                                                                        font: GoogleFonts
-                                                                            .outfit(
-                                                                          fontWeight:
-                                                                              FontWeight.w100,
-                                                                          fontStyle: FlutterFlowTheme.of(context)
-                                                                              .displaySmall
-                                                                              .fontStyle,
-                                                                        ),
-                                                                        color: FlutterFlowTheme.of(context)
-                                                                            .secondaryText,
-                                                                        fontSize:
-                                                                            16.0,
-                                                                        letterSpacing:
-                                                                            0.0,
-                                                                        fontWeight:
-                                                                            FontWeight.w100,
-                                                                        fontStyle: FlutterFlowTheme.of(context)
-                                                                            .displaySmall
-                                                                            .fontStyle,
-                                                                      ),
-                                                                ),
-                                                                Text(
-                                                                  'รอทำกิจกรรม',
-                                                                  style: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .override(
-                                                                        font: GoogleFonts
-                                                                            .readexPro(
-                                                                          fontWeight: FlutterFlowTheme.of(context)
-                                                                              .bodyMedium
-                                                                              .fontWeight,
-                                                                          fontStyle: FlutterFlowTheme.of(context)
-                                                                              .bodyMedium
-                                                                              .fontStyle,
-                                                                        ),
-                                                                        color: FlutterFlowTheme.of(context)
-                                                                            .error,
-                                                                        letterSpacing:
-                                                                            0.0,
-                                                                        fontWeight: FlutterFlowTheme.of(context)
-                                                                            .bodyMedium
-                                                                            .fontWeight,
-                                                                        fontStyle: FlutterFlowTheme.of(context)
-                                                                            .bodyMedium
-                                                                            .fontStyle,
-                                                                      ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          child: Align(
-                                                            alignment:
-                                                                AlignmentDirectional(
-                                                                    1.0, -1.0),
-                                                            child: Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          5.0,
-                                                                          0.0,
-                                                                          0.0,
-                                                                          0.0),
-                                                              child: Column(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .max,
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .start,
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Align(
-                                                                    alignment:
-                                                                        AlignmentDirectional(
-                                                                            1.0,
-                                                                            -1.0),
-                                                                    child:
-                                                                        Padding(
-                                                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          10.0,
-                                                                          0.0),
-                                                                      child:
-                                                                          Icon(
-                                                                        Icons
-                                                                            .chevron_right_rounded,
-                                                                        color: FlutterFlowTheme.of(context)
-                                                                            .secondaryText,
-                                                                        size:
-                                                                            24.0,
-                                                                      ),
+                                                                child: Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .max,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .start,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Text(
+                                                                      listViewBoothsRecord
+                                                                          .description,
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .displaySmall
+                                                                          .override(
+                                                                            font:
+                                                                                GoogleFonts.outfit(
+                                                                              fontWeight: FontWeight.w100,
+                                                                              fontStyle: FlutterFlowTheme.of(context).displaySmall.fontStyle,
+                                                                            ),
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).secondaryText,
+                                                                            fontSize:
+                                                                                16.0,
+                                                                            letterSpacing:
+                                                                                0.0,
+                                                                            fontWeight:
+                                                                                FontWeight.w100,
+                                                                            fontStyle:
+                                                                                FlutterFlowTheme.of(context).displaySmall.fontStyle,
+                                                                          ),
                                                                     ),
-                                                                  ),
-                                                                  Text(
-                                                                    ' ',
-                                                                    style: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .override(
-                                                                          font:
-                                                                              GoogleFonts.readexPro(
+                                                                    Text(
+                                                                      'รอทำกิจกรรม',
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .bodyMedium
+                                                                          .override(
+                                                                            font:
+                                                                                GoogleFonts.readexPro(
+                                                                              fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                            ),
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).error,
+                                                                            letterSpacing:
+                                                                                0.0,
                                                                             fontWeight:
                                                                                 FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                                                                             fontStyle:
                                                                                 FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                           ),
-                                                                          color:
-                                                                              FlutterFlowTheme.of(context).error,
-                                                                          letterSpacing:
-                                                                              0.0,
-                                                                          fontWeight: FlutterFlowTheme.of(context)
-                                                                              .bodyMedium
-                                                                              .fontWeight,
-                                                                          fontStyle: FlutterFlowTheme.of(context)
-                                                                              .bodyMedium
-                                                                              .fontStyle,
-                                                                        ),
-                                                                  ),
-                                                                ],
+                                                                    ),
+                                                                  ],
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
+                                                            Expanded(
+                                                              child: Align(
+                                                                alignment:
+                                                                    AlignmentDirectional(
+                                                                        1.0,
+                                                                        -1.0),
+                                                                child: Padding(
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          5.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                                  child: Column(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .max,
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .start,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Align(
+                                                                        alignment: AlignmentDirectional(
+                                                                            1.0,
+                                                                            -1.0),
+                                                                        child:
+                                                                            Padding(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
+                                                                              0.0,
+                                                                              0.0,
+                                                                              10.0,
+                                                                              0.0),
+                                                                          child:
+                                                                              Icon(
+                                                                            Icons.chevron_right_rounded,
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).secondaryText,
+                                                                            size:
+                                                                                24.0,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Text(
+                                                                        ' ',
+                                                                        style: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .override(
+                                                                              font: GoogleFonts.readexPro(
+                                                                                fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                                                                                fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                              ),
+                                                                              color: FlutterFlowTheme.of(context).error,
+                                                                              letterSpacing: 0.0,
+                                                                              fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                            ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                      ],
-                                                    ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ],
                                               ),

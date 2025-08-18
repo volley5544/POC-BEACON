@@ -157,7 +157,14 @@ final parametersBuilderMap =
               data, 'boothDocRef', BoothsRecord.fromSnapshot),
         },
       ),
-  'SuccessInprocess': ParameterData.none(),
+  'SuccessInprocess': (data) async => ParameterData(
+        allParams: {
+          'boothName': getParameter<String>(data, 'boothName'),
+          'eventId': getParameter<int>(data, 'eventId'),
+          'eventDocRef': await getDocumentParameter<EventsRecord>(
+              data, 'eventDocRef', EventsRecord.fromSnapshot),
+        },
+      ),
   'SuccessSurvey': ParameterData.none(),
   'Survey': ParameterData.none(),
   'SettingEventList': (data) async => ParameterData(

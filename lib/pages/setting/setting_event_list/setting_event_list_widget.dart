@@ -1197,8 +1197,9 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                     ),
                                                                     image:
                                                                         NetworkImage(
-                                                                      listViewEventsRecord
-                                                                              .hasEventImageList()
+                                                                      listViewEventsRecord.hasEventImageList() &&
+                                                                              (listViewEventsRecord.eventImageList.length >
+                                                                                  0)
                                                                           ? listViewEventsRecord
                                                                               .eventImageList
                                                                               .firstOrNull!

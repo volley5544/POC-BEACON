@@ -75,6 +75,11 @@ class BoothsRecord extends FirestoreRecord {
   List<String> get boothImageList => _boothImageList ?? const [];
   bool hasBoothImageList() => _boothImageList != null;
 
+  // "device_uuid" field.
+  String? _deviceUuid;
+  String get deviceUuid => _deviceUuid ?? '';
+  bool hasDeviceUuid() => _deviceUuid != null;
+
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
@@ -91,6 +96,7 @@ class BoothsRecord extends FirestoreRecord {
     _updatedBy = snapshotData['updated_by'] as String?;
     _eventId = castToType<int>(snapshotData['event_id']);
     _boothImageList = getDataList(snapshotData['booth_image_list']);
+    _deviceUuid = snapshotData['device_uuid'] as String?;
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -143,6 +149,7 @@ Map<String, dynamic> createBoothsRecordData({
   DateTime? updatedAt,
   String? updatedBy,
   int? eventId,
+  String? deviceUuid,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -157,6 +164,7 @@ Map<String, dynamic> createBoothsRecordData({
       'updated_at': updatedAt,
       'updated_by': updatedBy,
       'event_id': eventId,
+      'device_uuid': deviceUuid,
     }.withoutNulls,
   );
 
@@ -180,7 +188,8 @@ class BoothsRecordDocumentEquality implements Equality<BoothsRecord> {
         e1?.updatedAt == e2?.updatedAt &&
         e1?.updatedBy == e2?.updatedBy &&
         e1?.eventId == e2?.eventId &&
-        listEquality.equals(e1?.boothImageList, e2?.boothImageList);
+        listEquality.equals(e1?.boothImageList, e2?.boothImageList) &&
+        e1?.deviceUuid == e2?.deviceUuid;
   }
 
   @override
@@ -196,7 +205,8 @@ class BoothsRecordDocumentEquality implements Equality<BoothsRecord> {
         e?.updatedAt,
         e?.updatedBy,
         e?.eventId,
-        e?.boothImageList
+        e?.boothImageList,
+        e?.deviceUuid
       ]);
 
   @override

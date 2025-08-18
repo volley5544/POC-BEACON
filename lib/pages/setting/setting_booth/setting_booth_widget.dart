@@ -113,6 +113,11 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
             : '');
       });
       safeSetState(() {
+        _model.deviceUUIDTextController?.text = (widget.typePage == 'edit'
+            ? _model.queryBoothAction!.deviceUuid
+            : '');
+      });
+      safeSetState(() {
         _model.distanceTextController?.text = (widget.typePage == 'edit'
             ? _model.queryBoothAction!.notificationDistance.toString()
             : '');
@@ -129,6 +134,9 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
     _model.descriptionTextController ??= TextEditingController();
     _model.descriptionFocusNode ??= FocusNode();
     _model.descriptionFocusNode!.addListener(() => safeSetState(() {}));
+    _model.deviceUUIDTextController ??= TextEditingController();
+    _model.deviceUUIDFocusNode ??= FocusNode();
+    _model.deviceUUIDFocusNode!.addListener(() => safeSetState(() {}));
     _model.distanceTextController ??= TextEditingController();
     _model.distanceFocusNode ??= FocusNode();
     _model.distanceFocusNode!.addListener(() => safeSetState(() {}));
@@ -610,6 +618,173 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                           FlutterFlowTheme.of(context).primary,
                                       validator: _model
                                           .descriptionTextControllerValidator
+                                          .asValidator(context),
+                                      inputFormatters: [
+                                        if (!isAndroid && !isiOS)
+                                          TextInputFormatter.withFunction(
+                                              (oldValue, newValue) {
+                                            return TextEditingValue(
+                                              selection: newValue.selection,
+                                              text: newValue.text
+                                                  .toCapitalization(
+                                                      TextCapitalization.words),
+                                            );
+                                          }),
+                                      ],
+                                    ),
+                                    TextFormField(
+                                      controller:
+                                          _model.deviceUUIDTextController,
+                                      focusNode: _model.deviceUUIDFocusNode,
+                                      autofocus: false,
+                                      textCapitalization:
+                                          TextCapitalization.words,
+                                      obscureText: false,
+                                      decoration: InputDecoration(
+                                        labelText: 'Beacon UUID*',
+                                        labelStyle: FlutterFlowTheme.of(context)
+                                            .labelLarge
+                                            .override(
+                                              font: GoogleFonts.readexPro(
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelLarge
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelLarge
+                                                        .fontStyle,
+                                              ),
+                                              letterSpacing: 0.0,
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelLarge
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelLarge
+                                                      .fontStyle,
+                                            ),
+                                        hintStyle: FlutterFlowTheme.of(context)
+                                            .labelMedium
+                                            .override(
+                                              font: GoogleFonts.readexPro(
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelMedium
+                                                        .fontStyle,
+                                              ),
+                                              letterSpacing: 0.0,
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelMedium
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelMedium
+                                                      .fontStyle,
+                                            ),
+                                        errorStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.readexPro(
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              fontSize: 12.0,
+                                              letterSpacing: 0.0,
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
+                                            ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .alternate,
+                                            width: 2.0,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .primary,
+                                            width: 2.0,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .error,
+                                            width: 2.0,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .error,
+                                            width: 2.0,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(12.0),
+                                        ),
+                                        filled: true,
+                                        fillColor: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                        contentPadding:
+                                            EdgeInsetsDirectional.fromSTEB(
+                                                16.0, 20.0, 16.0, 20.0),
+                                      ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyLarge
+                                          .override(
+                                            font: GoogleFonts.readexPro(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyLarge
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyLarge
+                                                      .fontStyle,
+                                            ),
+                                            letterSpacing: 0.0,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyLarge
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyLarge
+                                                    .fontStyle,
+                                          ),
+                                      cursorColor:
+                                          FlutterFlowTheme.of(context).primary,
+                                      validator: _model
+                                          .deviceUUIDTextControllerValidator
                                           .asValidator(context),
                                       inputFormatters: [
                                         if (!isAndroid && !isiOS)
@@ -1414,9 +1589,10 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                   var _shouldSetState = false;
                                   if (_model.eventNameTextController.text !=
                                           '') {
-                                    if (_model.distanceTextController.text !=
+                                    if (_model.deviceUUIDTextController.text !=
                                             '') {
-                                      if (true) {
+                                      if (_model.distanceTextController.text !=
+                                              '') {
                                         if (true) {
                                           if (true) {
                                             if (true) {
@@ -1424,11 +1600,6 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                                 _model.queryLastestBoothAction =
                                                     await queryBoothsRecordOnce(
                                                   parent: widget.eventDocRef,
-                                                  queryBuilder:
-                                                      (boothsRecord) =>
-                                                          boothsRecord.orderBy(
-                                                              'booth_id',
-                                                              descending: true),
                                                   singleRecord: true,
                                                 ).then((s) => s.firstOrNull);
                                                 _shouldSetState = true;
@@ -1491,6 +1662,9 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                                             ? 0
                                                             : 1,
                                                     eventId: widget.eventId,
+                                                    deviceUuid: _model
+                                                        .deviceUUIDTextController
+                                                        .text,
                                                   ),
                                                   ...mapToFirestore(
                                                     {
@@ -1531,6 +1705,9 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                                             ? 0
                                                             : 1,
                                                     eventId: widget.eventId,
+                                                    deviceUuid: _model
+                                                        .deviceUUIDTextController
+                                                        .text,
                                                   ),
                                                   ...mapToFirestore(
                                                     {
@@ -1542,6 +1719,25 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                                   ),
                                                 }, boothsRecordReference);
                                                 _shouldSetState = true;
+                                                // Debug
+                                                await showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (alertDialogContext) {
+                                                    return AlertDialog(
+                                                      content: Text(
+                                                          'update เสร็จแล้ว'),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () =>
+                                                              Navigator.pop(
+                                                                  alertDialogContext),
+                                                          child: Text('Ok'),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                );
                                               } else {
                                                 if (_model.uploadImageLocalTemp
                                                         .length >
@@ -1578,6 +1774,9 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                                     updatedBy:
                                                         currentUserReference
                                                             ?.id,
+                                                    deviceUuid: _model
+                                                        .deviceUUIDTextController
+                                                        .text,
                                                   ),
                                                   ...mapToFirestore(
                                                     {
@@ -1617,67 +1816,9 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                                 _model.uploadedLocalFiles_uploadBoothImageAction =
                                                     [];
                                               });
-                                            } else {
-                                              await showDialog(
-                                                context: context,
-                                                builder: (alertDialogContext) {
-                                                  return AlertDialog(
-                                                    title: Text(
-                                                        'ข้อมูลไม่ครบถ้วน'),
-                                                    content: Text(
-                                                        'กรุณากรอก วันเวลาที่สิ้นสุด'),
-                                                    actions: [
-                                                      TextButton(
-                                                        onPressed: () =>
-                                                            Navigator.pop(
-                                                                alertDialogContext),
-                                                        child: Text('Ok'),
-                                                      ),
-                                                    ],
-                                                  );
-                                                },
-                                              );
                                             }
-                                          } else {
-                                            await showDialog(
-                                              context: context,
-                                              builder: (alertDialogContext) {
-                                                return AlertDialog(
-                                                  title:
-                                                      Text('ข้อมูลไม่ครบถ้วน'),
-                                                  content: Text(
-                                                      'กรุณากรอก วันเวลาที่เริ่มต้น'),
-                                                  actions: [
-                                                    TextButton(
-                                                      onPressed: () =>
-                                                          Navigator.pop(
-                                                              alertDialogContext),
-                                                      child: Text('Ok'),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
                                           }
                                         } else {
-                                          await showDialog(
-                                            context: context,
-                                            builder: (alertDialogContext) {
-                                              return AlertDialog(
-                                                title: Text('ข้อมูลไม่ครบถ้วน'),
-                                                content: Text(
-                                                    'กรุณากรอก จำนวนนาทีที่แจ้งเตือนซ้ำ'),
-                                                actions: [
-                                                  TextButton(
-                                                    onPressed: () =>
-                                                        Navigator.pop(
-                                                            alertDialogContext),
-                                                    child: Text('Ok'),
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          );
                                           if (_shouldSetState)
                                             safeSetState(() {});
                                           return;
@@ -1689,7 +1830,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                             return AlertDialog(
                                               title: Text('ข้อมูลไม่ครบถ้วน'),
                                               content: Text(
-                                                  'กรุณากรอก จำนวนครั้งที่แจ้งเตือนซ้ำ'),
+                                                  'กรุณากรอก ระยะส่ง Beacon เมื่อเข้าใกล้บูธกี่เมตร'),
                                               actions: [
                                                 TextButton(
                                                   onPressed: () =>
@@ -1711,8 +1852,8 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                         builder: (alertDialogContext) {
                                           return AlertDialog(
                                             title: Text('ข้อมูลไม่ครบถ้วน'),
-                                            content: Text(
-                                                'กรุณากรอก จำนวนครั้งแจ้งเตือนซ้ำ'),
+                                            content:
+                                                Text('กรุณากรอก Beacon UUID'),
                                             actions: [
                                               TextButton(
                                                 onPressed: () => Navigator.pop(
@@ -1732,8 +1873,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                       builder: (alertDialogContext) {
                                         return AlertDialog(
                                           title: Text('ข้อมูลไม่ครบถ้วน'),
-                                          content:
-                                              Text('กรุณากรอก ชื่อกิจกรรม'),
+                                          content: Text('กรุณากรอก ชื่อบูธ'),
                                           actions: [
                                             TextButton(
                                               onPressed: () => Navigator.pop(

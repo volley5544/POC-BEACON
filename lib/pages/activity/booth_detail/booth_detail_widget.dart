@@ -1,3 +1,4 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -76,6 +77,7 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
           );
         },
       );
+      // getBooth
       _model.dataBooth = await queryBoothsRecordOnce(
         queryBuilder: (boothsRecord) => boothsRecord
             .where(
@@ -85,6 +87,27 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
             .where(
               'is_active',
               isEqualTo: 0,
+            ),
+        singleRecord: true,
+      ).then((s) => s.firstOrNull);
+      // getActivity
+      _model.dataActivity = await queryUserActivitiesRecordOnce(
+        queryBuilder: (userActivitiesRecord) => userActivitiesRecord
+            .where(
+              'booth_id',
+              isEqualTo: widget.boothId?.toString(),
+            )
+            .where(
+              'is_active',
+              isEqualTo: 0,
+            )
+            .where(
+              'event_id',
+              isEqualTo: widget.eventId?.toString(),
+            )
+            .where(
+              'uid',
+              isEqualTo: currentUserUid,
             ),
         singleRecord: true,
       ).then((s) => s.firstOrNull);
@@ -151,7 +174,7 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                     fontStyle:
                         FlutterFlowTheme.of(context).headlineMedium.fontStyle,
                   ),
-                  color: FlutterFlowTheme.of(context).primary,
+                  color: FlutterFlowTheme.of(context).tertiary,
                   letterSpacing: 0.0,
                   fontWeight:
                       FlutterFlowTheme.of(context).headlineMedium.fontWeight,
@@ -170,26 +193,31 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
             children: [
               Padding(
                 padding: EdgeInsets.all(12.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(8.0),
-                    bottomRight: Radius.circular(8.0),
-                    topLeft: Radius.circular(8.0),
-                    topRight: Radius.circular(8.0),
-                  ),
-                  child: OctoImage(
-                    placeholderBuilder: (_) => SizedBox.expand(
-                      child: Image(
-                        image: BlurHashImage('LCPso48Y0h6+_c4U=x+s^*E349djds'),
-                        fit: BoxFit.cover,
+                child: Hero(
+                  tag: widget.boothDocRef!.boothImageList.elementAtOrNull(0)!,
+                  transitionOnUserGestures: true,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(8.0),
+                      bottomRight: Radius.circular(8.0),
+                      topLeft: Radius.circular(8.0),
+                      topRight: Radius.circular(8.0),
+                    ),
+                    child: OctoImage(
+                      placeholderBuilder: (_) => SizedBox.expand(
+                        child: Image(
+                          image: BlurHashImage(
+                              'UBEVpOXp4mV@bw9F8_?b00ITt7ocIA~q_48_'),
+                          fit: BoxFit.cover,
+                        ),
                       ),
+                      image: NetworkImage(
+                        widget.boothDocRef!.boothImageList.elementAtOrNull(0)!,
+                      ),
+                      width: double.infinity,
+                      height: 330.0,
+                      fit: BoxFit.cover,
                     ),
-                    image: NetworkImage(
-                      widget.boothDocRef!.boothImageList.elementAtOrNull(0)!,
-                    ),
-                    width: double.infinity,
-                    height: 330.0,
-                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -299,10 +327,116 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 0.0, 0.0, 12.0),
                           child: FFButtonWidget(
-                            onPressed: () async {
-                              context
-                                  .pushNamed(SuccessInprocessWidget.routeName);
-                            },
+                            onPressed: (_model.dataActivity?.activityId != null)
+                                ? null
+                                : () async {
+                                    var _shouldSetState = false;
+                                    var confirmDialogResponse =
+                                        await showDialog<bool>(
+                                              context: context,
+                                              builder: (alertDialogContext) {
+                                                return AlertDialog(
+                                                  content: Text(
+                                                      'คุณต้องการเช็คอินบูธ${widget.boothDocRef?.boothName}ใช่ไหม ?'),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              alertDialogContext,
+                                                              false),
+                                                      child: Text('Cancel'),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              alertDialogContext,
+                                                              true),
+                                                      child: Text('Confirm'),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            ) ??
+                                            false;
+                                    if (confirmDialogResponse) {
+                                      // countActivity
+                                      _model.countRows =
+                                          await queryUserActivitiesRecordCount();
+                                      _shouldSetState = true;
+                                      _model.counterActivity = _model.countRows;
+                                      safeSetState(() {});
+                                      _model.counterActivity =
+                                          _model.counterActivity! + 1;
+                                      safeSetState(() {});
+
+                                      var userActivitiesRecordReference =
+                                          UserActivitiesRecord.collection.doc();
+                                      await userActivitiesRecordReference.set({
+                                        ...createUserActivitiesRecordData(
+                                          uid: currentUserUid,
+                                          eventId: widget.eventId?.toString(),
+                                          boothId: widget.boothId?.toString(),
+                                          isCompleted: true,
+                                          createdBy: currentUserReference?.path,
+                                          isActive: 0,
+                                          activityId: _model.counterActivity,
+                                        ),
+                                        ...mapToFirestore(
+                                          {
+                                            'check_in_time':
+                                                FieldValue.serverTimestamp(),
+                                            'created_at':
+                                                FieldValue.serverTimestamp(),
+                                          },
+                                        ),
+                                      });
+                                      _model.saveActivity = UserActivitiesRecord
+                                          .getDocumentFromData({
+                                        ...createUserActivitiesRecordData(
+                                          uid: currentUserUid,
+                                          eventId: widget.eventId?.toString(),
+                                          boothId: widget.boothId?.toString(),
+                                          isCompleted: true,
+                                          createdBy: currentUserReference?.path,
+                                          isActive: 0,
+                                          activityId: _model.counterActivity,
+                                        ),
+                                        ...mapToFirestore(
+                                          {
+                                            'check_in_time': DateTime.now(),
+                                            'created_at': DateTime.now(),
+                                          },
+                                        ),
+                                      }, userActivitiesRecordReference);
+                                      _shouldSetState = true;
+
+                                      context.pushNamed(
+                                        SuccessInprocessWidget.routeName,
+                                        queryParameters: {
+                                          'boothName': serializeParam(
+                                            widget.boothDocRef?.boothName,
+                                            ParamType.String,
+                                          ),
+                                          'eventId': serializeParam(
+                                            widget.eventId,
+                                            ParamType.int,
+                                          ),
+                                          'eventDocRef': serializeParam(
+                                            _model.dataEvent,
+                                            ParamType.Document,
+                                          ),
+                                        }.withoutNulls,
+                                        extra: <String, dynamic>{
+                                          'eventDocRef': _model.dataEvent,
+                                        },
+                                      );
+                                    } else {
+                                      if (_shouldSetState) safeSetState(() {});
+                                      return;
+                                    }
+
+                                    if (_shouldSetState) safeSetState(() {});
+                                  },
                             text: 'เช็คอิน',
                             options: FFButtonOptions(
                               width: double.infinity,

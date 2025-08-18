@@ -183,7 +183,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
             name: BoothListWidget.routeName,
             path: BoothListWidget.routePath,
-            requireAuth: true,
             asyncParams: {
               'eventDocRef': getDoc(['events'], EventsRecord.fromSnapshot),
             },
@@ -233,7 +232,23 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: SuccessInprocessWidget.routeName,
           path: SuccessInprocessWidget.routePath,
-          builder: (context, params) => SuccessInprocessWidget(),
+          asyncParams: {
+            'eventDocRef': getDoc(['events'], EventsRecord.fromSnapshot),
+          },
+          builder: (context, params) => SuccessInprocessWidget(
+            boothName: params.getParam(
+              'boothName',
+              ParamType.String,
+            ),
+            eventId: params.getParam(
+              'eventId',
+              ParamType.int,
+            ),
+            eventDocRef: params.getParam(
+              'eventDocRef',
+              ParamType.Document,
+            ),
+          ),
         ),
         FFRoute(
           name: SuccessSurveyWidget.routeName,

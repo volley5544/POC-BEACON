@@ -55,11 +55,6 @@ class UserActivitiesRecord extends FirestoreRecord {
   String get createdBy => _createdBy ?? '';
   bool hasCreatedBy() => _createdBy != null;
 
-  // "activity_id" field.
-  int? _activityId;
-  int get activityId => _activityId ?? 0;
-  bool hasActivityId() => _activityId != null;
-
   // "is_active" field.
   int? _isActive;
   int get isActive => _isActive ?? 0;
@@ -75,6 +70,11 @@ class UserActivitiesRecord extends FirestoreRecord {
   String get updatedBy => _updatedBy ?? '';
   bool hasUpdatedBy() => _updatedBy != null;
 
+  // "activity_id" field.
+  int? _activityId;
+  int get activityId => _activityId ?? 0;
+  bool hasActivityId() => _activityId != null;
+
   void _initializeFields() {
     _uid = snapshotData['uid'] as String?;
     _eventId = snapshotData['event_id'] as String?;
@@ -84,10 +84,10 @@ class UserActivitiesRecord extends FirestoreRecord {
     _isCompleted = snapshotData['is_completed'] as bool?;
     _createdAt = snapshotData['created_at'] as DateTime?;
     _createdBy = snapshotData['created_by'] as String?;
-    _activityId = castToType<int>(snapshotData['activity_id']);
     _isActive = castToType<int>(snapshotData['is_active']);
     _updatedAt = snapshotData['updated_at'] as DateTime?;
     _updatedBy = snapshotData['updated_by'] as String?;
+    _activityId = castToType<int>(snapshotData['activity_id']);
   }
 
   static CollectionReference get collection =>
@@ -133,10 +133,10 @@ Map<String, dynamic> createUserActivitiesRecordData({
   bool? isCompleted,
   DateTime? createdAt,
   String? createdBy,
-  int? activityId,
   int? isActive,
   DateTime? updatedAt,
   String? updatedBy,
+  int? activityId,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -148,10 +148,10 @@ Map<String, dynamic> createUserActivitiesRecordData({
       'is_completed': isCompleted,
       'created_at': createdAt,
       'created_by': createdBy,
-      'activity_id': activityId,
       'is_active': isActive,
       'updated_at': updatedAt,
       'updated_by': updatedBy,
+      'activity_id': activityId,
     }.withoutNulls,
   );
 
@@ -172,10 +172,10 @@ class UserActivitiesRecordDocumentEquality
         e1?.isCompleted == e2?.isCompleted &&
         e1?.createdAt == e2?.createdAt &&
         e1?.createdBy == e2?.createdBy &&
-        e1?.activityId == e2?.activityId &&
         e1?.isActive == e2?.isActive &&
         e1?.updatedAt == e2?.updatedAt &&
-        e1?.updatedBy == e2?.updatedBy;
+        e1?.updatedBy == e2?.updatedBy &&
+        e1?.activityId == e2?.activityId;
   }
 
   @override
@@ -188,10 +188,10 @@ class UserActivitiesRecordDocumentEquality
         e?.isCompleted,
         e?.createdAt,
         e?.createdBy,
-        e?.activityId,
         e?.isActive,
         e?.updatedAt,
-        e?.updatedBy
+        e?.updatedBy,
+        e?.activityId
       ]);
 
   @override

@@ -51,11 +51,12 @@ class SettingBoothModel extends FlutterFlowModel<SettingBoothWidget> {
   FocusNode? descriptionFocusNode;
   TextEditingController? descriptionTextController;
   String? Function(BuildContext, String?)? descriptionTextControllerValidator;
-  // State field(s) for Distance widget.
-  FocusNode? distanceFocusNode;
-  TextEditingController? distanceTextController;
-  String? Function(BuildContext, String?)? distanceTextControllerValidator;
-  String? _distanceTextControllerValidator(BuildContext context, String? val) {
+  // State field(s) for deviceUUID widget.
+  FocusNode? deviceUUIDFocusNode;
+  TextEditingController? deviceUUIDTextController;
+  String? Function(BuildContext, String?)? deviceUUIDTextControllerValidator;
+  String? _deviceUUIDTextControllerValidator(
+      BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
       return 'Please enter an age for the patient.';
     }
@@ -63,6 +64,10 @@ class SettingBoothModel extends FlutterFlowModel<SettingBoothWidget> {
     return null;
   }
 
+  // State field(s) for Distance widget.
+  FocusNode? distanceFocusNode;
+  TextEditingController? distanceTextController;
+  String? Function(BuildContext, String?)? distanceTextControllerValidator;
   // State field(s) for Switch widget.
   bool? switchValue;
   bool isDataUploading_uploadBoothImageAction = false;
@@ -78,7 +83,7 @@ class SettingBoothModel extends FlutterFlowModel<SettingBoothWidget> {
   @override
   void initState(BuildContext context) {
     eventNameTextControllerValidator = _eventNameTextControllerValidator;
-    distanceTextControllerValidator = _distanceTextControllerValidator;
+    deviceUUIDTextControllerValidator = _deviceUUIDTextControllerValidator;
   }
 
   @override
@@ -88,6 +93,9 @@ class SettingBoothModel extends FlutterFlowModel<SettingBoothWidget> {
 
     descriptionFocusNode?.dispose();
     descriptionTextController?.dispose();
+
+    deviceUUIDFocusNode?.dispose();
+    deviceUUIDTextController?.dispose();
 
     distanceFocusNode?.dispose();
     distanceTextController?.dispose();

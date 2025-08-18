@@ -1,3 +1,4 @@
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -11,7 +12,16 @@ import 'success_inprocess_model.dart';
 export 'success_inprocess_model.dart';
 
 class SuccessInprocessWidget extends StatefulWidget {
-  const SuccessInprocessWidget({super.key});
+  const SuccessInprocessWidget({
+    super.key,
+    required this.boothName,
+    required this.eventId,
+    required this.eventDocRef,
+  });
+
+  final String? boothName;
+  final int? eventId;
+  final EventsRecord? eventDocRef;
 
   static String routeName = 'SuccessInprocess';
   static String routePath = '/successInprocess';
@@ -366,7 +376,10 @@ class _SuccessInprocessWidgetState extends State<SuccessInprocessWidget>
                             Align(
                               alignment: AlignmentDirectional(0.0, -1.0),
                               child: Text(
-                                'คุณทำกิจกรรมบูธ xxx สำเร็จแล้ว',
+                                valueOrDefault<String>(
+                                  'คุณทำกิจกรรมบูธ${widget.boothName}เรียบร้อยแล้ว',
+                                  '-',
+                                ),
                                 style: FlutterFlowTheme.of(context)
                                     .labelMedium
                                     .override(
@@ -401,10 +414,17 @@ class _SuccessInprocessWidgetState extends State<SuccessInprocessWidget>
                                   BoothListWidget.routeName,
                                   queryParameters: {
                                     'eventId': serializeParam(
-                                      0,
+                                      widget.eventId,
                                       ParamType.int,
                                     ),
+                                    'eventDocRef': serializeParam(
+                                      widget.eventDocRef,
+                                      ParamType.Document,
+                                    ),
                                   }.withoutNulls,
+                                  extra: <String, dynamic>{
+                                    'eventDocRef': widget.eventDocRef,
+                                  },
                                 );
                               },
                               text: 'ดำเนินการต่อ',
