@@ -45,21 +45,6 @@ class _BoothListWidgetState extends State<BoothListWidget>
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      await showDialog(
-        context: context,
-        builder: (alertDialogContext) {
-          return AlertDialog(
-            title: Text(widget.eventId.toString()),
-            content: Text(widget.eventDocRef!.reference.path),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(alertDialogContext),
-                child: Text('Ok'),
-              ),
-            ],
-          );
-        },
-      );
       _model.dataEvent = await queryEventsRecordOnce(
         queryBuilder: (eventsRecord) => eventsRecord
             .where(

@@ -9,12 +9,14 @@ class BoothDetailModel extends FlutterFlowModel<BoothDetailWidget> {
 
   int? counterActivity = 1;
 
+  bool isComplete = false;
+
   ///  State fields for stateful widgets in this page.
 
   // Stores action output result for [Firestore Query - Query a collection] action in BoothDetail widget.
-  BoothsRecord? dataBooth;
-  // Stores action output result for [Firestore Query - Query a collection] action in BoothDetail widget.
   UserActivitiesRecord? dataActivity;
+  // Stores action output result for [Firestore Query - Query a collection] action in BoothDetail widget.
+  BoothsRecord? dataBooth;
   // Stores action output result for [Firestore Query - Query a collection] action in BoothDetail widget.
   EventsRecord? dataEvent;
   // Stores action output result for [Firestore Query - Query a collection] action in ButtonSubmit widget.

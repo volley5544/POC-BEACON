@@ -6,6 +6,7 @@ export 'open_url_in_same_tab.dart' show openUrlInSameTab;
 export 'beacon2.dart' show beacon2;
 export 'check_permissions_beacon.dart' show checkPermissionsBeacon;
 export 'start_scanning_beacon.dart' show startScanningBeacon;
+export 'get_beacon_distance_action.dart' show getBeaconDistanceAction;
 export 'periodic_scan_beacon.dart' show periodicScanBeacon;
 export 'upload_file_firebase_storage.dart' show uploadFileFirebaseStorage;
 export 'upload_multiple_file_firebase_storage.dart'

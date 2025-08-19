@@ -47,49 +47,6 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      await showDialog(
-        context: context,
-        builder: (alertDialogContext) {
-          return AlertDialog(
-            title: Text(widget.eventId!.toString()),
-            content: Text(widget.eventDocRef!.path),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(alertDialogContext),
-                child: Text('Ok'),
-              ),
-            ],
-          );
-        },
-      );
-      await showDialog(
-        context: context,
-        builder: (alertDialogContext) {
-          return AlertDialog(
-            title: Text(widget.boothId!.toString()),
-            content: Text(widget.boothDocRef!.reference.id),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(alertDialogContext),
-                child: Text('Ok'),
-              ),
-            ],
-          );
-        },
-      );
-      // getBooth
-      _model.dataBooth = await queryBoothsRecordOnce(
-        queryBuilder: (boothsRecord) => boothsRecord
-            .where(
-              'booth_id',
-              isEqualTo: widget.boothId,
-            )
-            .where(
-              'is_active',
-              isEqualTo: 0,
-            ),
-        singleRecord: true,
-      ).then((s) => s.firstOrNull);
       // getActivity
       _model.dataActivity = await queryUserActivitiesRecordOnce(
         queryBuilder: (userActivitiesRecord) => userActivitiesRecord
@@ -108,6 +65,21 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
             .where(
               'uid',
               isEqualTo: currentUserUid,
+            ),
+        singleRecord: true,
+      ).then((s) => s.firstOrNull);
+      _model.isComplete = _model.dataActivity!.isCompleted;
+      safeSetState(() {});
+      // getBooth
+      _model.dataBooth = await queryBoothsRecordOnce(
+        queryBuilder: (boothsRecord) => boothsRecord
+            .where(
+              'booth_id',
+              isEqualTo: widget.boothId,
+            )
+            .where(
+              'is_active',
+              isEqualTo: 0,
             ),
         singleRecord: true,
       ).then((s) => s.firstOrNull);
@@ -327,7 +299,7 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 0.0, 0.0, 12.0),
                           child: FFButtonWidget(
-                            onPressed: (_model.dataActivity?.activityId != null)
+                            onPressed: _model.isComplete
                                 ? null
                                 : () async {
                                     var _shouldSetState = false;
@@ -409,7 +381,9 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                         ),
                                       }, userActivitiesRecordReference);
                                       _shouldSetState = true;
-
+                                      if (Navigator.of(context).canPop()) {
+                                        context.pop();
+                                      }
                                       context.pushNamed(
                                         SuccessInprocessWidget.routeName,
                                         queryParameters: {
@@ -437,7 +411,7 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
 
                                     if (_shouldSetState) safeSetState(() {});
                                   },
-                            text: 'เช็คอิน',
+                            text: _model.isComplete ? 'เช็คอินแล้ว' : 'เช็คอิน',
                             options: FFButtonOptions(
                               width: double.infinity,
                               height: 48.0,
@@ -471,6 +445,10 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                 width: 1.0,
                               ),
                               borderRadius: BorderRadius.circular(8.0),
+                              disabledColor: FlutterFlowTheme.of(context)
+                                  .primaryBackground,
+                              disabledTextColor:
+                                  FlutterFlowTheme.of(context).primaryText,
                             ),
                           ),
                         ),

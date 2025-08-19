@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import '/backend/backend.dart';
+import '/backend/schema/structs/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'flutter_flow/flutter_flow_util.dart';
 
 class FFAppState extends ChangeNotifier {
   static FFAppState _instance = FFAppState._internal();
@@ -86,6 +89,125 @@ class FFAppState extends ChangeNotifier {
   int get rolesID => _rolesID;
   set rolesID(int value) {
     _rolesID = value;
+  }
+
+  List<BeaconDataModelStruct> _foundBeaconList = [
+    BeaconDataModelStruct.fromSerializableMap(jsonDecode(
+        '{\"beaconId\":\"Hello World\",\"beaconName\":\"Hello World\",\"distance\":\"Hello World\"}'))
+  ];
+  List<BeaconDataModelStruct> get foundBeaconList => _foundBeaconList;
+  set foundBeaconList(List<BeaconDataModelStruct> value) {
+    _foundBeaconList = value;
+  }
+
+  void addToFoundBeaconList(BeaconDataModelStruct value) {
+    foundBeaconList.add(value);
+  }
+
+  void removeFromFoundBeaconList(BeaconDataModelStruct value) {
+    foundBeaconList.remove(value);
+  }
+
+  void removeAtIndexFromFoundBeaconList(int index) {
+    foundBeaconList.removeAt(index);
+  }
+
+  void updateFoundBeaconListAtIndex(
+    int index,
+    BeaconDataModelStruct Function(BeaconDataModelStruct) updateFn,
+  ) {
+    foundBeaconList[index] = updateFn(_foundBeaconList[index]);
+  }
+
+  void insertAtIndexInFoundBeaconList(int index, BeaconDataModelStruct value) {
+    foundBeaconList.insert(index, value);
+  }
+
+  List<String> _beaconIdList = [];
+  List<String> get beaconIdList => _beaconIdList;
+  set beaconIdList(List<String> value) {
+    _beaconIdList = value;
+  }
+
+  void addToBeaconIdList(String value) {
+    beaconIdList.add(value);
+  }
+
+  void removeFromBeaconIdList(String value) {
+    beaconIdList.remove(value);
+  }
+
+  void removeAtIndexFromBeaconIdList(int index) {
+    beaconIdList.removeAt(index);
+  }
+
+  void updateBeaconIdListAtIndex(
+    int index,
+    String Function(String) updateFn,
+  ) {
+    beaconIdList[index] = updateFn(_beaconIdList[index]);
+  }
+
+  void insertAtIndexInBeaconIdList(int index, String value) {
+    beaconIdList.insert(index, value);
+  }
+
+  List<String> _beaconNameList = [];
+  List<String> get beaconNameList => _beaconNameList;
+  set beaconNameList(List<String> value) {
+    _beaconNameList = value;
+  }
+
+  void addToBeaconNameList(String value) {
+    beaconNameList.add(value);
+  }
+
+  void removeFromBeaconNameList(String value) {
+    beaconNameList.remove(value);
+  }
+
+  void removeAtIndexFromBeaconNameList(int index) {
+    beaconNameList.removeAt(index);
+  }
+
+  void updateBeaconNameListAtIndex(
+    int index,
+    String Function(String) updateFn,
+  ) {
+    beaconNameList[index] = updateFn(_beaconNameList[index]);
+  }
+
+  void insertAtIndexInBeaconNameList(int index, String value) {
+    beaconNameList.insert(index, value);
+  }
+
+  List<String> _beaconDistanceList = [];
+  List<String> get beaconDistanceList => _beaconDistanceList;
+  set beaconDistanceList(List<String> value) {
+    _beaconDistanceList = value;
+  }
+
+  void addToBeaconDistanceList(String value) {
+    beaconDistanceList.add(value);
+  }
+
+  void removeFromBeaconDistanceList(String value) {
+    beaconDistanceList.remove(value);
+  }
+
+  void removeAtIndexFromBeaconDistanceList(int index) {
+    beaconDistanceList.removeAt(index);
+  }
+
+  void updateBeaconDistanceListAtIndex(
+    int index,
+    String Function(String) updateFn,
+  ) {
+    beaconDistanceList[index] = updateFn(_beaconDistanceList[index]);
+  }
+
+  void insertAtIndexInBeaconDistanceList(int index, String value) {
+    beaconDistanceList.insert(index, value);
   }
 }
 
