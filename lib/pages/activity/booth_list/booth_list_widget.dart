@@ -2,14 +2,15 @@ import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:octo_image/octo_image.dart';
+import 'package:provider/provider.dart';
 import 'booth_list_model.dart';
 export 'booth_list_model.dart';
 
@@ -45,18 +46,12 @@ class _BoothListWidgetState extends State<BoothListWidget>
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.dataEvent = await queryEventsRecordOnce(
-        queryBuilder: (eventsRecord) => eventsRecord
-            .where(
-              'event_id',
-              isEqualTo: widget.eventId,
-            )
-            .where(
-              'is_active',
-              isEqualTo: 0,
-            ),
-        singleRecord: true,
-      ).then((s) => s.firstOrNull);
+      await actions.getBeaconDistanceAction(
+        context,
+        () async {
+          safeSetState(() {});
+        },
+      );
     });
 
     animationsMap.addAll({
@@ -134,6 +129,8 @@ class _BoothListWidgetState extends State<BoothListWidget>
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -763,7 +760,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                           0.0,
                                                                           0.0),
                                                               child: Text(
-                                                                'อยู่ในระยะ 2 m',
+                                                                'อยู่ในระยะ ${FFAppState().beaconDistanceList.isNotEmpty ? FFAppState().beaconDistanceList.firstOrNull : '-3'} m',
                                                                 style: FlutterFlowTheme.of(
                                                                         context)
                                                                     .labelMedium

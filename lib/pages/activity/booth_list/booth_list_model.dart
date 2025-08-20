@@ -1,4 +1,3 @@
-import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'booth_list_widget.dart' show BoothListWidget;
@@ -7,8 +6,6 @@ import 'package:flutter/material.dart';
 class BoothListModel extends FlutterFlowModel<BoothListWidget> {
   ///  State fields for stateful widgets in this page.
 
-  // Stores action output result for [Firestore Query - Query a collection] action in BoothList widget.
-  EventsRecord? dataEvent;
   // Stores action output result for [Custom Action - checkPermissionsBeacon] action in Button widget.
   bool? buttonCheckPermissionBeaconOutput;
 
