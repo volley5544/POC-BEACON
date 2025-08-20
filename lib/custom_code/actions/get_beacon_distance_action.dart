@@ -29,24 +29,24 @@ Future<void> getBeaconDistanceAction(
   StreamSubscription<RangingResult>? streamRanging;
   streamRanging = flutterBeacon.ranging(regions).listen((result) async {
     print('in ranging.listen');
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('📡 เจอ Beacon ใกล้ที่สุด'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('in ranging.listen'),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
+    // showDialog(
+    //   context: context,
+    //   builder: (_) => AlertDialog(
+    //     title: const Text('📡 เจอ Beacon ใกล้ที่สุด'),
+    //     content: Column(
+    //       mainAxisSize: MainAxisSize.min,
+    //       children: [
+    //         Text('in ranging.listen'),
+    //       ],
+    //     ),
+    //     actions: [
+    //       TextButton(
+    //         onPressed: () => Navigator.of(context).pop(),
+    //         child: const Text('OK'),
+    //       ),
+    //     ],
+    //   ),
+    // );
     if (result.beacons.isNotEmpty) {
       result.beacons.sort((a, b) => a.accuracy.compareTo(b.accuracy));
       final nearest = result.beacons;
@@ -67,27 +67,27 @@ Future<void> getBeaconDistanceAction(
       // );
 
       // streamRanging?.cancel(); // หยุดหลังเจอ
-      showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: const Text('📡 เจอ Beacon ใกล้ที่สุด'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('ระยะโดยประมาณ: ${FFAppState().beaconDistanceList.first} m'),
-              Text(
-                  'จำนวนBeaconAppState: ${FFAppState().beaconDistanceList.length}'),
-              Text('จำนวนBeacon: ${nearest}'),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
+      // showDialog(
+      //   context: context,
+      //   builder: (_) => AlertDialog(
+      //     title: const Text('📡 เจอ Beacon ใกล้ที่สุด'),
+      //     content: Column(
+      //       mainAxisSize: MainAxisSize.min,
+      //       children: [
+      //         Text('ระยะโดยประมาณ: ${FFAppState().beaconDistanceList.first} m'),
+      //         Text(
+      //             'จำนวนBeaconAppState: ${FFAppState().beaconDistanceList.length}'),
+      //         Text('จำนวนBeacon: ${nearest}'),
+      //       ],
+      //     ),
+      //     actions: [
+      //       TextButton(
+      //         onPressed: () => Navigator.of(context).pop(),
+      //         child: const Text('OK'),
+      //       ),
+      //     ],
+      //   ),
+      // );
     }
   });
 }

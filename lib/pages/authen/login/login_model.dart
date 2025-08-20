@@ -16,10 +16,10 @@ class LoginModel extends FlutterFlowModel<LoginWidget> {
   TextEditingController? passwordTextController;
   late bool passwordVisibility;
   String? Function(BuildContext, String?)? passwordTextControllerValidator;
-  // Stores action output result for [Firestore Query - Query a collection] action in Button widget.
-  UsersRecord? dataUser;
   // Stores action output result for [Custom Action - checkPermissionsBeacon] action in Button widget.
   bool? permission;
+  // Stores action output result for [Firestore Query - Query a collection] action in Button widget.
+  UsersRecord? dataUser;
 
   @override
   void initState(BuildContext context) {

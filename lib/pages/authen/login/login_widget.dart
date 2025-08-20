@@ -12,7 +12,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'login_model.dart';
 export 'login_model.dart';
 
@@ -41,7 +40,7 @@ class _LoginWidgetState extends State<LoginWidget>
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      safeSetState(() {});
+      setDarkModeSetting(context, ThemeMode.light);
     });
 
     _model.emailAddressTextController ??= TextEditingController();
@@ -99,8 +98,6 @@ class _LoginWidgetState extends State<LoginWidget>
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -518,6 +515,9 @@ class _LoginWidgetState extends State<LoginWidget>
                                           '') {
                                     if (_model.passwordTextController.text !=
                                             '') {
+                                      _model.permission = await actions
+                                          .checkPermissionsBeacon();
+                                      _shouldSetState = true;
                                       GoRouter.of(context).prepareAuthEvent();
 
                                       final user =
@@ -545,9 +545,6 @@ class _LoginWidgetState extends State<LoginWidget>
                                         ),
                                         singleRecord: true,
                                       ).then((s) => s.firstOrNull);
-                                      _shouldSetState = true;
-                                      _model.permission = await actions
-                                          .checkPermissionsBeacon();
                                       _shouldSetState = true;
 
                                       context.pushNamedAuth(

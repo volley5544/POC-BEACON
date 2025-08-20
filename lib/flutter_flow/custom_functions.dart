@@ -64,3 +64,10 @@ DateTimeRange? newCustomFunction(
 ) {
   return DateTimeRange(start: startDate!, end: endDate!);
 }
+
+int? returnIndexValueInList(
+  List<String>? inputList,
+  String? value,
+) {
+  return inputList!.indexOf(value!);
+}
