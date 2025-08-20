@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -544,6 +545,9 @@ class _LoginWidgetState extends State<LoginWidget>
                                         ),
                                         singleRecord: true,
                                       ).then((s) => s.firstOrNull);
+                                      _shouldSetState = true;
+                                      _model.permission = await actions
+                                          .checkPermissionsBeacon();
                                       _shouldSetState = true;
 
                                       context.pushNamedAuth(
