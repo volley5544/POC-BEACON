@@ -1010,7 +1010,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                               .secondaryBackground,
                                                         ),
                                                         child: Text(
-                                                          'proximityUUID : ${FFAppState().beaconIdList.isNotEmpty ? FFAppState().beaconIdList.firstOrNull : '-3'}',
+                                                          'proximityUUID : ${FFAppState().beaconIdList.isNotEmpty ? (listViewIndex == 0 ? FFAppState().beaconIdList.firstOrNull : FFAppState().beaconIdList.lastOrNull) : '-3'}',
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .bodyMedium
