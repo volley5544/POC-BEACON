@@ -55,6 +55,7 @@ Future<void> getBeaconDistanceAction() async {
       FFAppState().beaconIdList = nearest.map((e) => e.proximityUUID).toList();
       // FFAppState().beaconNameList = nearest.map((e) => e.macAddress).toList();
       //await setStateAction!();
+      safeSetState(() {});
       /* niruemon.n comment ชั่วคราว 2035-06-05*/
       // triggerPushNotification(
       //   notificationTitle: 'Test Notification Title',
