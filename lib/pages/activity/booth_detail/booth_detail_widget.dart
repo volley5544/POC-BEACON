@@ -52,61 +52,67 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      // getActivity
-      _model.dataActivity = await queryUserActivitiesRecordOnce(
-        queryBuilder: (userActivitiesRecord) => userActivitiesRecord
-            .where(
-              'booth_id',
-              isEqualTo: widget.boothId?.toString(),
-            )
-            .where(
-              'is_active',
-              isEqualTo: 0,
-            )
-            .where(
-              'event_id',
-              isEqualTo: widget.eventId?.toString(),
-            )
-            .where(
-              'uid',
-              isEqualTo: currentUserUid,
-            ),
-        singleRecord: true,
-      ).then((s) => s.firstOrNull);
-      _model.isComplete = _model.dataActivity!.isCompleted;
-      safeSetState(() {});
-      // getBooth
-      _model.dataBooth = await queryBoothsRecordOnce(
-        queryBuilder: (boothsRecord) => boothsRecord
-            .where(
-              'booth_id',
-              isEqualTo: widget.boothId,
-            )
-            .where(
-              'is_active',
-              isEqualTo: 0,
-            ),
-        singleRecord: true,
-      ).then((s) => s.firstOrNull);
-      _model.dataEvent = await queryEventsRecordOnce(
-        queryBuilder: (eventsRecord) => eventsRecord
-            .where(
-              'event_id',
-              isEqualTo: widget.eventId,
-            )
-            .where(
-              'is_active',
-              isEqualTo: 0,
-            ),
-        singleRecord: true,
-      ).then((s) => s.firstOrNull);
-      _model.instantTimer = InstantTimer.periodic(
-        duration: Duration(milliseconds: 500),
-        callback: (timer) async {
+      await Future.wait([
+        Future(() async {
+          // getActivity
+          _model.dataActivity = await queryUserActivitiesRecordOnce(
+            queryBuilder: (userActivitiesRecord) => userActivitiesRecord
+                .where(
+                  'booth_id',
+                  isEqualTo: widget.boothId?.toString(),
+                )
+                .where(
+                  'is_active',
+                  isEqualTo: 0,
+                )
+                .where(
+                  'event_id',
+                  isEqualTo: widget.eventId?.toString(),
+                )
+                .where(
+                  'uid',
+                  isEqualTo: currentUserUid,
+                ),
+            singleRecord: true,
+          ).then((s) => s.firstOrNull);
+          _model.isComplete = _model.dataActivity!.isCompleted;
           safeSetState(() {});
-        },
-        startImmediately: true,
-      );
+          // getBooth
+          _model.dataBooth = await queryBoothsRecordOnce(
+            queryBuilder: (boothsRecord) => boothsRecord
+                .where(
+                  'booth_id',
+                  isEqualTo: widget.boothId,
+                )
+                .where(
+                  'is_active',
+                  isEqualTo: 0,
+                ),
+            singleRecord: true,
+          ).then((s) => s.firstOrNull);
+          _model.dataEvent = await queryEventsRecordOnce(
+            queryBuilder: (eventsRecord) => eventsRecord
+                .where(
+                  'event_id',
+                  isEqualTo: widget.eventId,
+                )
+                .where(
+                  'is_active',
+                  isEqualTo: 0,
+                ),
+            singleRecord: true,
+          ).then((s) => s.firstOrNull);
+        }),
+        Future(() async {
+          _model.instantTimer = InstantTimer.periodic(
+            duration: Duration(milliseconds: 500),
+            callback: (timer) async {
+              safeSetState(() {});
+            },
+            startImmediately: true,
+          );
+        }),
+      ]);
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
@@ -252,14 +258,10 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 8.0, 0.0, 12.0),
                             child: Text(
-                              functions
-                                          .returnIndexValueInList(
-                                              FFAppState()
-                                                  .beaconIdList
-                                                  .toList(),
-                                              widget.boothDoc?.deviceUuid)
-                                          .toString() !=
-                                      '-1'
+                              functions.returnIndexValueInList(
+                                          FFAppState().beaconIdList.toList(),
+                                          widget.boothDoc?.deviceUuid) !=
+                                      -1
                                   ? 'อยู่ในระยะ ${FFAppState().beaconDistanceList.elementAtOrNull(functions.returnIndexValueInList(FFAppState().beaconIdList.toList(), widget.boothDoc?.deviceUuid)!)} m'
                                   : 'ไม่อยู่ในระยะ',
                               style: FlutterFlowTheme.of(context)
