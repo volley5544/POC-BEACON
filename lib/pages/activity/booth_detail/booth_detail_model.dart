@@ -1,5 +1,6 @@
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/instant_timer.dart';
 import '/index.dart';
 import 'booth_detail_widget.dart' show BoothDetailWidget;
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class BoothDetailModel extends FlutterFlowModel<BoothDetailWidget> {
   BoothsRecord? dataBooth;
   // Stores action output result for [Firestore Query - Query a collection] action in BoothDetail widget.
   EventsRecord? dataEvent;
+  InstantTimer? instantTimer;
   // Stores action output result for [Firestore Query - Query a collection] action in ButtonSubmit widget.
   int? countRows;
   // Stores action output result for [Backend Call - Create Document] action in ButtonSubmit widget.
@@ -28,5 +30,7 @@ class BoothDetailModel extends FlutterFlowModel<BoothDetailWidget> {
   void initState(BuildContext context) {}
 
   @override
-  void dispose() {}
+  void dispose() {
+    instantTimer?.cancel();
+  }
 }

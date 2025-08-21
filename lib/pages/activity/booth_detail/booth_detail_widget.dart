@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/instant_timer.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:collection/collection.dart';
@@ -99,6 +100,13 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
             ),
         singleRecord: true,
       ).then((s) => s.firstOrNull);
+      _model.instantTimer = InstantTimer.periodic(
+        duration: Duration(milliseconds: 500),
+        callback: (timer) async {
+          safeSetState(() {});
+        },
+        startImmediately: true,
+      );
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
