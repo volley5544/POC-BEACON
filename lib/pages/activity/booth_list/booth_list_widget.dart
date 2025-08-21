@@ -992,7 +992,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                       ),
                                                     ],
                                                   ),
-                                                  if (false)
+                                                  if (true)
                                                     Padding(
                                                       padding:
                                                           EdgeInsetsDirectional
@@ -1040,7 +1040,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                         ),
                                                       ),
                                                     ),
-                                                  if (false)
+                                                  if (true)
                                                     Padding(
                                                       padding:
                                                           EdgeInsetsDirectional
