@@ -2,6 +2,7 @@ import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/instant_timer.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,15 @@ class _BoothListWidgetState extends State<BoothListWidget>
     _model = createModel(context, () => BoothListModel());
 
     // On page load action.
-    SchedulerBinding.instance.addPostFrameCallback((_) async {});
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.instantTimer = InstantTimer.periodic(
+        duration: Duration(milliseconds: 500),
+        callback: (timer) async {
+          safeSetState(() {});
+        },
+        startImmediately: true,
+      );
+    });
 
     animationsMap.addAll({
       'containerOnPageLoadAnimation4': AnimationInfo(
