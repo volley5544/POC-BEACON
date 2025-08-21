@@ -58,30 +58,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
             startImmediately: true,
           );
         }),
-        Future(() async {
-          _model.instantTimer2 = InstantTimer.periodic(
-            duration: Duration(milliseconds: 5000),
-            callback: (timer) async {
-              await showDialog(
-                context: context,
-                builder: (alertDialogContext) {
-                  return AlertDialog(
-                    title: Text(FFAppState().beaconIdList.length.toString()),
-                    content: Text(functions
-                        .returnTextInList(FFAppState().beaconIdList.toList())!),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(alertDialogContext),
-                        child: Text('Ok'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-            startImmediately: true,
-          );
-        }),
+        Future(() async {}),
       ]);
     });
 
