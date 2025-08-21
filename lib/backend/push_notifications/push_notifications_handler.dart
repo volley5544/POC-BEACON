@@ -155,6 +155,8 @@ final parametersBuilderMap =
           'boothId': getParameter<int>(data, 'boothId'),
           'boothDocRef': await getDocumentParameter<BoothsRecord>(
               data, 'boothDocRef', BoothsRecord.fromSnapshot),
+          'boothDoc': await getDocumentParameter<BoothsRecord>(
+              data, 'boothDoc', BoothsRecord.fromSnapshot),
         },
       ),
   'SuccessInprocess': (data) async => ParameterData(

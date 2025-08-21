@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:octo_image/octo_image.dart';
+import 'package:provider/provider.dart';
 import 'booth_detail_model.dart';
 export 'booth_detail_model.dart';
 
@@ -21,12 +23,14 @@ class BoothDetailWidget extends StatefulWidget {
     required this.eventDocRef,
     required this.boothId,
     required this.boothDocRef,
+    required this.boothDoc,
   });
 
   final int? eventId;
   final DocumentReference? eventDocRef;
   final int? boothId;
   final BoothsRecord? boothDocRef;
+  final BoothsRecord? boothDoc;
 
   static String routeName = 'BoothDetail';
   static String routePath = '/boothDetail';
@@ -109,6 +113,8 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -238,7 +244,16 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 8.0, 0.0, 12.0),
                             child: Text(
-                              'อยู่ในระยะ xxx เมตร',
+                              functions
+                                          .returnIndexValueInList(
+                                              FFAppState()
+                                                  .beaconIdList
+                                                  .toList(),
+                                              widget.boothDoc?.deviceUuid)
+                                          .toString() !=
+                                      '-1'
+                                  ? 'อยู่ในระยะ ${FFAppState().beaconDistanceList.elementAtOrNull(functions.returnIndexValueInList(FFAppState().beaconIdList.toList(), widget.boothDoc?.deviceUuid)!)} m'
+                                  : 'ไม่อยู่ในระยะ',
                               style: FlutterFlowTheme.of(context)
                                   .labelMedium
                                   .override(

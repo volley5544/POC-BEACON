@@ -664,10 +664,15 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                 listViewBoothsRecord,
                                                 ParamType.Document,
                                               ),
+                                              'boothDoc': serializeParam(
+                                                listViewBoothsRecord,
+                                                ParamType.Document,
+                                              ),
                                             }.withoutNulls,
                                             extra: <String, dynamic>{
                                               'boothDocRef':
                                                   listViewBoothsRecord,
+                                              'boothDoc': listViewBoothsRecord,
                                             },
                                           );
                                         },

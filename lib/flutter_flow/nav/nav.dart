@@ -205,6 +205,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             asyncParams: {
               'boothDocRef':
                   getDoc(['events', 'booths'], BoothsRecord.fromSnapshot),
+              'boothDoc':
+                  getDoc(['events', 'booths'], BoothsRecord.fromSnapshot),
             },
             builder: (context, params) => NavBarPage(
                   initialPage: '',
@@ -225,6 +227,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                     ),
                     boothDocRef: params.getParam(
                       'boothDocRef',
+                      ParamType.Document,
+                    ),
+                    boothDoc: params.getParam(
+                      'boothDoc',
                       ParamType.Document,
                     ),
                   ),
