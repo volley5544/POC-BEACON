@@ -13,7 +13,7 @@ import 'package:dchs_flutter_beacon/dchs_flutter_beacon.dart';
 import '/backend/push_notifications/push_notifications_util.dart';
 import 'dart:async';
 
-Future<void> getBeaconDistanceAction() async {
+Future<void> getBeaconDistanceAction(Future Function()? setStateAction) async {
   //BuildContext context, Future Function()? setStateAction
   // Add your function code here!
   // WidgetsFlutterBinding.ensureInitialized();
@@ -54,8 +54,7 @@ Future<void> getBeaconDistanceAction() async {
           nearest.map((e) => e.accuracy.toStringAsFixed(2)).toList();
       FFAppState().beaconIdList = nearest.map((e) => e.proximityUUID).toList();
       // FFAppState().beaconNameList = nearest.map((e) => e.macAddress).toList();
-      //await setStateAction!();
-      safeSetState(() {});
+      await setStateAction!();
       /* niruemon.n comment ชั่วคราว 2035-06-05*/
       // triggerPushNotification(
       //   notificationTitle: 'Test Notification Title',
