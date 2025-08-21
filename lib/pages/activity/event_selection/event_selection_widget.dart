@@ -34,12 +34,7 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      await actions.getBeaconDistanceAction(
-        context,
-        () async {
-          safeSetState(() {});
-        },
-      );
+      await actions.getBeaconDistanceAction();
       _model.datetimeCurrent = getCurrentTimestamp;
       _model.datetimeCurrentEnd = getCurrentTimestamp;
       safeSetState(() {});
