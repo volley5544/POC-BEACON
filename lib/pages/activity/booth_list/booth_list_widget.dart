@@ -623,7 +623,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                     0,
                                     0,
                                     0,
-                                    50.0,
+                                    100.0,
                                   ),
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
