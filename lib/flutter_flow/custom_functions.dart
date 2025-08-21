@@ -71,3 +71,14 @@ int? returnIndexValueInList(
 ) {
   return inputList!.indexOf(value!);
 }
+
+String? returnTextInList(List<String>? inputList) {
+  String output = '';
+  if (inputList!.length == 0) {
+    return 'empty';
+  }
+  for (int i = 0; i < inputList!.length; i++) {
+    output = output + '${inputList![i]}\n';
+  }
+  return output;
+}

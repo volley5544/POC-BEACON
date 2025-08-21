@@ -8,6 +8,7 @@ class BoothListModel extends FlutterFlowModel<BoothListWidget> {
   ///  State fields for stateful widgets in this page.
 
   InstantTimer? instantTimer;
+  InstantTimer? instantTimer2;
   // Stores action output result for [Custom Action - checkPermissionsBeacon] action in Button widget.
   bool? buttonCheckPermissionBeaconOutput;
 
@@ -17,5 +18,6 @@ class BoothListModel extends FlutterFlowModel<BoothListWidget> {
   @override
   void dispose() {
     instantTimer?.cancel();
+    instantTimer2?.cancel();
   }
 }
