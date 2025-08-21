@@ -1,6 +1,7 @@
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,12 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
+      await actions.getBeaconDistanceAction(
+        context,
+        () async {
+          safeSetState(() {});
+        },
+      );
       _model.datetimeCurrent = getCurrentTimestamp;
       _model.datetimeCurrentEnd = getCurrentTimestamp;
       safeSetState(() {});
