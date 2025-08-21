@@ -7,6 +7,7 @@ import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -1001,22 +1002,58 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                   0.0,
                                                                   24.0,
                                                                   12.0),
-                                                      child: Container(
-                                                        width: double.infinity,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondaryBackground,
-                                                        ),
-                                                        child: Text(
-                                                          'proximityUUID : ${FFAppState().beaconIdList.isNotEmpty ? (listViewIndex == 0 ? FFAppState().beaconIdList.firstOrNull : FFAppState().beaconIdList.lastOrNull) : '-3'}',
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                font: GoogleFonts
-                                                                    .readexPro(
+                                                      child: InkWell(
+                                                        splashColor:
+                                                            Colors.transparent,
+                                                        focusColor:
+                                                            Colors.transparent,
+                                                        hoverColor:
+                                                            Colors.transparent,
+                                                        highlightColor:
+                                                            Colors.transparent,
+                                                        onTap: () async {
+                                                          await Clipboard.setData(ClipboardData(
+                                                              text: FFAppState()
+                                                                      .beaconIdList
+                                                                      .isNotEmpty
+                                                                  ? (listViewIndex ==
+                                                                          0
+                                                                      ? FFAppState()
+                                                                          .beaconIdList
+                                                                          .firstOrNull!
+                                                                      : FFAppState()
+                                                                          .beaconIdList
+                                                                          .lastOrNull!)
+                                                                  : '-3'));
+                                                        },
+                                                        child: Container(
+                                                          width:
+                                                              double.infinity,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .secondaryBackground,
+                                                          ),
+                                                          child: Text(
+                                                            'proximityUUID : ${FFAppState().beaconIdList.isNotEmpty ? (listViewIndex == 0 ? FFAppState().beaconIdList.firstOrNull : FFAppState().beaconIdList.lastOrNull) : '-3'}',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .readexPro(
+                                                                    fontWeight: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontWeight,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                                  ),
+                                                                  letterSpacing:
+                                                                      0.0,
                                                                   fontWeight: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyMedium
@@ -1026,17 +1063,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                       .bodyMedium
                                                                       .fontStyle,
                                                                 ),
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontWeight,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                              ),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
@@ -1049,22 +1076,51 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                   0.0,
                                                                   24.0,
                                                                   12.0),
-                                                      child: Container(
-                                                        width: double.infinity,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondaryBackground,
-                                                        ),
-                                                        child: Text(
-                                                          'deviceId : ${listViewBoothsRecord.hasDeviceUuid() ? listViewBoothsRecord.deviceUuid : '-3'}',
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                font: GoogleFonts
-                                                                    .readexPro(
+                                                      child: InkWell(
+                                                        splashColor:
+                                                            Colors.transparent,
+                                                        focusColor:
+                                                            Colors.transparent,
+                                                        hoverColor:
+                                                            Colors.transparent,
+                                                        highlightColor:
+                                                            Colors.transparent,
+                                                        onTap: () async {
+                                                          await Clipboard.setData(ClipboardData(
+                                                              text: listViewBoothsRecord
+                                                                      .hasDeviceUuid()
+                                                                  ? listViewBoothsRecord
+                                                                      .deviceUuid
+                                                                  : '-3'));
+                                                        },
+                                                        child: Container(
+                                                          width:
+                                                              double.infinity,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .secondaryBackground,
+                                                          ),
+                                                          child: Text(
+                                                            'deviceId : ${listViewBoothsRecord.hasDeviceUuid() ? listViewBoothsRecord.deviceUuid : '-3'}',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .readexPro(
+                                                                    fontWeight: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontWeight,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                                  ),
+                                                                  letterSpacing:
+                                                                      0.0,
                                                                   fontWeight: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyMedium
@@ -1074,17 +1130,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                       .bodyMedium
                                                                       .fontStyle,
                                                                 ),
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontWeight,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                              ),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
