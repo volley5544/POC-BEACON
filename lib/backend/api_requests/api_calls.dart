@@ -13,13 +13,15 @@ const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 /// Start RAS Group Code
 
 class RasGroup {
-  static String getBaseUrl() => 'https://3491823da145.ngrok-free.app';
+  static String getBaseUrl() => 'https://989fc6ebd6f8.ngrok-free.app';
   static Map<String, String> headers = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer test-token-123456789',
   };
   static GetEventByIdCall getEventByIdCall = GetEventByIdCall();
   static GetAllBoothsCall getAllBoothsCall = GetAllBoothsCall();
+  static SummaryParticipantsBoothCall summaryParticipantsBoothCall =
+      SummaryParticipantsBoothCall();
   static UpdateEventByIdCall updateEventByIdCall = UpdateEventByIdCall();
   static CreateEventCall createEventCall = CreateEventCall();
   static UpdateBoothsCall updateBoothsCall = UpdateBoothsCall();
@@ -72,6 +74,206 @@ class GetAllBoothsCall {
     return ApiManager.instance.makeApiCall(
       callName: 'getAllBooths',
       apiUrl: '${baseUrl}/booths',
+      callType: ApiCallType.POST,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer test-token-123456789',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  int? statusCode(dynamic response) => castToType<int>(getJsonField(
+        response,
+        r'''$.status_code''',
+      ));
+  String? statusMessage(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.status_message''',
+      ));
+  String? description(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.description''',
+      ));
+  List<BoothDataModelStruct>? data(dynamic response) => (getJsonField(
+        response,
+        r'''$.data''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => BoothDataModelStruct.maybeFromMap(x))
+          .withoutNulls
+          .toList();
+  List<String>? boothDocRef(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].id''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? boothId(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].booth_id''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<String>? boothName(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].booth_name''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<String>? boothDescription(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].description''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? notificationDistance(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].notification_distance''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List? associateEeventId(dynamic response) => getJsonField(
+        response,
+        r'''$.data[:].associated_event_id''',
+        true,
+      ) as List?;
+  List<String>? createdAt(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].created_at''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<String>? createdBy(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].created_by''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? isActive(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].is_active''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<String>? updatedAt(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].updated_at''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? eventId(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].event_id''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<String>? updatedBy(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].updated_by''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List? imagesObject(dynamic response) => getJsonField(
+        response,
+        r'''$.data[:].images''',
+        true,
+      ) as List?;
+  String? imagesId(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data[:].images[:].id''',
+      ));
+  List<String>? imagesStatus(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].status''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  String? imagesFilename(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data[:].images[:].file_name''',
+      ));
+  String? imagesFileurl(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data[:].images[:].file_url''',
+      ));
+  String? imagesFiletype(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data[:].images[:].file_type''',
+      ));
+  int? imagesSeq(dynamic response) => castToType<int>(getJsonField(
+        response,
+        r'''$.data[:].images[:].seq''',
+      ));
+  bool? imagesIsCover(dynamic response) => castToType<bool>(getJsonField(
+        response,
+        r'''$.data[:].images[:].is_cover''',
+      ));
+  int? imagesIsActive(dynamic response) => castToType<int>(getJsonField(
+        response,
+        r'''$.data[:].images[:].is_active''',
+      ));
+}
+
+class SummaryParticipantsBoothCall {
+  Future<ApiCallResponse> call({
+    String? authToken = 'test-token-123456789',
+    String? eventRef = 'YWMyuNxPlLwB7prVc920',
+  }) async {
+    final baseUrl = RasGroup.getBaseUrl();
+
+    final ffApiRequestBody = '''
+{
+  "event_ref": "${escapeStringForJson(eventRef)}"
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'summaryParticipantsBooth',
+      apiUrl: '${baseUrl}/activities/summary-participants-booth',
       callType: ApiCallType.POST,
       headers: {
         'Content-Type': 'application/json',
