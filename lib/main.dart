@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'auth/firebase_auth/firebase_user_provider.dart';
 import 'auth/firebase_auth/auth_util.dart';
 
@@ -12,15 +13,32 @@ import 'backend/push_notifications/push_notifications_util.dart';
 import 'backend/firebase/firebase_config.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
+import 'flutter_flow/nav/nav.dart';
+import 'index.dart';
+
+import '/custom_code/actions/index.dart' as actions;
+import 'package:provider/provider.dart';
+import 'package:flutter/gestures.dart';
+
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
+import 'auth/firebase_auth/firebase_user_provider.dart';
+import 'auth/firebase_auth/auth_util.dart';
+
+import 'backend/push_notifications/push_notifications_util.dart';
+import 'backend/firebase/firebase_config.dart';
+import 'flutter_flow/flutter_flow_util.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'index.dart';
 
-
-
-
 import 'package:dchs_flutter_beacon/dchs_flutter_beacon.dart';
 import '/custom_code/my_stream_service.dart';
+import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,6 +74,26 @@ void main() async {
     final regions = <Region>[
       Region(identifier: 'any'),
     ];
+
+    Map<String, dynamic> dataOutput = {};
+
+    try {
+      final eventsStream1 =
+          FirebaseFirestore.instance.collection('events').get().docs;
+
+      for (QueryDocumentSnapshot document in documents!) {
+        Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
+        if (data != null) {
+          dataOutput = data;
+        }
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+    print('dataOutput :  $dataOutput');
+    dynamic jsonOutput = jsonEncode(dataOutput);
+    return jsonOutput;
+
     final service = MyStreamService();
     service.startListening(
         flutterBeacon.ranging(regions)); // stays alive across all pages

@@ -40,6 +40,16 @@ class NotificationsRecord extends FirestoreRecord {
   DateTime? get sentAt => _sentAt;
   bool hasSentAt() => _sentAt != null;
 
+  // "event_id" field.
+  int? _eventId;
+  int get eventId => _eventId ?? 0;
+  bool hasEventId() => _eventId != null;
+
+  // "send_count" field.
+  int? _sendCount;
+  int get sendCount => _sendCount ?? 0;
+  bool hasSendCount() => _sendCount != null;
+
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
@@ -48,6 +58,8 @@ class NotificationsRecord extends FirestoreRecord {
     _title = snapshotData['title'] as String?;
     _body = snapshotData['body'] as String?;
     _sentAt = snapshotData['sent_at'] as DateTime?;
+    _eventId = castToType<int>(snapshotData['event_id']);
+    _sendCount = castToType<int>(snapshotData['send_count']);
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -95,6 +107,8 @@ Map<String, dynamic> createNotificationsRecordData({
   String? title,
   String? body,
   DateTime? sentAt,
+  int? eventId,
+  int? sendCount,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -103,6 +117,8 @@ Map<String, dynamic> createNotificationsRecordData({
       'title': title,
       'body': body,
       'sent_at': sentAt,
+      'event_id': eventId,
+      'send_count': sendCount,
     }.withoutNulls,
   );
 
@@ -119,12 +135,21 @@ class NotificationsRecordDocumentEquality
         e1?.boothId == e2?.boothId &&
         e1?.title == e2?.title &&
         e1?.body == e2?.body &&
-        e1?.sentAt == e2?.sentAt;
+        e1?.sentAt == e2?.sentAt &&
+        e1?.eventId == e2?.eventId &&
+        e1?.sendCount == e2?.sendCount;
   }
 
   @override
-  int hash(NotificationsRecord? e) => const ListEquality()
-      .hash([e?.toUid, e?.boothId, e?.title, e?.body, e?.sentAt]);
+  int hash(NotificationsRecord? e) => const ListEquality().hash([
+        e?.toUid,
+        e?.boothId,
+        e?.title,
+        e?.body,
+        e?.sentAt,
+        e?.eventId,
+        e?.sendCount
+      ]);
 
   @override
   bool isValidKey(Object? o) => o is NotificationsRecord;

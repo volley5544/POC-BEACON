@@ -8,6 +8,7 @@ class MyStreamService {
   MyStreamService._internal();
 
   StreamSubscription<RangingResult>? _streamRanging;
+  StreamSubscription? _subEvents;
 
   void startListening(Stream<RangingResult> myStream) {
     _streamRanging ??= myStream.listen((result) async {
@@ -23,6 +24,12 @@ class MyStreamService {
         //safeSetState((){});
       }
       // handle data
+    });
+  }
+
+  void listenEvent(Stream eventsStream) {
+    _subEvents ??= eventsStream.listen((data) {
+      print("Orders update: $data");
     });
   }
 
