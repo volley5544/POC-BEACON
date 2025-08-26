@@ -78,8 +78,11 @@ void main() async {
     Map<String, dynamic> dataOutput = {};
 
     try {
-      final eventsStream1 =
-          FirebaseFirestore.instance.collection('events').get().docs;
+      final eventsStream1 = FirebaseFirestore.instance
+          .collection('events')
+          .where('', isEqualTo: '')
+          .get()
+          .docs;
 
       for (QueryDocumentSnapshot document in documents!) {
         Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
