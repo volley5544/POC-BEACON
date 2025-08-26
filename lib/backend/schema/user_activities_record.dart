@@ -75,6 +75,16 @@ class UserActivitiesRecord extends FirestoreRecord {
   int get activityId => _activityId ?? 0;
   bool hasActivityId() => _activityId != null;
 
+  // "associated_event_id" field.
+  String? _associatedEventId;
+  String get associatedEventId => _associatedEventId ?? '';
+  bool hasAssociatedEventId() => _associatedEventId != null;
+
+  // "associated_booth_id" field.
+  String? _associatedBoothId;
+  String get associatedBoothId => _associatedBoothId ?? '';
+  bool hasAssociatedBoothId() => _associatedBoothId != null;
+
   void _initializeFields() {
     _uid = snapshotData['uid'] as String?;
     _eventId = snapshotData['event_id'] as String?;
@@ -88,6 +98,8 @@ class UserActivitiesRecord extends FirestoreRecord {
     _updatedAt = snapshotData['updated_at'] as DateTime?;
     _updatedBy = snapshotData['updated_by'] as String?;
     _activityId = castToType<int>(snapshotData['activity_id']);
+    _associatedEventId = snapshotData['associated_event_id'] as String?;
+    _associatedBoothId = snapshotData['associated_booth_id'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -137,6 +149,8 @@ Map<String, dynamic> createUserActivitiesRecordData({
   DateTime? updatedAt,
   String? updatedBy,
   int? activityId,
+  String? associatedEventId,
+  String? associatedBoothId,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -152,6 +166,8 @@ Map<String, dynamic> createUserActivitiesRecordData({
       'updated_at': updatedAt,
       'updated_by': updatedBy,
       'activity_id': activityId,
+      'associated_event_id': associatedEventId,
+      'associated_booth_id': associatedBoothId,
     }.withoutNulls,
   );
 
@@ -175,7 +191,9 @@ class UserActivitiesRecordDocumentEquality
         e1?.isActive == e2?.isActive &&
         e1?.updatedAt == e2?.updatedAt &&
         e1?.updatedBy == e2?.updatedBy &&
-        e1?.activityId == e2?.activityId;
+        e1?.activityId == e2?.activityId &&
+        e1?.associatedEventId == e2?.associatedEventId &&
+        e1?.associatedBoothId == e2?.associatedBoothId;
   }
 
   @override
@@ -191,7 +209,9 @@ class UserActivitiesRecordDocumentEquality
         e?.isActive,
         e?.updatedAt,
         e?.updatedBy,
-        e?.activityId
+        e?.activityId,
+        e?.associatedEventId,
+        e?.associatedBoothId
       ]);
 
   @override

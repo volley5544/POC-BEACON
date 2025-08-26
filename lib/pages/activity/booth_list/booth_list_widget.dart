@@ -826,16 +826,17 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                               : null;
 
                                                                           return Text(
-                                                                            textUserActivitiesRecord!.isCompleted
-                                                                                ? 'ทำกิจกรรมแล้ว'
-                                                                                : 'รอทำกิจกรรม',
+                                                                            valueOrDefault<String>(
+                                                                              textUserActivitiesRecord?.isCompleted == true ? 'ทำกิจกรรมแล้ว' : 'รอทำกิจกรรม',
+                                                                              'รอทำกิจกรรม',
+                                                                            ),
                                                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                   font: GoogleFonts.readexPro(
                                                                                     fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                                                                                     fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                                   ),
                                                                                   color: valueOrDefault<Color>(
-                                                                                    textUserActivitiesRecord.isCompleted ? FlutterFlowTheme.of(context).success : FlutterFlowTheme.of(context).error,
+                                                                                    textUserActivitiesRecord!.isCompleted ? FlutterFlowTheme.of(context).success : FlutterFlowTheme.of(context).error,
                                                                                     FlutterFlowTheme.of(context).error,
                                                                                   ),
                                                                                   letterSpacing: 0.0,
@@ -1096,7 +1097,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                   alignment: AlignmentDirectional(0.0, -1.0),
                                   child: Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 20.0, 0.0, 10.0),
+                                        0.0, 20.0, 0.0, 30.0),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment:

@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:dchs_flutter_beacon/dchs_flutter_beacon.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
 
 class MyStreamService {
   static final MyStreamService _instance = MyStreamService._internal();
@@ -9,6 +11,8 @@ class MyStreamService {
 
   StreamSubscription<RangingResult>? _streamRanging;
   StreamSubscription? _subEvents;
+
+  List<Map<String, dynamic>> eventDocs = [];
 
   void startListening(Stream<RangingResult> myStream) {
     _streamRanging ??= myStream.listen((result) async {
@@ -27,10 +31,21 @@ class MyStreamService {
     });
   }
 
-  void listenEvent(Stream eventsStream) {
-    _subEvents ??= eventsStream.listen((data) {
-      print("Orders update: $data");
+  void listenEvent() {
+    _subEvents = FirebaseFirestore.instance
+        .collection('events')
+        .where('is_active', isEqualTo: 0)
+        .snapshots()
+        .listen((snapshot) {
+      eventDocs = snapshot.docs.map((d) => d.data()).toList();
+      print("Collection1 updated: ${eventDocs.length} docs");
+      print('object');
+      // print('allEvent5544 : ${snapshot.length}');
     });
+
+    // for (var doc in snapshot.docs) {
+    //   print("Order: ${doc.id} => ${doc.data()}");
+    // }
   }
 
   void stopListening() {

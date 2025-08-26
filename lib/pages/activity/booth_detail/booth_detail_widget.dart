@@ -394,6 +394,10 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                           createdBy: currentUserReference?.path,
                                           isActive: 0,
                                           activityId: _model.counterActivity,
+                                          associatedEventId:
+                                              widget.eventDocRef?.id,
+                                          associatedBoothId:
+                                              widget.boothDocRef?.reference.id,
                                         ),
                                         ...mapToFirestore(
                                           {
@@ -414,6 +418,10 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                           createdBy: currentUserReference?.path,
                                           isActive: 0,
                                           activityId: _model.counterActivity,
+                                          associatedEventId:
+                                              widget.eventDocRef?.id,
+                                          associatedBoothId:
+                                              widget.boothDocRef?.reference.id,
                                         ),
                                         ...mapToFirestore(
                                           {

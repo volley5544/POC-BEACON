@@ -236,31 +236,35 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   ),
                 )),
         FFRoute(
-          name: SuccessInprocessWidget.routeName,
-          path: SuccessInprocessWidget.routePath,
-          asyncParams: {
-            'eventDocRef': getDoc(['events'], EventsRecord.fromSnapshot),
-          },
-          builder: (context, params) => SuccessInprocessWidget(
-            boothName: params.getParam(
-              'boothName',
-              ParamType.String,
-            ),
-            eventId: params.getParam(
-              'eventId',
-              ParamType.int,
-            ),
-            eventDocRef: params.getParam(
-              'eventDocRef',
-              ParamType.Document,
-            ),
-          ),
-        ),
+            name: SuccessInprocessWidget.routeName,
+            path: SuccessInprocessWidget.routePath,
+            asyncParams: {
+              'eventDocRef': getDoc(['events'], EventsRecord.fromSnapshot),
+            },
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SuccessInprocessWidget(
+                    boothName: params.getParam(
+                      'boothName',
+                      ParamType.String,
+                    ),
+                    eventId: params.getParam(
+                      'eventId',
+                      ParamType.int,
+                    ),
+                    eventDocRef: params.getParam(
+                      'eventDocRef',
+                      ParamType.Document,
+                    ),
+                  ),
+                )),
         FFRoute(
-          name: SuccessSurveyWidget.routeName,
-          path: SuccessSurveyWidget.routePath,
-          builder: (context, params) => SuccessSurveyWidget(),
-        ),
+            name: SuccessSurveyWidget.routeName,
+            path: SuccessSurveyWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SuccessSurveyWidget(),
+                )),
         FFRoute(
             name: SurveyWidget.routeName,
             path: SurveyWidget.routePath,
