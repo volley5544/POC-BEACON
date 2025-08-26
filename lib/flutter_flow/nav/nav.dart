@@ -528,6 +528,51 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                       collectionNamePath: ['events'],
                     ),
                   ),
+                )),
+        FFRoute(
+            name: BoothListCopy2Widget.routeName,
+            path: BoothListCopy2Widget.routePath,
+            asyncParams: {
+              'eventDocRef': getDoc(['events'], EventsRecord.fromSnapshot),
+            },
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: BoothListCopy2Widget(
+                    eventId: params.getParam(
+                      'eventId',
+                      ParamType.int,
+                    ),
+                    eventDocRef: params.getParam(
+                      'eventDocRef',
+                      ParamType.Document,
+                    ),
+                  ),
+                )),
+        FFRoute(
+            name: BoothListCopy3Widget.routeName,
+            path: BoothListCopy3Widget.routePath,
+            asyncParams: {
+              'eventDocRef': getDoc(['events'], EventsRecord.fromSnapshot),
+            },
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: BoothListCopy3Widget(
+                    eventId: params.getParam(
+                      'eventId',
+                      ParamType.int,
+                    ),
+                    eventDocRef: params.getParam(
+                      'eventDocRef',
+                      ParamType.Document,
+                    ),
+                  ),
+                )),
+        FFRoute(
+            name: SurveyCopyWidget.routeName,
+            path: SurveyCopyWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SurveyCopyWidget(),
                 ))
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

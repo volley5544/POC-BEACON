@@ -251,6 +251,21 @@ final parametersBuilderMap =
           'eventDocRef': getParameter<DocumentReference>(data, 'eventDocRef'),
         },
       ),
+  'BoothListCopy2': (data) async => ParameterData(
+        allParams: {
+          'eventId': getParameter<int>(data, 'eventId'),
+          'eventDocRef': await getDocumentParameter<EventsRecord>(
+              data, 'eventDocRef', EventsRecord.fromSnapshot),
+        },
+      ),
+  'BoothListCopy3': (data) async => ParameterData(
+        allParams: {
+          'eventId': getParameter<int>(data, 'eventId'),
+          'eventDocRef': await getDocumentParameter<EventsRecord>(
+              data, 'eventDocRef', EventsRecord.fromSnapshot),
+        },
+      ),
+  'SurveyCopy': ParameterData.none(),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

@@ -458,6 +458,88 @@ class SummaryParticipantsBoothCall {
         response,
         r'''$.data[:].images[:].is_active''',
       ));
+  List? sumBoothArr(dynamic response) => getJsonField(
+        response,
+        r'''$.data.booths''',
+        true,
+      ) as List?;
+  List<int>? sumBoothId(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.booths[:].booth_id''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<String>? sumBoothName(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.booths[:].booth_name''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? sumPerson(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.booths[:].total_participants''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<int>? boothidlist(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.data_list[:].booth_id_list''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List? datalist(dynamic response) => getJsonField(
+        response,
+        r'''$.data.data_list''',
+        true,
+      ) as List?;
+  List<String>? boothnamelist(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.data_list[:].booth_name_list''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? totalparticipantslist(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.data_list[:].total_participants_list''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<String>? colorslist(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.data_list[:].colors''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? seqlist(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.data_list[:].index_seq''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
 }
 
 class UpdateEventByIdCall {

@@ -151,16 +151,16 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                     children: [
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(
-                            0.0, 70.0, 0.0, 32.0),
+                            0.0, 10.0, 0.0, 10.0),
                         child: Container(
-                          width: 200.0,
+                          width: double.infinity,
                           height: 70.0,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16.0),
                           ),
                           alignment: AlignmentDirectional(0.0, 0.0),
                           child: Text(
-                            'แอฟสันทนาการ',
+                            'RAS',
                             style: FlutterFlowTheme.of(context)
                                 .displaySmall
                                 .override(

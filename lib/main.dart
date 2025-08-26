@@ -19,17 +19,14 @@ import 'index.dart';
 
 
 import 'package:dchs_flutter_beacon/dchs_flutter_beacon.dart';
-
 import '/custom_code/my_stream_service.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() async {
-  final regions = <Region>[
-    Region(identifier: 'any'),
-  ];
   WidgetsFlutterBinding.ensureInitialized();
   GoRouter.optionURLReflectsImperativeAPIs = true;
   usePathUrlStrategy();
-
+  print('1');
   final environmentValues = FFDevEnvironmentValues();
   await environmentValues.initialize();
 
@@ -39,19 +36,31 @@ void main() async {
 
   final appState = FFAppState(); // Initialize FFAppState
   await appState.initializePersistedState();
+  print('2');
 
   // Start final custom actions code
-  await actions.checkPermissionsBeacon();
-  await flutterBeacon.initializeScanning;
+  if (!kIsWeb) {
+    await actions.checkPermissionsBeacon();
+    await flutterBeacon.initializeScanning;
+  }
+  print('3');
+
   // End final custom actions code
 
   runApp(ChangeNotifierProvider(
     create: (context) => appState,
     child: MyApp(),
   ));
-  final service = MyStreamService();
-  service.startListening(
-      flutterBeacon.ranging(regions)); // stays alive across all pages
+  print('4');
+  if (!kIsWeb) {
+    final regions = <Region>[
+      Region(identifier: 'any'),
+    ];
+    final service = MyStreamService();
+    service.startListening(
+        flutterBeacon.ranging(regions)); // stays alive across all pages
+  }
+  print('5');
 }
 
 class MyApp extends StatefulWidget {

@@ -3,7 +3,6 @@ import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/instant_timer.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
@@ -15,11 +14,11 @@ import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:provider/provider.dart';
-import 'booth_list_model.dart';
-export 'booth_list_model.dart';
+import 'booth_list_copy3_model.dart';
+export 'booth_list_copy3_model.dart';
 
-class BoothListWidget extends StatefulWidget {
-  const BoothListWidget({
+class BoothListCopy3Widget extends StatefulWidget {
+  const BoothListCopy3Widget({
     super.key,
     int? eventId,
     this.eventDocRef,
@@ -28,16 +27,16 @@ class BoothListWidget extends StatefulWidget {
   final int eventId;
   final EventsRecord? eventDocRef;
 
-  static String routeName = 'BoothList';
-  static String routePath = '/boothList';
+  static String routeName = 'BoothListCopy3';
+  static String routePath = '/boothListCopy3';
 
   @override
-  State<BoothListWidget> createState() => _BoothListWidgetState();
+  State<BoothListCopy3Widget> createState() => _BoothListCopy3WidgetState();
 }
 
-class _BoothListWidgetState extends State<BoothListWidget>
+class _BoothListCopy3WidgetState extends State<BoothListCopy3Widget>
     with TickerProviderStateMixin {
-  late BoothListModel _model;
+  late BoothListCopy3Model _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -46,7 +45,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => BoothListModel());
+    _model = createModel(context, () => BoothListCopy3Model());
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
@@ -91,13 +90,41 @@ class _BoothListWidgetState extends State<BoothListWidget>
           ),
         ],
       ),
+      'buttonOnPageLoadAnimation': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          VisibilityEffect(duration: 350.ms),
+          FadeEffect(
+            curve: Curves.easeInOut,
+            delay: 350.0.ms,
+            duration: 300.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          ScaleEffect(
+            curve: Curves.easeInOut,
+            delay: 350.0.ms,
+            duration: 300.0.ms,
+            begin: Offset(0.8, 0.8),
+            end: Offset(1.0, 1.0),
+          ),
+          TiltEffect(
+            curve: Curves.easeInOut,
+            delay: 350.0.ms,
+            duration: 300.0.ms,
+            begin: Offset(1.222, 0),
+            end: Offset(0, 0),
+          ),
+          MoveEffect(
+            curve: Curves.easeInOut,
+            delay: 350.0.ms,
+            duration: 300.0.ms,
+            begin: Offset(0.0, 40.0),
+            end: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
     });
-    setupAnimations(
-      animationsMap.values.where((anim) =>
-          anim.trigger == AnimationTrigger.onActionTrigger ||
-          !anim.applyInitialState),
-      this,
-    );
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -649,12 +676,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                               FFAppState().beaconIdList.toList(),
                                                                               listViewBoothsRecord.deviceUuid) !=
                                                                           -1
-                                                                      ? ((String beaconDistance, int notificationDistance) {
-                                                                          return double.parse(beaconDistance) <=
-                                                                              double.parse('$notificationDistance');
-                                                                        }(FFAppState().beaconDistanceList.elementAtOrNull(functions.returnIndexValueInList(FFAppState().beaconIdList.toList(), listViewBoothsRecord.deviceUuid)!)!, listViewBoothsRecord.notificationDistance)
-                                                                          ? 'อยู่ในระยะ ${FFAppState().beaconDistanceList.elementAtOrNull(functions.returnIndexValueInList(FFAppState().beaconIdList.toList(), listViewBoothsRecord.deviceUuid)!)} m'
-                                                                          : 'ไม่อยู่ในระยะ')
+                                                                      ? 'อยู่ในระยะ ${FFAppState().beaconDistanceList.elementAtOrNull(functions.returnIndexValueInList(FFAppState().beaconIdList.toList(), listViewBoothsRecord.deviceUuid)!)} m'
                                                                       : 'ไม่อยู่ในระยะ',
                                                                   style: FlutterFlowTheme.of(
                                                                           context)
@@ -1074,113 +1096,6 @@ class _BoothListWidgetState extends State<BoothListWidget>
                             ),
                           ).animateOnPageLoad(
                               animationsMap['containerOnPageLoadAnimation2']!),
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        height: 120.0,
-                        decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                        ),
-                        alignment: AlignmentDirectional(0.0, 1.0),
-                        child: Align(
-                          alignment: AlignmentDirectional(0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Expanded(
-                                child: Align(
-                                  alignment: AlignmentDirectional(0.0, -1.0),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 20.0, 0.0, 10.0),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Flexible(
-                                          child: Align(
-                                            alignment:
-                                                AlignmentDirectional(0.0, 1.0),
-                                            child: Padding(
-                                              padding: EdgeInsets.all(12.0),
-                                              child: FFButtonWidget(
-                                                onPressed: () async {
-                                                  if (Navigator.of(context)
-                                                      .canPop()) {
-                                                    context.pop();
-                                                  }
-                                                  context.pushNamed(
-                                                      SurveyWidget.routeName);
-                                                },
-                                                text: 'ประเมินกิจกรรม',
-                                                icon: Icon(
-                                                  Icons.star_rate_rounded,
-                                                  size: 24.0,
-                                                ),
-                                                options: FFButtonOptions(
-                                                  height: 50.0,
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          16.0, 0.0, 16.0, 0.0),
-                                                  iconPadding:
-                                                      EdgeInsets.all(0.0),
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primary,
-                                                  textStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleSmall
-                                                          .override(
-                                                            font: GoogleFonts
-                                                                .readexPro(
-                                                              fontWeight:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .titleSmall
-                                                                      .fontWeight,
-                                                              fontStyle:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .titleSmall
-                                                                      .fontStyle,
-                                                            ),
-                                                            color: Colors.white,
-                                                            letterSpacing: 0.0,
-                                                            fontWeight:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .fontWeight,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .fontStyle,
-                                                          ),
-                                                  elevation: 0.0,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          24.0),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
                         ),
                       ),
                     ],

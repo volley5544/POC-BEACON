@@ -10,9 +10,15 @@ import 'package:flutter/material.dart';
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
 import 'package:permission_handler/permission_handler.dart';
+import 'dart:io' show Platform;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 Future<bool> checkPermissionsBeacon() async {
   // Add your function code here!
+  if (kIsWeb) {
+    return false;
+  }
+
   await Permission.bluetooth.request();
   await Permission.bluetoothScan.request();
   await Permission.bluetoothConnect.request();
