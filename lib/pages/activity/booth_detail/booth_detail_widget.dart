@@ -46,6 +46,7 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
   late BoothDetailModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  LatLng? currentUserLocationValue;
 
   @override
   void initState() {
@@ -445,6 +446,10 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                 onPressed: _model.isComplete
                                     ? null
                                     : () async {
+                                        currentUserLocationValue =
+                                            await getCurrentUserLocation(
+                                                defaultLocation:
+                                                    LatLng(0.0, 0.0));
                                         var _shouldSetState = false;
                                         var confirmDialogResponse =
                                             await showDialog<bool>(
@@ -487,12 +492,12 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                               _model.counterActivity! + 1;
                                           safeSetState(() {});
 
-                                          var userActivitiesRecordReference =
-                                              UserActivitiesRecord.collection
-                                                  .doc();
-                                          await userActivitiesRecordReference
+                                          var userActivityRecordReference =
+                                              UserActivityRecord.createDoc(
+                                                  currentUserReference!);
+                                          await userActivityRecordReference
                                               .set({
-                                            ...createUserActivitiesRecordData(
+                                            ...createUserActivityRecordData(
                                               uid: currentUserUid,
                                               eventId:
                                                   widget.eventId?.toString(),
@@ -508,6 +513,13 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                                   widget.eventDocRef?.id,
                                               associatedBoothId: widget
                                                   .boothDocRef?.reference.id,
+                                              checkInLocation:
+                                                  currentUserLocationValue,
+                                              isSurveyed: false,
+                                              boothName:
+                                                  widget.boothDoc?.boothName,
+                                              updatedBy:
+                                                  currentUserReference?.path,
                                             ),
                                             ...mapToFirestore(
                                               {
@@ -515,13 +527,15 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                                     .serverTimestamp(),
                                                 'created_at': FieldValue
                                                     .serverTimestamp(),
+                                                'updated_at': FieldValue
+                                                    .serverTimestamp(),
                                               },
                                             ),
                                           });
                                           _model.saveActivity =
-                                              UserActivitiesRecord
+                                              UserActivityRecord
                                                   .getDocumentFromData({
-                                            ...createUserActivitiesRecordData(
+                                            ...createUserActivityRecordData(
                                               uid: currentUserUid,
                                               eventId:
                                                   widget.eventId?.toString(),
@@ -537,14 +551,22 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                                   widget.eventDocRef?.id,
                                               associatedBoothId: widget
                                                   .boothDocRef?.reference.id,
+                                              checkInLocation:
+                                                  currentUserLocationValue,
+                                              isSurveyed: false,
+                                              boothName:
+                                                  widget.boothDoc?.boothName,
+                                              updatedBy:
+                                                  currentUserReference?.path,
                                             ),
                                             ...mapToFirestore(
                                               {
                                                 'check_in_time': DateTime.now(),
                                                 'created_at': DateTime.now(),
+                                                'updated_at': DateTime.now(),
                                               },
                                             ),
-                                          }, userActivitiesRecordReference);
+                                          }, userActivityRecordReference);
                                           _shouldSetState = true;
                                           if (Navigator.of(context).canPop()) {
                                             context.pop();

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '/backend/backend.dart';
-import '/backend/schema/structs/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 
@@ -21,6 +20,9 @@ class FFAppState extends ChangeNotifier {
     prefs = await SharedPreferences.getInstance();
     _safeInit(() {
       _token = prefs.getString('ff_token') ?? _token;
+    });
+    _safeInit(() {
+      _userDocRef = prefs.getString('ff_userDocRef')?.ref ?? _userDocRef;
     });
   }
 
@@ -208,6 +210,15 @@ class FFAppState extends ChangeNotifier {
 
   void insertAtIndexInBeaconDistanceList(int index, String value) {
     beaconDistanceList.insert(index, value);
+  }
+
+  DocumentReference? _userDocRef;
+  DocumentReference? get userDocRef => _userDocRef;
+  set userDocRef(DocumentReference? value) {
+    _userDocRef = value;
+    value != null
+        ? prefs.setString('ff_userDocRef', value.path)
+        : prefs.remove('ff_userDocRef');
   }
 }
 

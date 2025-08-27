@@ -83,3 +83,12 @@ String? returnTextInList(List<String>? inputList) {
   }
   return output;
 }
+
+List<String>? generateDefaultList(
+  String? defaultValue,
+  int? length,
+) {
+  List<String> outputList = List.filled(length!, "${defaultValue!}");
+
+  return outputList;
+}

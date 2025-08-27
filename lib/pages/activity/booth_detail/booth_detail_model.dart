@@ -32,7 +32,7 @@ class BoothDetailModel extends FlutterFlowModel<BoothDetailWidget> {
   // Stores action output result for [Firestore Query - Query a collection] action in ButtonSubmit widget.
   int? countRows;
   // Stores action output result for [Backend Call - Create Document] action in ButtonSubmit widget.
-  UserActivitiesRecord? saveActivity;
+  UserActivityRecord? saveActivity;
 
   @override
   void initState(BuildContext context) {}

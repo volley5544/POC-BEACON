@@ -67,6 +67,18 @@ service cloud.firestore {
       allow delete: if request.auth != null;
     }
 
+    match /users/{parent}/UserActivity/{document} {
+      allow create: if request.auth != null;
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+      allow delete: if request.auth != null;
+    }
+
+    match /{path=**}/UserActivity/{document} {
+      allow read: if request.auth != null;
+    }
+
+
     match /ff_user_push_notifications/{id} {
       allow read, update, delete: if false;
       allow create: if /databases/$(database)/documents/users/$(request.auth.uid) == request.resource.data.sender;
