@@ -33,9 +33,7 @@ class _PracticePageWidgetState extends State<PracticePageWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.testApiOutput = await TestApiCallCall.call(
-        text: 'dskfjgd',
-      );
+      _model.testApiOutput = await TestApiCallCall.call();
 
       if ('${getJsonField(
             (_model.testApiOutput?.jsonBody ?? ''),

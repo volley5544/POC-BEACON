@@ -168,7 +168,12 @@ final parametersBuilderMap =
         },
       ),
   'SuccessSurvey': ParameterData.none(),
-  'Survey': ParameterData.none(),
+  'Survey': (data) async => ParameterData(
+        allParams: {
+          'uid': getParameter<String>(data, 'uid'),
+          'eventRef': getParameter<String>(data, 'eventRef'),
+        },
+      ),
   'SettingEventList': (data) async => ParameterData(
         allParams: {
           'isActive': getParameter<int>(data, 'isActive'),

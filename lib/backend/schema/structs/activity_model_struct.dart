@@ -13,10 +13,12 @@ class ActivityModelStruct extends FFFirebaseStruct {
     int? boothId,
     List<ActivityModelStruct>? boothName,
     List<ActivityModelStruct>? totalParticipants,
+    List<String>? boothList,
     FirestoreUtilData firestoreUtilData = const FirestoreUtilData(),
   })  : _boothId = boothId,
         _boothName = boothName,
         _totalParticipants = totalParticipants,
+        _boothList = boothList,
         super(firestoreUtilData);
 
   // "booth_id" field.
@@ -52,6 +54,17 @@ class ActivityModelStruct extends FFFirebaseStruct {
 
   bool hasTotalParticipants() => _totalParticipants != null;
 
+  // "boothList" field.
+  List<String>? _boothList;
+  List<String> get boothList => _boothList ?? const [];
+  set boothList(List<String>? val) => _boothList = val;
+
+  void updateBoothList(Function(List<String>) updateFn) {
+    updateFn(_boothList ??= []);
+  }
+
+  bool hasBoothList() => _boothList != null;
+
   static ActivityModelStruct fromMap(Map<String, dynamic> data) =>
       ActivityModelStruct(
         boothId: castToType<int>(data['booth_id']),
@@ -63,6 +76,7 @@ class ActivityModelStruct extends FFFirebaseStruct {
           data['total_participants'],
           ActivityModelStruct.fromMap,
         ),
+        boothList: getDataList(data['boothList']),
       );
 
   static ActivityModelStruct? maybeFromMap(dynamic data) => data is Map
@@ -74,6 +88,7 @@ class ActivityModelStruct extends FFFirebaseStruct {
         'booth_name': _boothName?.map((e) => e.toMap()).toList(),
         'total_participants':
             _totalParticipants?.map((e) => e.toMap()).toList(),
+        'boothList': _boothList,
       }.withoutNulls;
 
   @override
@@ -90,6 +105,11 @@ class ActivityModelStruct extends FFFirebaseStruct {
         'total_participants': serializeParam(
           _totalParticipants,
           ParamType.DataStruct,
+          isList: true,
+        ),
+        'boothList': serializeParam(
+          _boothList,
+          ParamType.String,
           isList: true,
         ),
       }.withoutNulls;
@@ -113,6 +133,11 @@ class ActivityModelStruct extends FFFirebaseStruct {
           true,
           structBuilder: ActivityModelStruct.fromSerializableMap,
         ),
+        boothList: deserializeParam<String>(
+          data['boothList'],
+          ParamType.String,
+          true,
+        ),
       );
 
   @override
@@ -124,12 +149,13 @@ class ActivityModelStruct extends FFFirebaseStruct {
     return other is ActivityModelStruct &&
         boothId == other.boothId &&
         listEquality.equals(boothName, other.boothName) &&
-        listEquality.equals(totalParticipants, other.totalParticipants);
+        listEquality.equals(totalParticipants, other.totalParticipants) &&
+        listEquality.equals(boothList, other.boothList);
   }
 
   @override
-  int get hashCode =>
-      const ListEquality().hash([boothId, boothName, totalParticipants]);
+  int get hashCode => const ListEquality()
+      .hash([boothId, boothName, totalParticipants, boothList]);
 }
 
 ActivityModelStruct createActivityModelStruct({

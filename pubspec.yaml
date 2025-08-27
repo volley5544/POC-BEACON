@@ -70,6 +70,7 @@ dependencies:
       url: https://github.com/FlutterFlow/flutter_credit_card
       ref: v4.0.2
   flutter_plugin_android_lifecycle: 2.0.28
+  flutter_rating_bar: 4.0.1
   fluttertoast: ^8.2.6
   font_awesome_flutter: 10.7.0
   from_css_color: 2.0.0
@@ -124,6 +125,7 @@ dependencies:
   sign_in_with_apple: 7.0.1
   sign_in_with_apple_platform_interface: 2.0.0
   sign_in_with_apple_web: 3.0.0
+  smooth_page_indicator: 1.1.0
   sqflite: 2.3.3+1
   sqflite_common: 2.5.4+3
   stream_transform: 2.1.0

@@ -6,17 +6,21 @@ import 'package:flutter/material.dart';
 class SurveyModel extends FlutterFlowModel<SurveyWidget> {
   ///  State fields for stateful widgets in this page.
 
-  // State field(s) for TextField widget.
-  FocusNode? textFieldFocusNode;
-  TextEditingController? textController;
-  String? Function(BuildContext, String?)? textControllerValidator;
+  // State field(s) for RatingBar widget.
+  double? ratingBarValue1;
+  // State field(s) for remark widget.
+  FocusNode? remarkFocusNode;
+  TextEditingController? remarkTextController;
+  String? Function(BuildContext, String?)? remarkTextControllerValidator;
+  // State field(s) for RatingBar widget.
+  double? ratingBarValue2;
 
   @override
   void initState(BuildContext context) {}
 
   @override
   void dispose() {
-    textFieldFocusNode?.dispose();
-    textController?.dispose();
+    remarkFocusNode?.dispose();
+    remarkTextController?.dispose();
   }
 }

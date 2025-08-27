@@ -21,6 +21,14 @@ class BoothDetailModel extends FlutterFlowModel<BoothDetailWidget> {
   // Stores action output result for [Firestore Query - Query a collection] action in BoothDetail widget.
   EventsRecord? dataEvent;
   InstantTimer? instantTimer;
+  // State field(s) for PageView widget.
+  PageController? pageViewController;
+
+  int get pageViewCurrentIndex => pageViewController != null &&
+          pageViewController!.hasClients &&
+          pageViewController!.page != null
+      ? pageViewController!.page!.round()
+      : 0;
   // Stores action output result for [Firestore Query - Query a collection] action in ButtonSubmit widget.
   int? countRows;
   // Stores action output result for [Backend Call - Create Document] action in ButtonSubmit widget.

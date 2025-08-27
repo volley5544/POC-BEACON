@@ -1374,7 +1374,18 @@ class _BoothListCopyWidgetState extends State<BoothListCopyWidget>
                                           child: FFButtonWidget(
                                             onPressed: () async {
                                               context.pushNamed(
-                                                  SurveyWidget.routeName);
+                                                SurveyWidget.routeName,
+                                                queryParameters: {
+                                                  'uid': serializeParam(
+                                                    '',
+                                                    ParamType.String,
+                                                  ),
+                                                  'eventRef': serializeParam(
+                                                    '',
+                                                    ParamType.String,
+                                                  ),
+                                                }.withoutNulls,
+                                              );
                                             },
                                             text: 'ทำแบบสอบถาม',
                                             options: FFButtonOptions(

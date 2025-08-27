@@ -270,7 +270,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             path: SurveyWidget.routePath,
             builder: (context, params) => NavBarPage(
                   initialPage: '',
-                  page: SurveyWidget(),
+                  page: SurveyWidget(
+                    uid: params.getParam(
+                      'uid',
+                      ParamType.String,
+                    ),
+                    eventRef: params.getParam(
+                      'eventRef',
+                      ParamType.String,
+                    ),
+                  ),
                 )),
         FFRoute(
             name: SettingEventListWidget.routeName,

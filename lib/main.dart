@@ -59,7 +59,7 @@ void main() async {
     final service = MyStreamService();
     service.startListening(
         flutterBeacon.ranging(regions)); // stays alive across all pages
-    service.listenEvent();
+    service.listenEventWithBooths();
   }
   print('5');
 }
