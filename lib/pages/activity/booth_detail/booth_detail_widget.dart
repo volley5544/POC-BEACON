@@ -499,10 +499,8 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                               .set({
                                             ...createUserActivityRecordData(
                                               uid: currentUserUid,
-                                              eventId:
-                                                  widget.eventId?.toString(),
-                                              boothId:
-                                                  widget.boothId?.toString(),
+                                              eventId: widget.eventId,
+                                              boothId: widget.boothId,
                                               isCompleted: true,
                                               createdBy:
                                                   currentUserReference?.path,
@@ -537,10 +535,8 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                                   .getDocumentFromData({
                                             ...createUserActivityRecordData(
                                               uid: currentUserUid,
-                                              eventId:
-                                                  widget.eventId?.toString(),
-                                              boothId:
-                                                  widget.boothId?.toString(),
+                                              eventId: widget.eventId,
+                                              boothId: widget.boothId,
                                               isCompleted: true,
                                               createdBy:
                                                   currentUserReference?.path,

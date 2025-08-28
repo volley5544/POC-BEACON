@@ -198,7 +198,7 @@ class _EmojiRatingComponentWidgetState
                               duration: Duration(milliseconds: 600),
                               curve: Curves.bounceOut,
                               child: Text(
-                                'ควรปรับปรุง',
+                                'พอใช้',
                               ),
                             )),
                           ),
@@ -272,7 +272,7 @@ class _EmojiRatingComponentWidgetState
                               duration: Duration(milliseconds: 600),
                               curve: Curves.bounceOut,
                               child: Text(
-                                'ควรปรับปรุง',
+                                'ปานกลาง',
                               ),
                             )),
                           ),
@@ -346,7 +346,7 @@ class _EmojiRatingComponentWidgetState
                               duration: Duration(milliseconds: 600),
                               curve: Curves.bounceOut,
                               child: Text(
-                                'ควรปรับปรุง',
+                                'ดี',
                               ),
                             )),
                           ),
@@ -420,7 +420,7 @@ class _EmojiRatingComponentWidgetState
                               duration: Duration(milliseconds: 600),
                               curve: Curves.bounceOut,
                               child: Text(
-                                'ควรปรับปรุง',
+                                'ดีมาก',
                               ),
                             )),
                           ),

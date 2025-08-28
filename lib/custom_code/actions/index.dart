@@ -12,3 +12,5 @@ export 'upload_file_firebase_storage.dart' show uploadFileFirebaseStorage;
 export 'upload_multiple_file_firebase_storage.dart'
     show uploadMultipleFileFirebaseStorage;
 export 'get_data_from_collection.dart' show getDataFromCollection;
+export 'beacon_background_service_action.dart'
+    show beaconBackgroundServiceAction;

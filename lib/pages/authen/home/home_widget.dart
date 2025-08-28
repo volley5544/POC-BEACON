@@ -69,6 +69,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
       );
 
       setDarkModeSetting(context, ThemeMode.light);
+      await actions.beaconBackgroundServiceAction();
       _model.dataUser = await queryUsersRecordOnce(
         queryBuilder: (usersRecord) => usersRecord.where(
           'uid',

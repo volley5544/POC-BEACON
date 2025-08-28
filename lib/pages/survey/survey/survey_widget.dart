@@ -21,11 +21,13 @@ class SurveyWidget extends StatefulWidget {
   const SurveyWidget({
     super.key,
     this.uid,
-    this.eventRef,
+    required this.eventRef,
+    required this.eventId,
   });
 
   final String? uid;
-  final String? eventRef;
+  final EventsRecord? eventRef;
+  final int? eventId;
 
   static String routeName = 'Survey';
   static String routePath = '/survey';
@@ -181,8 +183,8 @@ class _SurveyWidgetState extends State<SurveyWidget>
                     color: FlutterFlowTheme.of(context).secondaryText,
                     size: 30.0,
                   ),
-                  onPressed: () async {
-                    context.pushNamed(BoothListWidget.routeName);
+                  onPressed: () {
+                    print('IconButton pressed ...');
                   },
                 ),
               ),
@@ -231,7 +233,7 @@ class _SurveyWidgetState extends State<SurveyWidget>
                                               EdgeInsetsDirectional.fromSTEB(
                                                   16.0, 12.0, 0.0, 0.0),
                                           child: Text(
-                                            listBoothsItem.boothId,
+                                            listBoothsItem.boothId.toString(),
                                             style: FlutterFlowTheme.of(context)
                                                 .labelMedium
                                                 .override(
@@ -394,10 +396,8 @@ class _SurveyWidgetState extends State<SurveyWidget>
                                       isSurveyed: true,
                                       surveyData: createSurveyDataModelStruct(
                                         uid: currentLoop1Item.uid,
-                                        eventId:
-                                            int.parse(currentLoop1Item.eventId),
-                                        boothId:
-                                            int.parse(currentLoop1Item.boothId),
+                                        eventId: currentLoop1Item.eventId,
+                                        boothId: currentLoop1Item.boothId,
                                         rating: int.parse((_model.scoreList
                                             .elementAtOrNull(loop1Index)!)),
                                         feedback: _model
@@ -421,8 +421,22 @@ class _SurveyWidgetState extends State<SurveyWidget>
                                   if (Navigator.of(context).canPop()) {
                                     context.pop();
                                   }
-                                  context
-                                      .pushNamed(SuccessSurveyWidget.routeName);
+                                  context.pushNamed(
+                                    SuccessSurveyWidget.routeName,
+                                    queryParameters: {
+                                      'eventId': serializeParam(
+                                        widget.eventId,
+                                        ParamType.int,
+                                      ),
+                                      'eventRef': serializeParam(
+                                        widget.eventRef,
+                                        ParamType.Document,
+                                      ),
+                                    }.withoutNulls,
+                                    extra: <String, dynamic>{
+                                      'eventRef': widget.eventRef,
+                                    },
+                                  );
                                 },
                                 text: 'ส่ง',
                                 options: FFButtonOptions(

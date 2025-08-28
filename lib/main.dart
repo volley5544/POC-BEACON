@@ -19,7 +19,7 @@ import 'index.dart';
 
 
 import 'package:dchs_flutter_beacon/dchs_flutter_beacon.dart';
-import '/custom_code/my_stream_service.dart';
+// import '/custom_code/my_stream_service.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() async {
@@ -52,15 +52,16 @@ void main() async {
     child: MyApp(),
   ));
   print('4');
-  if (!kIsWeb) {
-    final regions = <Region>[
-      Region(identifier: 'any'),
-    ];
-    final service = MyStreamService();
-    service.startListening(
-        flutterBeacon.ranging(regions)); // stays alive across all pages
-    service.listenEventWithBooths();
-  }
+  // if (!kIsWeb) {
+  //   final regions = <Region>[
+  //     Region(identifier: 'any'),
+  //   ];
+  //   final service = MyStreamService();
+  //   service.startListening(
+  //       flutterBeacon.ranging(regions)); // stays alive across all pages
+  //   service.listenEventWithBooths();
+  //
+  // }
   print('5');
 }
 

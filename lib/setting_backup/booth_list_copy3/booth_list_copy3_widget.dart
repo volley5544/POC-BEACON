@@ -363,7 +363,7 @@ class _BoothListCopy3WidgetState extends State<BoothListCopy3Widget>
                                                                           ?.elementAtOrNull(
                                                                               summaryIndex))
                                                                       ?.toString(),
-                                                                  '-',
+                                                                  '0',
                                                                 ),
                                                                 style: FlutterFlowTheme.of(
                                                                         context)

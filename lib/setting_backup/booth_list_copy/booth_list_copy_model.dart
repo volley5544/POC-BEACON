@@ -1,5 +1,4 @@
 import '/flutter_flow/flutter_flow_util.dart';
-import '/index.dart';
 import 'booth_list_copy_widget.dart' show BoothListCopyWidget;
 import 'package:flutter/material.dart';
 

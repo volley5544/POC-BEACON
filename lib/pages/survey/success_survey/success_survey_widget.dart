@@ -1,3 +1,4 @@
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -11,7 +12,14 @@ import 'success_survey_model.dart';
 export 'success_survey_model.dart';
 
 class SuccessSurveyWidget extends StatefulWidget {
-  const SuccessSurveyWidget({super.key});
+  const SuccessSurveyWidget({
+    super.key,
+    required this.eventId,
+    required this.eventRef,
+  });
+
+  final int? eventId;
+  final EventsRecord? eventRef;
 
   static String routeName = 'SuccessSurvey';
   static String routePath = '/successSurvey';
@@ -401,10 +409,17 @@ class _SuccessSurveyWidgetState extends State<SuccessSurveyWidget>
                                   BoothListWidget.routeName,
                                   queryParameters: {
                                     'eventId': serializeParam(
-                                      0,
+                                      widget.eventId,
                                       ParamType.int,
                                     ),
+                                    'eventDocRef': serializeParam(
+                                      widget.eventRef,
+                                      ParamType.Document,
+                                    ),
                                   }.withoutNulls,
+                                  extra: <String, dynamic>{
+                                    'eventDocRef': widget.eventRef,
+                                  },
                                 );
                               },
                               text: 'กลับหน้ากิจกรรม',

@@ -23,7 +23,7 @@ class BoothListWidget extends StatefulWidget {
   const BoothListWidget({
     super.key,
     int? eventId,
-    this.eventDocRef,
+    required this.eventDocRef,
   }) : this.eventId = eventId ?? 1;
 
   final int eventId;
@@ -365,7 +365,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                           ?.elementAtOrNull(
                                                                               summaryIndex))
                                                                       ?.toString(),
-                                                                  '-',
+                                                                  '0',
                                                                 ),
                                                                 style: FlutterFlowTheme.of(
                                                                         context)
@@ -678,12 +678,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                               FFAppState().beaconIdList.toList(),
                                                                               listViewBoothsRecord.deviceUuid) !=
                                                                           -1
-                                                                      ? ((String beaconDistance, int notificationDistance) {
-                                                                          return double.parse(beaconDistance) <=
-                                                                              double.parse('$notificationDistance');
-                                                                        }(FFAppState().beaconDistanceList.elementAtOrNull(functions.returnIndexValueInList(FFAppState().beaconIdList.toList(), listViewBoothsRecord.deviceUuid)!)!, listViewBoothsRecord.notificationDistance)
-                                                                          ? 'อยู่ในระยะ ${FFAppState().beaconDistanceList.elementAtOrNull(functions.returnIndexValueInList(FFAppState().beaconIdList.toList(), listViewBoothsRecord.deviceUuid)!)} m'
-                                                                          : 'ไม่อยู่ในระยะ')
+                                                                      ? 'อยู่ในระยะ ${FFAppState().beaconDistanceList.elementAtOrNull(functions.returnIndexValueInList(FFAppState().beaconIdList.toList(), listViewBoothsRecord.deviceUuid)!)} m'
                                                                       : 'ไม่อยู่ในระยะ',
                                                                   style: FlutterFlowTheme.of(
                                                                           context)
@@ -1146,11 +1141,18 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                     ParamType.String,
                                                   ),
                                                   'eventRef': serializeParam(
-                                                    widget.eventDocRef
-                                                        ?.reference.id,
-                                                    ParamType.String,
+                                                    widget.eventDocRef,
+                                                    ParamType.Document,
+                                                  ),
+                                                  'eventId': serializeParam(
+                                                    widget.eventId,
+                                                    ParamType.int,
                                                   ),
                                                 }.withoutNulls,
+                                                extra: <String, dynamic>{
+                                                  'eventRef':
+                                                      widget.eventDocRef,
+                                                },
                                               );
                                             },
                                             text: 'ประเมินกิจกรรม',

@@ -1,5 +1,4 @@
 import '/flutter_flow/flutter_flow_util.dart';
-import '/index.dart';
 import 'survey_copy_widget.dart' show SurveyCopyWidget;
 import 'package:flutter/material.dart';
 

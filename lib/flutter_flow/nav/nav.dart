@@ -261,13 +261,28 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
             name: SuccessSurveyWidget.routeName,
             path: SuccessSurveyWidget.routePath,
+            asyncParams: {
+              'eventRef': getDoc(['events'], EventsRecord.fromSnapshot),
+            },
             builder: (context, params) => NavBarPage(
                   initialPage: '',
-                  page: SuccessSurveyWidget(),
+                  page: SuccessSurveyWidget(
+                    eventId: params.getParam(
+                      'eventId',
+                      ParamType.int,
+                    ),
+                    eventRef: params.getParam(
+                      'eventRef',
+                      ParamType.Document,
+                    ),
+                  ),
                 )),
         FFRoute(
             name: SurveyWidget.routeName,
             path: SurveyWidget.routePath,
+            asyncParams: {
+              'eventRef': getDoc(['events'], EventsRecord.fromSnapshot),
+            },
             builder: (context, params) => NavBarPage(
                   initialPage: '',
                   page: SurveyWidget(
@@ -277,7 +292,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                     ),
                     eventRef: params.getParam(
                       'eventRef',
-                      ParamType.String,
+                      ParamType.Document,
+                    ),
+                    eventId: params.getParam(
+                      'eventId',
+                      ParamType.int,
                     ),
                   ),
                 )),

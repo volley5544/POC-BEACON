@@ -4,7 +4,6 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/actions/index.dart' as actions;
-import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -1372,20 +1371,8 @@ class _BoothListCopyWidgetState extends State<BoothListCopyWidget>
                                               EdgeInsetsDirectional.fromSTEB(
                                                   15.0, 0.0, 15.0, 0.0),
                                           child: FFButtonWidget(
-                                            onPressed: () async {
-                                              context.pushNamed(
-                                                SurveyWidget.routeName,
-                                                queryParameters: {
-                                                  'uid': serializeParam(
-                                                    '',
-                                                    ParamType.String,
-                                                  ),
-                                                  'eventRef': serializeParam(
-                                                    '',
-                                                    ParamType.String,
-                                                  ),
-                                                }.withoutNulls,
-                                              );
+                                            onPressed: () {
+                                              print('Button pressed ...');
                                             },
                                             text: 'ทำแบบสอบถาม',
                                             options: FFButtonOptions(

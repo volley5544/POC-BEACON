@@ -55,7 +55,7 @@ export '/setting_backup/booth_list_copy/booth_list_copy_widget.dart'
     show BoothListCopyWidget;
 export '/setting_backup/booth_list_copy2/booth_list_copy2_widget.dart'
     show BoothListCopy2Widget;
-export '/pages/activity/booth_list_copy3/booth_list_copy3_widget.dart'
+export '/setting_backup/booth_list_copy3/booth_list_copy3_widget.dart'
     show BoothListCopy3Widget;
 export '/pages/survey/survey_copy/survey_copy_widget.dart'
     show SurveyCopyWidget;

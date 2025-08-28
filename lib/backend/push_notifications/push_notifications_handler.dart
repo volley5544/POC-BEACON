@@ -167,11 +167,19 @@ final parametersBuilderMap =
               data, 'eventDocRef', EventsRecord.fromSnapshot),
         },
       ),
-  'SuccessSurvey': ParameterData.none(),
+  'SuccessSurvey': (data) async => ParameterData(
+        allParams: {
+          'eventId': getParameter<int>(data, 'eventId'),
+          'eventRef': await getDocumentParameter<EventsRecord>(
+              data, 'eventRef', EventsRecord.fromSnapshot),
+        },
+      ),
   'Survey': (data) async => ParameterData(
         allParams: {
           'uid': getParameter<String>(data, 'uid'),
-          'eventRef': getParameter<String>(data, 'eventRef'),
+          'eventRef': await getDocumentParameter<EventsRecord>(
+              data, 'eventRef', EventsRecord.fromSnapshot),
+          'eventId': getParameter<int>(data, 'eventId'),
         },
       ),
   'SettingEventList': (data) async => ParameterData(

@@ -3,7 +3,6 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -127,8 +126,8 @@ class _SurveyCopyWidgetState extends State<SurveyCopyWidget>
                   color: FlutterFlowTheme.of(context).secondaryText,
                   size: 30.0,
                 ),
-                onPressed: () async {
-                  context.pushNamed(BoothListWidget.routeName);
+                onPressed: () {
+                  print('IconButton pressed ...');
                 },
               ),
             ),
@@ -566,8 +565,8 @@ class _SurveyCopyWidgetState extends State<SurveyCopyWidget>
                       padding:
                           EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 24.0),
                       child: FFButtonWidget(
-                        onPressed: () async {
-                          context.pushNamed(SuccessSurveyWidget.routeName);
+                        onPressed: () {
+                          print('Button pressed ...');
                         },
                         text: 'ส่ง',
                         options: FFButtonOptions(

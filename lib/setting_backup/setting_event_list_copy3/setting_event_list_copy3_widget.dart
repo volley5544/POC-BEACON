@@ -643,16 +643,8 @@ class _SettingEventListCopy3WidgetState
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             24.0, 0.0, 24.0, 0.0),
                                         child: FFButtonWidget(
-                                          onPressed: () async {
-                                            context.pushNamed(
-                                              BoothListWidget.routeName,
-                                              queryParameters: {
-                                                'eventId': serializeParam(
-                                                  0,
-                                                  ParamType.int,
-                                                ),
-                                              }.withoutNulls,
-                                            );
+                                          onPressed: () {
+                                            print('Button pressed ...');
                                           },
                                           text: 'ค้นหา',
                                           options: FFButtonOptions(

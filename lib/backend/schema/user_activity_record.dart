@@ -20,16 +20,6 @@ class UserActivityRecord extends FirestoreRecord {
   String get uid => _uid ?? '';
   bool hasUid() => _uid != null;
 
-  // "event_id" field.
-  String? _eventId;
-  String get eventId => _eventId ?? '';
-  bool hasEventId() => _eventId != null;
-
-  // "booth_id" field.
-  String? _boothId;
-  String get boothId => _boothId ?? '';
-  bool hasBoothId() => _boothId != null;
-
   // "check_in_time" field.
   DateTime? _checkInTime;
   DateTime? get checkInTime => _checkInTime;
@@ -101,12 +91,20 @@ class UserActivityRecord extends FirestoreRecord {
   String get boothName => _boothName ?? '';
   bool hasBoothName() => _boothName != null;
 
+  // "event_id" field.
+  int? _eventId;
+  int get eventId => _eventId ?? 0;
+  bool hasEventId() => _eventId != null;
+
+  // "booth_id" field.
+  int? _boothId;
+  int get boothId => _boothId ?? 0;
+  bool hasBoothId() => _boothId != null;
+
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
     _uid = snapshotData['uid'] as String?;
-    _eventId = snapshotData['event_id'] as String?;
-    _boothId = snapshotData['booth_id'] as String?;
     _checkInTime = snapshotData['check_in_time'] as DateTime?;
     _checkInLocation = snapshotData['check_in_location'] as LatLng?;
     _isCompleted = snapshotData['is_completed'] as bool?;
@@ -123,6 +121,8 @@ class UserActivityRecord extends FirestoreRecord {
         ? snapshotData['survey_data']
         : SurveyDataModelStruct.maybeFromMap(snapshotData['survey_data']);
     _boothName = snapshotData['booth_name'] as String?;
+    _eventId = castToType<int>(snapshotData['event_id']);
+    _boothId = castToType<int>(snapshotData['booth_id']);
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -166,8 +166,6 @@ class UserActivityRecord extends FirestoreRecord {
 
 Map<String, dynamic> createUserActivityRecordData({
   String? uid,
-  String? eventId,
-  String? boothId,
   DateTime? checkInTime,
   LatLng? checkInLocation,
   bool? isCompleted,
@@ -182,12 +180,12 @@ Map<String, dynamic> createUserActivityRecordData({
   bool? isSurveyed,
   SurveyDataModelStruct? surveyData,
   String? boothName,
+  int? eventId,
+  int? boothId,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
       'uid': uid,
-      'event_id': eventId,
-      'booth_id': boothId,
       'check_in_time': checkInTime,
       'check_in_location': checkInLocation,
       'is_completed': isCompleted,
@@ -202,6 +200,8 @@ Map<String, dynamic> createUserActivityRecordData({
       'is_surveyed': isSurveyed,
       'survey_data': SurveyDataModelStruct().toMap(),
       'booth_name': boothName,
+      'event_id': eventId,
+      'booth_id': boothId,
     }.withoutNulls,
   );
 
@@ -218,8 +218,6 @@ class UserActivityRecordDocumentEquality
   @override
   bool equals(UserActivityRecord? e1, UserActivityRecord? e2) {
     return e1?.uid == e2?.uid &&
-        e1?.eventId == e2?.eventId &&
-        e1?.boothId == e2?.boothId &&
         e1?.checkInTime == e2?.checkInTime &&
         e1?.checkInLocation == e2?.checkInLocation &&
         e1?.isCompleted == e2?.isCompleted &&
@@ -233,14 +231,14 @@ class UserActivityRecordDocumentEquality
         e1?.associatedBoothId == e2?.associatedBoothId &&
         e1?.isSurveyed == e2?.isSurveyed &&
         e1?.surveyData == e2?.surveyData &&
-        e1?.boothName == e2?.boothName;
+        e1?.boothName == e2?.boothName &&
+        e1?.eventId == e2?.eventId &&
+        e1?.boothId == e2?.boothId;
   }
 
   @override
   int hash(UserActivityRecord? e) => const ListEquality().hash([
         e?.uid,
-        e?.eventId,
-        e?.boothId,
         e?.checkInTime,
         e?.checkInLocation,
         e?.isCompleted,
@@ -254,7 +252,9 @@ class UserActivityRecordDocumentEquality
         e?.associatedBoothId,
         e?.isSurveyed,
         e?.surveyData,
-        e?.boothName
+        e?.boothName,
+        e?.eventId,
+        e?.boothId
       ]);
 
   @override
