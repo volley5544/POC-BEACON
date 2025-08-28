@@ -1425,6 +1425,75 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                                 mainAxisAlignment: MainAxisAlignment.start,
                                                                                 crossAxisAlignment: CrossAxisAlignment.center,
                                                                                 children: [
+                                                                                  InkWell(
+                                                                                    splashColor: Colors.transparent,
+                                                                                    focusColor: Colors.transparent,
+                                                                                    hoverColor: Colors.transparent,
+                                                                                    highlightColor: Colors.transparent,
+                                                                                    onTap: () async {
+                                                                                      context.pushNamed(
+                                                                                        RegisterWidget.routeName,
+                                                                                        queryParameters: {
+                                                                                          'eventId': serializeParam(
+                                                                                            listViewEventsRecord.eventId,
+                                                                                            ParamType.int,
+                                                                                          ),
+                                                                                          'eventRef': serializeParam(
+                                                                                            listViewEventsRecord,
+                                                                                            ParamType.Document,
+                                                                                          ),
+                                                                                        }.withoutNulls,
+                                                                                        extra: <String, dynamic>{
+                                                                                          'eventRef': listViewEventsRecord,
+                                                                                        },
+                                                                                      );
+                                                                                    },
+                                                                                    child: Text(
+                                                                                      'register',
+                                                                                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                                            font: GoogleFonts.readexPro(
+                                                                                              fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                                                                                              fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                            ),
+                                                                                            color: FlutterFlowTheme.of(context).primaryText,
+                                                                                            letterSpacing: 0.0,
+                                                                                            fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                                                                                            fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                          ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                            InkWell(
+                                                                              splashColor: Colors.transparent,
+                                                                              focusColor: Colors.transparent,
+                                                                              hoverColor: Colors.transparent,
+                                                                              highlightColor: Colors.transparent,
+                                                                              onTap: () async {
+                                                                                context.pushNamed(
+                                                                                  SettingBoothListWidget.routeName,
+                                                                                  queryParameters: {
+                                                                                    'eventDocRef': serializeParam(
+                                                                                      listViewEventsRecord.reference,
+                                                                                      ParamType.DocumentReference,
+                                                                                    ),
+                                                                                    'eventID': serializeParam(
+                                                                                      listViewEventsRecord.eventId,
+                                                                                      ParamType.int,
+                                                                                    ),
+                                                                                    'eventName': serializeParam(
+                                                                                      listViewEventsRecord.eventName,
+                                                                                      ParamType.String,
+                                                                                    ),
+                                                                                  }.withoutNulls,
+                                                                                );
+                                                                              },
+                                                                              child: Row(
+                                                                                mainAxisSize: MainAxisSize.max,
+                                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                children: [
                                                                                   Icon(
                                                                                     Icons.edit_note_outlined,
                                                                                     color: FlutterFlowTheme.of(context).success,
@@ -1438,6 +1507,52 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                                             fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                                           ),
                                                                                           color: FlutterFlowTheme.of(context).success,
+                                                                                          letterSpacing: 0.0,
+                                                                                          fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                                                                                          fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                        ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                            InkWell(
+                                                                              splashColor: Colors.transparent,
+                                                                              focusColor: Colors.transparent,
+                                                                              hoverColor: Colors.transparent,
+                                                                              highlightColor: Colors.transparent,
+                                                                              onTap: () async {
+                                                                                context.pushNamed(
+                                                                                  QRCodeWidget.routeName,
+                                                                                  queryParameters: {
+                                                                                    'eventDocRef': serializeParam(
+                                                                                      listViewEventsRecord.reference,
+                                                                                      ParamType.DocumentReference,
+                                                                                    ),
+                                                                                    'eventId': serializeParam(
+                                                                                      listViewEventsRecord.eventId,
+                                                                                      ParamType.int,
+                                                                                    ),
+                                                                                  }.withoutNulls,
+                                                                                );
+                                                                              },
+                                                                              child: Row(
+                                                                                mainAxisSize: MainAxisSize.max,
+                                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                children: [
+                                                                                  Icon(
+                                                                                    Icons.qr_code,
+                                                                                    color: Color(0xFE9D451F),
+                                                                                    size: 24.0,
+                                                                                  ),
+                                                                                  Text(
+                                                                                    'QR Code',
+                                                                                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                                          font: GoogleFonts.readexPro(
+                                                                                            fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                                                                                            fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                                          ),
+                                                                                          color: Color(0xFE9D451F),
                                                                                           letterSpacing: 0.0,
                                                                                           fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                                                                                           fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,

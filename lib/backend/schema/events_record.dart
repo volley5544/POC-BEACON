@@ -80,6 +80,11 @@ class EventsRecord extends FirestoreRecord {
   List<String> get eventImageList => _eventImageList ?? const [];
   bool hasEventImageList() => _eventImageList != null;
 
+  // "url" field.
+  String? _url;
+  String get url => _url ?? '';
+  bool hasUrl() => _url != null;
+
   void _initializeFields() {
     _eventId = castToType<int>(snapshotData['event_id']);
     _eventName = snapshotData['event_name'] as String?;
@@ -96,6 +101,7 @@ class EventsRecord extends FirestoreRecord {
     _startDatetime = snapshotData['start_datetime'] as DateTime?;
     _endDatetime = snapshotData['end_datetime'] as DateTime?;
     _eventImageList = getDataList(snapshotData['event_image_list']);
+    _url = snapshotData['url'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -144,6 +150,7 @@ Map<String, dynamic> createEventsRecordData({
   int? notificationFrequencyMinute,
   DateTime? startDatetime,
   DateTime? endDatetime,
+  String? url,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -159,6 +166,7 @@ Map<String, dynamic> createEventsRecordData({
       'notification_frequency_minute': notificationFrequencyMinute,
       'start_datetime': startDatetime,
       'end_datetime': endDatetime,
+      'url': url,
     }.withoutNulls,
   );
 
@@ -183,7 +191,8 @@ class EventsRecordDocumentEquality implements Equality<EventsRecord> {
         e1?.notificationFrequencyMinute == e2?.notificationFrequencyMinute &&
         e1?.startDatetime == e2?.startDatetime &&
         e1?.endDatetime == e2?.endDatetime &&
-        listEquality.equals(e1?.eventImageList, e2?.eventImageList);
+        listEquality.equals(e1?.eventImageList, e2?.eventImageList) &&
+        e1?.url == e2?.url;
   }
 
   @override
@@ -200,7 +209,8 @@ class EventsRecordDocumentEquality implements Equality<EventsRecord> {
         e?.notificationFrequencyMinute,
         e?.startDatetime,
         e?.endDatetime,
-        e?.eventImageList
+        e?.eventImageList,
+        e?.url
       ]);
 
   @override

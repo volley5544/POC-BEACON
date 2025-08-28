@@ -15,7 +15,7 @@ class BoothDetailModel extends FlutterFlowModel<BoothDetailWidget> {
   ///  State fields for stateful widgets in this page.
 
   // Stores action output result for [Firestore Query - Query a collection] action in BoothDetail widget.
-  UserActivitiesRecord? dataActivity;
+  UserActivityRecord? dataActivity;
   // Stores action output result for [Firestore Query - Query a collection] action in BoothDetail widget.
   BoothsRecord? dataBooth;
   // Stores action output result for [Firestore Query - Query a collection] action in BoothDetail widget.

@@ -13,7 +13,7 @@ const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 /// Start RAS Group Code
 
 class RasGroup {
-  static String getBaseUrl() => 'https://f5bf42607637.ngrok-free.app';
+  static String getBaseUrl() => 'https://7e4327524580.ngrok-free.app';
   static Map<String, String> headers = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer test-token-123456789',
@@ -304,15 +304,11 @@ class SummaryParticipantsBoothCall {
         response,
         r'''$.description''',
       ));
-  List<BoothDataModelStruct>? data(dynamic response) => (getJsonField(
+  PaticipantsBoothDataModelStruct? data(dynamic response) =>
+      PaticipantsBoothDataModelStruct.maybeFromMap(getJsonField(
         response,
         r'''$.data''',
-        true,
-      ) as List?)
-          ?.withoutNulls
-          .map((x) => BoothDataModelStruct.maybeFromMap(x))
-          .withoutNulls
-          .toList();
+      ));
   List<String>? boothDocRef(dynamic response) => (getJsonField(
         response,
         r'''$.data[:].id''',
@@ -532,13 +528,13 @@ class SummaryParticipantsBoothCall {
           .map((x) => castToType<int>(x))
           .withoutNulls
           .toList();
-  List<int>? totalparticipantslist(dynamic response) => (getJsonField(
+  List<String>? totalparticipantslist(dynamic response) => (getJsonField(
         response,
         r'''$.data.data_list[:].total_participants_list''',
         true,
       ) as List?)
           ?.withoutNulls
-          .map((x) => castToType<int>(x))
+          .map((x) => castToType<String>(x))
           .withoutNulls
           .toList();
 }

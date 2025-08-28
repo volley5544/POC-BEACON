@@ -279,6 +279,20 @@ final parametersBuilderMap =
         },
       ),
   'SurveyCopy': ParameterData.none(),
+  'notiPage': ParameterData.none(),
+  'Register': (data) async => ParameterData(
+        allParams: {
+          'eventId': getParameter<int>(data, 'eventId'),
+          'eventRef': await getDocumentParameter<EventsRecord>(
+              data, 'eventRef', EventsRecord.fromSnapshot),
+        },
+      ),
+  'QRCode': (data) async => ParameterData(
+        allParams: {
+          'eventDocRef': getParameter<DocumentReference>(data, 'eventDocRef'),
+          'eventId': getParameter<int>(data, 'eventId'),
+        },
+      ),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

@@ -355,14 +355,14 @@ class _BoothListCopy3WidgetState extends State<BoothListCopy3Widget>
                                                               Text(
                                                                 valueOrDefault<
                                                                     String>(
-                                                                  (RasGroup
-                                                                          .summaryParticipantsBoothCall
-                                                                          .totalparticipantslist(
-                                                                            listViewSummaryParticipantsBoothResponse.jsonBody,
-                                                                          )
-                                                                          ?.elementAtOrNull(
-                                                                              summaryIndex))
-                                                                      ?.toString(),
+                                                                  RasGroup
+                                                                      .summaryParticipantsBoothCall
+                                                                      .totalparticipantslist(
+                                                                        listViewSummaryParticipantsBoothResponse
+                                                                            .jsonBody,
+                                                                      )
+                                                                      ?.elementAtOrNull(
+                                                                          summaryIndex),
                                                                   '0',
                                                                 ),
                                                                 style: FlutterFlowTheme.of(

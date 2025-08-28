@@ -55,9 +55,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
         Future(() async {
           _model.instantTimer = InstantTimer.periodic(
             duration: Duration(milliseconds: 500),
-            callback: (timer) async {
-              safeSetState(() {});
-            },
+            callback: (timer) async {},
             startImmediately: true,
           );
         }),
@@ -290,11 +288,12 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                         builder: (context) {
                                           final summary = RasGroup
                                                   .summaryParticipantsBoothCall
-                                                  .boothnamelist(
+                                                  .data(
                                                     listViewSummaryParticipantsBoothResponse
                                                         .jsonBody,
                                                   )
-                                                  ?.toList() ??
+                                                  ?.booths
+                                                  .toList() ??
                                               [];
 
                                           return ListView.builder(
@@ -357,14 +356,8 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                               Text(
                                                                 valueOrDefault<
                                                                     String>(
-                                                                  (RasGroup
-                                                                          .summaryParticipantsBoothCall
-                                                                          .totalparticipantslist(
-                                                                            listViewSummaryParticipantsBoothResponse.jsonBody,
-                                                                          )
-                                                                          ?.elementAtOrNull(
-                                                                              summaryIndex))
-                                                                      ?.toString(),
+                                                                  summaryItem
+                                                                      .totalParticipants,
                                                                   '0',
                                                                 ),
                                                                 style: FlutterFlowTheme.of(
@@ -380,9 +373,17 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                             .displaySmall
                                                                             .fontStyle,
                                                                       ),
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .secondary,
+                                                                      color:
+                                                                          colorFromCssString(
+                                                                        valueOrDefault<
+                                                                            String>(
+                                                                          summaryItem
+                                                                              .cssCode,
+                                                                          '#ee8b60',
+                                                                        ),
+                                                                        defaultColor:
+                                                                            FlutterFlowTheme.of(context).secondaryText,
+                                                                      ),
                                                                       fontSize:
                                                                           36.0,
                                                                       letterSpacing:
@@ -408,14 +409,8 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                 child: Text(
                                                                   valueOrDefault<
                                                                       String>(
-                                                                    RasGroup
-                                                                        .summaryParticipantsBoothCall
-                                                                        .boothnamelist(
-                                                                          listViewSummaryParticipantsBoothResponse
-                                                                              .jsonBody,
-                                                                        )
-                                                                        ?.elementAtOrNull(
-                                                                            summaryIndex),
+                                                                    summaryItem
+                                                                        .boothName,
                                                                     '-',
                                                                   ),
                                                                   style: FlutterFlowTheme.of(
@@ -803,17 +798,23 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                       ),
                                                                       StreamBuilder<
                                                                           List<
-                                                                              UserActivitiesRecord>>(
+                                                                              UserActivityRecord>>(
                                                                         stream:
-                                                                            queryUserActivitiesRecord(
-                                                                          queryBuilder: (userActivitiesRecord) => userActivitiesRecord
+                                                                            queryUserActivityRecord(
+                                                                          parent:
+                                                                              currentUserReference,
+                                                                          queryBuilder: (userActivityRecord) => userActivityRecord
                                                                               .where(
                                                                                 'event_id',
-                                                                                isEqualTo: widget.eventId.toString(),
+                                                                                isEqualTo: widget.eventId,
                                                                               )
                                                                               .where(
                                                                                 'booth_id',
-                                                                                isEqualTo: listViewBoothsRecord.boothId.toString(),
+                                                                                isEqualTo: listViewBoothsRecord.boothId,
+                                                                              )
+                                                                              .where(
+                                                                                'is_completed',
+                                                                                isEqualTo: true,
                                                                               ),
                                                                           singleRecord:
                                                                               true,
@@ -836,33 +837,24 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                               ),
                                                                             );
                                                                           }
-                                                                          List<UserActivitiesRecord>
-                                                                              textUserActivitiesRecordList =
+                                                                          List<UserActivityRecord>
+                                                                              textUserActivityRecordList =
                                                                               snapshot.data!;
-                                                                          // Return an empty Container when the item does not exist.
-                                                                          if (snapshot
-                                                                              .data!
-                                                                              .isEmpty) {
-                                                                            return Container();
-                                                                          }
-                                                                          final textUserActivitiesRecord = textUserActivitiesRecordList.isNotEmpty
-                                                                              ? textUserActivitiesRecordList.first
+                                                                          final textUserActivityRecord = textUserActivityRecordList.isNotEmpty
+                                                                              ? textUserActivityRecordList.first
                                                                               : null;
 
                                                                           return Text(
                                                                             valueOrDefault<String>(
-                                                                              textUserActivitiesRecord?.isCompleted == true ? 'ทำกิจกรรมแล้ว' : 'รอทำกิจกรรม',
-                                                                              'รอทำกิจกรรม',
+                                                                              textUserActivityRecord != null ? 'ทำกิจกรรมแล้ว' : 'รอทำกิจกรรม',
+                                                                              'รอทำกิจกรรม.',
                                                                             ),
                                                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                   font: GoogleFonts.readexPro(
                                                                                     fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                                                                                     fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                                   ),
-                                                                                  color: valueOrDefault<Color>(
-                                                                                    textUserActivitiesRecord!.isCompleted ? FlutterFlowTheme.of(context).success : FlutterFlowTheme.of(context).error,
-                                                                                    FlutterFlowTheme.of(context).error,
-                                                                                  ),
+                                                                                  color: textUserActivityRecord!.isCompleted ? FlutterFlowTheme.of(context).secondary : FlutterFlowTheme.of(context).error,
                                                                                   letterSpacing: 0.0,
                                                                                   fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                                                                                   fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,

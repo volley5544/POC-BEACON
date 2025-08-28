@@ -605,6 +605,50 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             builder: (context, params) => NavBarPage(
                   initialPage: '',
                   page: SurveyCopyWidget(),
+                )),
+        FFRoute(
+          name: NotiPageWidget.routeName,
+          path: NotiPageWidget.routePath,
+          builder: (context, params) => NotiPageWidget(),
+        ),
+        FFRoute(
+            name: RegisterWidget.routeName,
+            path: RegisterWidget.routePath,
+            requireAuth: true,
+            asyncParams: {
+              'eventRef': getDoc(['events'], EventsRecord.fromSnapshot),
+            },
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: RegisterWidget(
+                    eventId: params.getParam(
+                      'eventId',
+                      ParamType.int,
+                    ),
+                    eventRef: params.getParam(
+                      'eventRef',
+                      ParamType.Document,
+                    ),
+                  ),
+                )),
+        FFRoute(
+            name: QRCodeWidget.routeName,
+            path: QRCodeWidget.routePath,
+            requireAuth: true,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: QRCodeWidget(
+                    eventDocRef: params.getParam(
+                      'eventDocRef',
+                      ParamType.DocumentReference,
+                      isList: false,
+                      collectionNamePath: ['events'],
+                    ),
+                    eventId: params.getParam(
+                      'eventId',
+                      ParamType.int,
+                    ),
+                  ),
                 ))
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

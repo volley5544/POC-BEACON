@@ -220,6 +220,12 @@ class FFAppState extends ChangeNotifier {
         ? prefs.setString('ff_userDocRef', value.path)
         : prefs.remove('ff_userDocRef');
   }
+
+  String _url = 'https://bpoc-beacon.flutterflow.app/';
+  String get url => _url;
+  set url(String value) {
+    _url = value;
+  }
 }
 
 void _safeInit(Function() initializeField) {

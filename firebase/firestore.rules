@@ -27,20 +27,6 @@ service cloud.firestore {
       allow delete: if true;
     }
 
-    match /userActivities/{document} {
-      allow create: if true;
-      allow read: if true;
-      allow write: if true;
-      allow delete: if true;
-    }
-
-    match /surveys/{document} {
-      allow create: if true;
-      allow read: if true;
-      allow write: if true;
-      allow delete: if true;
-    }
-
     match /events/{parent}/booths/{document} {
       allow create: if true;
       allow read: if true;
@@ -76,6 +62,25 @@ service cloud.firestore {
 
     match /{path=**}/UserActivity/{document} {
       allow read: if request.auth != null;
+    }
+
+
+    match /userActivities/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if true;
+    }
+
+    match /events/{parent}/register/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if true;
+    }
+
+    match /{path=**}/register/{document} {
+      allow read: if true;
     }
 
 

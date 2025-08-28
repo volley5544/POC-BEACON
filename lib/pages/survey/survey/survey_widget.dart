@@ -369,7 +369,8 @@ class _SurveyWidgetState extends State<SurveyWidget>
                                       context: context,
                                       builder: (alertDialogContext) {
                                         return AlertDialog(
-                                          content: Text('กรุณาประเมินให้ครบ'),
+                                          content:
+                                              Text('กรุณาประเมินกิจกรรมให้ครบ'),
                                           actions: [
                                             TextButton(
                                               onPressed: () => Navigator.pop(
@@ -406,13 +407,15 @@ class _SurveyWidgetState extends State<SurveyWidget>
                                           loop1Index.toString(),
                                           (m) => m.remarkTextController.text,
                                         ),
-                                        createdAt: getCurrentTimestamp,
                                         createdBy: currentUserReference?.path,
                                         isActive: 0,
-                                        updatedAt: getCurrentTimestamp,
                                         updatedBy: currentUserReference?.path,
                                         fieldValues: {
                                           'survey_id': FieldValue.increment(1),
+                                          'created_at':
+                                              FieldValue.serverTimestamp(),
+                                          'updated_at':
+                                              FieldValue.serverTimestamp(),
                                         },
                                         clearUnsetFields: false,
                                       ),

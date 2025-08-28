@@ -58,11 +58,12 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
       await Future.wait([
         Future(() async {
           // getActivity
-          _model.dataActivity = await queryUserActivitiesRecordOnce(
-            queryBuilder: (userActivitiesRecord) => userActivitiesRecord
+          _model.dataActivity = await queryUserActivityRecordOnce(
+            parent: currentUserReference,
+            queryBuilder: (userActivityRecord) => userActivityRecord
                 .where(
                   'booth_id',
-                  isEqualTo: widget.boothId?.toString(),
+                  isEqualTo: widget.boothId,
                 )
                 .where(
                   'is_active',
@@ -70,7 +71,7 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                 )
                 .where(
                   'event_id',
-                  isEqualTo: widget.eventId?.toString(),
+                  isEqualTo: widget.eventId,
                 )
                 .where(
                   'uid',
@@ -116,20 +117,6 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
           );
         }),
       ]);
-      await showDialog(
-        context: context,
-        builder: (alertDialogContext) {
-          return AlertDialog(
-            content: Text(_model.dataBooth!.boothImageList.length.toString()),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(alertDialogContext),
-                child: Text('Ok'),
-              ),
-            ],
-          );
-        },
-      );
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));

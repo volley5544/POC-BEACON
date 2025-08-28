@@ -50,6 +50,16 @@ class NotificationsRecord extends FirestoreRecord {
   int get sendCount => _sendCount ?? 0;
   bool hasSendCount() => _sendCount != null;
 
+  // "is_read" field.
+  bool? _isRead;
+  bool get isRead => _isRead ?? false;
+  bool hasIsRead() => _isRead != null;
+
+  // "is_deleted" field.
+  bool? _isDeleted;
+  bool get isDeleted => _isDeleted ?? false;
+  bool hasIsDeleted() => _isDeleted != null;
+
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
@@ -60,6 +70,8 @@ class NotificationsRecord extends FirestoreRecord {
     _sentAt = snapshotData['sent_at'] as DateTime?;
     _eventId = castToType<int>(snapshotData['event_id']);
     _sendCount = castToType<int>(snapshotData['send_count']);
+    _isRead = snapshotData['is_read'] as bool?;
+    _isDeleted = snapshotData['is_deleted'] as bool?;
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -109,6 +121,8 @@ Map<String, dynamic> createNotificationsRecordData({
   DateTime? sentAt,
   int? eventId,
   int? sendCount,
+  bool? isRead,
+  bool? isDeleted,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -119,6 +133,8 @@ Map<String, dynamic> createNotificationsRecordData({
       'sent_at': sentAt,
       'event_id': eventId,
       'send_count': sendCount,
+      'is_read': isRead,
+      'is_deleted': isDeleted,
     }.withoutNulls,
   );
 
@@ -137,7 +153,9 @@ class NotificationsRecordDocumentEquality
         e1?.body == e2?.body &&
         e1?.sentAt == e2?.sentAt &&
         e1?.eventId == e2?.eventId &&
-        e1?.sendCount == e2?.sendCount;
+        e1?.sendCount == e2?.sendCount &&
+        e1?.isRead == e2?.isRead &&
+        e1?.isDeleted == e2?.isDeleted;
   }
 
   @override
@@ -148,7 +166,9 @@ class NotificationsRecordDocumentEquality
         e?.body,
         e?.sentAt,
         e?.eventId,
-        e?.sendCount
+        e?.sendCount,
+        e?.isRead,
+        e?.isDeleted
       ]);
 
   @override

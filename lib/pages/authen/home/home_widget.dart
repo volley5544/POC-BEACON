@@ -6,6 +6,7 @@ import '/flutter_flow/flutter_flow_expanded_image_view.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/custom_code/actions/index.dart' as actions;
+import '/index.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -174,6 +175,52 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
             child: Scaffold(
               key: scaffoldKey,
               backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+              appBar: AppBar(
+                backgroundColor: FlutterFlowTheme.of(context).primary,
+                automaticallyImplyLeading: false,
+                leading: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 8.0),
+                  child: AuthUserStreamWidget(
+                    builder: (context) => Container(
+                      width: MediaQuery.sizeOf(context).width * 1.0,
+                      height: MediaQuery.sizeOf(context).width * 1.0,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      child: Image.network(
+                        valueOrDefault<String>(
+                          currentUserPhoto,
+                          'https://firebasestorage.googleapis.com/v0/b/poc-beacon-firebase.firebasestorage.app/o/add_user.jpg?alt=media&token=0d0b22bd-559b-4728-a727-b675c4850801',
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+                actions: [
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 16.0, 8.0),
+                    child: InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        context.pushNamed(NotiPageWidget.routeName);
+                      },
+                      child: Icon(
+                        Icons.notifications_active,
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                        size: 32.0,
+                      ),
+                    ),
+                  ),
+                ],
+                centerTitle: false,
+                elevation: 0.0,
+              ),
               body: SafeArea(
                 top: true,
                 child: SingleChildScrollView(
