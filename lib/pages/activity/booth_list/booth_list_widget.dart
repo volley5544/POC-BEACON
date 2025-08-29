@@ -806,7 +806,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                           queryBuilder: (userActivityRecord) => userActivityRecord
                                                                               .where(
                                                                                 'event_id',
-                                                                                isEqualTo: widget.eventId,
+                                                                                isEqualTo: listViewBoothsRecord.eventId,
                                                                               )
                                                                               .where(
                                                                                 'booth_id',
@@ -846,7 +846,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
 
                                                                           return Text(
                                                                             valueOrDefault<String>(
-                                                                              textUserActivityRecord != null ? 'ทำกิจกรรมแล้ว' : 'รอทำกิจกรรม',
+                                                                              true ? 'ทำกิจกรรมแล้ว' : 'รอทำกิจกรรม',
                                                                               'รอทำกิจกรรม.',
                                                                             ),
                                                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
