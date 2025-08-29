@@ -1,8 +1,10 @@
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'q_r_code_model.dart';
@@ -35,6 +37,12 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
     super.initState();
     _model = createModel(context, () => QRCodeModel());
 
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.dataEvent =
+          await EventsRecord.getDocumentOnce(widget.eventDocRef!);
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
@@ -65,7 +73,7 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Scan QR Code',
+                'Scan QR Code (${_model.dataEvent?.eventName})',
                 style: FlutterFlowTheme.of(context).headlineMedium.override(
                       font: GoogleFonts.outfit(
                         fontWeight: FlutterFlowTheme.of(context)

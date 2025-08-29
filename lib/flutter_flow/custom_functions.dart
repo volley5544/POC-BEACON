@@ -17,7 +17,6 @@ String? combineTextFullname(
   String? firstname,
   String? lastname,
 ) {
-  print('');
   String outputText = 'ชื่อลูกค้า : ${firstname!} ${lastname!}';
 
   return outputText;

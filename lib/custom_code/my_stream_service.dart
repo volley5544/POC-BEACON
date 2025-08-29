@@ -10,6 +10,7 @@ import '/custom_code/booth_data_model_struct_new.dart';
 import '/custom_code/user_notification_data_model_struct.dart';
 import 'package:flutter/services.dart';
 import '/auth/firebase_auth/auth_util.dart';
+import 'package:rxdart/rxdart.dart';
 
 class MyStreamService {
   static final MyStreamService _instance = MyStreamService._internal();
@@ -57,32 +58,68 @@ class MyStreamService {
         //safeSetState((){});
 
         if (true) {
-          matchingEvents = eventData.where((event) {
-            return event.boothList.any((booth) {
-              final beaconDist = beaconMap['${booth.deviceUuid}'];
-              if (beaconDist == null) return false;
+          // matchingEvents = eventData.where((event) {
+          //   return event.boothList.any((booth) {
+          //     final beaconDist = beaconMap['${booth.deviceUuid}'];
+          //     if (beaconDist == null) return false;
+          //
+          //     return beaconDist
+          //         booth.notificationDistance; // ✅ extra condition
+          //   });
+          // }).toList();
 
-              return beaconDist <=
-                  booth.notificationDistance; // ✅ extra condition
-            });
-          }).toList();
+          matchingEvents = eventData
+              .map((event) {
+                // Filter booths by condition
+                final matchedBooths = event.boothList.where((booth) {
+                  final beaconDist = beaconMap['${booth.deviceUuid}'];
+                  return beaconDist != null &&
+                      beaconDist <= booth.notificationDistance;
+                }).toList();
+
+                // Return event with only matching booths
+                return EventDataModelStruct1(
+                  eventId: event.eventId,
+                  eventName: event.eventName,
+                  description: event.description,
+                  createdBy: event.createdBy,
+                  isActive: event.isActive,
+                  uploadedBy: event.uploadedBy,
+                  notificationFrequencyAmount:
+                      event.notificationFrequencyAmount,
+                  notificationFrequencyMinute:
+                      event.notificationFrequencyMinute,
+                  eventImageList: event.eventImageList,
+                  startDatetime: event.startDatetime,
+                  endDatetime: event.endDatetime,
+                  uploadedAt: event.uploadedAt,
+                  createdAt: event.createdAt,
+                  boothList: matchedBooths, // ✅ only matched booths
+                );
+              })
+              .where((event) =>
+                  event.boothList.isNotEmpty) // keep only events with matches
+              .toList();
 
           print("Found ${matchingEvents.length} matching events");
 
           if (matchingEvents.length > 0) {
             HapticFeedback.heavyImpact();
             print('in range Beac');
+            await Future.wait(
+              matchingEvents.map((event) => createUserNotificationDoc(event)),
+            );
             // await Future.wait(
             //   matchingEvents.map((event) async {
-            //     // Map<String,dynamic> queryNotiData = await getDataFromCollection('${event.eventId}');
-            //     // if(queryNotiData == {}){
-            //     //   return createUserNotificationDoc(event);
-            //     // }
-            //     // else{
-            //     //   return createUserNotificationDoc(event);
-            //     // }
-            //     return createUserNotificationDoc(event);
-            //   } ),
+            // Map<String,dynamic> queryNotiData = await getDataFromCollection('${event.eventId}');
+            // if(queryNotiData == {}){
+            //   return createUserNotificationDoc(event);
+            // }
+            // else{
+            //   return createUserNotificationDoc(event);
+            // }
+            // return createUserNotificationDoc(event);
+            // } ),
             // );
           } else {
             print('not in range Beac');
@@ -141,11 +178,63 @@ class MyStreamService {
   }
 
   void listenEventWithBooths() {
-    queryEventsWithBooths().listen((eventList) {
+    queryEventsWithBooths5544().listen((eventList) {
       eventData = eventList;
-      print('qwofjhweoifjew : ${eventData.first.eventId}');
-      print('qwofjhweoifjew1 : ${eventData.first.boothList.first.boothName}');
+      // print('qwofjhweoifjew : ${eventData[4].eventId}');
+      // print('qwofjhweoifjew1 : ${eventData[4].boothList[2].notificationDistance}');
     });
+  }
+
+  Stream<List<EventDataModelStruct1>> queryEventsWithBooths5544() {
+    final eventsStream = FirebaseFirestore.instance
+        .collection("events")
+        .where("is_active", isEqualTo: 0)
+        .snapshots();
+
+    final boothsStream =
+        FirebaseFirestore.instance.collectionGroup("booths").snapshots();
+
+    return Rx.combineLatest2(
+      eventsStream,
+      boothsStream,
+      (QuerySnapshot eventSnapshot, QuerySnapshot boothSnapshot) {
+        // Convert booths first
+        final allBooths = boothSnapshot.docs
+            .map((doc) => BoothDataModelStructNew.fromMap(
+                doc.data() as Map<String, dynamic>))
+            .toList();
+
+        // Convert events and attach booths
+        return eventSnapshot.docs.map((eventDoc) {
+          final eventDataNew1 = EventDataModelStruct1.fromMap(
+              eventDoc.data() as Map<String, dynamic>);
+
+          final boothList = allBooths
+              .where(
+                  (b) => b.eventId == eventDataNew1.eventId) // join by eventId
+              .toList();
+
+          return EventDataModelStruct1(
+            eventId: eventDataNew1.eventId,
+            eventName: eventDataNew1.eventName,
+            description: eventDataNew1.description,
+            createdBy: eventDataNew1.createdBy,
+            isActive: eventDataNew1.isActive,
+            uploadedBy: eventDataNew1.uploadedBy,
+            notificationFrequencyAmount:
+                eventDataNew1.notificationFrequencyAmount,
+            notificationFrequencyMinute:
+                eventDataNew1.notificationFrequencyMinute,
+            eventImageList: eventDataNew1.eventImageList,
+            startDatetime: eventDataNew1.startDatetime,
+            endDatetime: eventDataNew1.endDatetime,
+            uploadedAt: eventDataNew1.uploadedAt,
+            createdAt: eventDataNew1.createdAt,
+            boothList: boothList,
+          );
+        }).toList();
+      },
+    );
   }
 
   Stream<List<EventDataModelStruct1>> queryEventsWithBooths() {
@@ -219,6 +308,25 @@ class MyStreamService {
   }
 
   Future createUserNotificationDoc(EventDataModelStruct1 event) async {
+    List<UserNotificationDataModelStruct> filteredNoti =
+        userNotiData.where((noti) => noti.eventId == event.eventId).toList();
+
+    if (filteredNoti.length != 0) {
+      if (filteredNoti.first.sendCount >=
+          (event.notificationFrequencyAmount != null
+              ? event.notificationFrequencyAmount
+              : 0)) {
+        return;
+      } else {
+        DateTime nextNotiTime = filteredNoti.first.sentAt
+            .add(Duration(minutes: event.notificationFrequencyMinute));
+
+        if (nextNotiTime.isAfter(Timestamp.now().toDate())) {
+          return;
+        }
+      }
+    }
+
     final notiRef = FirebaseFirestore.instance
         .collection('users')
         .doc('${currentUserUid}')
@@ -226,11 +334,16 @@ class MyStreamService {
 
     final query = await notiRef
         .where('event_id', isEqualTo: int.parse('${event.eventId}'))
+        // .where('booth_id'), isEqualTo: '${event.boothList.first}'
         .get();
     if (query.docs.isNotEmpty) {
       // 👉 update first doc
       await notiRef.doc(query.docs.first.id).set({
+        'booth_id': '${event.boothList.first.boothId}',
+        'sent_at': FieldValue.serverTimestamp(),
         'send_count': int.parse('${query.docs.first.data()['send_count'] + 1}'),
+        'is_read': false,
+        'is_deleted': false,
       }, SetOptions(merge: true));
     } else {
       // 👉 create new doc
@@ -243,6 +356,8 @@ class MyStreamService {
         'sent_at': FieldValue.serverTimestamp(),
         'event_id': int.parse('${event.eventId}'),
         'send_count': 1,
+        'is_read': false,
+        'is_deleted': false,
       });
     }
 

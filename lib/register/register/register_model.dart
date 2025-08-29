@@ -10,6 +10,8 @@ class RegisterModel extends FlutterFlowModel<RegisterWidget> {
 
   ///  State fields for stateful widgets in this page.
 
+  // Stores action output result for [Backend Call - Read Document] action in Register widget.
+  EventsRecord? dataEvent;
   // State field(s) for firstName widget.
   FocusNode? firstNameFocusNode;
   TextEditingController? firstNameTextController;

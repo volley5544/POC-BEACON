@@ -1,3 +1,4 @@
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'q_r_code_widget.dart' show QRCodeWidget;
 import 'package:flutter/material.dart';
@@ -31,6 +32,8 @@ class QRCodeModel extends FlutterFlowModel<QRCodeWidget> {
   ///  State fields for stateful widgets in this page.
 
   final formKey = GlobalKey<FormState>();
+  // Stores action output result for [Backend Call - Read Document] action in QRCode widget.
+  EventsRecord? dataEvent;
 
   @override
   void initState(BuildContext context) {}

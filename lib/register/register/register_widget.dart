@@ -56,14 +56,20 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           );
         },
       );
+      _model.dataEvent =
+          await EventsRecord.getDocumentOnce(widget.eventRef!.reference);
     });
 
     _model.firstNameTextController ??= TextEditingController(
-        text: valueOrDefault(currentUserDocument?.firstName, ''));
+        text: valueOrDefault(currentUserDocument?.firstName, '') != ''
+            ? valueOrDefault(currentUserDocument?.firstName, '')
+            : '');
     _model.firstNameFocusNode ??= FocusNode();
 
     _model.lastNameTextController ??= TextEditingController(
-        text: valueOrDefault(currentUserDocument?.lastName, ''));
+        text: valueOrDefault(currentUserDocument?.lastName, '') != ''
+            ? valueOrDefault(currentUserDocument?.lastName, '')
+            : '');
     _model.lastNameFocusNode ??= FocusNode();
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
@@ -150,7 +156,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                         padding:
                             EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 0.0, 0.0),
                         child: Text(
-                          'ลงทะเบียนเข้างาน',
+                          'ลงทะเบียนเข้างาน${_model.dataEvent?.eventName}',
                           style: FlutterFlowTheme.of(context)
                               .headlineMedium
                               .override(
@@ -528,6 +534,22 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                               ),
                             }, registerRecordReference);
                             _shouldSetState = true;
+
+                            await currentUserReference!.update({
+                              ...createUsersRecordData(
+                                firstName: _model.firstNameTextController.text,
+                                lastName: _model.lastNameTextController.text,
+                                email: '',
+                                displayName:
+                                    '${_model.firstNameTextController.text} ${_model.lastNameTextController.text}',
+                                updatedBy: currentUserReference?.path,
+                              ),
+                              ...mapToFirestore(
+                                {
+                                  'updated_at': FieldValue.serverTimestamp(),
+                                },
+                              ),
+                            });
                             await showDialog(
                               context: context,
                               builder: (alertDialogContext) {
