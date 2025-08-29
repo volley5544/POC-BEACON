@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:dchs_flutter_beacon/dchs_flutter_beacon.dart';
 import '/custom_code/my_stream_service.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter_background_service/flutter_background_service.dart';
+// import 'package:flutter_background_service/flutter_background_service.dart';
 
 Future beaconBackgroundServiceAction() async {
   // Add your function code here!
