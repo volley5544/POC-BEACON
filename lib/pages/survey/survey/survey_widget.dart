@@ -2,6 +2,7 @@ import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/components/emoji_rating_component_widget.dart';
 import '/components/loading_component_widget.dart';
+import '/components/no_data_component_widget.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -183,8 +184,8 @@ class _SurveyWidgetState extends State<SurveyWidget>
                     color: FlutterFlowTheme.of(context).secondaryText,
                     size: 30.0,
                   ),
-                  onPressed: () {
-                    print('IconButton pressed ...');
+                  onPressed: () async {
+                    context.safePop();
                   },
                 ),
               ),
@@ -194,17 +195,29 @@ class _SurveyWidgetState extends State<SurveyWidget>
           ),
           body: SafeArea(
             top: true,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Builder(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: Builder(
                     builder: (context) {
                       final listBooths =
                           _model.queryUserActivityAction?.toList() ?? [];
+                      if (listBooths.isEmpty) {
+                        return NoDataComponentWidget(
+                          title: 'ไม่พบข้อมูล',
+                          body:
+                              'ไม่พบข้อมูลประเมินความพึงพอใจ กรุณาเข้าร่วมบูธกิจกรรมและทำแบบสอบถามภายหลัง',
+                        );
+                      }
 
                       return ListView.builder(
-                        padding: EdgeInsets.zero,
+                        padding: EdgeInsets.fromLTRB(
+                          0,
+                          0,
+                          0,
+                          50.0,
+                        ),
                         shrinkWrap: true,
                         scrollDirection: Axis.vertical,
                         itemCount: listBooths.length,
@@ -212,7 +225,7 @@ class _SurveyWidgetState extends State<SurveyWidget>
                           final listBoothsItem = listBooths[listBoothsIndex];
                           return Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 5.0, 0.0, 5.0),
+                                0.0, 0.0, 0.0, 5.0),
                             child: Container(
                               width: double.infinity,
                               decoration: BoxDecoration(
@@ -346,125 +359,113 @@ class _SurveyWidgetState extends State<SurveyWidget>
                       );
                     },
                   ),
-                  Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  24.0, 10.0, 24.0, 24.0),
-                              child: FFButtonWidget(
-                                onPressed: () async {
-                                  if (!((List<String> listScore) {
-                                    return listScore
-                                        .every((item) => item != "0");
-                                  }(_model.scoreList.toList()))) {
-                                    await showDialog(
-                                      context: context,
-                                      builder: (alertDialogContext) {
-                                        return AlertDialog(
-                                          content:
-                                              Text('กรุณาประเมินกิจกรรมให้ครบ'),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () => Navigator.pop(
-                                                  alertDialogContext),
-                                              child: Text('Ok'),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                    return;
-                                  }
-                                  for (int loop1Index = 0;
-                                      loop1Index <=
-                                          _model.queryUserActivityAction!
-                                                  .length -
-                                              1;
-                                      loop1Index++) {
-                                    final currentLoop1Item = _model
-                                        .queryUserActivityAction![loop1Index];
-
-                                    await currentLoop1Item.reference
-                                        .update(createUserActivityRecordData(
-                                      isSurveyed: true,
-                                      surveyData: createSurveyDataModelStruct(
-                                        uid: currentLoop1Item.uid,
-                                        eventId: currentLoop1Item.eventId,
-                                        boothId: currentLoop1Item.boothId,
-                                        rating: int.parse((_model.scoreList
-                                            .elementAtOrNull(loop1Index)!)),
-                                        feedback: _model
-                                            .emojiRatingComponentModels
-                                            .getValueForKey(
-                                          loop1Index.toString(),
-                                          (m) => m.remarkTextController.text,
-                                        ),
-                                        createdBy: currentUserReference?.path,
-                                        isActive: 0,
-                                        updatedBy: currentUserReference?.path,
-                                        fieldValues: {
-                                          'survey_id': FieldValue.increment(1),
-                                          'created_at':
-                                              FieldValue.serverTimestamp(),
-                                          'updated_at':
-                                              FieldValue.serverTimestamp(),
-                                        },
-                                        clearUnsetFields: false,
-                                      ),
-                                    ));
-                                  }
-                                  if (Navigator.of(context).canPop()) {
-                                    context.pop();
-                                  }
-                                  context.pushNamed(
-                                    SuccessSurveyWidget.routeName,
-                                    queryParameters: {
-                                      'eventId': serializeParam(
-                                        widget.eventId,
-                                        ParamType.int,
-                                      ),
-                                      'eventRef': serializeParam(
-                                        widget.eventRef,
-                                        ParamType.Document,
-                                      ),
-                                    }.withoutNulls,
-                                    extra: <String, dynamic>{
-                                      'eventRef': widget.eventRef,
+                ),
+                if (_model.scoreList.length > 0)
+                  Container(
+                    height: 100.0,
+                    decoration: BoxDecoration(),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                24.0, 10.0, 24.0, 24.0),
+                            child: FFButtonWidget(
+                              onPressed: () async {
+                                if (!((List<String> listScore) {
+                                  return listScore.every((item) => item != "0");
+                                }(_model.scoreList.toList()))) {
+                                  await showDialog(
+                                    context: context,
+                                    builder: (alertDialogContext) {
+                                      return AlertDialog(
+                                        content:
+                                            Text('กรุณาประเมินกิจกรรมให้ครบ'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(
+                                                alertDialogContext),
+                                            child: Text('Ok'),
+                                          ),
+                                        ],
+                                      );
                                     },
                                   );
-                                },
-                                text: 'ส่ง',
-                                options: FFButtonOptions(
-                                  width: double.infinity,
-                                  height: 48.0,
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      24.0, 0.0, 24.0, 0.0),
-                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 0.0, 0.0),
-                                  color: FlutterFlowTheme.of(context).primary,
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .override(
-                                        font: GoogleFonts.readexPro(
-                                          fontWeight:
-                                              FlutterFlowTheme.of(context)
-                                                  .titleSmall
-                                                  .fontWeight,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .titleSmall
-                                                  .fontStyle,
-                                        ),
-                                        color: Colors.white,
-                                        letterSpacing: 0.0,
+                                  return;
+                                }
+                                for (int loop1Index = 0;
+                                    loop1Index <=
+                                        _model.queryUserActivityAction!.length -
+                                            1;
+                                    loop1Index++) {
+                                  final currentLoop1Item = _model
+                                      .queryUserActivityAction![loop1Index];
+
+                                  await currentLoop1Item.reference
+                                      .update(createUserActivityRecordData(
+                                    isSurveyed: true,
+                                    surveyData: createSurveyDataModelStruct(
+                                      uid: currentLoop1Item.uid,
+                                      eventId: currentLoop1Item.eventId,
+                                      boothId: currentLoop1Item.boothId,
+                                      rating: int.parse((_model.scoreList
+                                          .elementAtOrNull(loop1Index)!)),
+                                      feedback: _model
+                                          .emojiRatingComponentModels
+                                          .getValueForKey(
+                                        loop1Index.toString(),
+                                        (m) => m.remarkTextController.text,
+                                      ),
+                                      createdBy: currentUserReference?.path,
+                                      isActive: 0,
+                                      updatedBy: currentUserReference?.path,
+                                      fieldValues: {
+                                        'survey_id': FieldValue.increment(1),
+                                        'created_at':
+                                            FieldValue.serverTimestamp(),
+                                        'updated_at':
+                                            FieldValue.serverTimestamp(),
+                                      },
+                                      clearUnsetFields: false,
+                                    ),
+                                  ));
+                                }
+                                if (Navigator.of(context).canPop()) {
+                                  context.pop();
+                                }
+                                context.pushNamed(
+                                  SuccessSurveyWidget.routeName,
+                                  queryParameters: {
+                                    'eventId': serializeParam(
+                                      widget.eventId,
+                                      ParamType.int,
+                                    ),
+                                    'eventRef': serializeParam(
+                                      widget.eventRef,
+                                      ParamType.Document,
+                                    ),
+                                  }.withoutNulls,
+                                  extra: <String, dynamic>{
+                                    'eventRef': widget.eventRef,
+                                  },
+                                );
+                              },
+                              text: 'ส่ง',
+                              options: FFButtonOptions(
+                                width: double.infinity,
+                                height: 48.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    24.0, 0.0, 24.0, 0.0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                color: FlutterFlowTheme.of(context).primary,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      font: GoogleFonts.readexPro(
                                         fontWeight: FlutterFlowTheme.of(context)
                                             .titleSmall
                                             .fontWeight,
@@ -472,23 +473,30 @@ class _SurveyWidgetState extends State<SurveyWidget>
                                             .titleSmall
                                             .fontStyle,
                                       ),
-                                  elevation: 3.0,
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.0),
+                                      color: Colors.white,
+                                      letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .titleSmall
+                                          .fontStyle,
+                                    ),
+                                elevation: 3.0,
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1.0,
                                 ),
-                              ).animateOnPageLoad(
-                                  animationsMap['buttonOnPageLoadAnimation']!),
-                            ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ).animateOnPageLoad(
+                                animationsMap['buttonOnPageLoadAnimation']!),
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
+              ].addToEnd(SizedBox(height: 50.0)),
             ),
           ),
         ),

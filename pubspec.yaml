@@ -28,6 +28,7 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   auto_size_text: 3.0.0
+  badges: 2.0.2
   barcode_widget: 2.0.3
   cached_network_image: 3.4.1
   cached_network_image_platform_interface: 4.1.1

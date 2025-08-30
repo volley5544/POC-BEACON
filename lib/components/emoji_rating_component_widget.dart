@@ -50,19 +50,19 @@ class _EmojiRatingComponentWidgetState
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: FlutterFlowTheme.of(context).alternate,
+        color: FlutterFlowTheme.of(context).secondaryBackground,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: InkWell(
+          Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                InkWell(
                   splashColor: Colors.transparent,
                   focusColor: Colors.transparent,
                   hoverColor: Colors.transparent,
@@ -75,10 +75,9 @@ class _EmojiRatingComponentWidgetState
                     );
                   },
                   child: Container(
-                    width: _model.score == '1' ? 90.0 : 80.0,
+                    width: _model.score == '1' ? 80.0 : 70.0,
                     height: _model.score == '1' ? 90.0 : 80.0,
                     decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).alternate,
                       borderRadius: BorderRadius.circular(8.0),
                       border: Border.all(
                         color: _model.score == '1'
@@ -96,8 +95,8 @@ class _EmojiRatingComponentWidgetState
                         children: [
                           Image.network(
                             'https://cdn-icons-png.flaticon.com/512/6637/6637186.png',
-                            width: _model.score == '1' ? 50.0 : 45.0,
-                            height: _model.score == '1' ? 50.0 : 45.0,
+                            width: _model.score == '1' ? 40.0 : 35.0,
+                            height: _model.score == '1' ? 40.0 : 35.0,
                             fit: BoxFit.cover,
                           ),
                           Padding(
@@ -114,7 +113,7 @@ class _EmojiRatingComponentWidgetState
                                           .bodyMedium
                                           .fontStyle,
                                     ),
-                                    fontSize: _model.score == '1' ? 13.0 : 12.0,
+                                    fontSize: _model.score == '1' ? 12.0 : 11.0,
                                     letterSpacing: 0.0,
                                     fontWeight: FontWeight.w600,
                                     fontStyle: FlutterFlowTheme.of(context)
@@ -133,10 +132,7 @@ class _EmojiRatingComponentWidgetState
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: InkWell(
+                InkWell(
                   splashColor: Colors.transparent,
                   focusColor: Colors.transparent,
                   hoverColor: Colors.transparent,
@@ -149,10 +145,9 @@ class _EmojiRatingComponentWidgetState
                     );
                   },
                   child: Container(
-                    width: _model.score == '2' ? 90.0 : 80.0,
+                    width: _model.score == '2' ? 80.0 : 70.0,
                     height: _model.score == '2' ? 90.0 : 80.0,
                     decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).alternate,
                       borderRadius: BorderRadius.circular(8.0),
                       border: Border.all(
                         color: _model.score == '2'
@@ -170,8 +165,8 @@ class _EmojiRatingComponentWidgetState
                         children: [
                           Image.network(
                             'https://cdn-icons-png.flaticon.com/512/6637/6637209.png',
-                            width: _model.score == '2' ? 50.0 : 45.0,
-                            height: _model.score == '2' ? 50.0 : 45.0,
+                            width: _model.score == '2' ? 40.0 : 35.0,
+                            height: _model.score == '2' ? 40.0 : 35.0,
                             fit: BoxFit.cover,
                           ),
                           Padding(
@@ -188,7 +183,7 @@ class _EmojiRatingComponentWidgetState
                                           .bodyMedium
                                           .fontStyle,
                                     ),
-                                    fontSize: _model.score == '2' ? 13.0 : 12.0,
+                                    fontSize: _model.score == '2' ? 12.0 : 11.0,
                                     letterSpacing: 0.0,
                                     fontWeight: FontWeight.w600,
                                     fontStyle: FlutterFlowTheme.of(context)
@@ -207,10 +202,7 @@ class _EmojiRatingComponentWidgetState
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: InkWell(
+                InkWell(
                   splashColor: Colors.transparent,
                   focusColor: Colors.transparent,
                   hoverColor: Colors.transparent,
@@ -223,10 +215,9 @@ class _EmojiRatingComponentWidgetState
                     );
                   },
                   child: Container(
-                    width: _model.score == '3' ? 90.0 : 80.0,
+                    width: _model.score == '3' ? 80.0 : 70.0,
                     height: _model.score == '3' ? 90.0 : 80.0,
                     decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).alternate,
                       borderRadius: BorderRadius.circular(8.0),
                       border: Border.all(
                         color: _model.score == '3'
@@ -244,8 +235,8 @@ class _EmojiRatingComponentWidgetState
                         children: [
                           Image.network(
                             'https://cdn-icons-png.flaticon.com/512/6637/6637207.png',
-                            width: _model.score == '3' ? 50.0 : 45.0,
-                            height: _model.score == '3' ? 50.0 : 45.0,
+                            width: _model.score == '3' ? 40.0 : 35.0,
+                            height: _model.score == '3' ? 40.0 : 35.0,
                             fit: BoxFit.cover,
                           ),
                           Padding(
@@ -262,7 +253,7 @@ class _EmojiRatingComponentWidgetState
                                           .bodyMedium
                                           .fontStyle,
                                     ),
-                                    fontSize: _model.score == '3' ? 13.0 : 12.0,
+                                    fontSize: _model.score == '3' ? 12.0 : 11.0,
                                     letterSpacing: 0.0,
                                     fontWeight: FontWeight.w600,
                                     fontStyle: FlutterFlowTheme.of(context)
@@ -281,10 +272,7 @@ class _EmojiRatingComponentWidgetState
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: InkWell(
+                InkWell(
                   splashColor: Colors.transparent,
                   focusColor: Colors.transparent,
                   hoverColor: Colors.transparent,
@@ -297,10 +285,9 @@ class _EmojiRatingComponentWidgetState
                     );
                   },
                   child: Container(
-                    width: _model.score == '4' ? 90.0 : 80.0,
+                    width: _model.score == '4' ? 80.0 : 70.0,
                     height: _model.score == '4' ? 90.0 : 80.0,
                     decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).alternate,
                       borderRadius: BorderRadius.circular(8.0),
                       border: Border.all(
                         color: _model.score == '4'
@@ -318,8 +305,8 @@ class _EmojiRatingComponentWidgetState
                         children: [
                           Image.network(
                             'https://cdn-icons-png.flaticon.com/512/6637/6637188.png',
-                            width: _model.score == '4' ? 50.0 : 45.0,
-                            height: _model.score == '4' ? 50.0 : 45.0,
+                            width: _model.score == '4' ? 40.0 : 35.0,
+                            height: _model.score == '4' ? 40.0 : 35.0,
                             fit: BoxFit.cover,
                           ),
                           Padding(
@@ -336,7 +323,7 @@ class _EmojiRatingComponentWidgetState
                                           .bodyMedium
                                           .fontStyle,
                                     ),
-                                    fontSize: _model.score == '4' ? 13.0 : 12.0,
+                                    fontSize: _model.score == '4' ? 12.0 : 11.0,
                                     letterSpacing: 0.0,
                                     fontWeight: FontWeight.w600,
                                     fontStyle: FlutterFlowTheme.of(context)
@@ -355,10 +342,7 @@ class _EmojiRatingComponentWidgetState
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: InkWell(
+                InkWell(
                   splashColor: Colors.transparent,
                   focusColor: Colors.transparent,
                   hoverColor: Colors.transparent,
@@ -371,10 +355,9 @@ class _EmojiRatingComponentWidgetState
                     );
                   },
                   child: Container(
-                    width: _model.score == '5' ? 90.0 : 80.0,
+                    width: _model.score == '5' ? 80.0 : 70.0,
                     height: _model.score == '5' ? 90.0 : 80.0,
                     decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).alternate,
                       borderRadius: BorderRadius.circular(8.0),
                       border: Border.all(
                         color: _model.score == '5'
@@ -392,8 +375,8 @@ class _EmojiRatingComponentWidgetState
                         children: [
                           Image.network(
                             'https://cdn-icons-png.flaticon.com/512/6637/6637197.png',
-                            width: _model.score == '5' ? 50.0 : 45.0,
-                            height: _model.score == '5' ? 50.0 : 45.0,
+                            width: _model.score == '5' ? 40.0 : 35.0,
+                            height: _model.score == '5' ? 40.0 : 35.0,
                             fit: BoxFit.cover,
                           ),
                           Padding(
@@ -410,7 +393,7 @@ class _EmojiRatingComponentWidgetState
                                           .bodyMedium
                                           .fontStyle,
                                     ),
-                                    fontSize: _model.score == '5' ? 13.0 : 12.0,
+                                    fontSize: _model.score == '5' ? 12.0 : 11.0,
                                     letterSpacing: 0.0,
                                     fontWeight: FontWeight.w600,
                                     fontStyle: FlutterFlowTheme.of(context)
@@ -429,8 +412,8 @@ class _EmojiRatingComponentWidgetState
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(16.0, 8.0, 0.0, 8.0),
@@ -532,7 +515,6 @@ class _EmojiRatingComponentWidgetState
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     filled: true,
-                    fillColor: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         font: GoogleFonts.readexPro(
@@ -556,7 +538,7 @@ class _EmojiRatingComponentWidgetState
               ),
             ),
           ),
-        ],
+        ].addToEnd(SizedBox(height: 12.0)),
       ),
     );
   }

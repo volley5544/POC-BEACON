@@ -25,7 +25,11 @@ Future beaconBackgroundServiceAction() async {
         flutterBeacon.ranging(regions)); // stays alive across all pages
     service.listenUserNotification();
     service.listenEventWithBooths();
+  } else {
+    final service = MyStreamService();
+    service.listenUserNotification();
   }
 }
+
 // Set your action name, define your arguments and return parameter,
 // and then add the boilerplate code using the green button on the right!

@@ -11,6 +11,7 @@ import '/custom_code/user_notification_data_model_struct.dart';
 import 'package:flutter/services.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import 'package:rxdart/rxdart.dart';
+import '/backend/push_notifications/push_notifications_util.dart';
 
 class MyStreamService {
   static final MyStreamService _instance = MyStreamService._internal();
@@ -361,6 +362,16 @@ class MyStreamService {
       });
     }
 
+    triggerPushNotification(
+      notificationTitle: 'เรียนเชิญเล่นกิจกรรม${event.eventName}',
+      notificationText:
+          'ขณะนี้คุณได้อยู่ใกล้บูธ${event.boothList.first.boothName} กิจกรรม${event.eventName}แล้ว เชิญไปที่บูธเพื่อทำกรรมได้เลย',
+      notificationSound: 'default',
+      userRefs: [currentUserReference!],
+      initialPageName: 'Home',
+      parameterData: {},
+    );
+
     // await FirebaseFirestore.instance
     //     .collection('users')
     //     .doc('${currentUserUid}')
@@ -423,5 +434,13 @@ class MyStreamService {
   void stopListening() {
     _streamRanging?.cancel();
     _streamRanging = null;
+  }
+
+  List<String> getBeaconIdList() {
+    return beaconId;
+  }
+
+  List<String> getBeaconDistanceList() {
+    return beaconDistance;
   }
 }

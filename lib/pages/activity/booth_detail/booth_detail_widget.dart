@@ -345,26 +345,7 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                                   .toList(),
                                               widget.boothDoc?.deviceUuid) !=
                                           -1
-                                      ? ((String beaconDistance,
-                                                  int notificationDistance) {
-                                          return double.parse(beaconDistance) <=
-                                              double.parse(
-                                                  '$notificationDistance');
-                                        }(
-                                              FFAppState()
-                                                  .beaconDistanceList
-                                                  .elementAtOrNull(
-                                                      functions
-                                                          .returnIndexValueInList(
-                                                              FFAppState()
-                                                                  .beaconIdList
-                                                                  .toList(),
-                                                              widget.boothDoc
-                                                                  ?.deviceUuid)!)!,
-                                              widget.boothDoc!
-                                                  .notificationDistance)
-                                          ? 'อยู่ในระยะ ${FFAppState().beaconDistanceList.elementAtOrNull(functions.returnIndexValueInList(FFAppState().beaconIdList.toList(), widget.boothDoc?.deviceUuid)!)} m'
-                                          : 'ไม่อยู่ในระยะ')
+                                      ? 'อยู่ในระยะ ${FFAppState().beaconDistanceList.elementAtOrNull(functions.returnIndexValueInList(FFAppState().beaconIdList.toList(), widget.boothDoc?.deviceUuid)!)} m'
                                       : 'ไม่อยู่ในระยะ',
                                   style: FlutterFlowTheme.of(context)
                                       .labelMedium

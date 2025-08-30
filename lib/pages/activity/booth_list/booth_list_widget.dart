@@ -54,8 +54,10 @@ class _BoothListWidgetState extends State<BoothListWidget>
       await Future.wait([
         Future(() async {
           _model.instantTimer = InstantTimer.periodic(
-            duration: Duration(milliseconds: 500),
-            callback: (timer) async {},
+            duration: Duration(milliseconds: 2000),
+            callback: (timer) async {
+              safeSetState(() {});
+            },
             startImmediately: true,
           );
         }),
@@ -708,80 +710,86 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                     ),
                                                     Stack(
                                                       children: [
-                                                        Align(
-                                                          alignment:
-                                                              AlignmentDirectional(
-                                                                  0.0, -1.0),
-                                                          child: Row(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .max,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Padding(
-                                                                padding: EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        10.0,
-                                                                        5.0,
-                                                                        10.0,
-                                                                        10.0),
+                                                        Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          10.0,
+                                                                          5.0,
+                                                                          10.0,
+                                                                          10.0),
+                                                              child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8.0),
                                                                 child:
-                                                                    ClipRRect(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              8.0),
-                                                                  child:
-                                                                      OctoImage(
-                                                                    placeholderBuilder: (_) =>
-                                                                        SizedBox
-                                                                            .expand(
-                                                                      child:
-                                                                          Image(
-                                                                        image: BlurHashImage(
-                                                                            'UBEVpOXp4mV@bw9F8_?b00ITt7ocIA~q_48_'),
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                      ),
+                                                                    OctoImage(
+                                                                  placeholderBuilder:
+                                                                      (_) => SizedBox
+                                                                          .expand(
+                                                                    child:
+                                                                        Image(
+                                                                      image: BlurHashImage(
+                                                                          'UBEVpOXp4mV@bw9F8_?b00ITt7ocIA~q_48_'),
+                                                                      fit: BoxFit
+                                                                          .cover,
                                                                     ),
-                                                                    image:
-                                                                        NetworkImage(
-                                                                      listViewBoothsRecord
-                                                                          .boothImageList
-                                                                          .firstOrNull!,
-                                                                    ),
-                                                                    width: 90.0,
-                                                                    height:
-                                                                        90.0,
-                                                                    fit: BoxFit
-                                                                        .cover,
                                                                   ),
+                                                                  image:
+                                                                      NetworkImage(
+                                                                    listViewBoothsRecord.hasBoothImageList() &&
+                                                                            (listViewBoothsRecord
+                                                                                .boothImageList.isNotEmpty)
+                                                                        ? listViewBoothsRecord
+                                                                            .boothImageList
+                                                                            .firstOrNull!
+                                                                        : 'https://firebasestorage.googleapis.com/v0/b/poc-beacon-firebase.firebasestorage.app/o/joystick.jpeg?alt=media&token=420111f8-8d8e-49eb-aa7f-b9207718d8dd',
+                                                                  ),
+                                                                  width: 90.0,
+                                                                  height: 90.0,
+                                                                  fit: BoxFit
+                                                                      .cover,
                                                                 ),
                                                               ),
-                                                              Expanded(
-                                                                child: Padding(
-                                                                  padding: EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          5.0,
-                                                                          12.0,
-                                                                          0.0,
-                                                                          12.0),
-                                                                  child: Column(
-                                                                    mainAxisSize:
-                                                                        MainAxisSize
-                                                                            .max,
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .start,
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
-                                                                    children: [
-                                                                      Text(
-                                                                        listViewBoothsRecord
-                                                                            .description,
+                                                            ),
+                                                            Expanded(
+                                                              flex: 6,
+                                                              child: Padding(
+                                                                padding: EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        5.0,
+                                                                        12.0,
+                                                                        0.0,
+                                                                        12.0),
+                                                                child: Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .max,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .start,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Container(
+                                                                      width: double
+                                                                          .infinity,
+                                                                      decoration:
+                                                                          BoxDecoration(),
+                                                                      child:
+                                                                          Text(
+                                                                        listViewBoothsRecord.hasDescription()
+                                                                            ? listViewBoothsRecord.description
+                                                                            : '',
                                                                         style: FlutterFlowTheme.of(context)
                                                                             .displaySmall
                                                                             .override(
@@ -796,123 +804,64 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                               fontStyle: FlutterFlowTheme.of(context).displaySmall.fontStyle,
                                                                             ),
                                                                       ),
-                                                                      StreamBuilder<
-                                                                          List<
-                                                                              UserActivityRecord>>(
-                                                                        stream:
-                                                                            queryUserActivityRecord(
-                                                                          parent:
-                                                                              currentUserReference,
-                                                                          queryBuilder: (userActivityRecord) => userActivityRecord
-                                                                              .where(
-                                                                                'event_id',
-                                                                                isEqualTo: listViewBoothsRecord.eventId,
-                                                                              )
-                                                                              .where(
-                                                                                'booth_id',
-                                                                                isEqualTo: listViewBoothsRecord.boothId,
-                                                                              )
-                                                                              .where(
-                                                                                'is_completed',
-                                                                                isEqualTo: true,
-                                                                              ),
-                                                                          singleRecord:
-                                                                              true,
-                                                                        ),
-                                                                        builder:
-                                                                            (context,
-                                                                                snapshot) {
-                                                                          // Customize what your widget looks like when it's loading.
-                                                                          if (!snapshot
-                                                                              .hasData) {
-                                                                            return Center(
-                                                                              child: SizedBox(
-                                                                                width: 50.0,
-                                                                                height: 50.0,
-                                                                                child: CircularProgressIndicator(
-                                                                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                                                                    FlutterFlowTheme.of(context).primary,
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            );
-                                                                          }
-                                                                          List<UserActivityRecord>
-                                                                              textUserActivityRecordList =
-                                                                              snapshot.data!;
-                                                                          final textUserActivityRecord = textUserActivityRecordList.isNotEmpty
-                                                                              ? textUserActivityRecordList.first
-                                                                              : null;
-
-                                                                          return Text(
-                                                                            valueOrDefault<String>(
-                                                                              true ? 'ทำกิจกรรมแล้ว' : 'รอทำกิจกรรม',
-                                                                              'รอทำกิจกรรม.',
+                                                                    ),
+                                                                    StreamBuilder<
+                                                                        List<
+                                                                            UserActivityRecord>>(
+                                                                      stream:
+                                                                          queryUserActivityRecord(
+                                                                        parent:
+                                                                            currentUserReference,
+                                                                        queryBuilder: (userActivityRecord) => userActivityRecord
+                                                                            .where(
+                                                                              'event_id',
+                                                                              isEqualTo: listViewBoothsRecord.eventId,
+                                                                            )
+                                                                            .where(
+                                                                              'booth_id',
+                                                                              isEqualTo: listViewBoothsRecord.boothId,
+                                                                            )
+                                                                            .where(
+                                                                              'is_completed',
+                                                                              isEqualTo: true,
                                                                             ),
-                                                                            style: FlutterFlowTheme.of(context).bodyMedium.override(
-                                                                                  font: GoogleFonts.readexPro(
-                                                                                    fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                                    fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                  ),
-                                                                                  color: textUserActivityRecord!.isCompleted ? FlutterFlowTheme.of(context).secondary : FlutterFlowTheme.of(context).error,
-                                                                                  letterSpacing: 0.0,
-                                                                                  fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                                                                                  fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                                                                                ),
-                                                                          );
-                                                                        },
+                                                                        singleRecord:
+                                                                            true,
                                                                       ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                child: Align(
-                                                                  alignment:
-                                                                      AlignmentDirectional(
-                                                                          1.0,
-                                                                          -1.0),
-                                                                  child:
-                                                                      Padding(
-                                                                    padding: EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            5.0,
-                                                                            0.0,
-                                                                            0.0,
-                                                                            0.0),
-                                                                    child:
-                                                                        Column(
-                                                                      mainAxisSize:
-                                                                          MainAxisSize
-                                                                              .max,
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .start,
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .start,
-                                                                      children: [
-                                                                        Align(
-                                                                          alignment: AlignmentDirectional(
-                                                                              1.0,
-                                                                              -1.0),
-                                                                          child:
-                                                                              Padding(
-                                                                            padding: EdgeInsetsDirectional.fromSTEB(
-                                                                                0.0,
-                                                                                0.0,
-                                                                                10.0,
-                                                                                0.0),
+                                                                      builder:
+                                                                          (context,
+                                                                              snapshot) {
+                                                                        // Customize what your widget looks like when it's loading.
+                                                                        if (!snapshot
+                                                                            .hasData) {
+                                                                          return Center(
                                                                             child:
-                                                                                Icon(
-                                                                              Icons.chevron_right_rounded,
-                                                                              color: FlutterFlowTheme.of(context).secondaryText,
-                                                                              size: 24.0,
+                                                                                SizedBox(
+                                                                              width: 50.0,
+                                                                              height: 50.0,
+                                                                              child: CircularProgressIndicator(
+                                                                                valueColor: AlwaysStoppedAnimation<Color>(
+                                                                                  FlutterFlowTheme.of(context).primary,
+                                                                                ),
+                                                                              ),
                                                                             ),
+                                                                          );
+                                                                        }
+                                                                        List<UserActivityRecord>
+                                                                            textUserActivityRecordList =
+                                                                            snapshot.data!;
+                                                                        final textUserActivityRecord = textUserActivityRecordList.isNotEmpty
+                                                                            ? textUserActivityRecordList.first
+                                                                            : null;
+
+                                                                        return Text(
+                                                                          valueOrDefault<
+                                                                              String>(
+                                                                            (textUserActivityRecord != null ? textUserActivityRecord.isCompleted : false)
+                                                                                ? 'ทำกิจกรรมแล้ว'
+                                                                                : 'รอทำกิจกรรม',
+                                                                            'รอทำกิจกรรม.',
                                                                           ),
-                                                                        ),
-                                                                        Text(
-                                                                          ' ',
                                                                           style: FlutterFlowTheme.of(context)
                                                                               .bodyMedium
                                                                               .override(
@@ -920,19 +869,70 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                                   fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                                                                                   fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                                 ),
-                                                                                color: FlutterFlowTheme.of(context).error,
+                                                                                color: (textUserActivityRecord != null ? textUserActivityRecord.isCompleted : false) ? FlutterFlowTheme.of(context).secondary : FlutterFlowTheme.of(context).error,
                                                                                 letterSpacing: 0.0,
                                                                                 fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
                                                                                 fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                                                                               ),
-                                                                        ),
-                                                                      ],
+                                                                        );
+                                                                      },
                                                                     ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Align(
+                                                                alignment:
+                                                                    AlignmentDirectional(
+                                                                        1.0,
+                                                                        -1.0),
+                                                                child: Padding(
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          5.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                                  child: Column(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .max,
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .start,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Align(
+                                                                        alignment: AlignmentDirectional(
+                                                                            1.0,
+                                                                            -1.0),
+                                                                        child:
+                                                                            Padding(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
+                                                                              0.0,
+                                                                              0.0,
+                                                                              10.0,
+                                                                              0.0),
+                                                                          child:
+                                                                              Icon(
+                                                                            Icons.chevron_right_rounded,
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).secondaryText,
+                                                                            size:
+                                                                                24.0,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
                                                                   ),
                                                                 ),
                                                               ),
-                                                            ],
-                                                          ),
+                                                            ),
+                                                          ],
                                                         ),
                                                       ],
                                                     ),
@@ -1212,7 +1212,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                           ),
                         ),
                       ),
-                    ],
+                    ].addToEnd(SizedBox(height: 50.0)),
                   ),
                 ],
               ),
