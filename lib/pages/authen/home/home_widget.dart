@@ -12,6 +12,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'home_model.dart';
@@ -200,114 +201,152 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                   ),
                 ),
                 actions: [
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 20.0, 0.0),
-                    child: StreamBuilder<List<NotificationsRecord>>(
-                      stream: queryNotificationsRecord(
-                        parent: currentUserReference,
-                        queryBuilder: (notificationsRecord) =>
-                            notificationsRecord
-                                .where(
-                                  'is_read',
-                                  isEqualTo: false,
-                                )
-                                .where(
-                                  'is_deleted',
-                                  isEqualTo: false,
-                                ),
-                      ),
-                      builder: (context, snapshot) {
-                        // Customize what your widget looks like when it's loading.
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: SizedBox(
-                              width: 50.0,
-                              height: 50.0,
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  FlutterFlowTheme.of(context).primary,
-                                ),
-                              ),
-                            ),
-                          );
-                        }
-                        List<NotificationsRecord> badgeNotificationsRecordList =
-                            snapshot.data!;
-
-                        return InkWell(
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 10.0, 0.0),
+                        child: InkWell(
                           splashColor: Colors.transparent,
                           focusColor: Colors.transparent,
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
-                            for (int loop1Index = 0;
-                                loop1Index <=
-                                    badgeNotificationsRecordList.length - 1;
-                                loop1Index++) {
-                              final currentLoop1Item =
-                                  badgeNotificationsRecordList[loop1Index];
+                            _model.linkReister =
+                                await FlutterBarcodeScanner.scanBarcode(
+                              '#C62828', // scanning line color
+                              'Cancel', // cancel button text
+                              true, // whether to show the flash icon
+                              ScanMode.QR,
+                            );
 
-                              await badgeNotificationsRecordList
-                                  .elementAtOrNull(loop1Index)!
-                                  .reference
-                                  .update(createNotificationsRecordData(
-                                    isRead: true,
-                                  ));
-                            }
+                            await launchURL(_model.linkReister);
 
-                            context.pushNamed(NotiPageWidget.routeName);
+                            safeSetState(() {});
                           },
-                          child: badges.Badge(
-                            badgeContent: Text(
-                              valueOrDefault<String>(
-                                badgeNotificationsRecordList.length.toString(),
-                                '1',
-                              ),
-                              style: FlutterFlowTheme.of(context)
-                                  .titleSmall
-                                  .override(
-                                    font: GoogleFonts.readexPro(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .fontStyle,
-                                    ),
-                                    color: Colors.white,
-                                    fontSize: 14.0,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .fontStyle,
-                                  ),
-                            ),
-                            showBadge: badgeNotificationsRecordList.length > 0,
-                            shape: badges.BadgeShape.circle,
-                            badgeColor: Color(0xFFEF393C),
-                            elevation: 4.0,
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                8.0, 8.0, 8.0, 8.0),
-                            position: badges.BadgePosition.topEnd(),
-                            animationType: badges.BadgeAnimationType.scale,
-                            toAnimate: true,
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 4.0, 0.0),
-                              child: Icon(
-                                Icons.notifications_active_sharp,
-                                color: Colors.white,
-                                size: 30.0,
-                              ),
-                            ),
+                          child: Icon(
+                            Icons.qr_code_scanner_sharp,
+                            color:
+                                FlutterFlowTheme.of(context).primaryBackground,
+                            size: 30.0,
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 20.0, 0.0),
+                        child: StreamBuilder<List<NotificationsRecord>>(
+                          stream: queryNotificationsRecord(
+                            parent: currentUserReference,
+                            queryBuilder: (notificationsRecord) =>
+                                notificationsRecord
+                                    .where(
+                                      'is_read',
+                                      isEqualTo: false,
+                                    )
+                                    .where(
+                                      'is_deleted',
+                                      isEqualTo: false,
+                                    ),
+                          ),
+                          builder: (context, snapshot) {
+                            // Customize what your widget looks like when it's loading.
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: SizedBox(
+                                  width: 50.0,
+                                  height: 50.0,
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      FlutterFlowTheme.of(context).primary,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                            List<NotificationsRecord>
+                                badgeNotificationsRecordList = snapshot.data!;
+
+                            return InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                for (int loop1Index = 0;
+                                    loop1Index <=
+                                        badgeNotificationsRecordList.length - 1;
+                                    loop1Index++) {
+                                  final currentLoop1Item =
+                                      badgeNotificationsRecordList[loop1Index];
+
+                                  await badgeNotificationsRecordList
+                                      .elementAtOrNull(loop1Index)!
+                                      .reference
+                                      .update(createNotificationsRecordData(
+                                        isRead: true,
+                                      ));
+                                }
+
+                                context.pushNamed(NotiPageWidget.routeName);
+                              },
+                              child: badges.Badge(
+                                badgeContent: Text(
+                                  valueOrDefault<String>(
+                                    badgeNotificationsRecordList.length
+                                        .toString(),
+                                    '1',
+                                  ),
+                                  style: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        font: GoogleFonts.readexPro(
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleSmall
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleSmall
+                                                  .fontStyle,
+                                        ),
+                                        color: Colors.white,
+                                        fontSize: 14.0,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .titleSmall
+                                            .fontStyle,
+                                      ),
+                                ),
+                                showBadge:
+                                    badgeNotificationsRecordList.length > 0,
+                                shape: badges.BadgeShape.circle,
+                                badgeColor: Color(0xFFEF393C),
+                                elevation: 4.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    8.0, 8.0, 8.0, 8.0),
+                                position: badges.BadgePosition.topEnd(),
+                                animationType: badges.BadgeAnimationType.scale,
+                                toAnimate: true,
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 4.0, 0.0),
+                                  child: Icon(
+                                    Icons.notifications_active_sharp,
+                                    color: Colors.white,
+                                    size: 30.0,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 ],
                 centerTitle: false,

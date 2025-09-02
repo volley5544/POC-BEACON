@@ -156,16 +156,14 @@ class _SurveyWidgetState extends State<SurveyWidget>
               'ประเมินความพึงพอใจ',
               style: FlutterFlowTheme.of(context).displaySmall.override(
                     font: GoogleFonts.outfit(
-                      fontWeight:
-                          FlutterFlowTheme.of(context).displaySmall.fontWeight,
+                      fontWeight: FontWeight.normal,
                       fontStyle:
                           FlutterFlowTheme.of(context).displaySmall.fontStyle,
                     ),
-                    color: FlutterFlowTheme.of(context).primary,
-                    fontSize: 24.0,
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    fontSize: 22.0,
                     letterSpacing: 0.0,
-                    fontWeight:
-                        FlutterFlowTheme.of(context).displaySmall.fontWeight,
+                    fontWeight: FontWeight.normal,
                     fontStyle:
                         FlutterFlowTheme.of(context).displaySmall.fontStyle,
                   ),
@@ -198,169 +196,174 @@ class _SurveyWidgetState extends State<SurveyWidget>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: Builder(
-                    builder: (context) {
-                      final listBooths =
-                          _model.queryUserActivityAction?.toList() ?? [];
-                      if (listBooths.isEmpty) {
-                        return NoDataComponentWidget(
-                          title: 'ไม่พบข้อมูล',
-                          body:
-                              'ไม่พบข้อมูลประเมินความพึงพอใจ กรุณาเข้าร่วมบูธกิจกรรมและทำแบบสอบถามภายหลัง',
-                        );
-                      }
+                if (_model.queryUserActivityAction!.length > 0)
+                  Expanded(
+                    child: Builder(
+                      builder: (context) {
+                        final listBooths =
+                            _model.queryUserActivityAction?.toList() ?? [];
+                        if (listBooths.isEmpty) {
+                          return NoDataComponentWidget(
+                            title: 'ไม่พบข้อมูล',
+                            body:
+                                'ไม่พบข้อมูลประเมินความพึงพอใจ กรุณาเข้าร่วมบูธกิจกรรมและทำแบบสอบถามภายหลัง',
+                          );
+                        }
 
-                      return ListView.builder(
-                        padding: EdgeInsets.fromLTRB(
-                          0,
-                          0,
-                          0,
-                          50.0,
-                        ),
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        itemCount: listBooths.length,
-                        itemBuilder: (context, listBoothsIndex) {
-                          final listBoothsItem = listBooths[listBoothsIndex];
-                          return Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 5.0),
-                            child: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional(-1.0, 0.0),
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  16.0, 12.0, 0.0, 0.0),
-                                          child: Text(
-                                            listBoothsItem.boothId.toString(),
-                                            style: FlutterFlowTheme.of(context)
-                                                .labelMedium
-                                                .override(
-                                                  font: GoogleFonts.readexPro(
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .labelMedium
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .labelMedium
-                                                            .fontStyle,
-                                                  ),
-                                                  letterSpacing: 0.0,
-                                                  fontWeight:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .labelMedium
-                                                          .fontWeight,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .labelMedium
-                                                          .fontStyle,
-                                                ),
-                                          ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional(-1.0, 0.0),
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  8.0, 12.0, 0.0, 0.0),
-                                          child: Text(
-                                            listBoothsItem.boothName,
-                                            style: FlutterFlowTheme.of(context)
-                                                .labelMedium
-                                                .override(
-                                                  font: GoogleFonts.readexPro(
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .labelMedium
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .labelMedium
-                                                            .fontStyle,
-                                                  ),
-                                                  letterSpacing: 0.0,
-                                                  fontWeight:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .labelMedium
-                                                          .fontWeight,
-                                                  fontStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .labelMedium
-                                                          .fontStyle,
-                                                ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SingleChildScrollView(
-                                    child: Column(
+                        return ListView.builder(
+                          padding: EdgeInsets.fromLTRB(
+                            0,
+                            0,
+                            0,
+                            50.0,
+                          ),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemCount: listBooths.length,
+                          itemBuilder: (context, listBoothsIndex) {
+                            final listBoothsItem = listBooths[listBoothsIndex];
+                            return Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 5.0),
+                              child: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Row(
                                       mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
                                       children: [
-                                        wrapWithModel(
-                                          model: _model
-                                              .emojiRatingComponentModels
-                                              .getModel(
-                                            listBoothsIndex.toString(),
-                                            listBoothsIndex,
-                                          ),
-                                          updateCallback: () =>
-                                              safeSetState(() {}),
-                                          updateOnChange: true,
-                                          child: EmojiRatingComponentWidget(
-                                            key: Key(
-                                              'Key31u_${listBoothsIndex.toString()}',
+                                        Align(
+                                          alignment:
+                                              AlignmentDirectional(-1.0, 0.0),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    16.0, 12.0, 0.0, 0.0),
+                                            child: Text(
+                                              listBoothsItem.boothId.toString(),
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .labelMedium
+                                                  .override(
+                                                    font: GoogleFonts.readexPro(
+                                                      fontWeight:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelMedium
+                                                              .fontWeight,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelMedium
+                                                              .fontStyle,
+                                                    ),
+                                                    letterSpacing: 0.0,
+                                                    fontWeight:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .labelMedium
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .labelMedium
+                                                            .fontStyle,
+                                                  ),
                                             ),
-                                            returnScoreAction: (score) async {
-                                              _model.updateScoreListAtIndex(
-                                                listBoothsIndex,
-                                                (_) => score,
-                                              );
-                                              safeSetState(() {});
-                                              safeSetState(() {});
-                                            },
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment:
+                                              AlignmentDirectional(-1.0, 0.0),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    8.0, 12.0, 0.0, 0.0),
+                                            child: Text(
+                                              listBoothsItem.boothName,
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .labelMedium
+                                                  .override(
+                                                    font: GoogleFonts.readexPro(
+                                                      fontWeight:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelMedium
+                                                              .fontWeight,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelMedium
+                                                              .fontStyle,
+                                                    ),
+                                                    letterSpacing: 0.0,
+                                                    fontWeight:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .labelMedium
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .labelMedium
+                                                            .fontStyle,
+                                                  ),
+                                            ),
                                           ),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                ],
+                                    SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          wrapWithModel(
+                                            model: _model
+                                                .emojiRatingComponentModels
+                                                .getModel(
+                                              listBoothsIndex.toString(),
+                                              listBoothsIndex,
+                                            ),
+                                            updateCallback: () =>
+                                                safeSetState(() {}),
+                                            updateOnChange: true,
+                                            child: EmojiRatingComponentWidget(
+                                              key: Key(
+                                                'Key31u_${listBoothsIndex.toString()}',
+                                              ),
+                                              returnScoreAction: (score) async {
+                                                _model.updateScoreListAtIndex(
+                                                  listBoothsIndex,
+                                                  (_) => score,
+                                                );
+                                                safeSetState(() {});
+                                                safeSetState(() {});
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      );
-                    },
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
-                ),
-                if (_model.scoreList.length > 0)
+                if ((List<String> listScore) {
+                  return listScore.every((item) => item != "0");
+                }(_model.scoreList.toList()))
                   Container(
                     height: 100.0,
                     decoration: BoxDecoration(),

@@ -32,7 +32,7 @@ class QRCodeModel extends FlutterFlowModel<QRCodeWidget> {
   ///  State fields for stateful widgets in this page.
 
   final formKey = GlobalKey<FormState>();
-  // Stores action output result for [Backend Call - Read Document] action in QRCode widget.
+  // Stores action output result for [Firestore Query - Query a collection] action in QRCode widget.
   EventsRecord? dataEvent;
 
   @override

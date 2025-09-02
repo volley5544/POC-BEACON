@@ -380,7 +380,10 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                                                   BoxDecoration(),
                                                               child: Text(
                                                                 listViewBoothsRecord
-                                                                    .boothName,
+                                                                    .boothName
+                                                                    .maybeHandleOverflow(
+                                                                  maxChars: 50,
+                                                                ),
                                                                 style: FlutterFlowTheme.of(
                                                                         context)
                                                                     .titleLarge
@@ -397,6 +400,8 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                                                                       color: FlutterFlowTheme.of(
                                                                               context)
                                                                           .tertiary,
+                                                                      fontSize:
+                                                                          18.0,
                                                                       letterSpacing:
                                                                           0.0,
                                                                       fontWeight: FlutterFlowTheme.of(

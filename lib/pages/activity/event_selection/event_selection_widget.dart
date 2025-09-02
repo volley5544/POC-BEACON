@@ -1,8 +1,10 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
@@ -36,6 +38,17 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
       _model.datetimeCurrent = getCurrentTimestamp;
       _model.datetimeCurrentEnd = getCurrentTimestamp;
       safeSetState(() {});
+      _model.dataRegister = await queryRegisterRecordOnce(
+        queryBuilder: (registerRecord) => registerRecord
+            .where(
+              'uid',
+              isEqualTo: currentUserUid,
+            )
+            .where(
+              'is_active',
+              isEqualTo: 0,
+            ),
+      );
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
@@ -56,6 +69,10 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
             .where(
               'is_active',
               isEqualTo: 0,
+            )
+            .where(
+              'start_datetime',
+              isLessThanOrEqualTo: getCurrentTimestamp,
             )
             .orderBy('start_datetime', descending: true),
         limit: 10,
@@ -92,7 +109,7 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
               backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
               automaticallyImplyLeading: false,
               title: Text(
-                'เลือกกิจกรรม',
+                'เลือกกิจกรรม....',
                 style: FlutterFlowTheme.of(context).headlineMedium.override(
                       font: GoogleFonts.outfit(
                         fontWeight: FlutterFlowTheme.of(context)
@@ -128,7 +145,7 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
                         padding: EdgeInsetsDirectional.fromSTEB(
                             16.0, 12.0, 0.0, 0.0),
                         child: Text(
-                          'เลือกกิจกรรมที่คุณสนใจเข้าร่วม',
+                          'เลือกกิจกรรมที่คุณลงทะเบียนแล้ว',
                           style: FlutterFlowTheme.of(context)
                               .titleMedium
                               .override(
@@ -184,9 +201,20 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
                                     minHeight: 120.0,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: eventSelectionVarItem.isActive == 0
+                                    color: (eventSelectionVarItem.eventId ==
+                                                _model.dataRegister
+                                                    ?.elementAtOrNull(_model
+                                                        .dataRegister!
+                                                        .elementAtOrNull(
+                                                            eventSelectionVarIndex)!
+                                                        .eventId)
+                                                    ?.eventId) &&
+                                            _model.dataRegister!
+                                                .elementAtOrNull(
+                                                    eventSelectionVarIndex)!
+                                                .hasRegisterId()
                                         ? FlutterFlowTheme.of(context)
-                                            .secondaryBackground
+                                            .primaryBackground
                                         : Color(0xFFD8D8D9),
                                     boxShadow: [
                                       BoxShadow(
@@ -226,23 +254,137 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            context.pushNamed(
-                                              BoothListWidget.routeName,
-                                              queryParameters: {
-                                                'eventId': serializeParam(
-                                                  eventSelectionVarItem.eventId,
-                                                  ParamType.int,
-                                                ),
-                                                'eventDocRef': serializeParam(
-                                                  eventSelectionVarItem,
-                                                  ParamType.Document,
-                                                ),
-                                              }.withoutNulls,
-                                              extra: <String, dynamic>{
-                                                'eventDocRef':
-                                                    eventSelectionVarItem,
+                                            await showDialog(
+                                              context: context,
+                                              builder: (alertDialogContext) {
+                                                return AlertDialog(
+                                                  content: Text('AAA'),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              alertDialogContext),
+                                                      child: Text('Ok'),
+                                                    ),
+                                                  ],
+                                                );
                                               },
                                             );
+                                            await showDialog(
+                                              context: context,
+                                              builder: (alertDialogContext) {
+                                                return AlertDialog(
+                                                  title: Text(_model
+                                                      .dataRegister!
+                                                      .elementAtOrNull(
+                                                          eventSelectionVarIndex)!
+                                                      .registerId
+                                                      .toString()),
+                                                  content: Text(_model
+                                                      .dataRegister!
+                                                      .elementAtOrNull(
+                                                          eventSelectionVarIndex)!
+                                                      .eventId
+                                                      .toString()),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              alertDialogContext),
+                                                      child: Text('Ok'),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                            if (false) {
+                                              await showDialog(
+                                                context: context,
+                                                builder: (alertDialogContext) {
+                                                  return AlertDialog(
+                                                    content: Text('ลงทะเบียน'),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                alertDialogContext),
+                                                        child: Text('Ok'),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+
+                                              context.pushNamed(
+                                                BoothListWidget.routeName,
+                                                queryParameters: {
+                                                  'eventId': serializeParam(
+                                                    eventSelectionVarItem
+                                                        .eventId,
+                                                    ParamType.int,
+                                                  ),
+                                                  'eventDocRef': serializeParam(
+                                                    eventSelectionVarItem,
+                                                    ParamType.Document,
+                                                  ),
+                                                }.withoutNulls,
+                                                extra: <String, dynamic>{
+                                                  'eventDocRef':
+                                                      eventSelectionVarItem,
+                                                },
+                                              );
+                                            } else {
+                                              await showDialog(
+                                                context: context,
+                                                builder: (alertDialogContext) {
+                                                  return AlertDialog(
+                                                    title: Text(_model
+                                                        .dataRegister!
+                                                        .elementAtOrNull(
+                                                            eventSelectionVarIndex)!
+                                                        .hasRegisterId()
+                                                        .toString()),
+                                                    content: Text(_model
+                                                        .dataRegister!
+                                                        .elementAtOrNull(
+                                                            eventSelectionVarIndex)!
+                                                        .hasEventId()
+                                                        .toString()),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                alertDialogContext),
+                                                        child: Text('Ok'),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                              await showDialog(
+                                                context: context,
+                                                builder: (alertDialogContext) {
+                                                  return AlertDialog(
+                                                    title: Text(_model
+                                                        .dataRegister!
+                                                        .elementAtOrNull(
+                                                            eventSelectionVarIndex)!
+                                                        .hasUid()
+                                                        .toString()),
+                                                    content: Text('ยังไม่ลง'),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                alertDialogContext),
+                                                        child: Text('Ok'),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                              return;
+                                            }
                                           },
                                           child: Column(
                                             mainAxisSize: MainAxisSize.max,
@@ -358,6 +500,8 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
                                                                             ),
                                                                             color:
                                                                                 FlutterFlowTheme.of(context).primary,
+                                                                            fontSize:
+                                                                                18.0,
                                                                             letterSpacing:
                                                                                 0.0,
                                                                             fontWeight:

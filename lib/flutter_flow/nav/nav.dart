@@ -615,9 +615,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             name: RegisterWidget.routeName,
             path: RegisterWidget.routePath,
             requireAuth: true,
-            asyncParams: {
-              'eventRef': getDoc(['events'], EventsRecord.fromSnapshot),
-            },
             builder: (context, params) => NavBarPage(
                   initialPage: '',
                   page: RegisterWidget(
@@ -627,7 +624,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                     ),
                     eventRef: params.getParam(
                       'eventRef',
-                      ParamType.Document,
+                      ParamType.DocumentReference,
+                      isList: false,
+                      collectionNamePath: ['events'],
                     ),
                   ),
                 )),
@@ -649,6 +648,32 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                       ParamType.int,
                     ),
                   ),
+                )),
+        FFRoute(
+            name: SuccessRegisterWidget.routeName,
+            path: SuccessRegisterWidget.routePath,
+            asyncParams: {
+              'eventRef': getDoc(['events'], EventsRecord.fromSnapshot),
+            },
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SuccessRegisterWidget(
+                    eventId: params.getParam(
+                      'eventId',
+                      ParamType.int,
+                    ),
+                    eventRef: params.getParam(
+                      'eventRef',
+                      ParamType.Document,
+                    ),
+                  ),
+                )),
+        FFRoute(
+            name: SuccessEditProfileWidget.routeName,
+            path: SuccessEditProfileWidget.routePath,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SuccessEditProfileWidget(),
                 ))
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

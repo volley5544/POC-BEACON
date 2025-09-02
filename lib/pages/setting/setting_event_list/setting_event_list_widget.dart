@@ -161,26 +161,54 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
           automaticallyImplyLeading: false,
-          title: Text(
-            valueOrDefault<String>(
-              FFAppState().rolesID == 1 ? 'แดชบอร์ด & จัดการ' : 'แดชบอร์ด',
-              '-',
-            ),
-            style: FlutterFlowTheme.of(context).headlineMedium.override(
-                  font: GoogleFonts.outfit(
-                    fontWeight:
-                        FlutterFlowTheme.of(context).headlineMedium.fontWeight,
-                    fontStyle:
-                        FlutterFlowTheme.of(context).headlineMedium.fontStyle,
-                  ),
+          title: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              InkWell(
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: () async {
+                  context.pop();
+                },
+                child: Icon(
+                  Icons.arrow_back_rounded,
                   color: FlutterFlowTheme.of(context).primaryText,
-                  fontSize: 22.0,
-                  letterSpacing: 0.0,
-                  fontWeight:
-                      FlutterFlowTheme.of(context).headlineMedium.fontWeight,
-                  fontStyle:
-                      FlutterFlowTheme.of(context).headlineMedium.fontStyle,
+                  size: 30.0,
                 ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
+                child: Text(
+                  valueOrDefault<String>(
+                    FFAppState().rolesID == 1
+                        ? 'แดชบอร์ด & จัดการ'
+                        : 'แดชบอร์ด',
+                    '-',
+                  ),
+                  style: FlutterFlowTheme.of(context).headlineMedium.override(
+                        font: GoogleFonts.outfit(
+                          fontWeight: FlutterFlowTheme.of(context)
+                              .headlineMedium
+                              .fontWeight,
+                          fontStyle: FlutterFlowTheme.of(context)
+                              .headlineMedium
+                              .fontStyle,
+                        ),
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        fontSize: 22.0,
+                        letterSpacing: 0.0,
+                        fontWeight: FlutterFlowTheme.of(context)
+                            .headlineMedium
+                            .fontWeight,
+                        fontStyle: FlutterFlowTheme.of(context)
+                            .headlineMedium
+                            .fontStyle,
+                      ),
+                ),
+              ),
+            ],
           ),
           actions: [],
           centerTitle: false,
@@ -1252,13 +1280,16 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                               width: MediaQuery.sizeOf(context).width * 0.46,
                                                                               decoration: BoxDecoration(),
                                                                               child: Text(
-                                                                                listViewEventsRecord.eventName,
+                                                                                listViewEventsRecord.eventName.maybeHandleOverflow(
+                                                                                  maxChars: 50,
+                                                                                ),
                                                                                 style: FlutterFlowTheme.of(context).titleLarge.override(
                                                                                       font: GoogleFonts.outfit(
                                                                                         fontWeight: FlutterFlowTheme.of(context).titleLarge.fontWeight,
                                                                                         fontStyle: FlutterFlowTheme.of(context).titleLarge.fontStyle,
                                                                                       ),
                                                                                       color: FlutterFlowTheme.of(context).primary,
+                                                                                      fontSize: 18.0,
                                                                                       letterSpacing: 0.0,
                                                                                       fontWeight: FlutterFlowTheme.of(context).titleLarge.fontWeight,
                                                                                       fontStyle: FlutterFlowTheme.of(context).titleLarge.fontStyle,
@@ -1439,13 +1470,10 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                                             ParamType.int,
                                                                                           ),
                                                                                           'eventRef': serializeParam(
-                                                                                            listViewEventsRecord,
-                                                                                            ParamType.Document,
+                                                                                            listViewEventsRecord.reference,
+                                                                                            ParamType.DocumentReference,
                                                                                           ),
                                                                                         }.withoutNulls,
-                                                                                        extra: <String, dynamic>{
-                                                                                          'eventRef': listViewEventsRecord,
-                                                                                        },
                                                                                       );
                                                                                     },
                                                                                     child: Text(

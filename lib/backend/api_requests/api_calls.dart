@@ -13,7 +13,7 @@ const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 /// Start RAS Group Code
 
 class RasGroup {
-  static String getBaseUrl() => 'https://7e4327524580.ngrok-free.app';
+  static String getBaseUrl() => 'https://99064d5d1056.ngrok-free.app';
   static Map<String, String> headers = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer test-token-123456789',

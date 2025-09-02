@@ -350,7 +350,7 @@ class _SuccessInprocessWidgetState extends State<SuccessInprocessWidget>
                             Align(
                               alignment: AlignmentDirectional(0.0, -1.0),
                               child: Text(
-                                'เช็คอินสำเร็จ !',
+                                'เช็คอินสำเร็จ',
                                 style: FlutterFlowTheme.of(context)
                                     .displaySmall
                                     .override(
@@ -362,6 +362,7 @@ class _SuccessInprocessWidgetState extends State<SuccessInprocessWidget>
                                             .displaySmall
                                             .fontStyle,
                                       ),
+                                      fontSize: 30.0,
                                       letterSpacing: 0.0,
                                       fontWeight: FlutterFlowTheme.of(context)
                                           .displaySmall

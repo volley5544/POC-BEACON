@@ -65,13 +65,6 @@ service cloud.firestore {
     }
 
 
-    match /userActivities/{document} {
-      allow create: if true;
-      allow read: if true;
-      allow write: if true;
-      allow delete: if true;
-    }
-
     match /events/{parent}/register/{document} {
       allow create: if true;
       allow read: if true;
@@ -83,6 +76,13 @@ service cloud.firestore {
       allow read: if true;
     }
 
+
+    match /userActivities/{document} {
+      allow create: if true;
+      allow read: if true;
+      allow write: if true;
+      allow delete: if true;
+    }
 
     match /ff_user_push_notifications/{id} {
       allow read, update, delete: if false;

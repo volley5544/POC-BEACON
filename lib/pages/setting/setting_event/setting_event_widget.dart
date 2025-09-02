@@ -225,6 +225,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget>
                               .headlineMedium
                               .fontStyle,
                         ),
+                        fontSize: 22.0,
                         letterSpacing: 0.0,
                         fontWeight: FlutterFlowTheme.of(context)
                             .headlineMedium

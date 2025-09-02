@@ -219,6 +219,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                               .headlineMedium
                               .fontStyle,
                         ),
+                        fontSize: 22.0,
                         letterSpacing: 0.0,
                         fontWeight: FlutterFlowTheme.of(context)
                             .headlineMedium
@@ -1600,6 +1601,11 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                                 _model.queryLastestBoothAction =
                                                     await queryBoothsRecordOnce(
                                                   parent: widget.eventDocRef,
+                                                  queryBuilder:
+                                                      (boothsRecord) =>
+                                                          boothsRecord.orderBy(
+                                                              'booth_id',
+                                                              descending: true),
                                                   singleRecord: true,
                                                 ).then((s) => s.firstOrNull);
                                                 _shouldSetState = true;

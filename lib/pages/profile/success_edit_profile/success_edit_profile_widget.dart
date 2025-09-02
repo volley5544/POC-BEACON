@@ -1,4 +1,4 @@
-import '/backend/backend.dart';
+import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -8,29 +8,23 @@ import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'success_survey_model.dart';
-export 'success_survey_model.dart';
+import 'success_edit_profile_model.dart';
+export 'success_edit_profile_model.dart';
 
-class SuccessSurveyWidget extends StatefulWidget {
-  const SuccessSurveyWidget({
-    super.key,
-    required this.eventId,
-    required this.eventRef,
-  });
+class SuccessEditProfileWidget extends StatefulWidget {
+  const SuccessEditProfileWidget({super.key});
 
-  final int? eventId;
-  final EventsRecord? eventRef;
-
-  static String routeName = 'SuccessSurvey';
-  static String routePath = '/successSurvey';
+  static String routeName = 'SuccessEditProfile';
+  static String routePath = '/successEditProfile';
 
   @override
-  State<SuccessSurveyWidget> createState() => _SuccessSurveyWidgetState();
+  State<SuccessEditProfileWidget> createState() =>
+      _SuccessEditProfileWidgetState();
 }
 
-class _SuccessSurveyWidgetState extends State<SuccessSurveyWidget>
+class _SuccessEditProfileWidgetState extends State<SuccessEditProfileWidget>
     with TickerProviderStateMixin {
-  late SuccessSurveyModel _model;
+  late SuccessEditProfileModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -39,7 +33,7 @@ class _SuccessSurveyWidgetState extends State<SuccessSurveyWidget>
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => SuccessSurveyModel());
+    _model = createModel(context, () => SuccessEditProfileModel());
 
     animationsMap.addAll({
       'containerOnPageLoadAnimation': AnimationInfo(
@@ -76,7 +70,7 @@ class _SuccessSurveyWidgetState extends State<SuccessSurveyWidget>
           ),
         ],
       ),
-      'textOnPageLoadAnimation1': AnimationInfo(
+      'textOnPageLoadAnimation': AnimationInfo(
         trigger: AnimationTrigger.onPageLoad,
         effectsBuilder: () => [
           VisibilityEffect(duration: 100.ms),
@@ -104,40 +98,6 @@ class _SuccessSurveyWidgetState extends State<SuccessSurveyWidget>
           MoveEffect(
             curve: Curves.easeInOut,
             delay: 100.0.ms,
-            duration: 300.0.ms,
-            begin: Offset(0.0, 40.0),
-            end: Offset(0.0, 0.0),
-          ),
-        ],
-      ),
-      'textOnPageLoadAnimation2': AnimationInfo(
-        trigger: AnimationTrigger.onPageLoad,
-        effectsBuilder: () => [
-          VisibilityEffect(duration: 150.ms),
-          FadeEffect(
-            curve: Curves.easeInOut,
-            delay: 150.0.ms,
-            duration: 300.0.ms,
-            begin: 0.0,
-            end: 1.0,
-          ),
-          ScaleEffect(
-            curve: Curves.easeInOut,
-            delay: 150.0.ms,
-            duration: 300.0.ms,
-            begin: Offset(0.8, 0.8),
-            end: Offset(1.0, 1.0),
-          ),
-          TiltEffect(
-            curve: Curves.easeInOut,
-            delay: 150.0.ms,
-            duration: 300.0.ms,
-            begin: Offset(0, 1.396),
-            end: Offset(0, 0),
-          ),
-          MoveEffect(
-            curve: Curves.easeInOut,
-            delay: 150.0.ms,
             duration: 300.0.ms,
             begin: Offset(0.0, 40.0),
             end: Offset(0.0, 0.0),
@@ -353,50 +313,20 @@ class _SuccessSurveyWidgetState extends State<SuccessSurveyWidget>
                                     .displaySmall
                                     .override(
                                       font: GoogleFonts.outfit(
-                                        fontWeight: FlutterFlowTheme.of(context)
-                                            .displaySmall
-                                            .fontWeight,
+                                        fontWeight: FontWeight.w600,
                                         fontStyle: FlutterFlowTheme.of(context)
                                             .displaySmall
                                             .fontStyle,
                                       ),
                                       fontSize: 30.0,
                                       letterSpacing: 0.0,
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .displaySmall
-                                          .fontWeight,
+                                      fontWeight: FontWeight.w600,
                                       fontStyle: FlutterFlowTheme.of(context)
                                           .displaySmall
                                           .fontStyle,
                                     ),
                               ).animateOnPageLoad(
-                                  animationsMap['textOnPageLoadAnimation1']!),
-                            ),
-                            Align(
-                              alignment: AlignmentDirectional(0.0, -1.0),
-                              child: Text(
-                                'ขอบคุณที่ประเมินความพึงพอใจ',
-                                style: FlutterFlowTheme.of(context)
-                                    .labelMedium
-                                    .override(
-                                      font: GoogleFonts.readexPro(
-                                        fontWeight: FlutterFlowTheme.of(context)
-                                            .labelMedium
-                                            .fontWeight,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .labelMedium
-                                            .fontStyle,
-                                      ),
-                                      letterSpacing: 0.0,
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontStyle,
-                                    ),
-                              ).animateOnPageLoad(
-                                  animationsMap['textOnPageLoadAnimation2']!),
+                                  animationsMap['textOnPageLoadAnimation']!),
                             ),
                             Divider(
                               height: 44.0,
@@ -407,23 +337,16 @@ class _SuccessSurveyWidgetState extends State<SuccessSurveyWidget>
                             FFButtonWidget(
                               onPressed: () async {
                                 context.pushNamed(
-                                  BoothListWidget.routeName,
+                                  EditProfileWidget.routeName,
                                   queryParameters: {
-                                    'eventId': serializeParam(
-                                      widget.eventId,
-                                      ParamType.int,
-                                    ),
-                                    'eventDocRef': serializeParam(
-                                      widget.eventRef,
-                                      ParamType.Document,
+                                    'uid': serializeParam(
+                                      currentUserReference?.id,
+                                      ParamType.String,
                                     ),
                                   }.withoutNulls,
-                                  extra: <String, dynamic>{
-                                    'eventDocRef': widget.eventRef,
-                                  },
                                 );
                               },
-                              text: 'กลับหน้ากิจกรรม',
+                              text: 'กลับ',
                               options: FFButtonOptions(
                                 width: double.infinity,
                                 height: 48.0,

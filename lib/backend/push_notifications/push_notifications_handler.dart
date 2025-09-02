@@ -283,8 +283,7 @@ final parametersBuilderMap =
   'Register': (data) async => ParameterData(
         allParams: {
           'eventId': getParameter<int>(data, 'eventId'),
-          'eventRef': await getDocumentParameter<EventsRecord>(
-              data, 'eventRef', EventsRecord.fromSnapshot),
+          'eventRef': getParameter<DocumentReference>(data, 'eventRef'),
         },
       ),
   'QRCode': (data) async => ParameterData(
@@ -293,6 +292,14 @@ final parametersBuilderMap =
           'eventId': getParameter<int>(data, 'eventId'),
         },
       ),
+  'SuccessRegister': (data) async => ParameterData(
+        allParams: {
+          'eventId': getParameter<int>(data, 'eventId'),
+          'eventRef': await getDocumentParameter<EventsRecord>(
+              data, 'eventRef', EventsRecord.fromSnapshot),
+        },
+      ),
+  'SuccessEditProfile': ParameterData.none(),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

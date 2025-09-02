@@ -17,6 +17,7 @@ class HomeModel extends FlutterFlowModel<HomeWidget> {
   RolesRecord? roleData;
   // Stores action output result for [Custom Action - checkPermissionsBeacon] action in Home widget.
   bool? permiss;
+  var linkReister = '';
 
   @override
   void initState(BuildContext context) {}

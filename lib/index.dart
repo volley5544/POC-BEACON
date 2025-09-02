@@ -62,3 +62,7 @@ export '/setting_backup/survey_copy/survey_copy_widget.dart'
 export '/noti_page/noti_page_widget.dart' show NotiPageWidget;
 export '/register/register/register_widget.dart' show RegisterWidget;
 export '/register/q_r_code/q_r_code_widget.dart' show QRCodeWidget;
+export '/register/success_register/success_register_widget.dart'
+    show SuccessRegisterWidget;
+export '/pages/profile/success_edit_profile/success_edit_profile_widget.dart'
+    show SuccessEditProfileWidget;

@@ -2,7 +2,9 @@ import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'dart:async';
 import 'package:barcode_widget/barcode_widget.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -39,8 +41,22 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.dataEvent =
-          await EventsRecord.getDocumentOnce(widget.eventDocRef!);
+      unawaited(
+        () async {
+          _model.dataEvent = await queryEventsRecordOnce(
+            queryBuilder: (eventsRecord) => eventsRecord
+                .where(
+                  'event_id',
+                  isEqualTo: widget.eventId,
+                )
+                .where(
+                  'is_active',
+                  isEqualTo: 0,
+                ),
+            singleRecord: true,
+          ).then((s) => s.firstOrNull);
+        }(),
+      );
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
@@ -73,7 +89,7 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Scan QR Code (${_model.dataEvent?.eventName})',
+                'ลงทะเบียน',
                 style: FlutterFlowTheme.of(context).headlineMedium.override(
                       font: GoogleFonts.outfit(
                         fontWeight: FlutterFlowTheme.of(context)
@@ -83,6 +99,7 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
                             .headlineMedium
                             .fontStyle,
                       ),
+                      fontSize: 22.0,
                       letterSpacing: 0.0,
                       fontWeight: FlutterFlowTheme.of(context)
                           .headlineMedium
@@ -148,22 +165,115 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
                                     alignment: AlignmentDirectional(0.0, 0.0),
                                     child: Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 50.0, 0.0, 0.0),
-                                      child: BarcodeWidget(
-                                        data:
-                                            '${FFAppState().url}register?eventId=${widget.eventId?.toString()}&eventRef=${widget.eventDocRef?.id}',
-                                        barcode: Barcode.qrCode(),
-                                        width: 200.0,
-                                        height: 200.0,
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
-                                        backgroundColor: Colors.transparent,
-                                        errorBuilder: (_context, _error) =>
-                                            SizedBox(
+                                          0.0, 30.0, 0.0, 0.0),
+                                      child: Text(
+                                        valueOrDefault<String>(
+                                          _model.dataEvent?.eventName,
+                                          '-',
+                                        ),
+                                        textAlign: TextAlign.center,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.readexPro(
+                                                fontWeight: FontWeight.w600,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .success,
+                                              fontSize: 24.0,
+                                              letterSpacing: 0.0,
+                                              fontWeight: FontWeight.w600,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: AlignmentDirectional(0.0, 0.0),
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 20.0, 0.0, 0.0),
+                                      child: InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          await showDialog(
+                                            context: context,
+                                            builder: (alertDialogContext) {
+                                              return AlertDialog(
+                                                title: Text('URL'),
+                                                content: Text(
+                                                    '${'pocbeacon://pocbeacon.com${GoRouterState.of(context).uri.toString()}'}'),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(
+                                                            alertDialogContext),
+                                                    child: Text('Ok'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                        child: BarcodeWidget(
+                                          data:
+                                              '${FFAppState().url}register?eventId=${widget.eventId?.toString()}&eventRef=${widget.eventDocRef?.id}',
+                                          barcode: Barcode.qrCode(),
                                           width: 200.0,
                                           height: 200.0,
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                          backgroundColor: Colors.transparent,
+                                          errorBuilder: (_context, _error) =>
+                                              SizedBox(
+                                            width: 200.0,
+                                            height: 200.0,
+                                          ),
+                                          drawText: true,
                                         ),
-                                        drawText: true,
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: AlignmentDirectional(0.0, 0.0),
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 10.0, 0.0, 0.0),
+                                      child: Text(
+                                        'Scan QR Code เพื่อลงทะเบียนเข้างาน',
+                                        textAlign: TextAlign.center,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.readexPro(
+                                                fontWeight: FontWeight.w300,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryText,
+                                              fontSize: 18.0,
+                                              letterSpacing: 0.0,
+                                              fontWeight: FontWeight.w300,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
+                                            ),
                                       ),
                                     ),
                                   ),

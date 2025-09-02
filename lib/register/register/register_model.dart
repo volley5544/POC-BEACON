@@ -1,5 +1,6 @@
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/index.dart';
 import 'register_widget.dart' show RegisterWidget;
 import 'package:flutter/material.dart';
 
@@ -20,6 +21,10 @@ class RegisterModel extends FlutterFlowModel<RegisterWidget> {
   FocusNode? lastNameFocusNode;
   TextEditingController? lastNameTextController;
   String? Function(BuildContext, String?)? lastNameTextControllerValidator;
+  // State field(s) for email widget.
+  FocusNode? emailFocusNode;
+  TextEditingController? emailTextController;
+  String? Function(BuildContext, String?)? emailTextControllerValidator;
   // Stores action output result for [Firestore Query - Query a collection] action in Button widget.
   int? dataRegisterCount;
   // Stores action output result for [Backend Call - Create Document] action in Button widget.
@@ -35,5 +40,8 @@ class RegisterModel extends FlutterFlowModel<RegisterWidget> {
 
     lastNameFocusNode?.dispose();
     lastNameTextController?.dispose();
+
+    emailFocusNode?.dispose();
+    emailTextController?.dispose();
   }
 }

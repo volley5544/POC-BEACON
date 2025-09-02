@@ -65,6 +65,10 @@ dependencies:
   firebase_storage_web: 3.10.14
   floating_bottom_navigation_bar: 1.5.2
   flutter_animate: 4.5.0
+  flutter_barcode_scanner: 
+    git:
+      url: https://github.com/decodevM/flutter_barcode_scanner
+      ref: flutter-3.29
   flutter_blurhash: 0.9.1
   flutter_cache_manager: 3.4.1
   flutter_credit_card: 

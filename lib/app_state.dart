@@ -221,7 +221,7 @@ class FFAppState extends ChangeNotifier {
         : prefs.remove('ff_userDocRef');
   }
 
-  String _url = 'https://bpoc-beacon.flutterflow.app/';
+  String _url = 'pocbeacon://pocbeacon.com/';
   String get url => _url;
   set url(String value) {
     _url = value;

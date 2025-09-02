@@ -179,7 +179,8 @@ class _BoothListWidgetState extends State<BoothListWidget>
                     fontStyle:
                         FlutterFlowTheme.of(context).headlineMedium.fontStyle,
                   ),
-                  color: FlutterFlowTheme.of(context).primary,
+                  color: FlutterFlowTheme.of(context).primaryText,
+                  fontSize: 22.0,
                   letterSpacing: 0.0,
                   fontWeight:
                       FlutterFlowTheme.of(context).headlineMedium.fontWeight,
@@ -269,18 +270,8 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                     builder: (context, snapshot) {
                                       // Customize what your widget looks like when it's loading.
                                       if (!snapshot.hasData) {
-                                        return Center(
-                                          child: SizedBox(
-                                            width: 50.0,
-                                            height: 50.0,
-                                            child: CircularProgressIndicator(
-                                              valueColor:
-                                                  AlwaysStoppedAnimation<Color>(
-                                                FlutterFlowTheme.of(context)
-                                                    .primary,
-                                              ),
-                                            ),
-                                          ),
+                                        return Image.asset(
+                                          '',
                                         );
                                       }
                                       final listViewSummaryParticipantsBoothResponse =
@@ -624,7 +615,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                       font: GoogleFonts
                                                                           .outfit(
                                                                         fontWeight:
-                                                                            FontWeight.w600,
+                                                                            FontWeight.w500,
                                                                         fontStyle: FlutterFlowTheme.of(context)
                                                                             .headlineSmall
                                                                             .fontStyle,
@@ -632,11 +623,13 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                       color: FlutterFlowTheme.of(
                                                                               context)
                                                                           .tertiary,
+                                                                      fontSize:
+                                                                          18.0,
                                                                       letterSpacing:
                                                                           0.0,
                                                                       fontWeight:
                                                                           FontWeight
-                                                                              .w600,
+                                                                              .w500,
                                                                       fontStyle: FlutterFlowTheme.of(
                                                                               context)
                                                                           .headlineSmall
@@ -1093,124 +1086,182 @@ class _BoothListWidgetState extends State<BoothListWidget>
                               animationsMap['containerOnPageLoadAnimation2']!),
                         ),
                       ),
-                      Container(
-                        width: double.infinity,
-                        height: 90.0,
-                        decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
+                      StreamBuilder<List<UserActivityRecord>>(
+                        stream: queryUserActivityRecord(
+                          parent: currentUserReference,
+                          queryBuilder: (userActivityRecord) =>
+                              userActivityRecord
+                                  .where(
+                                    'is_surveyed',
+                                    isEqualTo: false,
+                                  )
+                                  .where(
+                                    'event_id',
+                                    isEqualTo: widget.eventId,
+                                  ),
                         ),
-                        alignment: AlignmentDirectional(0.0, 1.0),
-                        child: Align(
-                          alignment: AlignmentDirectional(0.0, 1.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Align(
-                                alignment: AlignmentDirectional(0.0, 0.0),
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 20.0, 0.0, 20.0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  24.0, 0.0, 24.0, 24.0),
-                                          child: FFButtonWidget(
-                                            onPressed: () async {
-                                              context.pushNamed(
-                                                SurveyWidget.routeName,
-                                                queryParameters: {
-                                                  'uid': serializeParam(
-                                                    currentUserReference?.id,
-                                                    ParamType.String,
-                                                  ),
-                                                  'eventRef': serializeParam(
-                                                    widget.eventDocRef,
-                                                    ParamType.Document,
-                                                  ),
-                                                  'eventId': serializeParam(
-                                                    widget.eventId,
-                                                    ParamType.int,
-                                                  ),
-                                                }.withoutNulls,
-                                                extra: <String, dynamic>{
-                                                  'eventRef':
-                                                      widget.eventDocRef,
-                                                },
-                                              );
-                                            },
-                                            text: 'ประเมินกิจกรรม',
-                                            icon: Icon(
-                                              Icons.speaker_notes,
-                                              size: 24.0,
-                                            ),
-                                            options: FFButtonOptions(
-                                              width: double.infinity,
-                                              height: 48.0,
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      24.0, 0.0, 24.0, 0.0),
-                                              iconPadding: EdgeInsetsDirectional
-                                                  .fromSTEB(0.0, 0.0, 0.0, 0.0),
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primary,
-                                              textStyle: FlutterFlowTheme.of(
-                                                      context)
-                                                  .titleSmall
-                                                  .override(
-                                                    font: GoogleFonts.readexPro(
-                                                      fontWeight:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .titleSmall
-                                                              .fontWeight,
-                                                      fontStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .titleSmall
-                                                              .fontStyle,
-                                                    ),
-                                                    color: Colors.white,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .titleSmall
-                                                            .fontWeight,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .titleSmall
-                                                            .fontStyle,
-                                                  ),
-                                              elevation: 3.0,
-                                              borderSide: BorderSide(
-                                                color: Colors.transparent,
-                                                width: 1.0,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                            ),
-                                          ).animateOnPageLoad(animationsMap[
-                                              'buttonOnPageLoadAnimation']!),
-                                        ),
-                                      ),
-                                    ],
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: SizedBox(
+                                width: 50.0,
+                                height: 50.0,
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    FlutterFlowTheme.of(context).primary,
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
+                            );
+                          }
+                          List<UserActivityRecord>
+                              containerUserActivityRecordList = snapshot.data!;
+
+                          return Container(
+                            width: double.infinity,
+                            height: 90.0,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                            ),
+                            alignment: AlignmentDirectional(0.0, 1.0),
+                            child: Align(
+                              alignment: AlignmentDirectional(0.0, 1.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Align(
+                                    alignment: AlignmentDirectional(0.0, 0.0),
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 20.0, 0.0, 20.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Expanded(
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      24.0, 0.0, 24.0, 24.0),
+                                              child: FFButtonWidget(
+                                                onPressed:
+                                                    (containerUserActivityRecordList
+                                                                .length ==
+                                                            0)
+                                                        ? null
+                                                        : () async {
+                                                            context.pushNamed(
+                                                              SurveyWidget
+                                                                  .routeName,
+                                                              queryParameters: {
+                                                                'uid':
+                                                                    serializeParam(
+                                                                  currentUserReference
+                                                                      ?.id,
+                                                                  ParamType
+                                                                      .String,
+                                                                ),
+                                                                'eventRef':
+                                                                    serializeParam(
+                                                                  widget
+                                                                      .eventDocRef,
+                                                                  ParamType
+                                                                      .Document,
+                                                                ),
+                                                                'eventId':
+                                                                    serializeParam(
+                                                                  widget
+                                                                      .eventId,
+                                                                  ParamType.int,
+                                                                ),
+                                                              }.withoutNulls,
+                                                              extra: <String,
+                                                                  dynamic>{
+                                                                'eventRef': widget
+                                                                    .eventDocRef,
+                                                              },
+                                                            );
+                                                          },
+                                                text: 'ประเมินกิจกรรม',
+                                                icon: Icon(
+                                                  Icons.speaker_notes,
+                                                  size: 24.0,
+                                                ),
+                                                options: FFButtonOptions(
+                                                  width: double.infinity,
+                                                  height: 48.0,
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                          24.0, 0.0, 24.0, 0.0),
+                                                  iconPadding:
+                                                      EdgeInsetsDirectional
+                                                          .fromSTEB(0.0, 0.0,
+                                                              0.0, 0.0),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primary,
+                                                  textStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .titleSmall
+                                                          .override(
+                                                            font: GoogleFonts
+                                                                .readexPro(
+                                                              fontWeight:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .titleSmall
+                                                                      .fontWeight,
+                                                              fontStyle:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .titleSmall
+                                                                      .fontStyle,
+                                                            ),
+                                                            color: Colors.white,
+                                                            letterSpacing: 0.0,
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .titleSmall
+                                                                    .fontWeight,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .titleSmall
+                                                                    .fontStyle,
+                                                          ),
+                                                  elevation: 3.0,
+                                                  borderSide: BorderSide(
+                                                    color: Colors.transparent,
+                                                    width: 1.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                  disabledColor:
+                                                      Color(0x7F4B39EF),
+                                                ),
+                                              ).animateOnPageLoad(animationsMap[
+                                                  'buttonOnPageLoadAnimation']!),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ].addToEnd(SizedBox(height: 50.0)),
                   ),

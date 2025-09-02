@@ -4,6 +4,8 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:async';
+import '/index.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -20,7 +22,7 @@ class RegisterWidget extends StatefulWidget {
   });
 
   final int? eventId;
-  final EventsRecord? eventRef;
+  final DocumentReference? eventRef;
 
   static String routeName = 'Register';
   static String routePath = '/register';
@@ -46,7 +48,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         builder: (alertDialogContext) {
           return AlertDialog(
             title: Text(widget.eventId!.toString()),
-            content: Text(widget.eventRef!.reference.id),
+            content: Text(widget.eventRef!.id),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(alertDialogContext),
@@ -56,8 +58,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           );
         },
       );
-      _model.dataEvent =
-          await EventsRecord.getDocumentOnce(widget.eventRef!.reference);
+      unawaited(
+        () async {
+          _model.dataEvent =
+              await EventsRecord.getDocumentOnce(widget.eventRef!);
+        }(),
+      );
     });
 
     _model.firstNameTextController ??= TextEditingController(
@@ -71,6 +77,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
             ? valueOrDefault(currentUserDocument?.lastName, '')
             : '');
     _model.lastNameFocusNode ??= FocusNode();
+
+    _model.emailTextController ??= TextEditingController(
+        text: currentUserEmail != ''
+            ? currentUserEmail
+            : '');
+    _model.emailFocusNode ??= FocusNode();
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
@@ -149,35 +161,60 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                 },
                               ),
                             ),
+                            Text(
+                              'ลงทะเบียนเข้างาน',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyLarge
+                                  .override(
+                                    font: GoogleFonts.readexPro(
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyLarge
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyLarge
+                                          .fontStyle,
+                                    ),
+                                    fontSize: 22.0,
+                                    letterSpacing: 0.0,
+                                    fontWeight: FlutterFlowTheme.of(context)
+                                        .bodyLarge
+                                        .fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .bodyLarge
+                                        .fontStyle,
+                                  ),
+                            ),
                           ],
                         ),
                       ),
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 0.0, 0.0),
-                        child: Text(
-                          'ลงทะเบียนเข้างาน${_model.dataEvent?.eventName}',
-                          style: FlutterFlowTheme.of(context)
-                              .headlineMedium
-                              .override(
-                                font: GoogleFonts.outfit(
-                                  fontWeight: FlutterFlowTheme.of(context)
-                                      .headlineMedium
-                                      .fontWeight,
+                      Align(
+                        alignment: AlignmentDirectional(0.0, 0.0),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              24.0, 0.0, 0.0, 0.0),
+                          child: Text(
+                            valueOrDefault<String>(
+                              _model.dataEvent?.eventName,
+                              '-',
+                            ),
+                            style: FlutterFlowTheme.of(context)
+                                .headlineMedium
+                                .override(
+                                  font: GoogleFonts.outfit(
+                                    fontWeight: FontWeight.w600,
+                                    fontStyle: FlutterFlowTheme.of(context)
+                                        .headlineMedium
+                                        .fontStyle,
+                                  ),
+                                  color: FlutterFlowTheme.of(context).success,
+                                  fontSize: 24.0,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.w600,
                                   fontStyle: FlutterFlowTheme.of(context)
                                       .headlineMedium
                                       .fontStyle,
                                 ),
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                fontSize: 22.0,
-                                letterSpacing: 0.0,
-                                fontWeight: FlutterFlowTheme.of(context)
-                                    .headlineMedium
-                                    .fontWeight,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .headlineMedium
-                                    .fontStyle,
-                              ),
+                          ),
                         ),
                       ),
                     ],
@@ -457,6 +494,117 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     ),
                   ),
                 ),
+                Padding(
+                  padding:
+                      EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 16.0),
+                  child: TextFormField(
+                    controller: _model.emailTextController,
+                    focusNode: _model.emailFocusNode,
+                    textCapitalization: TextCapitalization.words,
+                    readOnly: true,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      labelText: 'อีเมล',
+                      labelStyle:
+                          FlutterFlowTheme.of(context).labelMedium.override(
+                                font: GoogleFonts.readexPro(
+                                  fontWeight: FlutterFlowTheme.of(context)
+                                      .labelMedium
+                                      .fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .labelMedium
+                                      .fontStyle,
+                                ),
+                                letterSpacing: 0.0,
+                                fontWeight: FlutterFlowTheme.of(context)
+                                    .labelMedium
+                                    .fontWeight,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .labelMedium
+                                    .fontStyle,
+                              ),
+                      hintStyle:
+                          FlutterFlowTheme.of(context).labelMedium.override(
+                                font: GoogleFonts.readexPro(
+                                  fontWeight: FlutterFlowTheme.of(context)
+                                      .labelMedium
+                                      .fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context)
+                                      .labelMedium
+                                      .fontStyle,
+                                ),
+                                letterSpacing: 0.0,
+                                fontWeight: FlutterFlowTheme.of(context)
+                                    .labelMedium
+                                    .fontWeight,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .labelMedium
+                                    .fontStyle,
+                              ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).alternate,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).primary,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).error,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).error,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      filled: true,
+                      fillColor:
+                          FlutterFlowTheme.of(context).secondaryBackground,
+                      contentPadding:
+                          EdgeInsetsDirectional.fromSTEB(20.0, 24.0, 0.0, 24.0),
+                    ),
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          font: GoogleFonts.readexPro(
+                            fontWeight: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .fontWeight,
+                            fontStyle: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .fontStyle,
+                          ),
+                          letterSpacing: 0.0,
+                          fontWeight: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .fontWeight,
+                          fontStyle:
+                              FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                        ),
+                    validator: _model.emailTextControllerValidator
+                        .asValidator(context),
+                    inputFormatters: [
+                      if (!isAndroid && !isiOS)
+                        TextInputFormatter.withFunction((oldValue, newValue) {
+                          return TextEditingValue(
+                            selection: newValue.selection,
+                            text: newValue.text
+                                .toCapitalization(TextCapitalization.words),
+                          );
+                        }),
+                    ],
+                  ),
+                ),
                 Align(
                   alignment: AlignmentDirectional(0.0, 0.05),
                   child: Padding(
@@ -467,9 +615,31 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                         var _shouldSetState = false;
                         if (_model.firstNameTextController.text != '') {
                           if (_model.lastNameTextController.text != '') {
+                            var confirmDialogResponse = await showDialog<bool>(
+                                  context: context,
+                                  builder: (alertDialogContext) {
+                                    return AlertDialog(
+                                      content: Text(
+                                          'คุณต้องการลงทะเบียนงาน ${_model.dataEvent?.eventName}ใช่ไหม ?'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(
+                                              alertDialogContext, false),
+                                          child: Text('ยกเลิก'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(
+                                              alertDialogContext, true),
+                                          child: Text('ยืนยัน'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ) ??
+                                false;
                             _model.dataRegisterCount =
                                 await queryRegisterRecordCount(
-                              parent: widget.eventRef?.reference,
+                              parent: widget.eventRef,
                             );
                             _shouldSetState = true;
                             // generate register_id
@@ -498,14 +668,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                             // insert register
 
                             var registerRecordReference =
-                                RegisterRecord.createDoc(
-                                    widget.eventRef!.reference);
+                                RegisterRecord.createDoc(widget.eventRef!);
                             await registerRecordReference.set({
                               ...createRegisterRecordData(
                                 registerId: _model.newRegisterID,
                                 eventId: widget.eventId,
-                                associatedEventId:
-                                    widget.eventRef?.reference.id,
+                                associatedEventId: widget.eventRef?.id,
                                 uid: currentUserUid,
                                 createdBy: currentUserReference?.path,
                                 isActive: 0,
@@ -521,8 +689,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                               ...createRegisterRecordData(
                                 registerId: _model.newRegisterID,
                                 eventId: widget.eventId,
-                                associatedEventId:
-                                    widget.eventRef?.reference.id,
+                                associatedEventId: widget.eventRef?.id,
                                 uid: currentUserUid,
                                 createdBy: currentUserReference?.path,
                                 isActive: 0,
@@ -539,7 +706,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                               ...createUsersRecordData(
                                 firstName: _model.firstNameTextController.text,
                                 lastName: _model.lastNameTextController.text,
-                                email: '',
                                 displayName:
                                     '${_model.firstNameTextController.text} ${_model.lastNameTextController.text}',
                                 updatedBy: currentUserReference?.path,
@@ -550,21 +716,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                 },
                               ),
                             });
-                            await showDialog(
-                              context: context,
-                              builder: (alertDialogContext) {
-                                return AlertDialog(
-                                  content: Text('บันทึกสำเร็จ'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(alertDialogContext),
-                                      child: Text('Ok'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
+
+                            context.pushNamed(EventSelectionWidget.routeName);
+
                             if (_shouldSetState) safeSetState(() {});
                             return;
                           } else {
