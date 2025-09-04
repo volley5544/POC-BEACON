@@ -66,3 +66,5 @@ export '/register/success_register/success_register_widget.dart'
     show SuccessRegisterWidget;
 export '/pages/profile/success_edit_profile/success_edit_profile_widget.dart'
     show SuccessEditProfileWidget;
+export '/pages/setting/setting_event_list_copy2/setting_event_list_copy2_widget.dart'
+    show SettingEventListCopy2Widget;

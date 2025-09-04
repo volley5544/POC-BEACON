@@ -545,8 +545,8 @@ class _BoothListCopy3WidgetState extends State<BoothListCopy3Widget>
                                                 ParamType.int,
                                               ),
                                               'eventDocRef': serializeParam(
-                                                widget.eventDocRef?.reference,
-                                                ParamType.DocumentReference,
+                                                widget.eventDocRef,
+                                                ParamType.Document,
                                               ),
                                               'boothId': serializeParam(
                                                 listViewBoothsRecord.boothId,
@@ -562,6 +562,8 @@ class _BoothListCopy3WidgetState extends State<BoothListCopy3Widget>
                                               ),
                                             }.withoutNulls,
                                             extra: <String, dynamic>{
+                                              'eventDocRef':
+                                                  widget.eventDocRef,
                                               'boothDocRef':
                                                   listViewBoothsRecord,
                                               'boothDoc': listViewBoothsRecord,

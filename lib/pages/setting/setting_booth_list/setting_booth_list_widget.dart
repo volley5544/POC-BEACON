@@ -116,7 +116,7 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
           ),
         ),
         appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+          backgroundColor: FlutterFlowTheme.of(context).primary,
           automaticallyImplyLeading: false,
           leading: InkWell(
             splashColor: Colors.transparent,
@@ -128,7 +128,7 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
             },
             child: Icon(
               Icons.arrow_back_rounded,
-              color: FlutterFlowTheme.of(context).primaryText,
+              color: FlutterFlowTheme.of(context).primaryBackground,
               size: 30.0,
             ),
           ),
@@ -144,7 +144,7 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                     fontStyle:
                         FlutterFlowTheme.of(context).headlineMedium.fontStyle,
                   ),
-                  color: FlutterFlowTheme.of(context).primaryText,
+                  color: FlutterFlowTheme.of(context).primaryBackground,
                   fontSize: 22.0,
                   letterSpacing: 0.0,
                   fontWeight:

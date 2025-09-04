@@ -151,7 +151,8 @@ final parametersBuilderMap =
   'BoothDetail': (data) async => ParameterData(
         allParams: {
           'eventId': getParameter<int>(data, 'eventId'),
-          'eventDocRef': getParameter<DocumentReference>(data, 'eventDocRef'),
+          'eventDocRef': await getDocumentParameter<EventsRecord>(
+              data, 'eventDocRef', EventsRecord.fromSnapshot),
           'boothId': getParameter<int>(data, 'boothId'),
           'boothDocRef': await getDocumentParameter<BoothsRecord>(
               data, 'boothDocRef', BoothsRecord.fromSnapshot),
@@ -300,6 +301,11 @@ final parametersBuilderMap =
         },
       ),
   'SuccessEditProfile': ParameterData.none(),
+  'SettingEventListCopy2': (data) async => ParameterData(
+        allParams: {
+          'isActive': getParameter<int>(data, 'isActive'),
+        },
+      ),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

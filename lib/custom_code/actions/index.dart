@@ -14,3 +14,4 @@ export 'upload_multiple_file_firebase_storage.dart'
 export 'get_data_from_collection.dart' show getDataFromCollection;
 export 'beacon_background_service_action.dart'
     show beaconBackgroundServiceAction;
+export 'check_if_event_id_exists.dart' show checkIfEventIdExists;

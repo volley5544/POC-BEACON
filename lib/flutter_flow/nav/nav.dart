@@ -203,6 +203,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             name: BoothDetailWidget.routeName,
             path: BoothDetailWidget.routePath,
             asyncParams: {
+              'eventDocRef': getDoc(['events'], EventsRecord.fromSnapshot),
               'boothDocRef':
                   getDoc(['events', 'booths'], BoothsRecord.fromSnapshot),
               'boothDoc':
@@ -217,9 +218,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                     ),
                     eventDocRef: params.getParam(
                       'eventDocRef',
-                      ParamType.DocumentReference,
-                      isList: false,
-                      collectionNamePath: ['events'],
+                      ParamType.Document,
                     ),
                     boothId: params.getParam(
                       'boothId',
@@ -674,6 +673,19 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             builder: (context, params) => NavBarPage(
                   initialPage: '',
                   page: SuccessEditProfileWidget(),
+                )),
+        FFRoute(
+            name: SettingEventListCopy2Widget.routeName,
+            path: SettingEventListCopy2Widget.routePath,
+            requireAuth: true,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SettingEventListCopy2Widget(
+                    isActive: params.getParam(
+                      'isActive',
+                      ParamType.int,
+                    ),
+                  ),
                 ))
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

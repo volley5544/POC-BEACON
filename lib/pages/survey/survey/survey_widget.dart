@@ -150,7 +150,7 @@ class _SurveyWidgetState extends State<SurveyWidget>
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           appBar: AppBar(
-            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+            backgroundColor: FlutterFlowTheme.of(context).primary,
             automaticallyImplyLeading: false,
             title: Text(
               'ประเมินความพึงพอใจ',
@@ -160,7 +160,7 @@ class _SurveyWidgetState extends State<SurveyWidget>
                       fontStyle:
                           FlutterFlowTheme.of(context).displaySmall.fontStyle,
                     ),
-                    color: FlutterFlowTheme.of(context).primaryText,
+                    color: FlutterFlowTheme.of(context).primaryBackground,
                     fontSize: 22.0,
                     letterSpacing: 0.0,
                     fontWeight: FontWeight.normal,
@@ -169,23 +169,30 @@ class _SurveyWidgetState extends State<SurveyWidget>
                   ),
             ),
             actions: [
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 16.0, 0.0),
-                child: FlutterFlowIconButton(
-                  borderColor: Colors.transparent,
-                  borderRadius: 30.0,
-                  borderWidth: 1.0,
-                  buttonSize: 50.0,
-                  fillColor: FlutterFlowTheme.of(context).primaryBackground,
-                  icon: Icon(
-                    Icons.close_rounded,
-                    color: FlutterFlowTheme.of(context).secondaryText,
-                    size: 30.0,
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 16.0, 0.0),
+                    child: FlutterFlowIconButton(
+                      borderColor: FlutterFlowTheme.of(context).alternate,
+                      borderRadius: 12.0,
+                      borderWidth: 1.0,
+                      buttonSize: 40.0,
+                      fillColor:
+                          FlutterFlowTheme.of(context).secondaryBackground,
+                      icon: Icon(
+                        Icons.close_rounded,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: 24.0,
+                      ),
+                      onPressed: () async {
+                        context.safePop();
+                      },
+                    ),
                   ),
-                  onPressed: () async {
-                    context.safePop();
-                  },
-                ),
+                ],
               ),
             ],
             centerTitle: false,

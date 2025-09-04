@@ -13,7 +13,7 @@ const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 /// Start RAS Group Code
 
 class RasGroup {
-  static String getBaseUrl() => 'https://99064d5d1056.ngrok-free.app';
+  static String getBaseUrl() => 'https://d741ecd41925.ngrok-free.app';
   static Map<String, String> headers = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer test-token-123456789',
@@ -22,6 +22,10 @@ class RasGroup {
   static GetAllBoothsCall getAllBoothsCall = GetAllBoothsCall();
   static SummaryParticipantsBoothCall summaryParticipantsBoothCall =
       SummaryParticipantsBoothCall();
+  static ReportSurveyByBoothDetailsCall reportSurveyByBoothDetailsCall =
+      ReportSurveyByBoothDetailsCall();
+  static SummarizeDashboardCall summarizeDashboardCall =
+      SummarizeDashboardCall();
   static SurveyGetActivityCall surveyGetActivityCall = SurveyGetActivityCall();
   static UpdateEventByIdCall updateEventByIdCall = UpdateEventByIdCall();
   static CreateEventCall createEventCall = CreateEventCall();
@@ -275,6 +279,566 @@ class SummaryParticipantsBoothCall {
     return ApiManager.instance.makeApiCall(
       callName: 'summaryParticipantsBooth',
       apiUrl: '${baseUrl}/activities/summary-participants-booth',
+      callType: ApiCallType.POST,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer test-token-123456789',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  int? statusCode(dynamic response) => castToType<int>(getJsonField(
+        response,
+        r'''$.status_code''',
+      ));
+  String? statusMessage(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.status_message''',
+      ));
+  String? description(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.description''',
+      ));
+  PaticipantsBoothDataModelStruct? data(dynamic response) =>
+      PaticipantsBoothDataModelStruct.maybeFromMap(getJsonField(
+        response,
+        r'''$.data''',
+      ));
+  List<String>? boothDocRef(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].id''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? boothId(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].booth_id''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<String>? boothName(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].booth_name''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<String>? boothDescription(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].description''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? notificationDistance(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].notification_distance''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List? associateEeventId(dynamic response) => getJsonField(
+        response,
+        r'''$.data[:].associated_event_id''',
+        true,
+      ) as List?;
+  List<String>? createdAt(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].created_at''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<String>? createdBy(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].created_by''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? isActive(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].is_active''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<String>? updatedAt(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].updated_at''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? eventId(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].event_id''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<String>? updatedBy(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].updated_by''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List? imagesObject(dynamic response) => getJsonField(
+        response,
+        r'''$.data[:].images''',
+        true,
+      ) as List?;
+  String? imagesId(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data[:].images[:].id''',
+      ));
+  List<String>? imagesStatus(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].status''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  String? imagesFilename(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data[:].images[:].file_name''',
+      ));
+  String? imagesFileurl(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data[:].images[:].file_url''',
+      ));
+  String? imagesFiletype(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data[:].images[:].file_type''',
+      ));
+  int? imagesSeq(dynamic response) => castToType<int>(getJsonField(
+        response,
+        r'''$.data[:].images[:].seq''',
+      ));
+  bool? imagesIsCover(dynamic response) => castToType<bool>(getJsonField(
+        response,
+        r'''$.data[:].images[:].is_cover''',
+      ));
+  int? imagesIsActive(dynamic response) => castToType<int>(getJsonField(
+        response,
+        r'''$.data[:].images[:].is_active''',
+      ));
+  List? sumBoothArr(dynamic response) => getJsonField(
+        response,
+        r'''$.data.booths''',
+        true,
+      ) as List?;
+  List<int>? sumBoothId(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.booths[:].booth_id''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<String>? sumBoothName(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.booths[:].booth_name''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? sumPerson(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.booths[:].total_participants''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<int>? boothidlist(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.data_list[:].booth_id_list''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List? datalist(dynamic response) => getJsonField(
+        response,
+        r'''$.data.data_list''',
+        true,
+      ) as List?;
+  List<String>? boothnamelist(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.data_list[:].booth_name_list''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<String>? colorslist(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.data_list[:].colors''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? seqlist(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.data_list[:].index_seq''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<String>? totalparticipantslist(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.data_list[:].total_participants_list''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+}
+
+class ReportSurveyByBoothDetailsCall {
+  Future<ApiCallResponse> call({
+    String? authToken = 'test-token-123456789',
+    String? eventRef = 'YWMyuNxPlLwB7prVc920',
+  }) async {
+    final baseUrl = RasGroup.getBaseUrl();
+
+    final ffApiRequestBody = '''
+{
+  "event_ref": "${escapeStringForJson(eventRef)}"
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'reportSurveyByBoothDetails',
+      apiUrl: '${baseUrl}/survey/booths/details',
+      callType: ApiCallType.POST,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer test-token-123456789',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  int? statusCode(dynamic response) => castToType<int>(getJsonField(
+        response,
+        r'''$.status_code''',
+      ));
+  String? statusMessage(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.status_message''',
+      ));
+  String? description(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.description''',
+      ));
+  PaticipantsBoothDataModelStruct? data(dynamic response) =>
+      PaticipantsBoothDataModelStruct.maybeFromMap(getJsonField(
+        response,
+        r'''$.data''',
+      ));
+  List<String>? boothDocRef(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].id''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? boothId(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].booth_id''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<String>? boothName(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].booth_name''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<String>? boothDescription(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].description''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? notificationDistance(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].notification_distance''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List? associateEeventId(dynamic response) => getJsonField(
+        response,
+        r'''$.data[:].associated_event_id''',
+        true,
+      ) as List?;
+  List<String>? createdAt(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].created_at''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<String>? createdBy(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].created_by''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? isActive(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].is_active''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<String>? updatedAt(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].updated_at''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? eventId(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].event_id''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<String>? updatedBy(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].updated_by''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List? imagesObject(dynamic response) => getJsonField(
+        response,
+        r'''$.data[:].images''',
+        true,
+      ) as List?;
+  String? imagesId(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data[:].images[:].id''',
+      ));
+  List<String>? imagesStatus(dynamic response) => (getJsonField(
+        response,
+        r'''$.data[:].status''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  String? imagesFilename(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data[:].images[:].file_name''',
+      ));
+  String? imagesFileurl(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data[:].images[:].file_url''',
+      ));
+  String? imagesFiletype(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.data[:].images[:].file_type''',
+      ));
+  int? imagesSeq(dynamic response) => castToType<int>(getJsonField(
+        response,
+        r'''$.data[:].images[:].seq''',
+      ));
+  bool? imagesIsCover(dynamic response) => castToType<bool>(getJsonField(
+        response,
+        r'''$.data[:].images[:].is_cover''',
+      ));
+  int? imagesIsActive(dynamic response) => castToType<int>(getJsonField(
+        response,
+        r'''$.data[:].images[:].is_active''',
+      ));
+  List? sumBoothArr(dynamic response) => getJsonField(
+        response,
+        r'''$.data.booths''',
+        true,
+      ) as List?;
+  List<int>? sumBoothId(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.booths[:].booth_id''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<String>? sumBoothName(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.booths[:].booth_name''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? sumPerson(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.booths[:].total_participants''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<int>? boothidlist(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.data_list[:].booth_id_list''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List? datalist(dynamic response) => getJsonField(
+        response,
+        r'''$.data.data_list''',
+        true,
+      ) as List?;
+  List<String>? boothnamelist(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.data_list[:].booth_name_list''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<String>? colorslist(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.data_list[:].colors''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? seqlist(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.data_list[:].index_seq''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<String>? totalparticipantslist(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.data_list[:].total_participants_list''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+}
+
+class SummarizeDashboardCall {
+  Future<ApiCallResponse> call({
+    String? authToken = 'test-token-123456789',
+    String? eventRef = 'YWMyuNxPlLwB7prVc920',
+    String? startDatetime = '1756807778',
+    String? endDatetime = '1756868400',
+  }) async {
+    final baseUrl = RasGroup.getBaseUrl();
+
+    final ffApiRequestBody = '''
+{
+  "event_ref": "${escapeStringForJson(eventRef)}",
+  "start_datetime": "${escapeStringForJson(startDatetime)}",
+  "end_datetime": "${escapeStringForJson(endDatetime)}"
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'summarizeDashboard',
+      apiUrl: '${baseUrl}/activities/summary-dashboard',
       callType: ApiCallType.POST,
       headers: {
         'Content-Type': 'application/json',

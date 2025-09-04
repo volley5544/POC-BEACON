@@ -208,7 +208,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget>
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
           appBar: AppBar(
-            backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+            backgroundColor: FlutterFlowTheme.of(context).primary,
             automaticallyImplyLeading: false,
             title: Column(
               mainAxisSize: MainAxisSize.max,
@@ -225,6 +225,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget>
                               .headlineMedium
                               .fontStyle,
                         ),
+                        color: FlutterFlowTheme.of(context).primaryBackground,
                         fontSize: 22.0,
                         letterSpacing: 0.0,
                         fontWeight: FlutterFlowTheme.of(context)

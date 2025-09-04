@@ -2,6 +2,7 @@ import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'home_widget.dart' show HomeWidget;
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class HomeModel extends FlutterFlowModel<HomeWidget> {
@@ -17,6 +18,10 @@ class HomeModel extends FlutterFlowModel<HomeWidget> {
   RolesRecord? roleData;
   // Stores action output result for [Custom Action - checkPermissionsBeacon] action in Home widget.
   bool? permiss;
+  // State field(s) for Carousel widget.
+  CarouselSliderController? carouselController;
+  int carouselCurrentIndex = 0;
+
   var linkReister = '';
 
   @override

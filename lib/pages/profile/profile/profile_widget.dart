@@ -81,23 +81,27 @@ class _ProfileWidgetState extends State<ProfileWidget> {
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
             appBar: AppBar(
-              backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+              backgroundColor: FlutterFlowTheme.of(context).primary,
               automaticallyImplyLeading: false,
               title: Text(
                 'โปรไฟล์',
-                style: FlutterFlowTheme.of(context).bodyLarge.override(
-                      font: GoogleFonts.readexPro(
-                        fontWeight:
-                            FlutterFlowTheme.of(context).bodyLarge.fontWeight,
-                        fontStyle:
-                            FlutterFlowTheme.of(context).bodyLarge.fontStyle,
+                style: FlutterFlowTheme.of(context).headlineMedium.override(
+                      font: GoogleFonts.outfit(
+                        fontWeight: FlutterFlowTheme.of(context)
+                            .headlineMedium
+                            .fontWeight,
+                        fontStyle: FlutterFlowTheme.of(context)
+                            .headlineMedium
+                            .fontStyle,
                       ),
+                      color: FlutterFlowTheme.of(context).primaryBackground,
                       fontSize: 22.0,
                       letterSpacing: 0.0,
-                      fontWeight:
-                          FlutterFlowTheme.of(context).bodyLarge.fontWeight,
+                      fontWeight: FlutterFlowTheme.of(context)
+                          .headlineMedium
+                          .fontWeight,
                       fontStyle:
-                          FlutterFlowTheme.of(context).bodyLarge.fontStyle,
+                          FlutterFlowTheme.of(context).headlineMedium.fontStyle,
                     ),
               ),
               actions: [],

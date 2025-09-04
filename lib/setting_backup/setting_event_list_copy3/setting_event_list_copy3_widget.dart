@@ -716,7 +716,7 @@ class _SettingEventListCopy3WidgetState
                                           AlignmentDirectional(0.0, -1.0),
                                       child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 0.0, 20.0),
+                                            0.0, 20.0, 0.0, 20.0),
                                         child: Text(
                                           'ความนิยมบูธ',
                                           textAlign: TextAlign.center,

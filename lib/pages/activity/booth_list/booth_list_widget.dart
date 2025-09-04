@@ -151,7 +151,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+          backgroundColor: FlutterFlowTheme.of(context).primary,
           automaticallyImplyLeading: false,
           leading: InkWell(
             splashColor: Colors.transparent,
@@ -163,7 +163,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
             },
             child: Icon(
               Icons.arrow_back_rounded,
-              color: FlutterFlowTheme.of(context).primaryText,
+              color: FlutterFlowTheme.of(context).primaryBackground,
               size: 30.0,
             ),
           ),
@@ -179,7 +179,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                     fontStyle:
                         FlutterFlowTheme.of(context).headlineMedium.fontStyle,
                   ),
-                  color: FlutterFlowTheme.of(context).primaryText,
+                  color: FlutterFlowTheme.of(context).primaryBackground,
                   fontSize: 22.0,
                   letterSpacing: 0.0,
                   fontWeight:
@@ -535,8 +535,8 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                 ParamType.int,
                                               ),
                                               'eventDocRef': serializeParam(
-                                                widget.eventDocRef?.reference,
-                                                ParamType.DocumentReference,
+                                                widget.eventDocRef,
+                                                ParamType.Document,
                                               ),
                                               'boothId': serializeParam(
                                                 listViewBoothsRecord.boothId,
@@ -552,6 +552,8 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                               ),
                                             }.withoutNulls,
                                             extra: <String, dynamic>{
+                                              'eventDocRef':
+                                                  widget.eventDocRef,
                                               'boothDocRef':
                                                   listViewBoothsRecord,
                                               'boothDoc': listViewBoothsRecord,

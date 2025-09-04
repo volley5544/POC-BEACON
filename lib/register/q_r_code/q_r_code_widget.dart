@@ -2,7 +2,6 @@ import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'dart:async';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -41,22 +40,19 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      unawaited(
-        () async {
-          _model.dataEvent = await queryEventsRecordOnce(
-            queryBuilder: (eventsRecord) => eventsRecord
-                .where(
-                  'event_id',
-                  isEqualTo: widget.eventId,
-                )
-                .where(
-                  'is_active',
-                  isEqualTo: 0,
-                ),
-            singleRecord: true,
-          ).then((s) => s.firstOrNull);
-        }(),
-      );
+      _model.dataEvent = await queryEventsRecordOnce(
+        queryBuilder: (eventsRecord) => eventsRecord
+            .where(
+              'event_id',
+              isEqualTo: widget.eventId,
+            )
+            .where(
+              'is_active',
+              isEqualTo: 0,
+            ),
+        singleRecord: true,
+      ).then((s) => s.firstOrNull);
+      safeSetState(() {});
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
@@ -82,7 +78,7 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+          backgroundColor: FlutterFlowTheme.of(context).primary,
           automaticallyImplyLeading: false,
           title: Column(
             mainAxisSize: MainAxisSize.max,
@@ -99,6 +95,7 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
                             .headlineMedium
                             .fontStyle,
                       ),
+                      color: FlutterFlowTheme.of(context).primaryBackground,
                       fontSize: 22.0,
                       letterSpacing: 0.0,
                       fontWeight: FlutterFlowTheme.of(context)
@@ -142,6 +139,35 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Align(
+                  alignment: AlignmentDirectional(0.0, 0.0),
+                  child: Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
+                    child: Text(
+                      valueOrDefault<String>(
+                        _model.dataEvent?.eventName,
+                        '-',
+                      ),
+                      textAlign: TextAlign.center,
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            font: GoogleFonts.readexPro(
+                              fontWeight: FontWeight.w600,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontStyle,
+                            ),
+                            color: FlutterFlowTheme.of(context).success,
+                            fontSize: 24.0,
+                            letterSpacing: 0.0,
+                            fontWeight: FontWeight.w600,
+                            fontStyle: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .fontStyle,
+                          ),
+                    ),
+                  ),
+                ),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
@@ -161,41 +187,6 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
                                 mainAxisSize: MainAxisSize.max,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Align(
-                                    alignment: AlignmentDirectional(0.0, 0.0),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 30.0, 0.0, 0.0),
-                                      child: Text(
-                                        valueOrDefault<String>(
-                                          _model.dataEvent?.eventName,
-                                          '-',
-                                        ),
-                                        textAlign: TextAlign.center,
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              font: GoogleFonts.readexPro(
-                                                fontWeight: FontWeight.w600,
-                                                fontStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .fontStyle,
-                                              ),
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .success,
-                                              fontSize: 24.0,
-                                              letterSpacing: 0.0,
-                                              fontWeight: FontWeight.w600,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .fontStyle,
-                                            ),
-                                      ),
-                                    ),
-                                  ),
                                   Align(
                                     alignment: AlignmentDirectional(0.0, 0.0),
                                     child: Padding(

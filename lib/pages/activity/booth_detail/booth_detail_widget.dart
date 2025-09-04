@@ -30,7 +30,7 @@ class BoothDetailWidget extends StatefulWidget {
   });
 
   final int? eventId;
-  final DocumentReference? eventDocRef;
+  final EventsRecord? eventDocRef;
   final int? boothId;
   final BoothsRecord? boothDocRef;
   final BoothsRecord? boothDoc;
@@ -142,7 +142,7 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+          backgroundColor: FlutterFlowTheme.of(context).primary,
           automaticallyImplyLeading: false,
           leading: FlutterFlowIconButton(
             borderColor: Colors.transparent,
@@ -151,7 +151,7 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
             buttonSize: 60.0,
             icon: Icon(
               Icons.arrow_back_rounded,
-              color: FlutterFlowTheme.of(context).primaryText,
+              color: FlutterFlowTheme.of(context).primaryBackground,
               size: 30.0,
             ),
             onPressed: () async {
@@ -170,7 +170,7 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                     fontStyle:
                         FlutterFlowTheme.of(context).headlineMedium.fontStyle,
                   ),
-                  color: FlutterFlowTheme.of(context).primaryText,
+                  color: FlutterFlowTheme.of(context).primaryBackground,
                   fontSize: 22.0,
                   letterSpacing: 0.0,
                   fontWeight:
@@ -476,8 +476,8 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                               isActive: 0,
                                               activityId:
                                                   _model.counterActivity,
-                                              associatedEventId:
-                                                  widget.eventDocRef?.id,
+                                              associatedEventId: widget
+                                                  .eventDocRef?.reference.id,
                                               associatedBoothId: widget
                                                   .boothDocRef?.reference.id,
                                               checkInLocation:
@@ -512,8 +512,8 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                               isActive: 0,
                                               activityId:
                                                   _model.counterActivity,
-                                              associatedEventId:
-                                                  widget.eventDocRef?.id,
+                                              associatedEventId: widget
+                                                  .eventDocRef?.reference.id,
                                               associatedBoothId: widget
                                                   .boothDocRef?.reference.id,
                                               checkInLocation:
