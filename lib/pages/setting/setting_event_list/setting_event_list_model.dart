@@ -19,6 +19,27 @@ class SettingEventListModel extends FlutterFlowModel<SettingEventListWidget> {
   void updateUploadImageTempAtIndex(int index, Function(String) updateFn) =>
       uploadImageTemp[index] = updateFn(uploadImageTemp[index]);
 
+  List<double> tempPageState = [20.0, 40.0, 40.0];
+  void addToTempPageState(double item) => tempPageState.add(item);
+  void removeFromTempPageState(double item) => tempPageState.remove(item);
+  void removeAtIndexFromTempPageState(int index) =>
+      tempPageState.removeAt(index);
+  void insertAtIndexInTempPageState(int index, double item) =>
+      tempPageState.insert(index, item);
+  void updateTempPageStateAtIndex(int index, Function(double) updateFn) =>
+      tempPageState[index] = updateFn(tempPageState[index]);
+
+  List<String> tempPageStateName = ['aaa', 'bbb', 'ccc'];
+  void addToTempPageStateName(String item) => tempPageStateName.add(item);
+  void removeFromTempPageStateName(String item) =>
+      tempPageStateName.remove(item);
+  void removeAtIndexFromTempPageStateName(int index) =>
+      tempPageStateName.removeAt(index);
+  void insertAtIndexInTempPageStateName(int index, String item) =>
+      tempPageStateName.insert(index, item);
+  void updateTempPageStateNameAtIndex(int index, Function(String) updateFn) =>
+      tempPageStateName[index] = updateFn(tempPageStateName[index]);
+
   ///  State fields for stateful widgets in this page.
 
   // Stores action output result for [Firestore Query - Query a collection] action in SettingEventList widget.

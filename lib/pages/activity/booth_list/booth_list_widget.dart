@@ -51,6 +51,8 @@ class _BoothListWidgetState extends State<BoothListWidget>
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.getBeaconDistanceListOutput =
+          _model.myStreamService?.getBeaconDistanceList();
       await Future.wait([
         Future(() async {
           _model.instantTimer = InstantTimer.periodic(
@@ -232,7 +234,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     16.0, 0.0, 0.0, 0.0),
                                 child: Text(
-                                  'จำนวนผู้เข้าร่วมงานแต่ละบูธ',
+                                  'จำนวนผู้เข้าร่วมงานแต่ละบูธ/${_model.getBeaconDistanceListOutput?.length.toString()}',
                                   style: FlutterFlowTheme.of(context)
                                       .labelMedium
                                       .override(

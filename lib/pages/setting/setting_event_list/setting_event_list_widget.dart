@@ -1360,46 +1360,6 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                 if ((_model.datePicked2 !=
                                                         null) ||
                                                     true) {
-                                                  await showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (alertDialogContext) {
-                                                      return AlertDialog(
-                                                        title: Text(_model
-                                                            .datePicked1!
-                                                            .toString()),
-                                                        content: Text(_model
-                                                            .datePicked2!
-                                                            .toString()),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () =>
-                                                                Navigator.pop(
-                                                                    alertDialogContext),
-                                                            child: Text('Ok'),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                  await showDialog(
-                                                    context: context,
-                                                    builder:
-                                                        (alertDialogContext) {
-                                                      return AlertDialog(
-                                                        content: Text(_model
-                                                            .eventNameValue!),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () =>
-                                                                Navigator.pop(
-                                                                    alertDialogContext),
-                                                            child: Text('Ok'),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
                                                   showDialog(
                                                     context: context,
                                                     builder: (dialogContext) {
@@ -1453,6 +1413,164 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                     .apiResultw4l
                                                                     ?.jsonBody ??
                                                                 '')
+                                                            .toString()),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    alertDialogContext),
+                                                            child: Text('Ok'),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                  await showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (alertDialogContext) {
+                                                      return AlertDialog(
+                                                        content: Text(RasGroup
+                                                            .summarizeDashboardCall
+                                                            .dashboard(
+                                                              (_model.apiResultw4l
+                                                                      ?.jsonBody ??
+                                                                  ''),
+                                                            )!
+                                                            .firstOrNull!
+                                                            .boothName),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    alertDialogContext),
+                                                            child: Text('Ok'),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                  await showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (alertDialogContext) {
+                                                      return AlertDialog(
+                                                        content: Text((RasGroup
+                                                                .summarizeDashboardCall
+                                                                .dashboard(
+                                                                  (_model.apiResultw4l
+                                                                          ?.jsonBody ??
+                                                                      ''),
+                                                                )!
+                                                                .elementAtOrNull(
+                                                                    1))!
+                                                            .boothName),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    alertDialogContext),
+                                                            child: Text('Ok'),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                  await showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (alertDialogContext) {
+                                                      return AlertDialog(
+                                                        content: Text((RasGroup
+                                                                .summarizeDashboardCall
+                                                                .dashboard(
+                                                                  (_model.apiResultw4l
+                                                                          ?.jsonBody ??
+                                                                      ''),
+                                                                )!
+                                                                .elementAtOrNull(
+                                                                    2))!
+                                                            .boothName),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    alertDialogContext),
+                                                            child: Text('Ok'),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                  await showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (alertDialogContext) {
+                                                      return AlertDialog(
+                                                        content: Text((RasGroup
+                                                                .summarizeDashboardCall
+                                                                .dashboard(
+                                                                  (_model.apiResultw4l
+                                                                          ?.jsonBody ??
+                                                                      ''),
+                                                                )!
+                                                                .elementAtOrNull(
+                                                                    0))!
+                                                            .participantPercentage
+                                                            .toString()),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    alertDialogContext),
+                                                            child: Text('Ok'),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                  await showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (alertDialogContext) {
+                                                      return AlertDialog(
+                                                        content: Text((RasGroup
+                                                                .summarizeDashboardCall
+                                                                .dashboard(
+                                                                  (_model.apiResultw4l
+                                                                          ?.jsonBody ??
+                                                                      ''),
+                                                                )!
+                                                                .elementAtOrNull(
+                                                                    1))!
+                                                            .participantPercentage
+                                                            .toString()),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    alertDialogContext),
+                                                            child: Text('Ok'),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                  await showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (alertDialogContext) {
+                                                      return AlertDialog(
+                                                        content: Text((RasGroup
+                                                                .summarizeDashboardCall
+                                                                .dashboard(
+                                                                  (_model.apiResultw4l
+                                                                          ?.jsonBody ??
+                                                                      ''),
+                                                                )!
+                                                                .elementAtOrNull(
+                                                                    2))!
+                                                            .participantPercentage
                                                             .toString()),
                                                         actions: [
                                                           TextButton(
@@ -1643,47 +1761,28 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                   ),
                                 ],
                               ),
-                              if ((RasGroup.summarizeDashboardCall.statusCode(
-                                        (_model.apiResultw4l?.jsonBody ?? ''),
-                                      ) ==
-                                      200) &&
-                                  ((_model.apiResultw4l?.statusCode ?? 200) ==
-                                      200))
-                                Container(
-                                  width: 100.0,
-                                  height: 400.0,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                  ),
-                                  child: Stack(
-                                    children: [
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional(0.0, -1.0),
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 20.0),
-                                          child: Text(
-                                            'ความนิยมบูธ',
-                                            textAlign: TextAlign.center,
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  font: GoogleFonts.readexPro(
-                                                    fontWeight: FontWeight.w600,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontStyle,
-                                                  ),
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
-                                                  fontSize: 20.0,
-                                                  letterSpacing: 0.0,
+                              Container(
+                                width: 100.0,
+                                height: 400.0,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Align(
+                                      alignment:
+                                          AlignmentDirectional(0.0, -1.0),
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 0.0, 0.0, 20.0),
+                                        child: Text(
+                                          'ความนิยมบูธ',
+                                          textAlign: TextAlign.center,
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                font: GoogleFonts.readexPro(
                                                   fontWeight: FontWeight.w600,
                                                   fontStyle:
                                                       FlutterFlowTheme.of(
@@ -1691,9 +1790,25 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                           .bodyMedium
                                                           .fontStyle,
                                                 ),
-                                          ),
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                                fontSize: 20.0,
+                                                letterSpacing: 0.0,
+                                                fontWeight: FontWeight.w600,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
                                         ),
                                       ),
+                                    ),
+                                    if ('${getJsonField(
+                                          (_model.apiResultw4l?.jsonBody ?? ''),
+                                          r'''$.status_code''',
+                                        ).toString()}' ==
+                                        '200')
                                       Container(
                                         width: 370.0,
                                         height: 230.0,
@@ -1708,9 +1823,8 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                               ?.jsonBody ??
                                                           ''),
                                                     )!
-                                                    .map((e) => e
-                                                        .participantPercentage
-                                                        .toString())
+                                                    .map((e) =>
+                                                        e.participantPercentage)
                                                     .toList(),
                                                 colors: chartPieChartColorsList,
                                                 radius: [80.0],
@@ -1824,9 +1938,9 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                           ],
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                  ],
                                 ),
+                              ),
                             ],
                           ),
                         ),
