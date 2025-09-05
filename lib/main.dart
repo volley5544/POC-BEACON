@@ -21,6 +21,7 @@ import 'index.dart';
 import 'package:dchs_flutter_beacon/dchs_flutter_beacon.dart';
 // import '/custom_code/my_stream_service.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +40,16 @@ void main() async {
   print('2');
 
   // Start final custom actions code
+  NotificationSettings settings =
+      await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
   if (!kIsWeb) {
     await actions.checkPermissionsBeacon();
     await flutterBeacon.initializeScanning;
