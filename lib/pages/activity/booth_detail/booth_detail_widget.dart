@@ -332,6 +332,23 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                               ),
                             ),
                             Align(
+                              alignment: AlignmentDirectional(1.0, 0.0),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 4.0, 0.0, 0.0),
+                                child: Container(
+                                  width: 110.0,
+                                  height: 30.0,
+                                  child: custom_widgets
+                                      .TextWidgetShowBeaconDistance(
+                                    width: 110.0,
+                                    height: 30.0,
+                                    deviceUuid: widget.boothDoc?.deviceUuid,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Align(
                               alignment: AlignmentDirectional(-1.0, 0.0),
                               child: Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
@@ -565,23 +582,6 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                       .primaryBackground,
                                   disabledTextColor:
                                       FlutterFlowTheme.of(context).primaryText,
-                                ),
-                              ),
-                            ),
-                            Align(
-                              alignment: AlignmentDirectional(1.0, 0.0),
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 4.0, 0.0, 0.0),
-                                child: Container(
-                                  width: 110.0,
-                                  height: 30.0,
-                                  child: custom_widgets
-                                      .TextWidgetShowBeaconDistance(
-                                    width: 110.0,
-                                    height: 30.0,
-                                    deviceUuid: widget.boothDoc?.deviceUuid,
-                                  ),
                                 ),
                               ),
                             ),
