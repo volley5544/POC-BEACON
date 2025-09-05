@@ -386,7 +386,7 @@ class _SuccessSurveyWidgetState extends State<SuccessSurveyWidget>
                                 animationsMap['dividerOnPageLoadAnimation']!),
                             FFButtonWidget(
                               onPressed: () async {
-                                context.pushNamed(
+                                context.goNamed(
                                   BoothListWidget.routeName,
                                   queryParameters: {
                                     'eventId': serializeParam(

@@ -63,7 +63,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget>
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       if (FFAppState().rolesID != 1) {
-        context.pushNamed(
+        context.goNamed(
           HomeWidget.routeName,
           queryParameters: {
             'uid': serializeParam(

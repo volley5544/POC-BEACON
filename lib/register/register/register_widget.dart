@@ -43,6 +43,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
+      // getEvent
       _model.dataEvent = await queryEventsRecordOnce(
         queryBuilder: (eventsRecord) => eventsRecord
             .where(
@@ -53,6 +54,42 @@ class _RegisterWidgetState extends State<RegisterWidget> {
               'is_active',
               isEqualTo: 0,
             ),
+        singleRecord: true,
+      ).then((s) => s.firstOrNull);
+      // countRegistered
+      _model.countRegistered = await queryRegisterRecordCount(
+        parent: widget.eventRef,
+        queryBuilder: (registerRecord) => registerRecord
+            .where(
+              'event_id',
+              isEqualTo: widget.eventId,
+            )
+            .where(
+              'is_active',
+              isEqualTo: 0,
+            )
+            .where(
+              'uid',
+              isEqualTo: currentUserUid,
+            ),
+      );
+      // getRegister
+      _model.dataRegistered = await queryRegisterRecordOnce(
+        parent: widget.eventRef,
+        queryBuilder: (registerRecord) => registerRecord
+            .where(
+              'event_id',
+              isEqualTo: widget.eventId,
+            )
+            .where(
+              'is_active',
+              isEqualTo: 0,
+            )
+            .where(
+              'uid',
+              isEqualTo: currentUserUid,
+            )
+            .orderBy('register_id', descending: true),
         singleRecord: true,
       ).then((s) => s.firstOrNull);
       safeSetState(() {});
@@ -254,6 +291,38 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     ],
                   ),
                 ),
+                if (_model.countRegistered != 0)
+                  Align(
+                    alignment: AlignmentDirectional(-1.0, 0.0),
+                    child: Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 10.0),
+                      child: Text(
+                        _model.countRegistered != 0
+                            ? 'วัน/เวลาที่ลงทะเบียน : ${dateTimeFormat("d/M/y", _model.dataRegistered?.createdAt)} (${dateTimeFormat("Hm", _model.dataRegistered?.createdAt)})'
+                            : ' ',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.readexPro(
+                                fontWeight: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontWeight,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                              ),
+                              color: FlutterFlowTheme.of(context).success,
+                              fontSize: 18.0,
+                              letterSpacing: 0.0,
+                              fontWeight: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontWeight,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontStyle,
+                            ),
+                      ),
+                    ),
+                  ),
                 Padding(
                   padding:
                       EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 16.0),
@@ -596,158 +665,177 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     padding:
                         EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
                     child: FFButtonWidget(
-                      onPressed: () async {
-                        var _shouldSetState = false;
-                        if (_model.firstNameTextController.text != '') {
-                          if (_model.lastNameTextController.text != '') {
-                            var confirmDialogResponse = await showDialog<bool>(
+                      onPressed: (_model.countRegistered != 0)
+                          ? null
+                          : () async {
+                              var _shouldSetState = false;
+                              if (_model.firstNameTextController.text != '') {
+                                if (_model.lastNameTextController.text != '') {
+                                  var confirmDialogResponse =
+                                      await showDialog<bool>(
+                                            context: context,
+                                            builder: (alertDialogContext) {
+                                              return AlertDialog(
+                                                content: Text(
+                                                    'คุณต้องการลงทะเบียนงาน ${_model.dataEvent?.eventName} ใช่ไหม ?'),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(
+                                                            alertDialogContext,
+                                                            false),
+                                                    child: Text('ยกเลิก'),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(
+                                                            alertDialogContext,
+                                                            true),
+                                                    child: Text('ยืนยัน'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          ) ??
+                                          false;
+                                  if (confirmDialogResponse) {
+                                    _model.dataRegisterCount =
+                                        await queryRegisterRecordCount(
+                                      parent: widget.eventRef,
+                                    );
+                                    _shouldSetState = true;
+                                    // generate register_id
+                                    _model.newRegisterID =
+                                        _model.dataRegisterCount!;
+                                    safeSetState(() {});
+                                    // generate register_id
+                                    _model.newRegisterID =
+                                        _model.newRegisterID + 1;
+                                    safeSetState(() {});
+                                    // insert register
+
+                                    var registerRecordReference =
+                                        RegisterRecord.createDoc(
+                                            widget.eventRef!);
+                                    await registerRecordReference.set({
+                                      ...createRegisterRecordData(
+                                        registerId: _model.newRegisterID,
+                                        eventId: widget.eventId,
+                                        associatedEventId: widget.eventRef?.id,
+                                        uid: currentUserUid,
+                                        createdBy: currentUserReference?.path,
+                                        isActive: 0,
+                                      ),
+                                      ...mapToFirestore(
+                                        {
+                                          'created_at':
+                                              FieldValue.serverTimestamp(),
+                                        },
+                                      ),
+                                    });
+                                    _model.outputRegister =
+                                        RegisterRecord.getDocumentFromData({
+                                      ...createRegisterRecordData(
+                                        registerId: _model.newRegisterID,
+                                        eventId: widget.eventId,
+                                        associatedEventId: widget.eventRef?.id,
+                                        uid: currentUserUid,
+                                        createdBy: currentUserReference?.path,
+                                        isActive: 0,
+                                      ),
+                                      ...mapToFirestore(
+                                        {
+                                          'created_at': DateTime.now(),
+                                        },
+                                      ),
+                                    }, registerRecordReference);
+                                    _shouldSetState = true;
+
+                                    await currentUserReference!.update({
+                                      ...createUsersRecordData(
+                                        firstName:
+                                            _model.firstNameTextController.text,
+                                        lastName:
+                                            _model.lastNameTextController.text,
+                                        displayName:
+                                            '${_model.firstNameTextController.text} ${_model.lastNameTextController.text}',
+                                        updatedBy: currentUserReference?.path,
+                                      ),
+                                      ...mapToFirestore(
+                                        {
+                                          'updated_at':
+                                              FieldValue.serverTimestamp(),
+                                        },
+                                      ),
+                                    });
+
+                                    context.pushNamed(
+                                      SuccessRegisterWidget.routeName,
+                                      queryParameters: {
+                                        'eventId': serializeParam(
+                                          widget.eventId,
+                                          ParamType.int,
+                                        ),
+                                        'eventRef': serializeParam(
+                                          _model.dataEvent,
+                                          ParamType.Document,
+                                        ),
+                                      }.withoutNulls,
+                                      extra: <String, dynamic>{
+                                        'eventRef': _model.dataEvent,
+                                      },
+                                    );
+
+                                    if (_shouldSetState) safeSetState(() {});
+                                    return;
+                                  } else {
+                                    if (_shouldSetState) safeSetState(() {});
+                                    return;
+                                  }
+                                } else {
+                                  await showDialog(
+                                    context: context,
+                                    builder: (alertDialogContext) {
+                                      return AlertDialog(
+                                        content: Text('กรุณากรอกนามสกุล'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(
+                                                alertDialogContext),
+                                            child: Text('Ok'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                  if (_shouldSetState) safeSetState(() {});
+                                  return;
+                                }
+                              } else {
+                                await showDialog(
                                   context: context,
                                   builder: (alertDialogContext) {
                                     return AlertDialog(
-                                      content: Text(
-                                          'คุณต้องการลงทะเบียนงาน ${_model.dataEvent?.eventName}ใช่ไหม ?'),
+                                      content: Text('กรุณากรอกชื่อ'),
                                       actions: [
                                         TextButton(
-                                          onPressed: () => Navigator.pop(
-                                              alertDialogContext, false),
-                                          child: Text('ยกเลิก'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () => Navigator.pop(
-                                              alertDialogContext, true),
-                                          child: Text('ยืนยัน'),
+                                          onPressed: () =>
+                                              Navigator.pop(alertDialogContext),
+                                          child: Text('Ok'),
                                         ),
                                       ],
                                     );
                                   },
-                                ) ??
-                                false;
-                            _model.dataRegisterCount =
-                                await queryRegisterRecordCount(
-                              parent: widget.eventRef,
-                            );
-                            _shouldSetState = true;
-                            // generate register_id
-                            _model.newRegisterID = _model.dataRegisterCount!;
-                            safeSetState(() {});
-                            // generate register_id
-                            _model.newRegisterID = _model.newRegisterID + 1;
-                            safeSetState(() {});
-                            await showDialog(
-                              context: context,
-                              builder: (alertDialogContext) {
-                                return AlertDialog(
-                                  title: Text('new id'),
-                                  content:
-                                      Text(_model.newRegisterID.toString()),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(alertDialogContext),
-                                      child: Text('Ok'),
-                                    ),
-                                  ],
                                 );
-                              },
-                            );
-                            // insert register
+                                if (_shouldSetState) safeSetState(() {});
+                                return;
+                              }
 
-                            var registerRecordReference =
-                                RegisterRecord.createDoc(widget.eventRef!);
-                            await registerRecordReference.set({
-                              ...createRegisterRecordData(
-                                registerId: _model.newRegisterID,
-                                eventId: widget.eventId,
-                                associatedEventId: widget.eventRef?.id,
-                                uid: currentUserUid,
-                                createdBy: currentUserReference?.path,
-                                isActive: 0,
-                              ),
-                              ...mapToFirestore(
-                                {
-                                  'created_at': FieldValue.serverTimestamp(),
-                                },
-                              ),
-                            });
-                            _model.outputRegister =
-                                RegisterRecord.getDocumentFromData({
-                              ...createRegisterRecordData(
-                                registerId: _model.newRegisterID,
-                                eventId: widget.eventId,
-                                associatedEventId: widget.eventRef?.id,
-                                uid: currentUserUid,
-                                createdBy: currentUserReference?.path,
-                                isActive: 0,
-                              ),
-                              ...mapToFirestore(
-                                {
-                                  'created_at': DateTime.now(),
-                                },
-                              ),
-                            }, registerRecordReference);
-                            _shouldSetState = true;
-
-                            await currentUserReference!.update({
-                              ...createUsersRecordData(
-                                firstName: _model.firstNameTextController.text,
-                                lastName: _model.lastNameTextController.text,
-                                displayName:
-                                    '${_model.firstNameTextController.text} ${_model.lastNameTextController.text}',
-                                updatedBy: currentUserReference?.path,
-                              ),
-                              ...mapToFirestore(
-                                {
-                                  'updated_at': FieldValue.serverTimestamp(),
-                                },
-                              ),
-                            });
-
-                            context.pushNamed(EventSelectionWidget.routeName);
-
-                            if (_shouldSetState) safeSetState(() {});
-                            return;
-                          } else {
-                            await showDialog(
-                              context: context,
-                              builder: (alertDialogContext) {
-                                return AlertDialog(
-                                  content: Text('กรุณากรอกนามสกุล'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(alertDialogContext),
-                                      child: Text('Ok'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                            if (_shouldSetState) safeSetState(() {});
-                            return;
-                          }
-                        } else {
-                          await showDialog(
-                            context: context,
-                            builder: (alertDialogContext) {
-                              return AlertDialog(
-                                content: Text('กรุณากรอกชื่อ'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(alertDialogContext),
-                                    child: Text('Ok'),
-                                  ),
-                                ],
-                              );
+                              if (_shouldSetState) safeSetState(() {});
                             },
-                          );
-                          if (_shouldSetState) safeSetState(() {});
-                          return;
-                        }
-
-                        if (_shouldSetState) safeSetState(() {});
-                      },
-                      text: 'ลงทะเบียน',
+                      text: _model.countRegistered != 0
+                          ? 'ลงทะเบียนแล้ว'
+                          : 'ลงทะเบียน',
                       options: FFButtonOptions(
                         width: double.infinity,
                         height: 50.0,
@@ -781,6 +869,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                           width: 1.0,
                         ),
                         borderRadius: BorderRadius.circular(12.0),
+                        disabledColor: FlutterFlowTheme.of(context).alternate,
+                        disabledTextColor:
+                            FlutterFlowTheme.of(context).primaryText,
                       ),
                     ),
                   ),

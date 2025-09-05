@@ -15,6 +15,10 @@ class RegisterModel extends FlutterFlowModel<RegisterWidget> {
 
   // Stores action output result for [Firestore Query - Query a collection] action in Register widget.
   EventsRecord? dataEvent;
+  // Stores action output result for [Firestore Query - Query a collection] action in Register widget.
+  int? countRegistered;
+  // Stores action output result for [Firestore Query - Query a collection] action in Register widget.
+  RegisterRecord? dataRegistered;
   // State field(s) for firstName widget.
   FocusNode? firstNameFocusNode;
   TextEditingController? firstNameTextController;

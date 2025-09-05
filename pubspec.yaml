@@ -43,6 +43,7 @@ dependencies:
   collection: 1.19.1
   crypto: ^3.0.2
   csslib: 1.0.2
+  data_table_2: 2.5.10
   dchs_flutter_beacon: ^0.6.4
   device_info_plus: 11.5.0
   device_info_plus_platform_interface: 7.0.3
@@ -64,6 +65,7 @@ dependencies:
   firebase_storage: 12.4.7
   firebase_storage_platform_interface: 5.2.7
   firebase_storage_web: 3.10.14
+  fl_chart: 1.0.0
   floating_bottom_navigation_bar: 1.5.2
   flutter_animate: 4.5.0
   flutter_barcode_scanner: 

@@ -3,10 +3,11 @@ import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/form_field_controller.dart';
 import '/index.dart';
-import 'setting_event_list_widget.dart' show SettingEventListWidget;
+import 'setting_event_list_copy4_widget.dart' show SettingEventListCopy4Widget;
 import 'package:flutter/material.dart';
 
-class SettingEventListModel extends FlutterFlowModel<SettingEventListWidget> {
+class SettingEventListCopy4Model
+    extends FlutterFlowModel<SettingEventListCopy4Widget> {
   ///  Local state fields for this page.
 
   List<String> uploadImageTemp = [];
@@ -21,7 +22,7 @@ class SettingEventListModel extends FlutterFlowModel<SettingEventListWidget> {
 
   ///  State fields for stateful widgets in this page.
 
-  // Stores action output result for [Firestore Query - Query a collection] action in SettingEventList widget.
+  // Stores action output result for [Firestore Query - Query a collection] action in SettingEventListCopy4 widget.
   List<EventsRecord>? dataEvent;
   // State field(s) for TabBar widget.
   TabController? tabBarController;
@@ -30,11 +31,12 @@ class SettingEventListModel extends FlutterFlowModel<SettingEventListWidget> {
   int get tabBarPreviousIndex =>
       tabBarController != null ? tabBarController!.previousIndex : 0;
 
+  DateTime? datePicked1;
   // State field(s) for eventName widget.
   String? eventNameValue;
   FormFieldController<String>? eventNameValueController;
-  DateTime? datePicked1;
   DateTime? datePicked2;
+  DateTime? datePicked3;
   // Stores action output result for [Backend Call - API (summarizeDashboard)] action in Button widget.
   ApiCallResponse? apiResultw4l;
 

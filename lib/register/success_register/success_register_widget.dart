@@ -322,8 +322,7 @@ class _SuccessRegisterWidgetState extends State<SuccessRegisterWidget>
                                 animationsMap['dividerOnPageLoadAnimation']!),
                             FFButtonWidget(
                               onPressed: () async {
-                                context
-                                    .pushNamed(EventSelectionWidget.routeName);
+                                context.goNamed(EventSelectionWidget.routeName);
                               },
                               text: 'กลับหน้ากิจกรรม',
                               options: FFButtonOptions(

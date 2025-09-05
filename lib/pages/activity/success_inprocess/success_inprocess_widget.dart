@@ -391,10 +391,7 @@ class _SuccessInprocessWidgetState extends State<SuccessInprocessWidget>
                                 animationsMap['dividerOnPageLoadAnimation']!),
                             FFButtonWidget(
                               onPressed: () async {
-                                if (Navigator.of(context).canPop()) {
-                                  context.pop();
-                                }
-                                context.pushNamed(
+                                context.goNamed(
                                   BoothListWidget.routeName,
                                   queryParameters: {
                                     'eventId': serializeParam(

@@ -548,12 +548,13 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                                 ParamType.int,
                                               ),
                                               'eventDocRef': serializeParam(
-                                                _model.dataEvent,
+                                                widget.eventDocRef,
                                                 ParamType.Document,
                                               ),
                                             }.withoutNulls,
                                             extra: <String, dynamic>{
-                                              'eventDocRef': _model.dataEvent,
+                                              'eventDocRef':
+                                                  widget.eventDocRef,
                                             },
                                           );
                                         } else {

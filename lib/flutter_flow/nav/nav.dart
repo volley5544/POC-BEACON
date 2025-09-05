@@ -686,7 +686,30 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                       ParamType.int,
                     ),
                   ),
-                ))
+                )),
+        FFRoute(
+            name: SettingEventListCopy4Widget.routeName,
+            path: SettingEventListCopy4Widget.routePath,
+            requireAuth: true,
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: SettingEventListCopy4Widget(
+                    isActive: params.getParam(
+                      'isActive',
+                      ParamType.int,
+                    ),
+                  ),
+                )),
+        FFRoute(
+          name: DashboardWidget.routeName,
+          path: DashboardWidget.routePath,
+          builder: (context, params) => DashboardWidget(),
+        ),
+        FFRoute(
+          name: DatatableWidget.routeName,
+          path: DatatableWidget.routePath,
+          builder: (context, params) => DatatableWidget(),
+        )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
 

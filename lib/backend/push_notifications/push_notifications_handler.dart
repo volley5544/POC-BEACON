@@ -306,6 +306,13 @@ final parametersBuilderMap =
           'isActive': getParameter<int>(data, 'isActive'),
         },
       ),
+  'SettingEventListCopy4': (data) async => ParameterData(
+        allParams: {
+          'isActive': getParameter<int>(data, 'isActive'),
+        },
+      ),
+  'dashboard': ParameterData.none(),
+  'datatable': ParameterData.none(),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

@@ -316,7 +316,7 @@ class _SuccessEditProfileWidgetState extends State<SuccessEditProfileWidget>
                                 animationsMap['dividerOnPageLoadAnimation']!),
                             FFButtonWidget(
                               onPressed: () async {
-                                context.pushNamed(
+                                context.goNamed(
                                   EditProfileWidget.routeName,
                                   queryParameters: {
                                     'uid': serializeParam(

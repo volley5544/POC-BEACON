@@ -12,11 +12,13 @@ class BoothsStruct extends FFFirebaseStruct {
     String? boothName,
     String? totalParticipants,
     String? cssCode,
+    double? participantPercentage,
     FirestoreUtilData firestoreUtilData = const FirestoreUtilData(),
   })  : _boothId = boothId,
         _boothName = boothName,
         _totalParticipants = totalParticipants,
         _cssCode = cssCode,
+        _participantPercentage = participantPercentage,
         super(firestoreUtilData);
 
   // "booth_id" field.
@@ -49,11 +51,23 @@ class BoothsStruct extends FFFirebaseStruct {
 
   bool hasCssCode() => _cssCode != null;
 
+  // "participant_percentage" field.
+  double? _participantPercentage;
+  double get participantPercentage => _participantPercentage ?? 0.0;
+  set participantPercentage(double? val) => _participantPercentage = val;
+
+  void incrementParticipantPercentage(double amount) =>
+      participantPercentage = participantPercentage + amount;
+
+  bool hasParticipantPercentage() => _participantPercentage != null;
+
   static BoothsStruct fromMap(Map<String, dynamic> data) => BoothsStruct(
         boothId: castToType<int>(data['booth_id']),
         boothName: data['booth_name'] as String?,
         totalParticipants: data['total_participants'] as String?,
         cssCode: data['css_code'] as String?,
+        participantPercentage:
+            castToType<double>(data['participant_percentage']),
       );
 
   static BoothsStruct? maybeFromMap(dynamic data) =>
@@ -64,6 +78,7 @@ class BoothsStruct extends FFFirebaseStruct {
         'booth_name': _boothName,
         'total_participants': _totalParticipants,
         'css_code': _cssCode,
+        'participant_percentage': _participantPercentage,
       }.withoutNulls;
 
   @override
@@ -83,6 +98,10 @@ class BoothsStruct extends FFFirebaseStruct {
         'css_code': serializeParam(
           _cssCode,
           ParamType.String,
+        ),
+        'participant_percentage': serializeParam(
+          _participantPercentage,
+          ParamType.double,
         ),
       }.withoutNulls;
 
@@ -108,6 +127,11 @@ class BoothsStruct extends FFFirebaseStruct {
           ParamType.String,
           false,
         ),
+        participantPercentage: deserializeParam(
+          data['participant_percentage'],
+          ParamType.double,
+          false,
+        ),
       );
 
   @override
@@ -119,12 +143,13 @@ class BoothsStruct extends FFFirebaseStruct {
         boothId == other.boothId &&
         boothName == other.boothName &&
         totalParticipants == other.totalParticipants &&
-        cssCode == other.cssCode;
+        cssCode == other.cssCode &&
+        participantPercentage == other.participantPercentage;
   }
 
   @override
-  int get hashCode => const ListEquality()
-      .hash([boothId, boothName, totalParticipants, cssCode]);
+  int get hashCode => const ListEquality().hash(
+      [boothId, boothName, totalParticipants, cssCode, participantPercentage]);
 }
 
 BoothsStruct createBoothsStruct({
@@ -132,6 +157,7 @@ BoothsStruct createBoothsStruct({
   String? boothName,
   String? totalParticipants,
   String? cssCode,
+  double? participantPercentage,
   Map<String, dynamic> fieldValues = const {},
   bool clearUnsetFields = true,
   bool create = false,
@@ -142,6 +168,7 @@ BoothsStruct createBoothsStruct({
       boothName: boothName,
       totalParticipants: totalParticipants,
       cssCode: cssCode,
+      participantPercentage: participantPercentage,
       firestoreUtilData: FirestoreUtilData(
         clearUnsetFields: clearUnsetFields,
         create: create,

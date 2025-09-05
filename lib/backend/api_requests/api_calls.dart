@@ -13,7 +13,7 @@ const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 /// Start RAS Group Code
 
 class RasGroup {
-  static String getBaseUrl() => 'https://d741ecd41925.ngrok-free.app';
+  static String getBaseUrl() => 'https://2079ce79bd0a.ngrok-free.app';
   static Map<String, String> headers = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer test-token-123456789',
@@ -1099,6 +1099,15 @@ class SummarizeDashboardCall {
       ) as List?)
           ?.withoutNulls
           .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<BoothsStruct>? dashboard(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.booths''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => BoothsStruct.maybeFromMap(x))
           .withoutNulls
           .toList();
 }

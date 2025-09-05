@@ -44,8 +44,9 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      if (FFAppState().rolesID != 1) {
-        context.pushNamed(
+      if (FFAppState().rolesID == 1) {
+      } else {
+        context.goNamed(
           HomeWidget.routeName,
           queryParameters: {
             'uid': serializeParam(

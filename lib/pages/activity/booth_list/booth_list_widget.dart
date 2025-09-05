@@ -54,7 +54,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
       await Future.wait([
         Future(() async {
           _model.instantTimer = InstantTimer.periodic(
-            duration: Duration(milliseconds: 2000),
+            duration: Duration(milliseconds: 20000),
             callback: (timer) async {
               safeSetState(() {});
             },
@@ -337,7 +337,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                         child: Padding(
                                                           padding:
                                                               EdgeInsets.all(
-                                                                  12.0),
+                                                                  6.0),
                                                           child: Column(
                                                             mainAxisSize:
                                                                 MainAxisSize
@@ -391,45 +391,50 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                           .fontStyle,
                                                                     ),
                                                               ),
-                                                              Padding(
-                                                                padding:
-                                                                    EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            0.0,
-                                                                            4.0,
-                                                                            0.0,
-                                                                            0.0),
-                                                                child: Text(
-                                                                  valueOrDefault<
-                                                                      String>(
-                                                                    summaryItem
-                                                                        .boothName,
-                                                                    '-',
-                                                                  ),
-                                                                  style: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .labelMedium
-                                                                      .override(
-                                                                        font: GoogleFonts
-                                                                            .readexPro(
+                                                              Align(
+                                                                alignment:
+                                                                    AlignmentDirectional(
+                                                                        -1.0,
+                                                                        0.0),
+                                                                child: Padding(
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          4.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                                  child: Text(
+                                                                    valueOrDefault<
+                                                                        String>(
+                                                                      summaryItem
+                                                                          .boothName,
+                                                                      '-',
+                                                                    ),
+                                                                    style: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .labelMedium
+                                                                        .override(
+                                                                          font:
+                                                                              GoogleFonts.readexPro(
+                                                                            fontWeight:
+                                                                                FlutterFlowTheme.of(context).labelMedium.fontWeight,
+                                                                            fontStyle:
+                                                                                FlutterFlowTheme.of(context).labelMedium.fontStyle,
+                                                                          ),
+                                                                          fontSize:
+                                                                              14.0,
+                                                                          letterSpacing:
+                                                                              0.0,
                                                                           fontWeight: FlutterFlowTheme.of(context)
                                                                               .labelMedium
                                                                               .fontWeight,
                                                                           fontStyle: FlutterFlowTheme.of(context)
                                                                               .labelMedium
                                                                               .fontStyle,
+                                                                          lineHeight:
+                                                                              3.0,
                                                                         ),
-                                                                        fontSize:
-                                                                            16.0,
-                                                                        letterSpacing:
-                                                                            0.0,
-                                                                        fontWeight: FlutterFlowTheme.of(context)
-                                                                            .labelMedium
-                                                                            .fontWeight,
-                                                                        fontStyle: FlutterFlowTheme.of(context)
-                                                                            .labelMedium
-                                                                            .fontStyle,
-                                                                      ),
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ],

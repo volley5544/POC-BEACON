@@ -231,12 +231,11 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
                                         minHeight: 120.0,
                                       ),
                                       decoration: BoxDecoration(
-                                        color:
-                                            menuItemRegisterRecordList.length >
-                                                    0
-                                                ? FlutterFlowTheme.of(context)
-                                                    .secondary
-                                                : Color(0xCCFFFFFF),
+                                        color: menuItemRegisterRecordList
+                                                    .length >
+                                                0
+                                            ? FlutterFlowTheme.of(context).info
+                                            : Color(0xFFA4ACB4),
                                         boxShadow: [
                                           BoxShadow(
                                             color: Color(0x411D2429),
@@ -319,7 +318,7 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
                                                         (alertDialogContext) {
                                                       return AlertDialog(
                                                         content: Text(
-                                                            'ยังไม่ลงทะเบียนกิจกรรม'),
+                                                            'คุณยังไม่ลงทะเบียนกิจกรรมนี้'),
                                                         actions: [
                                                           TextButton(
                                                             onPressed: () =>
@@ -442,7 +441,11 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
                                                                         child:
                                                                             Text(
                                                                           eventSelectionVarItem
-                                                                              .eventName,
+                                                                              .eventName
+                                                                              .maybeHandleOverflow(
+                                                                            maxChars:
+                                                                                40,
+                                                                          ),
                                                                           style: FlutterFlowTheme.of(context)
                                                                               .titleLarge
                                                                               .override(
@@ -484,7 +487,7 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
                                                                             ),
                                                                             AutoSizeText(
                                                                               eventSelectionVarItem.description.maybeHandleOverflow(
-                                                                                maxChars: 70,
+                                                                                maxChars: 30,
                                                                                 replacement: '…',
                                                                               ),
                                                                               textAlign: TextAlign.start,
