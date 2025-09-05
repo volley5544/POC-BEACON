@@ -71,4 +71,4 @@ export '/pages/setting/setting_event_list_copy2/setting_event_list_copy2_widget.
 export '/pages/setting/setting_event_list_copy4/setting_event_list_copy4_widget.dart'
     show SettingEventListCopy4Widget;
 export '/dashboard/dashboard_widget.dart' show DashboardWidget;
-export '/datatable/datatable_widget.dart' show DatatableWidget;
+export '/pages/setting/datatable/datatable_widget.dart' show DatatableWidget;

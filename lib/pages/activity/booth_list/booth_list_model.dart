@@ -1,3 +1,5 @@
+import '/backend/backend.dart';
+import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'booth_list_widget.dart' show BoothListWidget;
@@ -13,6 +15,20 @@ class BoothListModel extends FlutterFlowModel<BoothListWidget> {
   int? colorThree;
 
   int? colorLast;
+
+  List<PaticipantDataModelStruct> paticipantDataList = [];
+  void addToPaticipantDataList(PaticipantDataModelStruct item) =>
+      paticipantDataList.add(item);
+  void removeFromPaticipantDataList(PaticipantDataModelStruct item) =>
+      paticipantDataList.remove(item);
+  void removeAtIndexFromPaticipantDataList(int index) =>
+      paticipantDataList.removeAt(index);
+  void insertAtIndexInPaticipantDataList(
+          int index, PaticipantDataModelStruct item) =>
+      paticipantDataList.insert(index, item);
+  void updatePaticipantDataListAtIndex(
+          int index, Function(PaticipantDataModelStruct) updateFn) =>
+      paticipantDataList[index] = updateFn(paticipantDataList[index]);
 
   @override
   void initState(BuildContext context) {}

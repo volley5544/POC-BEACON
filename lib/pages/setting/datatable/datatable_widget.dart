@@ -602,141 +602,280 @@ class _DatatableWidgetState extends State<DatatableWidget>
                           animationsMap['containerOnPageLoadAnimation5']!),
                     ),
                     Expanded(
-                      child: Builder(
-                        builder: (context) {
-                          final reportSurvey = getJsonField(
-                            datatableReportSurveyByBoothDetailsResponse
-                                .jsonBody,
-                            r'''$.data.boothSurveyDetails''',
-                          ).toList();
+                      child: Align(
+                        alignment: AlignmentDirectional(-1.0, -1.0),
+                        child: Builder(
+                          builder: (context) {
+                            final reportSurvey = getJsonField(
+                              datatableReportSurveyByBoothDetailsResponse
+                                  .jsonBody,
+                              r'''$.data.boothSurveyDetails''',
+                            ).toList();
 
-                          return FlutterFlowDataTable<dynamic>(
-                            controller: _model.paginatedDataTableController,
-                            data: reportSurvey,
-                            columnsBuilder: (onSortChanged) => [
-                              DataColumn2(
-                                label: DefaultTextStyle.merge(
-                                  softWrap: true,
-                                  child: Text(
-                                    'Edit Header 1',
-                                    style: FlutterFlowTheme.of(context)
-                                        .labelLarge
-                                        .override(
-                                          font: GoogleFonts.readexPro(
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .labelLarge
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .labelLarge
-                                                    .fontStyle,
-                                          ),
-                                          letterSpacing: 0.0,
-                                          fontWeight:
-                                              FlutterFlowTheme.of(context)
-                                                  .labelLarge
-                                                  .fontWeight,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .labelLarge
-                                                  .fontStyle,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                              DataColumn2(
-                                label: DefaultTextStyle.merge(
-                                  softWrap: true,
-                                  child: Text(
-                                    'Edit Header 2',
-                                    style: FlutterFlowTheme.of(context)
-                                        .labelLarge
-                                        .override(
-                                          font: GoogleFonts.readexPro(
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .labelLarge
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .labelLarge
-                                                    .fontStyle,
-                                          ),
-                                          letterSpacing: 0.0,
-                                          fontWeight:
-                                              FlutterFlowTheme.of(context)
-                                                  .labelLarge
-                                                  .fontWeight,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .labelLarge
-                                                  .fontStyle,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                              DataColumn2(
-                                label: DefaultTextStyle.merge(
-                                  softWrap: true,
-                                  child: Text(
-                                    'Edit Header 3',
-                                    style: FlutterFlowTheme.of(context)
-                                        .labelLarge
-                                        .override(
-                                          font: GoogleFonts.readexPro(
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .labelLarge
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .labelLarge
-                                                    .fontStyle,
-                                          ),
-                                          letterSpacing: 0.0,
-                                          fontWeight:
-                                              FlutterFlowTheme.of(context)
-                                                  .labelLarge
-                                                  .fontWeight,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .labelLarge
-                                                  .fontStyle,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                            dataRowBuilder: (reportSurveyItem,
-                                    reportSurveyIndex,
-                                    selected,
-                                    onSelectChanged) =>
-                                DataRow(
-                              color: WidgetStateProperty.all(
-                                reportSurveyIndex % 2 == 0
-                                    ? FlutterFlowTheme.of(context)
-                                        .secondaryBackground
-                                    : FlutterFlowTheme.of(context)
-                                        .primaryBackground,
-                              ),
-                              cells: [
-                                Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Text(
-                                      valueOrDefault<String>(
-                                        getJsonField(
-                                          datatableReportSurveyByBoothDetailsResponse
-                                              .jsonBody,
-                                          r'''$.data.boothSurveyDetails..booth_name''',
-                                        )?.toString(),
-                                        '-',
-                                      ),
+                            return FlutterFlowDataTable<dynamic>(
+                              controller: _model.paginatedDataTableController,
+                              data: reportSurvey,
+                              columnsBuilder: (onSortChanged) => [
+                                DataColumn2(
+                                  label: DefaultTextStyle.merge(
+                                    softWrap: true,
+                                    child: Text(
+                                      'name',
                                       style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
+                                          .labelLarge
                                           .override(
                                             font: GoogleFonts.readexPro(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelLarge
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelLarge
+                                                      .fontStyle,
+                                            ),
+                                            letterSpacing: 0.0,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelLarge
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelLarge
+                                                    .fontStyle,
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                                DataColumn2(
+                                  label: DefaultTextStyle.merge(
+                                    softWrap: true,
+                                    child: Text(
+                                      '1',
+                                      style: FlutterFlowTheme.of(context)
+                                          .labelLarge
+                                          .override(
+                                            font: GoogleFonts.readexPro(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelLarge
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelLarge
+                                                      .fontStyle,
+                                            ),
+                                            letterSpacing: 0.0,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelLarge
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelLarge
+                                                    .fontStyle,
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                                DataColumn2(
+                                  label: DefaultTextStyle.merge(
+                                    softWrap: true,
+                                    child: Text(
+                                      '2',
+                                      style: FlutterFlowTheme.of(context)
+                                          .labelLarge
+                                          .override(
+                                            font: GoogleFonts.readexPro(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelLarge
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelLarge
+                                                      .fontStyle,
+                                            ),
+                                            letterSpacing: 0.0,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelLarge
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelLarge
+                                                    .fontStyle,
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                                DataColumn2(
+                                  label: DefaultTextStyle.merge(
+                                    softWrap: true,
+                                    child: Text(
+                                      '3',
+                                      style: FlutterFlowTheme.of(context)
+                                          .labelLarge
+                                          .override(
+                                            font: GoogleFonts.readexPro(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelLarge
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelLarge
+                                                      .fontStyle,
+                                            ),
+                                            letterSpacing: 0.0,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelLarge
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelLarge
+                                                    .fontStyle,
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                                DataColumn2(
+                                  label: DefaultTextStyle.merge(
+                                    softWrap: true,
+                                    child: Text(
+                                      '4',
+                                      style: FlutterFlowTheme.of(context)
+                                          .labelLarge
+                                          .override(
+                                            font: GoogleFonts.readexPro(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelLarge
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelLarge
+                                                      .fontStyle,
+                                            ),
+                                            letterSpacing: 0.0,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelLarge
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelLarge
+                                                    .fontStyle,
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                                DataColumn2(
+                                  label: DefaultTextStyle.merge(
+                                    softWrap: true,
+                                    child: Text(
+                                      '5',
+                                      style: FlutterFlowTheme.of(context)
+                                          .labelLarge
+                                          .override(
+                                            font: GoogleFonts.readexPro(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelLarge
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelLarge
+                                                      .fontStyle,
+                                            ),
+                                            letterSpacing: 0.0,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelLarge
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelLarge
+                                                    .fontStyle,
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                                DataColumn2(
+                                  label: DefaultTextStyle.merge(
+                                    softWrap: true,
+                                    child: Text(
+                                      '%',
+                                      style: FlutterFlowTheme.of(context)
+                                          .labelLarge
+                                          .override(
+                                            font: GoogleFonts.readexPro(
+                                              fontWeight:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelLarge
+                                                      .fontWeight,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelLarge
+                                                      .fontStyle,
+                                            ),
+                                            letterSpacing: 0.0,
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelLarge
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelLarge
+                                                    .fontStyle,
+                                          ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                              dataRowBuilder: (reportSurveyItem,
+                                      reportSurveyIndex,
+                                      selected,
+                                      onSelectChanged) =>
+                                  DataRow(
+                                color: WidgetStateProperty.all(
+                                  reportSurveyIndex % 2 == 0
+                                      ? FlutterFlowTheme.of(context)
+                                          .secondaryBackground
+                                      : FlutterFlowTheme.of(context)
+                                          .primaryBackground,
+                                ),
+                                cells: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Text(
+                                        '${valueOrDefault<String>(
+                                          RasGroup
+                                              .reportSurveyByBoothDetailsCall
+                                              .boothNameRating(
+                                                datatableReportSurveyByBoothDetailsResponse
+                                                    .jsonBody,
+                                              )
+                                              ?.elementAtOrNull(
+                                                  reportSurveyIndex),
+                                          '-',
+                                        )}',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              font: GoogleFonts.readexPro(
+                                                fontWeight:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontWeight,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMedium
+                                                        .fontStyle,
+                                              ),
+                                              letterSpacing: 0.0,
                                               fontWeight:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -746,7 +885,25 @@ class _DatatableWidgetState extends State<DatatableWidget>
                                                       .bodyMedium
                                                       .fontStyle,
                                             ),
-                                            letterSpacing: 0.0,
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    '${valueOrDefault<String>(
+                                      (RasGroup.reportSurveyByBoothDetailsCall
+                                              .ratingcounts1(
+                                                datatableReportSurveyByBoothDetailsResponse
+                                                    .jsonBody,
+                                              )
+                                              ?.elementAtOrNull(
+                                                  reportSurveyIndex))
+                                          ?.toString(),
+                                      '-',
+                                    )}',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          font: GoogleFonts.readexPro(
                                             fontWeight:
                                                 FlutterFlowTheme.of(context)
                                                     .bodyMedium
@@ -756,22 +913,43 @@ class _DatatableWidgetState extends State<DatatableWidget>
                                                     .bodyMedium
                                                     .fontStyle,
                                           ),
-                                    ),
-                                  ],
-                                ),
-                                Text(
-                                  valueOrDefault<String>(
-                                    getJsonField(
-                                      datatableReportSurveyByBoothDetailsResponse
-                                          .jsonBody,
-                                      r'''$.data.boothSurveyDetails[*].rating_counts''',
-                                    )?.toString(),
-                                    '-',
+                                          letterSpacing: 0.0,
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                        ),
                                   ),
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        font: GoogleFonts.readexPro(
+                                  Text(
+                                    '${valueOrDefault<String>(
+                                      (RasGroup.reportSurveyByBoothDetailsCall
+                                              .ratingcounts2(
+                                                datatableReportSurveyByBoothDetailsResponse
+                                                    .jsonBody,
+                                              )
+                                              ?.elementAtOrNull(
+                                                  reportSurveyIndex))
+                                          ?.toString(),
+                                      '-',
+                                    )}',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          font: GoogleFonts.readexPro(
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
+                                          letterSpacing: 0.0,
                                           fontWeight:
                                               FlutterFlowTheme.of(context)
                                                   .bodyMedium
@@ -781,21 +959,33 @@ class _DatatableWidgetState extends State<DatatableWidget>
                                                   .bodyMedium
                                                   .fontStyle,
                                         ),
-                                        letterSpacing: 0.0,
-                                        fontWeight: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .fontWeight,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .fontStyle,
-                                      ),
-                                ),
-                                Text(
-                                  'Edit Column 3',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        font: GoogleFonts.readexPro(
+                                  ),
+                                  Text(
+                                    '${valueOrDefault<String>(
+                                      (RasGroup.reportSurveyByBoothDetailsCall
+                                              .ratingcounts3(
+                                                datatableReportSurveyByBoothDetailsResponse
+                                                    .jsonBody,
+                                              )
+                                              ?.elementAtOrNull(
+                                                  reportSurveyIndex))
+                                          ?.toString(),
+                                      '-',
+                                    )}',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          font: GoogleFonts.readexPro(
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
+                                          letterSpacing: 0.0,
                                           fontWeight:
                                               FlutterFlowTheme.of(context)
                                                   .bodyMedium
@@ -805,36 +995,136 @@ class _DatatableWidgetState extends State<DatatableWidget>
                                                   .bodyMedium
                                                   .fontStyle,
                                         ),
-                                        letterSpacing: 0.0,
-                                        fontWeight: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .fontWeight,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .fontStyle,
-                                      ),
-                                ),
-                              ].map((c) => DataCell(c)).toList(),
-                            ),
-                            paginated: true,
-                            selectable: false,
-                            hidePaginator: false,
-                            showFirstLastButtons: false,
-                            headingRowHeight: 56.0,
-                            dataRowHeight: 48.0,
-                            columnSpacing: 20.0,
-                            headingRowColor:
-                                FlutterFlowTheme.of(context).primary,
-                            borderRadius: BorderRadius.circular(8.0),
-                            addHorizontalDivider: true,
-                            addTopAndBottomDivider: false,
-                            hideDefaultHorizontalDivider: true,
-                            horizontalDividerColor: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            horizontalDividerThickness: 1.0,
-                            addVerticalDivider: false,
-                          );
-                        },
+                                  ),
+                                  Text(
+                                    '${valueOrDefault<String>(
+                                      (RasGroup.reportSurveyByBoothDetailsCall
+                                              .ratingcounts4(
+                                                datatableReportSurveyByBoothDetailsResponse
+                                                    .jsonBody,
+                                              )
+                                              ?.elementAtOrNull(
+                                                  reportSurveyIndex))
+                                          ?.toString(),
+                                      '-',
+                                    )}',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          font: GoogleFonts.readexPro(
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
+                                          letterSpacing: 0.0,
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                        ),
+                                  ),
+                                  Text(
+                                    '${valueOrDefault<String>(
+                                      (RasGroup.reportSurveyByBoothDetailsCall
+                                              .ratingcounts5(
+                                                datatableReportSurveyByBoothDetailsResponse
+                                                    .jsonBody,
+                                              )
+                                              ?.elementAtOrNull(
+                                                  reportSurveyIndex))
+                                          ?.toString(),
+                                      '-',
+                                    )}',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          font: GoogleFonts.readexPro(
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
+                                          letterSpacing: 0.0,
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                        ),
+                                  ),
+                                  Text(
+                                    '${valueOrDefault<String>(
+                                      RasGroup.reportSurveyByBoothDetailsCall
+                                          .percentage(
+                                            datatableReportSurveyByBoothDetailsResponse
+                                                .jsonBody,
+                                          )
+                                          ?.elementAtOrNull(reportSurveyIndex),
+                                      '-',
+                                    )}',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          font: GoogleFonts.readexPro(
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                          ),
+                                          letterSpacing: 0.0,
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                        ),
+                                  ),
+                                ].map((c) => DataCell(c)).toList(),
+                              ),
+                              paginated: true,
+                              selectable: false,
+                              hidePaginator: false,
+                              showFirstLastButtons: false,
+                              headingRowHeight: 56.0,
+                              dataRowHeight: 48.0,
+                              columnSpacing: 20.0,
+                              headingRowColor: FlutterFlowTheme.of(context)
+                                  .primaryBackground,
+                              borderRadius: BorderRadius.circular(8.0),
+                              addHorizontalDivider: true,
+                              addTopAndBottomDivider: false,
+                              hideDefaultHorizontalDivider: true,
+                              horizontalDividerColor:
+                                  FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                              horizontalDividerThickness: 1.0,
+                              addVerticalDivider: false,
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ],

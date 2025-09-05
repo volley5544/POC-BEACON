@@ -28,6 +28,10 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
   auto_size_text: 3.0.0
+  background_location:
+    git:
+      url: https://github.com/zaave/background_location/
+      ref: fix-flutter-3.30-build
   badges: 2.0.2
   barcode_widget: 2.0.3
   cached_network_image: 3.4.1

@@ -819,6 +819,74 @@ class ReportSurveyByBoothDetailsCall {
           .map((x) => castToType<String>(x))
           .withoutNulls
           .toList();
+  List? ratingcounts(dynamic response) => getJsonField(
+        response,
+        r'''$.data.boothSurveyDetails[:].rating_counts''',
+        true,
+      ) as List?;
+  List<String>? boothNameRating(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.boothSurveyDetails..booth_name''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<int>? ratingcounts1(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.boothSurveyDetails..rating_counts["1"]''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<int>? ratingcounts2(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.boothSurveyDetails..rating_counts["2"]''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<int>? ratingcounts3(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.boothSurveyDetails..rating_counts["3"]''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<int>? ratingcounts4(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.boothSurveyDetails..rating_counts["4"]''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<int>? ratingcounts5(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.boothSurveyDetails..rating_counts["5"]''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<int>(x))
+          .withoutNulls
+          .toList();
+  List<String>? percentage(dynamic response) => (getJsonField(
+        response,
+        r'''$.data.boothSurveyDetails..percentage''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
 }
 
 class SummarizeDashboardCall {

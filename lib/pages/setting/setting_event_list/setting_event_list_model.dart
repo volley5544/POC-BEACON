@@ -1,4 +1,5 @@
 import '/backend/api_requests/api_calls.dart';
+import '/flutter_flow/flutter_flow_data_table.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/form_field_controller.dart';
 import '/index.dart';
@@ -55,6 +56,13 @@ class SettingEventListModel extends FlutterFlowModel<SettingEventListWidget> {
   DateTime? datePicked2;
   // Stores action output result for [Backend Call - API (summarizeDashboard)] action in Button widget.
   ApiCallResponse? apiResultw4l;
+  // State field(s) for eventName2 widget.
+  String? eventName2Value;
+  FormFieldController<String>? eventName2ValueController;
+  // Stores action output result for [Backend Call - API (reportSurveyByBoothDetails)] action in Button widget.
+  ApiCallResponse? apiResultw4lll;
+  // State field(s) for PaginatedDataTable widget.
+  final paginatedDataTableController = FlutterFlowDataTableController<String>();
 
   @override
   void initState(BuildContext context) {}
@@ -62,5 +70,6 @@ class SettingEventListModel extends FlutterFlowModel<SettingEventListWidget> {
   @override
   void dispose() {
     tabBarController?.dispose();
+    paginatedDataTableController.dispose();
   }
 }

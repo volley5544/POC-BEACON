@@ -68,7 +68,6 @@ class _HomeWidgetState extends State<HomeWidget> {
       );
 
       setDarkModeSetting(context, ThemeMode.light);
-      await actions.beaconBackgroundServiceAction();
       _model.dataUser = await queryUsersRecordOnce(
         queryBuilder: (usersRecord) => usersRecord.where(
           'uid',
@@ -76,36 +75,20 @@ class _HomeWidgetState extends State<HomeWidget> {
         ),
         singleRecord: true,
       ).then((s) => s.firstOrNull);
-      await showDialog(
-        context: context,
-        builder: (alertDialogContext) {
-          return AlertDialog(
-            title: Text('role_ref'),
-            content: Text(valueOrDefault<String>(
-              _model.dataUser?.rolesRef?.id,
-              '-',
-            )),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(alertDialogContext),
-                child: Text('Ok'),
-              ),
-            ],
-          );
-        },
-      );
-      // getRole
-      _model.roleData = await queryRolesRecordOnce(
-        queryBuilder: (rolesRecord) => rolesRecord.where(
-          'roles_ref',
-          isEqualTo: _model.dataUser?.rolesRef,
-        ),
-        singleRecord: true,
-      ).then((s) => s.firstOrNull);
-      FFAppState().rolesName = _model.roleData!.rolesName;
-      FFAppState().rolesDescription = _model.roleData!.rolesDescription;
-      FFAppState().rolesID = _model.roleData!.rolesId;
-      safeSetState(() {});
+      if (_model.dataUser?.rolesRef != null) {
+        // getRole
+        _model.roleData = await queryRolesRecordOnce(
+          queryBuilder: (rolesRecord) => rolesRecord.where(
+            'roles_ref',
+            isEqualTo: _model.dataUser?.rolesRef,
+          ),
+          singleRecord: true,
+        ).then((s) => s.firstOrNull);
+        FFAppState().rolesName = _model.roleData!.rolesName;
+        FFAppState().rolesDescription = _model.roleData!.rolesDescription;
+        FFAppState().rolesID = _model.roleData!.rolesId;
+        safeSetState(() {});
+      }
       _model.permiss = await actions.checkPermissionsBeacon();
       Navigator.pop(context);
     });

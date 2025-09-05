@@ -452,7 +452,7 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                         if (confirmDialogResponse) {
                                           // countActivity
                                           _model.countRows =
-                                              await queryUserActivitiesRecordCount();
+                                              await queryUserActivityRecordCount();
                                           _shouldSetState = true;
                                           _model.counterActivity =
                                               _model.countRows;

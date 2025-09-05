@@ -4,6 +4,7 @@ export 'activity_model_struct.dart';
 export 'beacon_data_model_struct.dart';
 export 'booth_data_model_struct.dart';
 export 'event_data_model_struct.dart';
+export 'paticipant_data_model_struct.dart';
 export 'paticipants_booth_data_model_struct.dart';
 export 'survey_data_model_struct.dart';
 export 'booths_struct.dart';

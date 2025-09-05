@@ -12,23 +12,30 @@ import 'package:flutter/material.dart';
 import 'package:dchs_flutter_beacon/dchs_flutter_beacon.dart';
 import '/custom_code/my_stream_service.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-// import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:background_location/background_location.dart';
 
 Future beaconBackgroundServiceAction() async {
   // Add your function code here!
-  if (!kIsWeb) {
+  await getBackgroundLocation();
+}
+
+Future getBackgroundLocation() async {
+  // Add your function code here!
+  LatLng outputLocation = LatLng(0, 0);
+  final service = MyStreamService();
+  await BackgroundLocation.startLocationService();
+  await BackgroundLocation().getCurrentLocation().then((location) async {
+    print('${location.latitude}');
+    outputLocation = LatLng(location.latitude!, location.longitude!);
     final regions = <Region>[
       Region(identifier: 'any'),
     ];
-    final service = MyStreamService();
+
     service.startListening(
         flutterBeacon.ranging(regions)); // stays alive across all pages
     service.listenUserNotification();
     service.listenEventWithBooths();
-  } else {
-    final service = MyStreamService();
-    service.listenUserNotification();
-  }
+  });
 }
 
 // Set your action name, define your arguments and return parameter,

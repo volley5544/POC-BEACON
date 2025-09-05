@@ -4,6 +4,7 @@ import '/backend/backend.dart';
 import '/components/loading_component_widget.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_charts.dart';
+import '/flutter_flow/flutter_flow_data_table.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -68,12 +69,46 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
 
     _model.tabBarController = TabController(
       vsync: this,
-      length: 2,
+      length: 3,
       initialIndex: 0,
     )..addListener(() => safeSetState(() {}));
 
     animationsMap.addAll({
-      'buttonOnPageLoadAnimation': AnimationInfo(
+      'buttonOnPageLoadAnimation1': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          VisibilityEffect(duration: 350.ms),
+          FadeEffect(
+            curve: Curves.easeInOut,
+            delay: 350.0.ms,
+            duration: 300.0.ms,
+            begin: 0.0,
+            end: 1.0,
+          ),
+          ScaleEffect(
+            curve: Curves.easeInOut,
+            delay: 350.0.ms,
+            duration: 300.0.ms,
+            begin: Offset(0.8, 0.8),
+            end: Offset(1.0, 1.0),
+          ),
+          TiltEffect(
+            curve: Curves.easeInOut,
+            delay: 350.0.ms,
+            duration: 300.0.ms,
+            begin: Offset(1.222, 0),
+            end: Offset(0, 0),
+          ),
+          MoveEffect(
+            curve: Curves.easeInOut,
+            delay: 350.0.ms,
+            duration: 300.0.ms,
+            begin: Offset(0.0, 40.0),
+            end: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      'buttonOnPageLoadAnimation2': AnimationInfo(
         trigger: AnimationTrigger.onPageLoad,
         effectsBuilder: () => [
           VisibilityEffect(duration: 350.ms),
@@ -267,10 +302,13 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                         Tab(
                           text: 'จัดการ',
                         ),
+                        Tab(
+                          text: 'ผลประเมิน',
+                        ),
                       ],
                       controller: _model.tabBarController,
                       onTap: (i) async {
-                        [() async {}, () async {}][i]();
+                        [() async {}, () async {}, () async {}][i]();
                       },
                     ),
                   ),
@@ -1616,35 +1654,54 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                           8.0),
                                                 ),
                                               ).animateOnPageLoad(animationsMap[
-                                                  'buttonOnPageLoadAnimation']!),
+                                                  'buttonOnPageLoadAnimation1']!),
                                             ),
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                  Align(
-                                    alignment: AlignmentDirectional(0.0, -1.0),
-                                    child: Container(
+                                  if ('${getJsonField(
+                                        (_model.apiResultw4l?.jsonBody ?? ''),
+                                        r'''$.status_code''',
+                                      ).toString()}' ==
+                                      '200')
+                                    Container(
                                       width: double.infinity,
+                                      height: 450.0,
                                       decoration: BoxDecoration(),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                      child: Stack(
                                         children: [
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 0.0, 20.0),
-                                            child: Text(
-                                              'ความนิยมบูธ',
-                                              textAlign: TextAlign.center,
-                                              style: FlutterFlowTheme.of(
-                                                      context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    font: GoogleFonts.readexPro(
+                                          Align(
+                                            alignment: AlignmentDirectional(
+                                                0.0, -0.85),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      0.0, 0.0, 0.0, 20.0),
+                                              child: Text(
+                                                'ความนิยมบูธ',
+                                                textAlign: TextAlign.center,
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .bodyMedium
+                                                    .override(
+                                                      font:
+                                                          GoogleFonts.readexPro(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .fontStyle,
+                                                      ),
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryText,
+                                                      fontSize: 20.0,
+                                                      letterSpacing: 0.0,
                                                       fontWeight:
                                                           FontWeight.w600,
                                                       fontStyle:
@@ -1653,132 +1710,102 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                               .bodyMedium
                                                               .fontStyle,
                                                     ),
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .primaryText,
-                                                    fontSize: 20.0,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .fontStyle,
-                                                  ),
+                                              ),
                                             ),
                                           ),
-                                          if ('${getJsonField(
-                                                (_model.apiResultw4l
-                                                        ?.jsonBody ??
-                                                    ''),
-                                                r'''$.status_code''',
-                                              ).toString()}' ==
-                                              '200')
-                                            Container(
-                                              width: double.infinity,
-                                              height: 300.0,
-                                              child: Stack(
-                                                children: [
-                                                  FlutterFlowPieChart(
-                                                    data: FFPieChartData(
-                                                      values: RasGroup
-                                                          .summarizeDashboardCall
-                                                          .dashboard(
-                                                            (_model.apiResultw4l
-                                                                    ?.jsonBody ??
-                                                                ''),
-                                                          )!
-                                                          .map((e) => e
-                                                              .participantPercentage)
-                                                          .toList(),
-                                                      colors:
-                                                          chartPieChartColorsList,
-                                                      radius: [80.0],
-                                                      borderColor: [
-                                                        Color(0x00000000)
-                                                      ],
-                                                    ),
-                                                    donutHoleRadius: 0.0,
-                                                    donutHoleColor:
-                                                        Colors.transparent,
-                                                    sectionLabelType:
-                                                        PieChartSectionLabelType
-                                                            .value,
-                                                    sectionLabelStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .headlineSmall
-                                                            .override(
-                                                              font: GoogleFonts
-                                                                  .outfit(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .headlineSmall
-                                                                    .fontStyle,
-                                                              ),
-                                                              letterSpacing:
-                                                                  0.0,
+                                          Container(
+                                            width: double.infinity,
+                                            height: 450.0,
+                                            child: Stack(
+                                              children: [
+                                                FlutterFlowPieChart(
+                                                  data: FFPieChartData(
+                                                    values: RasGroup
+                                                        .summarizeDashboardCall
+                                                        .dashboard(
+                                                          (_model.apiResultw4l
+                                                                  ?.jsonBody ??
+                                                              ''),
+                                                        )!
+                                                        .map((e) => e
+                                                            .participantPercentage)
+                                                        .toList(),
+                                                    colors:
+                                                        chartPieChartColorsList,
+                                                    radius: [120.0],
+                                                    borderColor: [
+                                                      Color(0x00000000)
+                                                    ],
+                                                  ),
+                                                  donutHoleRadius: 3.0,
+                                                  donutHoleColor:
+                                                      Colors.transparent,
+                                                  sectionLabelType:
+                                                      PieChartSectionLabelType
+                                                          .value,
+                                                  sectionLabelStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .headlineSmall
+                                                          .override(
+                                                            font: GoogleFonts
+                                                                .outfit(
                                                               fontWeight:
                                                                   FontWeight
-                                                                      .normal,
+                                                                      .w600,
                                                               fontStyle: FlutterFlowTheme
                                                                       .of(context)
                                                                   .headlineSmall
                                                                   .fontStyle,
                                                             ),
-                                                  ),
-                                                  Align(
-                                                    alignment:
-                                                        AlignmentDirectional(
-                                                            1.0, 1.0),
-                                                    child:
-                                                        FlutterFlowChartLegendWidget(
-                                                      entries: RasGroup
-                                                          .summarizeDashboardCall
-                                                          .dashboard(
-                                                            (_model.apiResultw4l
-                                                                    ?.jsonBody ??
-                                                                ''),
-                                                          )!
-                                                          .map((e) =>
-                                                              e.boothName)
-                                                          .toList()
-                                                          .asMap()
-                                                          .entries
-                                                          .map(
-                                                            (label) =>
-                                                                LegendEntry(
-                                                              chartPieChartColorsList[label
-                                                                      .key %
-                                                                  chartPieChartColorsList
-                                                                      .length],
-                                                              label.value,
-                                                            ),
-                                                          )
-                                                          .toList(),
-                                                      width: 100.0,
-                                                      height: 150.0,
-                                                      textStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                font: GoogleFonts
-                                                                    .readexPro(
-                                                                  fontWeight: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontWeight,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
-                                                                ),
-                                                                letterSpacing:
-                                                                    0.0,
+                                                            fontSize: 16.0,
+                                                            letterSpacing: 0.0,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .headlineSmall
+                                                                    .fontStyle,
+                                                          ),
+                                                ),
+                                                Align(
+                                                  alignment:
+                                                      AlignmentDirectional(
+                                                          1.0, 1.0),
+                                                  child:
+                                                      FlutterFlowChartLegendWidget(
+                                                    entries: RasGroup
+                                                        .summarizeDashboardCall
+                                                        .dashboard(
+                                                          (_model.apiResultw4l
+                                                                  ?.jsonBody ??
+                                                              ''),
+                                                        )!
+                                                        .map((e) => e.boothName)
+                                                        .toList()
+                                                        .asMap()
+                                                        .entries
+                                                        .map(
+                                                          (label) =>
+                                                              LegendEntry(
+                                                            chartPieChartColorsList[
+                                                                label.key %
+                                                                    chartPieChartColorsList
+                                                                        .length],
+                                                            label.value,
+                                                          ),
+                                                        )
+                                                        .toList(),
+                                                    width: 100.0,
+                                                    height: 150.0,
+                                                    textStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .override(
+                                                              font: GoogleFonts
+                                                                  .readexPro(
                                                                 fontWeight: FlutterFlowTheme.of(
                                                                         context)
                                                                     .bodyMedium
@@ -1788,31 +1815,37 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                     .bodyMedium
                                                                     .fontStyle,
                                                               ),
-                                                      textPadding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  5.0,
+                                                              letterSpacing:
                                                                   0.0,
-                                                                  0.0,
-                                                                  0.0),
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  5.0,
-                                                                  0.0,
-                                                                  5.0,
-                                                                  0.0),
-                                                      borderWidth: 0.0,
-                                                      indicatorSize: 10.0,
-                                                    ),
+                                                              fontWeight:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontWeight,
+                                                              fontStyle:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                            ),
+                                                    textPadding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(5.0, 0.0,
+                                                                0.0, 0.0),
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(5.0, 0.0,
+                                                                5.0, 0.0),
+                                                    borderWidth: 0.0,
+                                                    indicatorSize: 10.0,
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
+                                          ),
                                         ],
                                       ),
                                     ),
-                                  ),
                                 ],
                               ),
                             );
@@ -2706,6 +2739,1033 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                               ),
                             ].addToEnd(SizedBox(height: 5.0)),
                           ),
+                        ),
+                        StreamBuilder<List<EventsRecord>>(
+                          stream: queryEventsRecord(
+                            queryBuilder: (eventsRecord) => eventsRecord
+                                .where(
+                                  'is_active',
+                                  isEqualTo: 0,
+                                )
+                                .orderBy('event_id', descending: true),
+                          ),
+                          builder: (context, snapshot) {
+                            // Customize what your widget looks like when it's loading.
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: SizedBox(
+                                  width: 50.0,
+                                  height: 50.0,
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      FlutterFlowTheme.of(context).primary,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                            List<EventsRecord> backgroundColorEventsRecordList =
+                                snapshot.data!;
+
+                            return Container(
+                              width: 100.0,
+                              height: 100.0,
+                              decoration: BoxDecoration(
+                                color: FlutterFlowTheme.of(context)
+                                    .primaryBackground,
+                              ),
+                              child: ListView(
+                                padding: EdgeInsets.zero,
+                                scrollDirection: Axis.vertical,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Align(
+                                          alignment:
+                                              AlignmentDirectional(-1.0, 0.0),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    16.0, 12.0, 0.0, 0.0),
+                                            child: Text(
+                                              'ตัวกรองข้อมูล',
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .labelMedium
+                                                  .override(
+                                                    font: GoogleFonts.readexPro(
+                                                      fontWeight:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelMedium
+                                                              .fontWeight,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelMedium
+                                                              .fontStyle,
+                                                    ),
+                                                    letterSpacing: 0.0,
+                                                    fontWeight:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .labelMedium
+                                                            .fontWeight,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .labelMedium
+                                                            .fontStyle,
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        20.0, 10.0, 20.0, 10.0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'กิจกรรม',
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .labelMedium
+                                                    .override(
+                                                      font:
+                                                          GoogleFonts.readexPro(
+                                                        fontWeight:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .labelMedium
+                                                                .fontWeight,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .labelMedium
+                                                                .fontStyle,
+                                                      ),
+                                                      letterSpacing: 0.0,
+                                                      fontWeight:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelMedium
+                                                              .fontWeight,
+                                                      fontStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelMedium
+                                                              .fontStyle,
+                                                    ),
+                                              ),
+                                              Align(
+                                                alignment: AlignmentDirectional(
+                                                    -1.0, 0.0),
+                                                child:
+                                                    FlutterFlowDropDown<String>(
+                                                  controller: _model
+                                                          .eventName2ValueController ??=
+                                                      FormFieldController<
+                                                          String>(
+                                                    _model.eventName2Value ??=
+                                                        '',
+                                                  ),
+                                                  options: List<String>.from(
+                                                      backgroundColorEventsRecordList
+                                                          .map((e) =>
+                                                              e.reference.id)
+                                                          .toList()),
+                                                  optionLabels:
+                                                      backgroundColorEventsRecordList
+                                                          .map((e) =>
+                                                              e.eventName)
+                                                          .toList(),
+                                                  onChanged: (val) =>
+                                                      safeSetState(() => _model
+                                                              .eventName2Value =
+                                                          val),
+                                                  width: 350.0,
+                                                  height: 40.0,
+                                                  searchHintTextStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .labelMedium
+                                                          .override(
+                                                            font: GoogleFonts
+                                                                .readexPro(
+                                                              fontWeight:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelMedium
+                                                                      .fontWeight,
+                                                              fontStyle:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelMedium
+                                                                      .fontStyle,
+                                                            ),
+                                                            letterSpacing: 0.0,
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelMedium
+                                                                    .fontWeight,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                  searchTextStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .override(
+                                                            font: GoogleFonts
+                                                                .readexPro(
+                                                              fontWeight:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontWeight,
+                                                              fontStyle:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                            ),
+                                                            letterSpacing: 0.0,
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontWeight,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                  textStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .bodyMedium
+                                                          .override(
+                                                            font: GoogleFonts
+                                                                .readexPro(
+                                                              fontWeight:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontWeight,
+                                                              fontStyle:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                            ),
+                                                            letterSpacing: 0.0,
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontWeight,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                  hintText: 'กรุณาเลือกกิจกรรม',
+                                                  searchHintText: 'Search...',
+                                                  icon: Icon(
+                                                    Icons
+                                                        .keyboard_arrow_down_rounded,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .secondaryText,
+                                                    size: 24.0,
+                                                  ),
+                                                  fillColor:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .secondaryBackground,
+                                                  elevation: 2.0,
+                                                  borderColor:
+                                                      Colors.transparent,
+                                                  borderWidth: 0.0,
+                                                  borderRadius: 8.0,
+                                                  margin: EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                          12.0, 0.0, 12.0, 0.0),
+                                                  hidesUnderline: true,
+                                                  isOverButton: false,
+                                                  isSearchable: true,
+                                                  isMultiSelect: false,
+                                                ),
+                                              ),
+                                            ].divide(SizedBox(height: 4.0)),
+                                          ),
+                                        ),
+                                      ].divide(SizedBox(width: 12.0)),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 10.0, 0.0, 20.0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Expanded(
+                                          child: Builder(
+                                            builder: (context) => Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      24.0, 0.0, 24.0, 0.0),
+                                              child: FFButtonWidget(
+                                                onPressed: () async {
+                                                  var _shouldSetState = false;
+                                                  if (!(_model.eventName2Value !=
+                                                          null &&
+                                                      _model.eventName2Value !=
+                                                          '')) {
+                                                    await showDialog(
+                                                      context: context,
+                                                      builder:
+                                                          (alertDialogContext) {
+                                                        return AlertDialog(
+                                                          content: Text(
+                                                              'กรุณาเลือก event'),
+                                                          actions: [
+                                                            TextButton(
+                                                              onPressed: () =>
+                                                                  Navigator.pop(
+                                                                      alertDialogContext),
+                                                              child: Text('Ok'),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                    if (_shouldSetState)
+                                                      safeSetState(() {});
+                                                    return;
+                                                  }
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (dialogContext) {
+                                                      return Dialog(
+                                                        elevation: 0,
+                                                        insetPadding:
+                                                            EdgeInsets.zero,
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                        alignment:
+                                                            AlignmentDirectional(
+                                                                    0.0, 0.0)
+                                                                .resolve(
+                                                                    Directionality.of(
+                                                                        context)),
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            FocusScope.of(
+                                                                    dialogContext)
+                                                                .unfocus();
+                                                            FocusManager
+                                                                .instance
+                                                                .primaryFocus
+                                                                ?.unfocus();
+                                                          },
+                                                          child:
+                                                              LoadingComponentWidget(),
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
+
+                                                  _model.apiResultw4lll =
+                                                      await RasGroup
+                                                          .reportSurveyByBoothDetailsCall
+                                                          .call(
+                                                    authToken:
+                                                        FFAppState().token,
+                                                    eventRef:
+                                                        _model.eventName2Value,
+                                                  );
+
+                                                  _shouldSetState = true;
+                                                  Navigator.pop(context);
+                                                  if (_shouldSetState)
+                                                    safeSetState(() {});
+                                                },
+                                                text: 'ค้นหา',
+                                                options: FFButtonOptions(
+                                                  height: 48.0,
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                          24.0, 0.0, 24.0, 0.0),
+                                                  iconPadding:
+                                                      EdgeInsetsDirectional
+                                                          .fromSTEB(0.0, 0.0,
+                                                              0.0, 0.0),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primary,
+                                                  textStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .titleSmall
+                                                          .override(
+                                                            font: GoogleFonts
+                                                                .readexPro(
+                                                              fontWeight:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .titleSmall
+                                                                      .fontWeight,
+                                                              fontStyle:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .titleSmall
+                                                                      .fontStyle,
+                                                            ),
+                                                            color: Colors.white,
+                                                            letterSpacing: 0.0,
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .titleSmall
+                                                                    .fontWeight,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .titleSmall
+                                                                    .fontStyle,
+                                                          ),
+                                                  elevation: 3.0,
+                                                  borderSide: BorderSide(
+                                                    color: Colors.transparent,
+                                                    width: 1.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                              ).animateOnPageLoad(animationsMap[
+                                                  'buttonOnPageLoadAnimation2']!),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  if ('${getJsonField(
+                                        (_model.apiResultw4lll?.jsonBody ?? ''),
+                                        r'''$.status_code''',
+                                      ).toString()}' ==
+                                      '200')
+                                    Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                      ),
+                                      child: Align(
+                                        alignment:
+                                            AlignmentDirectional(-1.0, -1.0),
+                                        child: Builder(
+                                          builder: (context) {
+                                            final reportSurvey = RasGroup
+                                                    .reportSurveyByBoothDetailsCall
+                                                    .boothNameRating(
+                                                      (_model.apiResultw4lll
+                                                              ?.jsonBody ??
+                                                          ''),
+                                                    )
+                                                    ?.toList() ??
+                                                [];
+
+                                            return FlutterFlowDataTable<String>(
+                                              controller: _model
+                                                  .paginatedDataTableController,
+                                              data: reportSurvey,
+                                              columnsBuilder: (onSortChanged) =>
+                                                  [
+                                                DataColumn2(
+                                                  label: DefaultTextStyle.merge(
+                                                    softWrap: true,
+                                                    child: Text(
+                                                      'booth',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelLarge
+                                                              .override(
+                                                                font: GoogleFonts
+                                                                    .readexPro(
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelLarge
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelLarge
+                                                                      .fontStyle,
+                                                                ),
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontWeight,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontStyle,
+                                                              ),
+                                                    ),
+                                                  ),
+                                                  fixedWidth: 110.0,
+                                                ),
+                                                DataColumn2(
+                                                  label: DefaultTextStyle.merge(
+                                                    softWrap: true,
+                                                    child: Text(
+                                                      '1',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelLarge
+                                                              .override(
+                                                                font: GoogleFonts
+                                                                    .readexPro(
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelLarge
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelLarge
+                                                                      .fontStyle,
+                                                                ),
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontWeight,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontStyle,
+                                                              ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                DataColumn2(
+                                                  label: DefaultTextStyle.merge(
+                                                    softWrap: true,
+                                                    child: Text(
+                                                      '2',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelLarge
+                                                              .override(
+                                                                font: GoogleFonts
+                                                                    .readexPro(
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelLarge
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelLarge
+                                                                      .fontStyle,
+                                                                ),
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontWeight,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontStyle,
+                                                              ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                DataColumn2(
+                                                  label: DefaultTextStyle.merge(
+                                                    softWrap: true,
+                                                    child: Text(
+                                                      '3',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelLarge
+                                                              .override(
+                                                                font: GoogleFonts
+                                                                    .readexPro(
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelLarge
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelLarge
+                                                                      .fontStyle,
+                                                                ),
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontWeight,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontStyle,
+                                                              ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                DataColumn2(
+                                                  label: DefaultTextStyle.merge(
+                                                    softWrap: true,
+                                                    child: Text(
+                                                      '4',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelLarge
+                                                              .override(
+                                                                font: GoogleFonts
+                                                                    .readexPro(
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelLarge
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelLarge
+                                                                      .fontStyle,
+                                                                ),
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontWeight,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontStyle,
+                                                              ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                DataColumn2(
+                                                  label: DefaultTextStyle.merge(
+                                                    softWrap: true,
+                                                    child: Text(
+                                                      '5',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelLarge
+                                                              .override(
+                                                                font: GoogleFonts
+                                                                    .readexPro(
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelLarge
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelLarge
+                                                                      .fontStyle,
+                                                                ),
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontWeight,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontStyle,
+                                                              ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                DataColumn2(
+                                                  label: DefaultTextStyle.merge(
+                                                    softWrap: true,
+                                                    child: Text(
+                                                      '%',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .labelLarge
+                                                              .override(
+                                                                font: GoogleFonts
+                                                                    .readexPro(
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelLarge
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .labelLarge
+                                                                      .fontStyle,
+                                                                ),
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontWeight,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .labelLarge
+                                                                    .fontStyle,
+                                                              ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                              dataRowBuilder: (reportSurveyItem,
+                                                      reportSurveyIndex,
+                                                      selected,
+                                                      onSelectChanged) =>
+                                                  DataRow(
+                                                color:
+                                                    WidgetStateProperty.all(
+                                                  reportSurveyIndex % 2 == 0
+                                                      ? FlutterFlowTheme.of(
+                                                              context)
+                                                          .secondaryBackground
+                                                      : FlutterFlowTheme.of(
+                                                              context)
+                                                          .primaryBackground,
+                                                ),
+                                                cells: [
+                                                  Container(
+                                                    width: double.infinity,
+                                                    height: double.infinity,
+                                                    decoration: BoxDecoration(
+                                                      color: FlutterFlowTheme
+                                                              .of(context)
+                                                          .secondaryBackground,
+                                                    ),
+                                                    alignment:
+                                                        AlignmentDirectional(
+                                                            -1.0, 0.0),
+                                                    child: Text(
+                                                      '${RasGroup.reportSurveyByBoothDetailsCall.boothNameRating(
+                                                            (_model.apiResultw4lll
+                                                                    ?.jsonBody ??
+                                                                ''),
+                                                          )?.elementAtOrNull(reportSurveyIndex)}',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                font: GoogleFonts
+                                                                    .readexPro(
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                ),
+                                                                letterSpacing:
+                                                                    0.0,
+                                                                fontWeight: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontWeight,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                              ),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    '${'${(RasGroup.reportSurveyByBoothDetailsCall.ratingcounts1(
+                                                          (_model.apiResultw4lll
+                                                                  ?.jsonBody ??
+                                                              ''),
+                                                        )?.elementAtOrNull(reportSurveyIndex))?.toString()}'}',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .readexPro(
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontWeight,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                                  ),
+                                                  Text(
+                                                    '${(RasGroup.reportSurveyByBoothDetailsCall.ratingcounts2(
+                                                          (_model.apiResultw4lll
+                                                                  ?.jsonBody ??
+                                                              ''),
+                                                        )?.elementAtOrNull(reportSurveyIndex))?.toString()}',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .readexPro(
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontWeight,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                                  ),
+                                                  Text(
+                                                    '${(RasGroup.reportSurveyByBoothDetailsCall.ratingcounts3(
+                                                          (_model.apiResultw4lll
+                                                                  ?.jsonBody ??
+                                                              ''),
+                                                        )?.elementAtOrNull(reportSurveyIndex))?.toString()}',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .readexPro(
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontWeight,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                                  ),
+                                                  Text(
+                                                    '${(RasGroup.reportSurveyByBoothDetailsCall.ratingcounts4(
+                                                          (_model.apiResultw4lll
+                                                                  ?.jsonBody ??
+                                                              ''),
+                                                        )?.elementAtOrNull(reportSurveyIndex))?.toString()}',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .readexPro(
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontWeight,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                                  ),
+                                                  Text(
+                                                    '${(RasGroup.reportSurveyByBoothDetailsCall.ratingcounts5(
+                                                          (_model.apiResultw4lll
+                                                                  ?.jsonBody ??
+                                                              ''),
+                                                        )?.elementAtOrNull(reportSurveyIndex))?.toString()}',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .readexPro(
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontWeight,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                                  ),
+                                                  Text(
+                                                    '${RasGroup.reportSurveyByBoothDetailsCall.percentage(
+                                                          (_model.apiResultw4lll
+                                                                  ?.jsonBody ??
+                                                              ''),
+                                                        )?.elementAtOrNull(reportSurveyIndex)}',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyMedium
+                                                        .override(
+                                                          font: GoogleFonts
+                                                              .readexPro(
+                                                            fontWeight:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontWeight,
+                                                            fontStyle:
+                                                                FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyMedium
+                                                                    .fontStyle,
+                                                          ),
+                                                          letterSpacing: 0.0,
+                                                          fontWeight:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontWeight,
+                                                          fontStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .bodyMedium
+                                                                  .fontStyle,
+                                                        ),
+                                                  ),
+                                                ]
+                                                    .map((c) => DataCell(c))
+                                                    .toList(),
+                                              ),
+                                              paginated: false,
+                                              selectable: false,
+                                              headingRowHeight: 56.0,
+                                              dataRowHeight: 50.0,
+                                              columnSpacing: 20.0,
+                                              headingRowColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .alternate,
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                              addHorizontalDivider: true,
+                                              addTopAndBottomDivider: false,
+                                              hideDefaultHorizontalDivider:
+                                                  true,
+                                              horizontalDividerColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              horizontalDividerThickness: 1.0,
+                                              addVerticalDivider: true,
+                                              verticalDividerColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryText,
+                                              verticalDividerThickness: 1.0,
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
