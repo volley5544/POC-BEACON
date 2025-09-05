@@ -648,29 +648,36 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                     .max,
                                                             crossAxisAlignment:
                                                                 CrossAxisAlignment
-                                                                    .start,
+                                                                    .end,
                                                             children: [
-                                                              Padding(
-                                                                padding:
-                                                                    EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            0.0,
-                                                                            4.0,
-                                                                            0.0,
-                                                                            0.0),
-                                                                child:
-                                                                    Container(
-                                                                  width: 200.0,
-                                                                  height: 30.0,
-                                                                  child: custom_widgets
-                                                                      .TextWidgetShowBeaconDistance(
+                                                              Align(
+                                                                alignment:
+                                                                    AlignmentDirectional(
+                                                                        1.0,
+                                                                        0.0),
+                                                                child: Padding(
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          4.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                                  child:
+                                                                      Container(
                                                                     width:
-                                                                        200.0,
+                                                                        100.0,
                                                                     height:
                                                                         30.0,
-                                                                    deviceUuid:
-                                                                        listViewBoothsRecord
-                                                                            .deviceUuid,
+                                                                    child: custom_widgets
+                                                                        .TextWidgetShowBeaconDistance(
+                                                                      width:
+                                                                          100.0,
+                                                                      height:
+                                                                          30.0,
+                                                                      deviceUuid:
+                                                                          listViewBoothsRecord
+                                                                              .deviceUuid,
+                                                                    ),
                                                                   ),
                                                                 ),
                                                               ),
