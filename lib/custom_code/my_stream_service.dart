@@ -21,8 +21,8 @@ class MyStreamService {
   StreamSubscription<RangingResult>? _streamRanging;
   StreamSubscription? _subEvents;
   StreamSubscription? _subBooth;
-  List<String> beaconId = [];
-  List<String> beaconDistance = [];
+  List<String> _beaconId = [];
+  List<String> _beaconDistance = [];
 
   List<Map<String, dynamic>> eventDocs = [];
   List<EventDataModelStruct1> eventData = [];
@@ -33,6 +33,9 @@ class MyStreamService {
   List<Map<String, dynamic>> userNotiDocs = [];
   List<UserNotificationDataModelStruct> userNotiData = [];
 
+  List<String> get beaconId => _beaconId;
+  List<String> get beaconDistance => _beaconDistance;
+
   void startListening(Stream<RangingResult> myStream) {
     List<EventDataModelStruct1> matchingEvents = [];
     _streamRanging ??= myStream.listen((result) async {
@@ -40,9 +43,9 @@ class MyStreamService {
       if (result.beacons.isNotEmpty) {
         result.beacons.sort((a, b) => a.accuracy.compareTo(b.accuracy));
         final nearest = result.beacons;
-        beaconId = nearest.map((e) => e.proximityUUID).toList();
+        _beaconId = nearest.map((e) => e.proximityUUID).toList();
         ;
-        beaconDistance =
+        _beaconDistance =
             nearest.map((e) => e.accuracy.toStringAsFixed(2)).toList();
         ;
         FFAppState().beaconDistanceList =
@@ -51,8 +54,8 @@ class MyStreamService {
             nearest.map((e) => e.proximityUUID).toList();
         // Convert beaconId + beaconDistance into a Map for easy lookup
         Map<String, double> beaconMap = {
-          for (int i = 0; i < beaconId.length; i++)
-            beaconId[i]: double.parse('${beaconDistance[i]}')
+          for (int i = 0; i < _beaconId.length; i++)
+            _beaconId[i]: double.parse('${_beaconDistance[i]}')
         };
 
         // FFAppState().beaconNameList = nearest.map((e) => e.macAddress).toList();
@@ -436,11 +439,11 @@ class MyStreamService {
     _streamRanging = null;
   }
 
-  List<String> getBeaconIdList() {
-    return beaconId;
-  }
-
-  List<String> getBeaconDistanceList() {
-    return beaconDistance;
-  }
+  // List<String> getBeaconIdList() {
+  //   return beaconId;
+  // }
+  //
+  // List<String> getBeaconDistanceList() {
+  //   return FFAppState().beaconDistanceList;
+  // }
 }

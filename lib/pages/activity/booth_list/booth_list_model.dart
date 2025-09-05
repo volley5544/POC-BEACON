@@ -20,8 +20,6 @@ class BoothListModel extends FlutterFlowModel<BoothListWidget> {
 
   ///  State fields for stateful widgets in this page.
 
-  // Stores action output result for [Custom Class Method - MyStreamService.getBeaconDistanceList] action in BoothList widget.
-  List<String>? getBeaconDistanceListOutput;
   InstantTimer? instantTimer;
 
   @override

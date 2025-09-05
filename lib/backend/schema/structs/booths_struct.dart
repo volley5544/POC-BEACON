@@ -10,7 +10,7 @@ class BoothsStruct extends FFFirebaseStruct {
   BoothsStruct({
     int? boothId,
     String? boothName,
-    String? totalParticipants,
+    double? totalParticipants,
     String? cssCode,
     double? participantPercentage,
     FirestoreUtilData firestoreUtilData = const FirestoreUtilData(),
@@ -38,9 +38,12 @@ class BoothsStruct extends FFFirebaseStruct {
   bool hasBoothName() => _boothName != null;
 
   // "total_participants" field.
-  String? _totalParticipants;
-  String get totalParticipants => _totalParticipants ?? '';
-  set totalParticipants(String? val) => _totalParticipants = val;
+  double? _totalParticipants;
+  double get totalParticipants => _totalParticipants ?? 0.0;
+  set totalParticipants(double? val) => _totalParticipants = val;
+
+  void incrementTotalParticipants(double amount) =>
+      totalParticipants = totalParticipants + amount;
 
   bool hasTotalParticipants() => _totalParticipants != null;
 
@@ -64,7 +67,7 @@ class BoothsStruct extends FFFirebaseStruct {
   static BoothsStruct fromMap(Map<String, dynamic> data) => BoothsStruct(
         boothId: castToType<int>(data['booth_id']),
         boothName: data['booth_name'] as String?,
-        totalParticipants: data['total_participants'] as String?,
+        totalParticipants: castToType<double>(data['total_participants']),
         cssCode: data['css_code'] as String?,
         participantPercentage:
             castToType<double>(data['participant_percentage']),
@@ -93,7 +96,7 @@ class BoothsStruct extends FFFirebaseStruct {
         ),
         'total_participants': serializeParam(
           _totalParticipants,
-          ParamType.String,
+          ParamType.double,
         ),
         'css_code': serializeParam(
           _cssCode,
@@ -119,7 +122,7 @@ class BoothsStruct extends FFFirebaseStruct {
         ),
         totalParticipants: deserializeParam(
           data['total_participants'],
-          ParamType.String,
+          ParamType.double,
           false,
         ),
         cssCode: deserializeParam(
@@ -155,7 +158,7 @@ class BoothsStruct extends FFFirebaseStruct {
 BoothsStruct createBoothsStruct({
   int? boothId,
   String? boothName,
-  String? totalParticipants,
+  double? totalParticipants,
   String? cssCode,
   double? participantPercentage,
   Map<String, dynamic> fieldValues = const {},
