@@ -226,6 +226,12 @@ class FFAppState extends ChangeNotifier {
   set url(String value) {
     _url = value;
   }
+
+  bool _isInApp = false;
+  bool get isInApp => _isInApp;
+  set isInApp(bool value) {
+    _isInApp = value;
+  }
 }
 
 void _safeInit(Function() initializeField) {

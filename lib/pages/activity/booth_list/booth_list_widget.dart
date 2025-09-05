@@ -130,6 +130,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
 
     return StreamBuilder<List<BoothsRecord>>(
       stream: queryBoothsRecord(
+        parent: widget.eventDocRef?.reference,
         queryBuilder: (boothsRecord) => boothsRecord
             .where(
               'is_active',
@@ -692,13 +693,13 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                       child:
                                                                           Container(
                                                                         width:
-                                                                            100.0,
+                                                                            110.0,
                                                                         height:
                                                                             30.0,
                                                                         child: custom_widgets
                                                                             .TextWidgetShowBeaconDistance(
                                                                           width:
-                                                                              100.0,
+                                                                              110.0,
                                                                           height:
                                                                               30.0,
                                                                           deviceUuid:

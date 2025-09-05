@@ -16,7 +16,7 @@
     },
     {
       "collectionGroup": "booths",
-      "queryScope": "COLLECTION_GROUP",
+      "queryScope": "COLLECTION",
       "fields": [
         {
           "fieldPath": "is_active",
@@ -61,6 +61,24 @@
         {
           "fieldPath": "event_id",
           "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "booths",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        {
+          "fieldPath": "is_active",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "event_id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "booth_id",
+          "order": "ASCENDING"
         }
       ]
     },

@@ -68,6 +68,11 @@ class _HomeWidgetState extends State<HomeWidget> {
       );
 
       setDarkModeSetting(context, ThemeMode.light);
+      if (!FFAppState().isInApp) {
+        await actions.beaconBackgroundServiceAction();
+        FFAppState().isInApp = true;
+        safeSetState(() {});
+      }
       _model.dataUser = await queryUsersRecordOnce(
         queryBuilder: (usersRecord) => usersRecord.where(
           'uid',
