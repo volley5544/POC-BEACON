@@ -125,7 +125,11 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
     final chartPieChartColorsList = [
       FlutterFlowTheme.of(context).secondary,
       FlutterFlowTheme.of(context).warning,
-      FlutterFlowTheme.of(context).tertiary
+      FlutterFlowTheme.of(context).tertiary,
+      Color(0xFF549A80),
+      Color(0xFF4A57C2),
+      Color(0xFF3E8DD0),
+      Color(0xFF2F2087)
     ];
     return GestureDetector(
       onTap: () {
@@ -1619,19 +1623,17 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                       ],
                                     ),
                                   ),
-                                  Container(
-                                    width: double.infinity,
-                                    height: 400.0,
-                                    decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                    ),
-                                    child: Stack(
-                                      children: [
-                                        Align(
-                                          alignment:
-                                              AlignmentDirectional(0.0, -1.0),
-                                          child: Padding(
+                                  Align(
+                                    alignment: AlignmentDirectional(0.0, -1.0),
+                                    child: Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Padding(
                                             padding:
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 0.0, 0.0, 20.0),
@@ -1665,114 +1667,118 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                   ),
                                             ),
                                           ),
-                                        ),
-                                        if ('${getJsonField(
-                                              (_model.apiResultw4l?.jsonBody ??
-                                                  ''),
-                                              r'''$.status_code''',
-                                            ).toString()}' ==
-                                            '200')
-                                          Container(
-                                            width: double.infinity,
-                                            height: 299.98,
-                                            child: Stack(
-                                              children: [
-                                                FlutterFlowPieChart(
-                                                  data: FFPieChartData(
-                                                    values: RasGroup
-                                                        .summarizeDashboardCall
-                                                        .dashboard(
-                                                          (_model.apiResultw4l
-                                                                  ?.jsonBody ??
-                                                              ''),
-                                                        )!
-                                                        .map((e) => e
-                                                            .participantPercentage)
-                                                        .toList(),
-                                                    colors:
-                                                        chartPieChartColorsList,
-                                                    radius: [80.0],
-                                                    borderColor: [
-                                                      Color(0x00000000)
-                                                    ],
-                                                  ),
-                                                  donutHoleRadius: 0.0,
-                                                  donutHoleColor:
-                                                      Colors.transparent,
-                                                  sectionLabelType:
-                                                      PieChartSectionLabelType
-                                                          .value,
-                                                  sectionLabelStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .headlineSmall
-                                                          .override(
-                                                            font: GoogleFonts
-                                                                .outfit(
-                                                              fontWeight: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .headlineSmall
-                                                                  .fontWeight,
+                                          if ('${getJsonField(
+                                                (_model.apiResultw4l
+                                                        ?.jsonBody ??
+                                                    ''),
+                                                r'''$.status_code''',
+                                              ).toString()}' ==
+                                              '200')
+                                            Container(
+                                              width: double.infinity,
+                                              height: 300.0,
+                                              child: Stack(
+                                                children: [
+                                                  FlutterFlowPieChart(
+                                                    data: FFPieChartData(
+                                                      values: RasGroup
+                                                          .summarizeDashboardCall
+                                                          .dashboard(
+                                                            (_model.apiResultw4l
+                                                                    ?.jsonBody ??
+                                                                ''),
+                                                          )!
+                                                          .map((e) => e
+                                                              .participantPercentage)
+                                                          .toList(),
+                                                      colors:
+                                                          chartPieChartColorsList,
+                                                      radius: [80.0],
+                                                      borderColor: [
+                                                        Color(0x00000000)
+                                                      ],
+                                                    ),
+                                                    donutHoleRadius: 0.0,
+                                                    donutHoleColor:
+                                                        Colors.transparent,
+                                                    sectionLabelType:
+                                                        PieChartSectionLabelType
+                                                            .value,
+                                                    sectionLabelStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .headlineSmall
+                                                            .override(
+                                                              font: GoogleFonts
+                                                                  .outfit(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .headlineSmall
+                                                                    .fontStyle,
+                                                              ),
+                                                              letterSpacing:
+                                                                  0.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .normal,
                                                               fontStyle: FlutterFlowTheme
                                                                       .of(context)
                                                                   .headlineSmall
                                                                   .fontStyle,
                                                             ),
-                                                            letterSpacing: 0.0,
-                                                            fontWeight:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .headlineSmall
-                                                                    .fontWeight,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .headlineSmall
-                                                                    .fontStyle,
-                                                          ),
-                                                  labelFormatter:
-                                                      LabelFormatter(
-                                                    numberFormat: (val) =>
-                                                        val.toString(),
                                                   ),
-                                                ),
-                                                Align(
-                                                  alignment:
-                                                      AlignmentDirectional(
-                                                          1.0, 1.0),
-                                                  child:
-                                                      FlutterFlowChartLegendWidget(
-                                                    entries: RasGroup
-                                                        .summarizeDashboardCall
-                                                        .dashboard(
-                                                          (_model.apiResultw4l
-                                                                  ?.jsonBody ??
-                                                              ''),
-                                                        )!
-                                                        .map((e) => e.boothName)
-                                                        .toList()
-                                                        .asMap()
-                                                        .entries
-                                                        .map(
-                                                          (label) =>
-                                                              LegendEntry(
-                                                            chartPieChartColorsList[
-                                                                label.key %
-                                                                    chartPieChartColorsList
-                                                                        .length],
-                                                            label.value,
-                                                          ),
-                                                        )
-                                                        .toList(),
-                                                    width: 100.0,
-                                                    height: 50.0,
-                                                    textStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .override(
-                                                              font: GoogleFonts
-                                                                  .readexPro(
+                                                  Align(
+                                                    alignment:
+                                                        AlignmentDirectional(
+                                                            1.0, 1.0),
+                                                    child:
+                                                        FlutterFlowChartLegendWidget(
+                                                      entries: RasGroup
+                                                          .summarizeDashboardCall
+                                                          .dashboard(
+                                                            (_model.apiResultw4l
+                                                                    ?.jsonBody ??
+                                                                ''),
+                                                          )!
+                                                          .map((e) =>
+                                                              e.boothName)
+                                                          .toList()
+                                                          .asMap()
+                                                          .entries
+                                                          .map(
+                                                            (label) =>
+                                                                LegendEntry(
+                                                              chartPieChartColorsList[label
+                                                                      .key %
+                                                                  chartPieChartColorsList
+                                                                      .length],
+                                                              label.value,
+                                                            ),
+                                                          )
+                                                          .toList(),
+                                                      width: 100.0,
+                                                      height: 150.0,
+                                                      textStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                font: GoogleFonts
+                                                                    .readexPro(
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                ),
+                                                                letterSpacing:
+                                                                    0.0,
                                                                 fontWeight: FlutterFlowTheme.of(
                                                                         context)
                                                                     .bodyMedium
@@ -1782,36 +1788,29 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                     .bodyMedium
                                                                     .fontStyle,
                                                               ),
-                                                              letterSpacing:
+                                                      textPadding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  5.0,
                                                                   0.0,
-                                                              fontWeight:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontWeight,
-                                                              fontStyle:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
-                                                            ),
-                                                    textPadding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(5.0, 0.0,
-                                                                0.0, 0.0),
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(5.0, 0.0,
-                                                                5.0, 0.0),
-                                                    borderWidth: 1.0,
-                                                    borderColor: Colors.black,
-                                                    indicatorSize: 10.0,
+                                                                  0.0,
+                                                                  0.0),
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  5.0,
+                                                                  0.0,
+                                                                  5.0,
+                                                                  0.0),
+                                                      borderWidth: 0.0,
+                                                      indicatorSize: 10.0,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],

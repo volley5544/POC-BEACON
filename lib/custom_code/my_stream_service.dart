@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import 'package:rxdart/rxdart.dart';
 import '/backend/push_notifications/push_notifications_util.dart';
+import 'package:flutter/material.dart';
 
 class MyStreamService {
   static final MyStreamService _instance = MyStreamService._internal();
@@ -21,8 +22,8 @@ class MyStreamService {
   StreamSubscription<RangingResult>? _streamRanging;
   StreamSubscription? _subEvents;
   StreamSubscription? _subBooth;
-  List<String> _beaconId = [];
-  List<String> _beaconDistance = [];
+  final ValueNotifier<List<String>> beaconDistance = ValueNotifier([]);
+  final ValueNotifier<List<String>> beaconId = ValueNotifier([]);
 
   List<Map<String, dynamic>> eventDocs = [];
   List<EventDataModelStruct1> eventData = [];
@@ -33,8 +34,8 @@ class MyStreamService {
   List<Map<String, dynamic>> userNotiDocs = [];
   List<UserNotificationDataModelStruct> userNotiData = [];
 
-  List<String> get beaconId => _beaconId;
-  List<String> get beaconDistance => _beaconDistance;
+  // List<String> get beaconId => _beaconId;
+  // List<String> get beaconDistance => _beaconDistance;
 
   void startListening(Stream<RangingResult> myStream) {
     List<EventDataModelStruct1> matchingEvents = [];
@@ -43,9 +44,9 @@ class MyStreamService {
       if (result.beacons.isNotEmpty) {
         result.beacons.sort((a, b) => a.accuracy.compareTo(b.accuracy));
         final nearest = result.beacons;
-        _beaconId = nearest.map((e) => e.proximityUUID).toList();
+        beaconId.value = nearest.map((e) => e.proximityUUID).toList();
         ;
-        _beaconDistance =
+        beaconDistance.value =
             nearest.map((e) => e.accuracy.toStringAsFixed(2)).toList();
         ;
         FFAppState().beaconDistanceList =
@@ -54,8 +55,8 @@ class MyStreamService {
             nearest.map((e) => e.proximityUUID).toList();
         // Convert beaconId + beaconDistance into a Map for easy lookup
         Map<String, double> beaconMap = {
-          for (int i = 0; i < _beaconId.length; i++)
-            _beaconId[i]: double.parse('${_beaconDistance[i]}')
+          for (int i = 0; i < beaconId.value.length; i++)
+            beaconId.value[i]: double.parse('${beaconDistance.value[i]}')
         };
 
         // FFAppState().beaconNameList = nearest.map((e) => e.macAddress).toList();

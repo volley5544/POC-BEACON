@@ -76,6 +76,24 @@ class _HomeWidgetState extends State<HomeWidget> {
         ),
         singleRecord: true,
       ).then((s) => s.firstOrNull);
+      await showDialog(
+        context: context,
+        builder: (alertDialogContext) {
+          return AlertDialog(
+            title: Text('role_ref'),
+            content: Text(valueOrDefault<String>(
+              _model.dataUser?.rolesRef?.id,
+              '-',
+            )),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(alertDialogContext),
+                child: Text('Ok'),
+              ),
+            ],
+          );
+        },
+      );
       // getRole
       _model.roleData = await queryRolesRecordOnce(
         queryBuilder: (rolesRecord) => rolesRecord.where(
