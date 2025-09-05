@@ -2977,7 +2977,7 @@ class _SettingEventWidgetState extends State<SettingEventWidget>
                       ),
                     ),
                   ),
-                ],
+                ].addToEnd(SizedBox(height: 50.0)),
               ),
             ),
           ),

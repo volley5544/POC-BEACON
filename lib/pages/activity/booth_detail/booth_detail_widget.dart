@@ -5,7 +5,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/instant_timer.dart';
-import '/flutter_flow/custom_functions.dart' as functions;
+import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/index.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart'
     as smooth_page_indicator;
@@ -15,7 +15,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:octo_image/octo_image.dart';
-import 'package:provider/provider.dart';
 import 'booth_detail_model.dart';
 export 'booth_detail_model.dart';
 
@@ -131,8 +130,6 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -332,46 +329,6 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                           .headlineMedium
                                           .fontStyle,
                                     ),
-                              ),
-                            ),
-                            Align(
-                              alignment: AlignmentDirectional(1.0, 0.0),
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 8.0, 0.0, 12.0),
-                                child: Text(
-                                  functions.returnIndexValueInList(
-                                              FFAppState()
-                                                  .beaconIdList
-                                                  .toList(),
-                                              widget.boothDoc?.deviceUuid) !=
-                                          -1
-                                      ? 'อยู่ในระยะ ${FFAppState().beaconDistanceList.elementAtOrNull(functions.returnIndexValueInList(FFAppState().beaconIdList.toList(), widget.boothDoc?.deviceUuid)!)} m'
-                                      : 'ไม่อยู่ในระยะ',
-                                  style: FlutterFlowTheme.of(context)
-                                      .labelMedium
-                                      .override(
-                                        font: GoogleFonts.readexPro(
-                                          fontWeight:
-                                              FlutterFlowTheme.of(context)
-                                                  .labelMedium
-                                                  .fontWeight,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .labelMedium
-                                                  .fontStyle,
-                                        ),
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondary,
-                                        letterSpacing: 0.0,
-                                        fontWeight: FlutterFlowTheme.of(context)
-                                            .labelMedium
-                                            .fontWeight,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .labelMedium
-                                            .fontStyle,
-                                      ),
-                                ),
                               ),
                             ),
                             Align(
@@ -608,6 +565,23 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                       .primaryBackground,
                                   disabledTextColor:
                                       FlutterFlowTheme.of(context).primaryText,
+                                ),
+                              ),
+                            ),
+                            Align(
+                              alignment: AlignmentDirectional(1.0, 0.0),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 4.0, 0.0, 0.0),
+                                child: Container(
+                                  width: 110.0,
+                                  height: 30.0,
+                                  child: custom_widgets
+                                      .TextWidgetShowBeaconDistance(
+                                    width: 110.0,
+                                    height: 30.0,
+                                    deviceUuid: widget.boothDoc?.deviceUuid,
+                                  ),
                                 ),
                               ),
                             ),

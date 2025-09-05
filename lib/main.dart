@@ -42,7 +42,7 @@ void main() async {
   if (!kIsWeb) {
     await actions.checkPermissionsBeacon();
     await flutterBeacon.initializeScanning;
-    await actions.beaconBackgroundServiceAction();
+    //await actions.beaconBackgroundServiceAction();
   }
   print('3');
 

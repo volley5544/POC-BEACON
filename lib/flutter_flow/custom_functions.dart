@@ -91,3 +91,38 @@ List<String>? generateDefaultList(
 
   return outputList;
 }
+
+List<dynamic>? countAndSortBooths(
+  List<String>? boothId,
+  List<String>? boothName,
+) {
+  if (boothId == null ||
+      boothName == null ||
+      boothId.length != boothName.length) {
+    return null; // basic validation
+  }
+
+  // Step 0: Map boothId -> boothName (take first occurrence)
+  Map<String, String> idToName = {};
+  for (int i = 0; i < boothId.length; i++) {
+    idToName.putIfAbsent(boothId[i], () => boothName[i]);
+  }
+
+  // Step 1: Count occurrences
+  Map<String, int> counts = {};
+  for (var item in boothId) {
+    counts[item] = (counts[item] ?? 0) + 1;
+  }
+
+  // Step 2: Convert to List<Map> and sort by count (desc)
+  List<Map<String, dynamic>> result = counts.entries.map((entry) {
+    return {
+      'booth_id': entry.key,
+      'booth_name': idToName[entry.key],
+      'count': entry.value,
+    };
+  }).toList()
+    ..sort((a, b) => (b['count'] as int).compareTo(a['count'] as int));
+
+  return result;
+}
