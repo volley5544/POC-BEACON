@@ -5,6 +5,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
+import '/flutter_flow/custom_functions.dart' as functions;
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -14,11 +15,11 @@ import 'package:flutter_blurhash/flutter_blurhash.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:provider/provider.dart';
-import 'booth_list_model.dart';
-export 'booth_list_model.dart';
+import 'booth_list_copy4_model.dart';
+export 'booth_list_copy4_model.dart';
 
-class BoothListWidget extends StatefulWidget {
-  const BoothListWidget({
+class BoothListCopy4Widget extends StatefulWidget {
+  const BoothListCopy4Widget({
     super.key,
     int? eventId,
     required this.eventDocRef,
@@ -27,16 +28,16 @@ class BoothListWidget extends StatefulWidget {
   final int eventId;
   final EventsRecord? eventDocRef;
 
-  static String routeName = 'BoothList';
-  static String routePath = '/boothList';
+  static String routeName = 'BoothListCopy4';
+  static String routePath = '/boothListCopy4';
 
   @override
-  State<BoothListWidget> createState() => _BoothListWidgetState();
+  State<BoothListCopy4Widget> createState() => _BoothListCopy4WidgetState();
 }
 
-class _BoothListWidgetState extends State<BoothListWidget>
+class _BoothListCopy4WidgetState extends State<BoothListCopy4Widget>
     with TickerProviderStateMixin {
-  late BoothListModel _model;
+  late BoothListCopy4Model _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -45,7 +46,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => BoothListModel());
+    _model = createModel(context, () => BoothListCopy4Model());
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {});
@@ -159,7 +160,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
             ),
           );
         }
-        List<BoothsRecord> boothListBoothsRecordList = snapshot.data!;
+        List<BoothsRecord> boothListCopy4BoothsRecordList = snapshot.data!;
 
         return GestureDetector(
           onTap: () {
@@ -352,7 +353,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                           child: Builder(
                                             builder: (context) {
                                               final summary =
-                                                  boothListBoothsRecordList
+                                                  boothListCopy4BoothsRecordList
                                                       .toList();
 
                                               return ListView.builder(
@@ -523,7 +524,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                 child: Builder(
                                   builder: (context) {
                                     final boothListVar =
-                                        boothListBoothsRecordList.toList();
+                                        boothListCopy4BoothsRecordList.toList();
 
                                     return ListView.builder(
                                       padding: EdgeInsets.fromLTRB(
@@ -960,6 +961,31 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                           context)
                                                                       .secondaryBackground,
                                                                 ),
+                                                                child: Text(
+                                                                  'proximityUUID : ${FFAppState().beaconIdList.isNotEmpty ? (functions.returnIndexValueInList(FFAppState().beaconIdList.toList(), boothListVarItem.deviceUuid) != -1 ? FFAppState().beaconIdList.elementAtOrNull(functions.returnIndexValueInList(FFAppState().beaconIdList.toList(), boothListVarItem.deviceUuid)!) : 'NONE') : '-3'}',
+                                                                  style: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .override(
+                                                                        font: GoogleFonts
+                                                                            .readexPro(
+                                                                          fontWeight: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontWeight,
+                                                                          fontStyle: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontStyle,
+                                                                        ),
+                                                                        letterSpacing:
+                                                                            0.0,
+                                                                        fontWeight: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontWeight,
+                                                                        fontStyle: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontStyle,
+                                                                      ),
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
@@ -998,6 +1024,31 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                   color: FlutterFlowTheme.of(
                                                                           context)
                                                                       .secondaryBackground,
+                                                                ),
+                                                                child: Text(
+                                                                  'deviceId : ${boothListVarItem.hasDeviceUuid() ? boothListVarItem.deviceUuid : '-3'}',
+                                                                  style: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .override(
+                                                                        font: GoogleFonts
+                                                                            .readexPro(
+                                                                          fontWeight: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontWeight,
+                                                                          fontStyle: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontStyle,
+                                                                        ),
+                                                                        letterSpacing:
+                                                                            0.0,
+                                                                        fontWeight: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontWeight,
+                                                                        fontStyle: FlutterFlowTheme.of(context)
+                                                                            .bodyMedium
+                                                                            .fontStyle,
+                                                                      ),
                                                                 ),
                                                               ),
                                                             ),

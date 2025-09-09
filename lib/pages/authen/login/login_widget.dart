@@ -4,7 +4,6 @@ import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -515,9 +514,6 @@ class _LoginWidgetState extends State<LoginWidget>
                                           '') {
                                     if (_model.passwordTextController.text !=
                                             '') {
-                                      _model.permission = await actions
-                                          .checkPermissionsBeacon();
-                                      _shouldSetState = true;
                                       GoRouter.of(context).prepareAuthEvent();
 
                                       final user =
@@ -546,8 +542,10 @@ class _LoginWidgetState extends State<LoginWidget>
                                         singleRecord: true,
                                       ).then((s) => s.firstOrNull);
                                       _shouldSetState = true;
+                                      FFAppState().isInApp = false;
+                                      safeSetState(() {});
 
-                                      context.pushNamedAuth(
+                                      context.goNamedAuth(
                                         HomeWidget.routeName,
                                         context.mounted,
                                         queryParameters: {
@@ -557,10 +555,6 @@ class _LoginWidgetState extends State<LoginWidget>
                                           ),
                                         }.withoutNulls,
                                       );
-
-                                      if (_shouldSetState)
-                                        safeSetState(() {});
-                                      return;
                                                                         } else {
                                       await showDialog(
                                         context: context,

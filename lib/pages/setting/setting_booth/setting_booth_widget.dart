@@ -1568,264 +1568,302 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                       ),
                     ),
                   ),
-                  Container(
-                    constraints: BoxConstraints(
-                      maxWidth: 770.0,
-                    ),
-                    decoration: BoxDecoration(),
-                    alignment: AlignmentDirectional(0.0, -1.0),
-                    child: Align(
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 70.0),
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxWidth: 770.0,
+                      ),
+                      decoration: BoxDecoration(),
                       alignment: AlignmentDirectional(0.0, -1.0),
-                      child: Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 50.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  16.0, 12.0, 16.0, 12.0),
-                              child: FFButtonWidget(
-                                onPressed: () async {
-                                  var _shouldSetState = false;
-                                  if (_model.eventNameTextController.text !=
-                                          '') {
-                                    if (_model.deviceUUIDTextController.text !=
+                      child: Align(
+                        alignment: AlignmentDirectional(0.0, -1.0),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 50.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16.0, 12.0, 16.0, 12.0),
+                                child: FFButtonWidget(
+                                  onPressed: () async {
+                                    var _shouldSetState = false;
+                                    if (_model.eventNameTextController.text !=
                                             '') {
-                                      if (_model.distanceTextController.text !=
+                                      if (_model.deviceUUIDTextController
+                                                  .text !=
                                               '') {
-                                        if (true) {
+                                        if (_model.distanceTextController
+                                                    .text !=
+                                                '') {
                                           if (true) {
                                             if (true) {
-                                              if (widget.typePage != 'edit') {
-                                                _model.queryLastestBoothAction =
-                                                    await queryBoothsRecordOnce(
-                                                  parent: widget.eventDocRef,
-                                                  queryBuilder:
-                                                      (boothsRecord) =>
-                                                          boothsRecord.orderBy(
-                                                              'booth_id',
-                                                              descending: true),
-                                                  singleRecord: true,
-                                                ).then((s) => s.firstOrNull);
-                                                _shouldSetState = true;
-                                              }
-                                              if (_model.uploadImageLocalTemp
-                                                      .length >
-                                                  0) {
-                                                _model.uploadImageListToStorageOutput =
-                                                    await actions
-                                                        .uploadMultipleFileFirebaseStorage(
-                                                  'BoothImageUploaded/${widget.typePage == 'edit' ? _model.queryBoothAction?.boothId.toString() : ((_model.queryLastestBoothAction != null ? _model.queryLastestBoothAction!.boothId : 0) + 1).toString()}',
-                                                  _model.uploadImageLocalTemp
-                                                      .toList(),
-                                                );
-                                                _shouldSetState = true;
-                                              }
-                                              if (widget.typePage != 'edit') {
+                                              if (true) {
+                                                if (widget.typePage !=
+                                                    'edit') {
+                                                  _model.queryLastestBoothAction =
+                                                      await queryBoothsRecordOnce(
+                                                    parent: widget.eventDocRef,
+                                                    queryBuilder:
+                                                        (boothsRecord) =>
+                                                            boothsRecord
+                                                                .orderBy(
+                                                                    'booth_id',
+                                                                    descending:
+                                                                        true),
+                                                    singleRecord: true,
+                                                  ).then((s) => s.firstOrNull);
+                                                  _shouldSetState = true;
+                                                }
                                                 if (_model.uploadImageLocalTemp
                                                         .length >
                                                     0) {
-                                                  _model.uploadImageTemp = functions
-                                                      .convertListStringToListImgPath(
-                                                          _model
-                                                              .uploadImageListToStorageOutput
-                                                              ?.toList())!
-                                                      .toList()
-                                                      .cast<String>();
-                                                  safeSetState(() {});
+                                                  _model.uploadImageListToStorageOutput =
+                                                      await actions
+                                                          .uploadMultipleFileFirebaseStorage(
+                                                    'BoothImageUploaded/${widget.typePage == 'edit' ? _model.queryBoothAction?.boothId.toString() : ((_model.queryLastestBoothAction != null ? _model.queryLastestBoothAction!.boothId : 0) + 1).toString()}',
+                                                    _model.uploadImageLocalTemp
+                                                        .toList(),
+                                                  );
+                                                  _shouldSetState = true;
+                                                }
+                                                if (widget.typePage !=
+                                                    'edit') {
+                                                  if (_model
+                                                          .uploadImageLocalTemp
+                                                          .length >
+                                                      0) {
+                                                    _model.uploadImageTemp = functions
+                                                        .convertListStringToListImgPath(
+                                                            _model
+                                                                .uploadImageListToStorageOutput
+                                                                ?.toList())!
+                                                        .toList()
+                                                        .cast<String>();
+                                                    safeSetState(() {});
+                                                  }
+
+                                                  var boothsRecordReference =
+                                                      BoothsRecord.createDoc(
+                                                          widget.eventDocRef!);
+                                                  await boothsRecordReference
+                                                      .set({
+                                                    ...createBoothsRecordData(
+                                                      boothId:
+                                                          (_model.queryLastestBoothAction !=
+                                                                      null
+                                                                  ? _model
+                                                                      .queryLastestBoothAction!
+                                                                      .boothId
+                                                                  : 0) +
+                                                              1,
+                                                      boothName: _model
+                                                          .eventNameTextController
+                                                          .text,
+                                                      description: _model
+                                                          .descriptionTextController
+                                                          .text,
+                                                      notificationDistance:
+                                                          int.tryParse(_model
+                                                              .distanceTextController
+                                                              .text),
+                                                      createdBy:
+                                                          currentUserReference
+                                                              ?.id,
+                                                      isActive:
+                                                          _model.switchValue!
+                                                              ? 0
+                                                              : 1,
+                                                      eventId: widget.eventId,
+                                                      deviceUuid: _model
+                                                          .deviceUUIDTextController
+                                                          .text,
+                                                    ),
+                                                    ...mapToFirestore(
+                                                      {
+                                                        'created_at': FieldValue
+                                                            .serverTimestamp(),
+                                                        'booth_image_list':
+                                                            _model
+                                                                .uploadImageTemp,
+                                                      },
+                                                    ),
+                                                  });
+                                                  _model.createBoothDocOutput =
+                                                      BoothsRecord
+                                                          .getDocumentFromData({
+                                                    ...createBoothsRecordData(
+                                                      boothId:
+                                                          (_model.queryLastestBoothAction !=
+                                                                      null
+                                                                  ? _model
+                                                                      .queryLastestBoothAction!
+                                                                      .boothId
+                                                                  : 0) +
+                                                              1,
+                                                      boothName: _model
+                                                          .eventNameTextController
+                                                          .text,
+                                                      description: _model
+                                                          .descriptionTextController
+                                                          .text,
+                                                      notificationDistance:
+                                                          int.tryParse(_model
+                                                              .distanceTextController
+                                                              .text),
+                                                      createdBy:
+                                                          currentUserReference
+                                                              ?.id,
+                                                      isActive:
+                                                          _model.switchValue!
+                                                              ? 0
+                                                              : 1,
+                                                      eventId: widget.eventId,
+                                                      deviceUuid: _model
+                                                          .deviceUUIDTextController
+                                                          .text,
+                                                    ),
+                                                    ...mapToFirestore(
+                                                      {
+                                                        'created_at':
+                                                            DateTime.now(),
+                                                        'booth_image_list':
+                                                            _model
+                                                                .uploadImageTemp,
+                                                      },
+                                                    ),
+                                                  }, boothsRecordReference);
+                                                  _shouldSetState = true;
+                                                  // Debug
+                                                  await showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (alertDialogContext) {
+                                                      return AlertDialog(
+                                                        content: Text(
+                                                            'update เสร็จแล้ว'),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    alertDialogContext),
+                                                            child: Text('Ok'),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                } else {
+                                                  if (_model
+                                                          .uploadImageLocalTemp
+                                                          .length >
+                                                      0) {
+                                                    _model.uploadImageTemp = functions
+                                                        .combine2ImagePathList(
+                                                            _model
+                                                                .uploadImageTemp
+                                                                .toList(),
+                                                            functions
+                                                                .convertListStringToListImgPath(_model
+                                                                    .uploadImageListToStorageOutput
+                                                                    ?.toList())
+                                                                ?.toList())!
+                                                        .toList()
+                                                        .cast<String>();
+                                                    safeSetState(() {});
+                                                  }
+
+                                                  await _model.queryBoothAction!
+                                                      .reference
+                                                      .update({
+                                                    ...createBoothsRecordData(
+                                                      boothName: _model
+                                                          .eventNameTextController
+                                                          .text,
+                                                      description: _model
+                                                          .descriptionTextController
+                                                          .text,
+                                                      notificationDistance:
+                                                          int.tryParse(_model
+                                                              .distanceTextController
+                                                              .text),
+                                                      updatedBy:
+                                                          currentUserReference
+                                                              ?.id,
+                                                      deviceUuid: _model
+                                                          .deviceUUIDTextController
+                                                          .text,
+                                                    ),
+                                                    ...mapToFirestore(
+                                                      {
+                                                        'updated_at': FieldValue
+                                                            .serverTimestamp(),
+                                                        'booth_image_list':
+                                                            _model
+                                                                .uploadImageTemp,
+                                                      },
+                                                    ),
+                                                  });
+                                                  await showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (alertDialogContext) {
+                                                      return AlertDialog(
+                                                        title: Text('สำเร็จ'),
+                                                        content: Text(
+                                                            'แก้ไขข้อมูลสำเร็จ'),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    alertDialogContext),
+                                                            child: Text('Ok'),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
                                                 }
 
-                                                var boothsRecordReference =
-                                                    BoothsRecord.createDoc(
-                                                        widget.eventDocRef!);
-                                                await boothsRecordReference
-                                                    .set({
-                                                  ...createBoothsRecordData(
-                                                    boothId:
-                                                        (_model.queryLastestBoothAction !=
-                                                                    null
-                                                                ? _model
-                                                                    .queryLastestBoothAction!
-                                                                    .boothId
-                                                                : 0) +
-                                                            1,
-                                                    boothName: _model
-                                                        .eventNameTextController
-                                                        .text,
-                                                    description: _model
-                                                        .descriptionTextController
-                                                        .text,
-                                                    notificationDistance:
-                                                        int.tryParse(_model
-                                                            .distanceTextController
-                                                            .text),
-                                                    createdBy:
-                                                        currentUserReference
-                                                            ?.id,
-                                                    isActive:
-                                                        _model.switchValue!
-                                                            ? 0
-                                                            : 1,
-                                                    eventId: widget.eventId,
-                                                    deviceUuid: _model
-                                                        .deviceUUIDTextController
-                                                        .text,
-                                                  ),
-                                                  ...mapToFirestore(
-                                                    {
-                                                      'created_at': FieldValue
-                                                          .serverTimestamp(),
-                                                      'booth_image_list': _model
-                                                          .uploadImageTemp,
-                                                    },
-                                                  ),
-                                                });
-                                                _model.createBoothDocOutput =
-                                                    BoothsRecord
-                                                        .getDocumentFromData({
-                                                  ...createBoothsRecordData(
-                                                    boothId:
-                                                        (_model.queryLastestBoothAction !=
-                                                                    null
-                                                                ? _model
-                                                                    .queryLastestBoothAction!
-                                                                    .boothId
-                                                                : 0) +
-                                                            1,
-                                                    boothName: _model
-                                                        .eventNameTextController
-                                                        .text,
-                                                    description: _model
-                                                        .descriptionTextController
-                                                        .text,
-                                                    notificationDistance:
-                                                        int.tryParse(_model
-                                                            .distanceTextController
-                                                            .text),
-                                                    createdBy:
-                                                        currentUserReference
-                                                            ?.id,
-                                                    isActive:
-                                                        _model.switchValue!
-                                                            ? 0
-                                                            : 1,
-                                                    eventId: widget.eventId,
-                                                    deviceUuid: _model
-                                                        .deviceUUIDTextController
-                                                        .text,
-                                                  ),
-                                                  ...mapToFirestore(
-                                                    {
-                                                      'created_at':
-                                                          DateTime.now(),
-                                                      'booth_image_list': _model
-                                                          .uploadImageTemp,
-                                                    },
-                                                  ),
-                                                }, boothsRecordReference);
-                                                _shouldSetState = true;
-                                                // Debug
-                                                await showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (alertDialogContext) {
-                                                    return AlertDialog(
-                                                      content: Text(
-                                                          'update เสร็จแล้ว'),
-                                                      actions: [
-                                                        TextButton(
-                                                          onPressed: () =>
-                                                              Navigator.pop(
-                                                                  alertDialogContext),
-                                                          child: Text('Ok'),
-                                                        ),
-                                                      ],
-                                                    );
-                                                  },
-                                                );
-                                              } else {
-                                                if (_model.uploadImageLocalTemp
-                                                        .length >
-                                                    0) {
-                                                  _model.uploadImageTemp = functions
-                                                      .combine2ImagePathList(
-                                                          _model.uploadImageTemp
-                                                              .toList(),
-                                                          functions
-                                                              .convertListStringToListImgPath(
-                                                                  _model
-                                                                      .uploadImageListToStorageOutput
-                                                                      ?.toList())
-                                                              ?.toList())!
-                                                      .toList()
-                                                      .cast<String>();
-                                                  safeSetState(() {});
-                                                }
-
-                                                await _model
-                                                    .queryBoothAction!.reference
-                                                    .update({
-                                                  ...createBoothsRecordData(
-                                                    boothName: _model
-                                                        .eventNameTextController
-                                                        .text,
-                                                    description: _model
-                                                        .descriptionTextController
-                                                        .text,
-                                                    notificationDistance:
-                                                        int.tryParse(_model
-                                                            .distanceTextController
-                                                            .text),
-                                                    updatedBy:
-                                                        currentUserReference
-                                                            ?.id,
-                                                    deviceUuid: _model
-                                                        .deviceUUIDTextController
-                                                        .text,
-                                                  ),
-                                                  ...mapToFirestore(
-                                                    {
-                                                      'updated_at': FieldValue
-                                                          .serverTimestamp(),
-                                                      'booth_image_list': _model
-                                                          .uploadImageTemp,
-                                                    },
-                                                  ),
-                                                });
-                                                await showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (alertDialogContext) {
-                                                    return AlertDialog(
-                                                      title: Text('สำเร็จ'),
-                                                      content: Text(
-                                                          'แก้ไขข้อมูลสำเร็จ'),
-                                                      actions: [
-                                                        TextButton(
-                                                          onPressed: () =>
-                                                              Navigator.pop(
-                                                                  alertDialogContext),
-                                                          child: Text('Ok'),
-                                                        ),
-                                                      ],
-                                                    );
-                                                  },
-                                                );
-                                              }
-
-                                              _model.uploadImageLocalTemp = [];
-                                              safeSetState(() {});
-                                              safeSetState(() {
-                                                _model.isDataUploading_uploadBoothImageAction =
-                                                    false;
-                                                _model.uploadedLocalFiles_uploadBoothImageAction =
+                                                _model.uploadImageLocalTemp =
                                                     [];
-                                              });
+                                                safeSetState(() {});
+                                                safeSetState(() {
+                                                  _model.isDataUploading_uploadBoothImageAction =
+                                                      false;
+                                                  _model.uploadedLocalFiles_uploadBoothImageAction =
+                                                      [];
+                                                });
+                                              }
                                             }
+                                          } else {
+                                            if (_shouldSetState)
+                                              safeSetState(() {});
+                                            return;
                                           }
                                         } else {
+                                          await showDialog(
+                                            context: context,
+                                            builder: (alertDialogContext) {
+                                              return AlertDialog(
+                                                title: Text('ข้อมูลไม่ครบถ้วน'),
+                                                content: Text(
+                                                    'กรุณากรอก ระยะส่ง Beacon เมื่อเข้าใกล้บูธกี่เมตร'),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(
+                                                            alertDialogContext),
+                                                    child: Text('Ok'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
                                           if (_shouldSetState)
                                             safeSetState(() {});
                                           return;
@@ -1836,8 +1874,8 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                           builder: (alertDialogContext) {
                                             return AlertDialog(
                                               title: Text('ข้อมูลไม่ครบถ้วน'),
-                                              content: Text(
-                                                  'กรุณากรอก ระยะส่ง Beacon เมื่อเข้าใกล้บูธกี่เมตร'),
+                                              content:
+                                                  Text('กรุณากรอก Beacon UUID'),
                                               actions: [
                                                 TextButton(
                                                   onPressed: () =>
@@ -1859,8 +1897,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                         builder: (alertDialogContext) {
                                           return AlertDialog(
                                             title: Text('ข้อมูลไม่ครบถ้วน'),
-                                            content:
-                                                Text('กรุณากรอก Beacon UUID'),
+                                            content: Text('กรุณากรอก ชื่อบูธ'),
                                             actions: [
                                               TextButton(
                                                 onPressed: () => Navigator.pop(
@@ -1874,42 +1911,33 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                       if (_shouldSetState) safeSetState(() {});
                                       return;
                                     }
-                                  } else {
-                                    await showDialog(
-                                      context: context,
-                                      builder: (alertDialogContext) {
-                                        return AlertDialog(
-                                          title: Text('ข้อมูลไม่ครบถ้วน'),
-                                          content: Text('กรุณากรอก ชื่อบูธ'),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () => Navigator.pop(
-                                                  alertDialogContext),
-                                              child: Text('Ok'),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                    if (_shouldSetState) safeSetState(() {});
-                                    return;
-                                  }
 
-                                  if (_shouldSetState) safeSetState(() {});
-                                },
-                                text: 'บันทึก',
-                                options: FFButtonOptions(
-                                  width: double.infinity,
-                                  height: 48.0,
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      24.0, 0.0, 24.0, 0.0),
-                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 0.0, 0.0),
-                                  color: FlutterFlowTheme.of(context).primary,
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .override(
-                                        font: GoogleFonts.readexPro(
+                                    if (_shouldSetState) safeSetState(() {});
+                                  },
+                                  text: 'บันทึก',
+                                  options: FFButtonOptions(
+                                    width: double.infinity,
+                                    height: 48.0,
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        24.0, 0.0, 24.0, 0.0),
+                                    iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 0.0),
+                                    color: FlutterFlowTheme.of(context).primary,
+                                    textStyle: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .override(
+                                          font: GoogleFonts.readexPro(
+                                            fontWeight:
+                                                FlutterFlowTheme.of(context)
+                                                    .titleSmall
+                                                    .fontWeight,
+                                            fontStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .titleSmall
+                                                    .fontStyle,
+                                          ),
+                                          color: Colors.white,
+                                          letterSpacing: 0.0,
                                           fontWeight:
                                               FlutterFlowTheme.of(context)
                                                   .titleSmall
@@ -1919,25 +1947,17 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                                   .titleSmall
                                                   .fontStyle,
                                         ),
-                                        color: Colors.white,
-                                        letterSpacing: 0.0,
-                                        fontWeight: FlutterFlowTheme.of(context)
-                                            .titleSmall
-                                            .fontWeight,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .titleSmall
-                                            .fontStyle,
-                                      ),
-                                  elevation: 3.0,
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1.0,
+                                    elevation: 3.0,
+                                    borderSide: BorderSide(
+                                      color: Colors.transparent,
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8.0),
                                   ),
-                                  borderRadius: BorderRadius.circular(8.0),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),

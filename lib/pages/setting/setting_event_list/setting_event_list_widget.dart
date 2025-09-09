@@ -182,7 +182,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
           child: Align(
             alignment: AlignmentDirectional(1.0, 1.0),
             child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 50.0),
+              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 100.0),
               child: FloatingActionButton(
                 onPressed: () async {
                   context.pushNamed(
@@ -566,7 +566,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                     .bodyMedium
                                                                     .fontStyle,
                                                           ),
-                                                  hintText: 'กรุณาเลือกกิจกรรม',
+                                                  hintText: 'เลือกกิจกรรม',
                                                   searchHintText: 'Search...',
                                                   icon: Icon(
                                                     Icons
@@ -1481,7 +1481,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                           (alertDialogContext) {
                                                         return AlertDialog(
                                                           content: Text(
-                                                              'กรุณาเลือก event'),
+                                                              'กรุณาเลือกกิจกรรม'),
                                                           actions: [
                                                             TextButton(
                                                               onPressed: () =>
@@ -1675,33 +1675,14 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                           Align(
                                             alignment: AlignmentDirectional(
                                                 0.0, -0.85),
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      0.0, 0.0, 0.0, 20.0),
-                                              child: Text(
-                                                'ความนิยมบูธ',
-                                                textAlign: TextAlign.center,
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      font:
-                                                          GoogleFonts.readexPro(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primaryText,
-                                                      fontSize: 20.0,
-                                                      letterSpacing: 0.0,
+                                            child: Text(
+                                              'ความนิยมบูธ',
+                                              textAlign: TextAlign.center,
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyMedium
+                                                  .override(
+                                                    font: GoogleFonts.readexPro(
                                                       fontWeight:
                                                           FontWeight.w600,
                                                       fontStyle:
@@ -1710,46 +1691,75 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                               .bodyMedium
                                                               .fontStyle,
                                                     ),
-                                              ),
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
+                                                    fontSize: 20.0,
+                                                    letterSpacing: 0.0,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMedium
+                                                            .fontStyle,
+                                                  ),
                                             ),
                                           ),
-                                          Container(
-                                            width: double.infinity,
-                                            height: 450.0,
-                                            child: Stack(
-                                              children: [
-                                                FlutterFlowPieChart(
-                                                  data: FFPieChartData(
-                                                    values: RasGroup
-                                                        .summarizeDashboardCall
-                                                        .dashboard(
-                                                          (_model.apiResultw4l
-                                                                  ?.jsonBody ??
-                                                              ''),
-                                                        )!
-                                                        .map((e) => e
-                                                            .participantPercentage)
-                                                        .toList(),
-                                                    colors:
-                                                        chartPieChartColorsList,
-                                                    radius: [120.0],
-                                                    borderColor: [
-                                                      Color(0x00000000)
-                                                    ],
-                                                  ),
-                                                  donutHoleRadius: 3.0,
-                                                  donutHoleColor:
-                                                      Colors.transparent,
-                                                  sectionLabelType:
-                                                      PieChartSectionLabelType
-                                                          .value,
-                                                  sectionLabelStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .headlineSmall
-                                                          .override(
-                                                            font: GoogleFonts
-                                                                .outfit(
+                                          Align(
+                                            alignment:
+                                                AlignmentDirectional(0.0, -1.0),
+                                            child: Container(
+                                              width: double.infinity,
+                                              height: 450.0,
+                                              child: Stack(
+                                                children: [
+                                                  FlutterFlowPieChart(
+                                                    data: FFPieChartData(
+                                                      values: RasGroup
+                                                          .summarizeDashboardCall
+                                                          .dashboard(
+                                                            (_model.apiResultw4l
+                                                                    ?.jsonBody ??
+                                                                ''),
+                                                          )!
+                                                          .map((e) => e
+                                                              .participantPercentage)
+                                                          .toList(),
+                                                      colors:
+                                                          chartPieChartColorsList,
+                                                      radius: [100.0],
+                                                      borderColor: [
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .primary
+                                                      ],
+                                                    ),
+                                                    donutHoleRadius: 1.0,
+                                                    donutHoleColor:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .secondaryBackground,
+                                                    sectionLabelType:
+                                                        PieChartSectionLabelType
+                                                            .value,
+                                                    sectionLabelStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .headlineSmall
+                                                            .override(
+                                                              font: GoogleFonts
+                                                                  .outfit(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                fontStyle: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .headlineSmall
+                                                                    .fontStyle,
+                                                              ),
+                                                              fontSize: 16.0,
+                                                              letterSpacing:
+                                                                  0.0,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w600,
@@ -1758,54 +1768,56 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                   .headlineSmall
                                                                   .fontStyle,
                                                             ),
-                                                            fontSize: 16.0,
-                                                            letterSpacing: 0.0,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .headlineSmall
-                                                                    .fontStyle,
-                                                          ),
-                                                ),
-                                                Align(
-                                                  alignment:
-                                                      AlignmentDirectional(
-                                                          1.0, 1.0),
-                                                  child:
-                                                      FlutterFlowChartLegendWidget(
-                                                    entries: RasGroup
-                                                        .summarizeDashboardCall
-                                                        .dashboard(
-                                                          (_model.apiResultw4l
-                                                                  ?.jsonBody ??
-                                                              ''),
-                                                        )!
-                                                        .map((e) => e.boothName)
-                                                        .toList()
-                                                        .asMap()
-                                                        .entries
-                                                        .map(
-                                                          (label) =>
-                                                              LegendEntry(
-                                                            chartPieChartColorsList[
-                                                                label.key %
-                                                                    chartPieChartColorsList
-                                                                        .length],
-                                                            label.value,
-                                                          ),
-                                                        )
-                                                        .toList(),
-                                                    width: 100.0,
-                                                    height: 150.0,
-                                                    textStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium
-                                                            .override(
-                                                              font: GoogleFonts
-                                                                  .readexPro(
+                                                  ),
+                                                  Align(
+                                                    alignment:
+                                                        AlignmentDirectional(
+                                                            1.0, 1.0),
+                                                    child:
+                                                        FlutterFlowChartLegendWidget(
+                                                      entries: RasGroup
+                                                          .summarizeDashboardCall
+                                                          .dashboard(
+                                                            (_model.apiResultw4l
+                                                                    ?.jsonBody ??
+                                                                ''),
+                                                          )!
+                                                          .map((e) =>
+                                                              e.boothName)
+                                                          .toList()
+                                                          .asMap()
+                                                          .entries
+                                                          .map(
+                                                            (label) =>
+                                                                LegendEntry(
+                                                              chartPieChartColorsList[label
+                                                                      .key %
+                                                                  chartPieChartColorsList
+                                                                      .length],
+                                                              label.value,
+                                                            ),
+                                                          )
+                                                          .toList(),
+                                                      width: 100.0,
+                                                      height: 150.0,
+                                                      textStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                font: GoogleFonts
+                                                                    .readexPro(
+                                                                  fontWeight: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .fontStyle,
+                                                                ),
+                                                                letterSpacing:
+                                                                    0.0,
                                                                 fontWeight: FlutterFlowTheme.of(
                                                                         context)
                                                                     .bodyMedium
@@ -1815,32 +1827,26 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                     .bodyMedium
                                                                     .fontStyle,
                                                               ),
-                                                              letterSpacing:
+                                                      textPadding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  5.0,
                                                                   0.0,
-                                                              fontWeight:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontWeight,
-                                                              fontStyle:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
-                                                            ),
-                                                    textPadding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(5.0, 0.0,
-                                                                0.0, 0.0),
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(5.0, 0.0,
-                                                                5.0, 0.0),
-                                                    borderWidth: 0.0,
-                                                    indicatorSize: 10.0,
+                                                                  0.0,
+                                                                  0.0),
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  5.0,
+                                                                  0.0,
+                                                                  5.0,
+                                                                  0.0),
+                                                      borderWidth: 0.0,
+                                                      indicatorSize: 10.0,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -2124,46 +2130,6 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                                     ),
                                                                               ),
                                                                             ),
-                                                                            Container(
-                                                                              width: double.infinity,
-                                                                              decoration: BoxDecoration(),
-                                                                              child: Row(
-                                                                                mainAxisSize: MainAxisSize.max,
-                                                                                children: [
-                                                                                  AutoSizeText(
-                                                                                    'รายละเอียด : ',
-                                                                                    textAlign: TextAlign.start,
-                                                                                    style: FlutterFlowTheme.of(context).bodySmall.override(
-                                                                                          font: GoogleFonts.readexPro(
-                                                                                            fontWeight: FontWeight.w600,
-                                                                                            fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
-                                                                                          ),
-                                                                                          fontSize: 12.0,
-                                                                                          letterSpacing: 0.0,
-                                                                                          fontWeight: FontWeight.w600,
-                                                                                          fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
-                                                                                        ),
-                                                                                  ),
-                                                                                  AutoSizeText(
-                                                                                    listViewEventsRecord.description.maybeHandleOverflow(
-                                                                                      maxChars: 70,
-                                                                                      replacement: '…',
-                                                                                    ),
-                                                                                    textAlign: TextAlign.start,
-                                                                                    style: FlutterFlowTheme.of(context).bodySmall.override(
-                                                                                          font: GoogleFonts.readexPro(
-                                                                                            fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
-                                                                                            fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
-                                                                                          ),
-                                                                                          fontSize: 12.0,
-                                                                                          letterSpacing: 0.0,
-                                                                                          fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
-                                                                                          fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
-                                                                                        ),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            ),
                                                                           ].divide(SizedBox(height: 8.0)),
                                                                         ),
                                                                         Container(
@@ -2191,7 +2157,52 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                                     ),
                                                                               ),
                                                                               AutoSizeText(
-                                                                                '${dateTimeFormat("d/M/y", listViewEventsRecord.startDatetime)} (${dateTimeFormat("Hm", listViewEventsRecord.startDatetime)}) - ${dateTimeFormat("d/M/y", listViewEventsRecord.endDatetime)} (${dateTimeFormat("Hm", listViewEventsRecord.endDatetime)})'.maybeHandleOverflow(
+                                                                                '${dateTimeFormat("d/M/y", listViewEventsRecord.startDatetime)} (${dateTimeFormat("Hm", listViewEventsRecord.startDatetime)})'.maybeHandleOverflow(
+                                                                                  maxChars: 70,
+                                                                                  replacement: '…',
+                                                                                ),
+                                                                                textAlign: TextAlign.start,
+                                                                                style: FlutterFlowTheme.of(context).bodySmall.override(
+                                                                                      font: GoogleFonts.readexPro(
+                                                                                        fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
+                                                                                        fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                                                                      ),
+                                                                                      color: FlutterFlowTheme.of(context).primary,
+                                                                                      fontSize: 12.0,
+                                                                                      letterSpacing: 0.0,
+                                                                                      fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
+                                                                                      fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                                                                    ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                        Container(
+                                                                          width:
+                                                                              double.infinity,
+                                                                          decoration:
+                                                                              BoxDecoration(),
+                                                                          child:
+                                                                              Row(
+                                                                            mainAxisSize:
+                                                                                MainAxisSize.max,
+                                                                            children: [
+                                                                              AutoSizeText(
+                                                                                'วัน/เวลาที่สิ้นสุด : ',
+                                                                                textAlign: TextAlign.start,
+                                                                                style: FlutterFlowTheme.of(context).bodySmall.override(
+                                                                                      font: GoogleFonts.readexPro(
+                                                                                        fontWeight: FontWeight.w600,
+                                                                                        fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                                                                      ),
+                                                                                      fontSize: 12.0,
+                                                                                      letterSpacing: 0.0,
+                                                                                      fontWeight: FontWeight.w600,
+                                                                                      fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                                                                    ),
+                                                                              ),
+                                                                              AutoSizeText(
+                                                                                '${dateTimeFormat("d/M/y", listViewEventsRecord.endDatetime)} (${dateTimeFormat("Hm", listViewEventsRecord.endDatetime)})'.maybeHandleOverflow(
                                                                                   maxChars: 70,
                                                                                   replacement: '…',
                                                                                 ),
@@ -2305,7 +2316,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                                       );
                                                                                     },
                                                                                     child: Text(
-                                                                                      'register',
+                                                                                      ' ',
                                                                                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                             font: GoogleFonts.readexPro(
                                                                                               fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
@@ -2990,7 +3001,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                     .bodyMedium
                                                                     .fontStyle,
                                                           ),
-                                                  hintText: 'กรุณาเลือกกิจกรรม',
+                                                  hintText: 'เลือกกิจกรรม',
                                                   searchHintText: 'Search...',
                                                   icon: Icon(
                                                     Icons
@@ -3049,7 +3060,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                           (alertDialogContext) {
                                                         return AlertDialog(
                                                           content: Text(
-                                                              'กรุณาเลือก event'),
+                                                              'กรุณาเลือกกิจกรรม'),
                                                           actions: [
                                                             TextButton(
                                                               onPressed: () =>
@@ -3209,7 +3220,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                   label: DefaultTextStyle.merge(
                                                     softWrap: true,
                                                     child: Text(
-                                                      'booth',
+                                                      'บูธ',
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -3479,12 +3490,14 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                     alignment:
                                                         AlignmentDirectional(
                                                             -1.0, 0.0),
-                                                    child: Text(
+                                                    child: AutoSizeText(
                                                       '${RasGroup.reportSurveyByBoothDetailsCall.boothNameRating(
                                                             (_model.apiResultw4lll
                                                                     ?.jsonBody ??
                                                                 ''),
                                                           )?.elementAtOrNull(reportSurveyIndex)}',
+                                                      textAlign:
+                                                          TextAlign.start,
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -3501,6 +3514,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                       .bodyMedium
                                                                       .fontStyle,
                                                                 ),
+                                                                fontSize: 12.0,
                                                                 letterSpacing:
                                                                     0.0,
                                                                 fontWeight: FlutterFlowTheme.of(
@@ -3537,6 +3551,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                     .bodyMedium
                                                                     .fontStyle,
                                                           ),
+                                                          fontSize: 12.0,
                                                           letterSpacing: 0.0,
                                                           fontWeight:
                                                               FlutterFlowTheme.of(
@@ -3573,6 +3588,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                     .bodyMedium
                                                                     .fontStyle,
                                                           ),
+                                                          fontSize: 12.0,
                                                           letterSpacing: 0.0,
                                                           fontWeight:
                                                               FlutterFlowTheme.of(
@@ -3609,6 +3625,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                     .bodyMedium
                                                                     .fontStyle,
                                                           ),
+                                                          fontSize: 12.0,
                                                           letterSpacing: 0.0,
                                                           fontWeight:
                                                               FlutterFlowTheme.of(
@@ -3645,6 +3662,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                     .bodyMedium
                                                                     .fontStyle,
                                                           ),
+                                                          fontSize: 12.0,
                                                           letterSpacing: 0.0,
                                                           fontWeight:
                                                               FlutterFlowTheme.of(
@@ -3681,6 +3699,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                     .bodyMedium
                                                                     .fontStyle,
                                                           ),
+                                                          fontSize: 12.0,
                                                           letterSpacing: 0.0,
                                                           fontWeight:
                                                               FlutterFlowTheme.of(
@@ -3717,6 +3736,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                     .bodyMedium
                                                                     .fontStyle,
                                                           ),
+                                                          fontSize: 12.0,
                                                           letterSpacing: 0.0,
                                                           fontWeight:
                                                               FlutterFlowTheme.of(
@@ -3736,9 +3756,10 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                               ),
                                               paginated: false,
                                               selectable: false,
+                                              width: double.infinity,
                                               headingRowHeight: 56.0,
                                               dataRowHeight: 50.0,
-                                              columnSpacing: 20.0,
+                                              columnSpacing: 10.0,
                                               headingRowColor:
                                                   FlutterFlowTheme.of(context)
                                                       .alternate,

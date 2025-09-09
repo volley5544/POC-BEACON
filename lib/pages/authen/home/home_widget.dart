@@ -94,7 +94,6 @@ class _HomeWidgetState extends State<HomeWidget> {
         FFAppState().rolesID = _model.roleData!.rolesId;
         safeSetState(() {});
       }
-      _model.permiss = await actions.checkPermissionsBeacon();
       Navigator.pop(context);
     });
 
@@ -484,32 +483,36 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                     children: [
                                                       Text(
                                                         imgListItem.eventName,
-                                                        style: FlutterFlowTheme
-                                                                .of(context)
-                                                            .bodyMedium
-                                                            .override(
-                                                              font: GoogleFonts
-                                                                  .readexPro(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                              ),
-                                                              fontSize: 20.0,
-                                                              letterSpacing:
-                                                                  0.0,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                              fontStyle:
-                                                                  FlutterFlowTheme.of(
+                                                        style:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .readexPro(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .fontStyle,
+                                                                  ),
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .secondaryText,
+                                                                  fontSize:
+                                                                      16.0,
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontStyle: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyMedium
                                                                       .fontStyle,
-                                                            ),
+                                                                ),
                                                       ),
                                                       InkWell(
                                                         splashColor:
@@ -529,7 +532,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(
-                                                                      8.0),
+                                                                      2.0),
                                                           child: Image.network(
                                                             imgListItem
                                                                 .eventImageList
@@ -553,7 +556,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                       min(0,
                                                           imgList.length - 1)),
                                                   viewportFraction: 0.5,
-                                                  disableCenter: true,
+                                                  disableCenter: false,
                                                   enlargeCenterPage: true,
                                                   enlargeFactor: 0.25,
                                                   enableInfiniteScroll: false,
@@ -568,7 +571,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                                           (800 + 4000)),
                                                   autoPlayCurve: Curves.linear,
                                                   pauseAutoPlayInFiniteScroll:
-                                                      true,
+                                                      false,
                                                   onPageChanged: (index, _) =>
                                                       _model.carouselCurrentIndex =
                                                           index,
@@ -584,104 +587,6 @@ class _HomeWidgetState extends State<HomeWidget> {
                               ),
                             );
                           },
-                        ),
-                      ),
-                      InkWell(
-                        splashColor: Colors.transparent,
-                        focusColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () async {
-                          context.goNamed(DashboardWidget.routeName);
-                        },
-                        child: Text(
-                          'dashboard',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.readexPro(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                        ),
-                      ),
-                      InkWell(
-                        splashColor: Colors.transparent,
-                        focusColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () async {
-                          context.goNamed(DatatableWidget.routeName);
-                        },
-                        child: Text(
-                          'survey',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.readexPro(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                        ),
-                      ),
-                      InkWell(
-                        splashColor: Colors.transparent,
-                        focusColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () async {
-                          context.pushNamed(
-                            SettingEventListWidget.routeName,
-                            queryParameters: {
-                              'isActive': serializeParam(
-                                0,
-                                ParamType.int,
-                              ),
-                            }.withoutNulls,
-                          );
-                        },
-                        child: Text(
-                          'Hello World',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.readexPro(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
                         ),
                       ),
                     ],

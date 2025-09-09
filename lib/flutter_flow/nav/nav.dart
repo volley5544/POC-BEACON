@@ -709,7 +709,26 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: DatatableWidget.routeName,
           path: DatatableWidget.routePath,
           builder: (context, params) => DatatableWidget(),
-        )
+        ),
+        FFRoute(
+            name: BoothListCopy4Widget.routeName,
+            path: BoothListCopy4Widget.routePath,
+            asyncParams: {
+              'eventDocRef': getDoc(['events'], EventsRecord.fromSnapshot),
+            },
+            builder: (context, params) => NavBarPage(
+                  initialPage: '',
+                  page: BoothListCopy4Widget(
+                    eventId: params.getParam(
+                      'eventId',
+                      ParamType.int,
+                    ),
+                    eventDocRef: params.getParam(
+                      'eventDocRef',
+                      ParamType.Document,
+                    ),
+                  ),
+                ))
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
 

@@ -313,6 +313,13 @@ final parametersBuilderMap =
       ),
   'dashboard': ParameterData.none(),
   'datatable': ParameterData.none(),
+  'BoothListCopy4': (data) async => ParameterData(
+        allParams: {
+          'eventId': getParameter<int>(data, 'eventId'),
+          'eventDocRef': await getDocumentParameter<EventsRecord>(
+              data, 'eventDocRef', EventsRecord.fromSnapshot),
+        },
+      ),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

@@ -16,8 +16,6 @@ class HomeModel extends FlutterFlowModel<HomeWidget> {
   UsersRecord? dataUser;
   // Stores action output result for [Firestore Query - Query a collection] action in Home widget.
   RolesRecord? roleData;
-  // Stores action output result for [Custom Action - checkPermissionsBeacon] action in Home widget.
-  bool? permiss;
   // State field(s) for Carousel widget.
   CarouselSliderController? carouselController;
   int carouselCurrentIndex = 0;

@@ -8,6 +8,7 @@ import '/backend/schema/events_record.dart';
 import '/custom_code/event_data_model_struct_1.dart';
 import '/custom_code/booth_data_model_struct_new.dart';
 import '/custom_code/user_notification_data_model_struct.dart';
+import '/custom_code/user_activity_data_model_struct_new.dart';
 import 'package:flutter/services.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import 'package:rxdart/rxdart.dart';
@@ -33,6 +34,9 @@ class MyStreamService {
 
   List<Map<String, dynamic>> userNotiDocs = [];
   List<UserNotificationDataModelStruct> userNotiData = [];
+
+  List<Map<String, dynamic>> userActivityDocs = [];
+  List<UserActivityDataModelStructNew> userActivityData = [];
 
   // List<String> get beaconId => _beaconId;
   // List<String> get beaconDistance => _beaconDistance;
@@ -309,6 +313,27 @@ class MyStreamService {
           .toList();
       // print('Booth5544 : ${boothData[3].boothName}');
       print('userNoti5544 : ${userNotiData.length}');
+    });
+  }
+
+  void listenUserActivity() async {
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc("${currentUserUid}")
+        .collection("UserActivity")
+        .snapshots()
+        .listen((snapshot) {
+      userActivityDocs = snapshot.docs.map((d) => d.data()).toList();
+      print('userAcDocLength : ${snapshot.docs.map((d) => d.data()).toList()}');
+      // print('volley5544123');
+      // print(boothDocs.first);
+      userActivityData = userActivityDocs
+          .map(
+            (doc) => UserActivityDataModelStructNew.fromMap(doc),
+          )
+          .toList();
+      // print('Booth5544 : ${boothData[3].boothName}');
+      print('userActivity5544 : ${userActivityData.length}');
     });
   }
 

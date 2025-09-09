@@ -337,11 +337,11 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     0.0, 4.0, 0.0, 0.0),
                                 child: Container(
-                                  width: 110.0,
+                                  width: 120.0,
                                   height: 30.0,
                                   child: custom_widgets
                                       .TextWidgetShowBeaconDistance(
-                                    width: 110.0,
+                                    width: 120.0,
                                     height: 30.0,
                                     deviceUuid: widget.boothDoc?.deviceUuid,
                                   ),

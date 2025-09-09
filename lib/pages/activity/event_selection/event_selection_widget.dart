@@ -487,7 +487,7 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
                                                                             ),
                                                                             AutoSizeText(
                                                                               eventSelectionVarItem.description.maybeHandleOverflow(
-                                                                                maxChars: 30,
+                                                                                maxChars: 20,
                                                                                 replacement: '…',
                                                                               ),
                                                                               textAlign: TextAlign.start,
