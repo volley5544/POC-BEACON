@@ -60,6 +60,11 @@ class NotificationsRecord extends FirestoreRecord {
   bool get isDeleted => _isDeleted ?? false;
   bool hasIsDeleted() => _isDeleted != null;
 
+  // "noti_type" field.
+  String? _notiType;
+  String get notiType => _notiType ?? '';
+  bool hasNotiType() => _notiType != null;
+
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
@@ -72,6 +77,7 @@ class NotificationsRecord extends FirestoreRecord {
     _sendCount = castToType<int>(snapshotData['send_count']);
     _isRead = snapshotData['is_read'] as bool?;
     _isDeleted = snapshotData['is_deleted'] as bool?;
+    _notiType = snapshotData['noti_type'] as String?;
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -123,6 +129,7 @@ Map<String, dynamic> createNotificationsRecordData({
   int? sendCount,
   bool? isRead,
   bool? isDeleted,
+  String? notiType,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -135,6 +142,7 @@ Map<String, dynamic> createNotificationsRecordData({
       'send_count': sendCount,
       'is_read': isRead,
       'is_deleted': isDeleted,
+      'noti_type': notiType,
     }.withoutNulls,
   );
 
@@ -155,7 +163,8 @@ class NotificationsRecordDocumentEquality
         e1?.eventId == e2?.eventId &&
         e1?.sendCount == e2?.sendCount &&
         e1?.isRead == e2?.isRead &&
-        e1?.isDeleted == e2?.isDeleted;
+        e1?.isDeleted == e2?.isDeleted &&
+        e1?.notiType == e2?.notiType;
   }
 
   @override
@@ -168,7 +177,8 @@ class NotificationsRecordDocumentEquality
         e?.eventId,
         e?.sendCount,
         e?.isRead,
-        e?.isDeleted
+        e?.isDeleted,
+        e?.notiType
       ]);
 
   @override

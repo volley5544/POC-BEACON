@@ -9,6 +9,7 @@ import '/custom_code/event_data_model_struct_1.dart';
 import '/custom_code/booth_data_model_struct_new.dart';
 import '/custom_code/user_notification_data_model_struct.dart';
 import '/custom_code/user_activity_data_model_struct_new.dart';
+import '/custom_code/register_data_model_struct.dart';
 import 'package:flutter/services.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import 'package:rxdart/rxdart.dart';
@@ -37,6 +38,9 @@ class MyStreamService {
 
   List<Map<String, dynamic>> userActivityDocs = [];
   List<UserActivityDataModelStructNew> userActivityData = [];
+
+  List<Map<String, dynamic>> eventRegisterDocs = [];
+  List<RegisterDataModelStruct> eventRegisterData = [];
 
   // List<String> get beaconId => _beaconId;
   // List<String> get beaconDistance => _beaconDistance;
@@ -116,7 +120,8 @@ class MyStreamService {
             HapticFeedback.heavyImpact();
             print('in range Beac');
             await Future.wait(
-              matchingEvents.map((event) => createUserNotificationDoc(event)),
+              matchingEvents.expand((event) => event.boothList
+                  .map((booth) => createUserNotificationDoc(event, booth))),
             );
             // await Future.wait(
             //   matchingEvents.map((event) async {
@@ -198,6 +203,8 @@ class MyStreamService {
     final eventsStream = FirebaseFirestore.instance
         .collection("events")
         .where("is_active", isEqualTo: 0)
+        .where("start_datetime", isLessThanOrEqualTo: DateTime.now())
+        .where("end_datetime", isGreaterThanOrEqualTo: DateTime.now())
         .snapshots();
 
     final boothsStream =
@@ -321,6 +328,7 @@ class MyStreamService {
         .collection("users")
         .doc("${currentUserUid}")
         .collection("UserActivity")
+        .where('is_active', isEqualTo: 0)
         .snapshots()
         .listen((snapshot) {
       userActivityDocs = snapshot.docs.map((d) => d.data()).toList();
@@ -334,23 +342,113 @@ class MyStreamService {
           .toList();
       // print('Booth5544 : ${boothData[3].boothName}');
       print('userActivity5544 : ${userActivityData.length}');
+      print('${userActivityData.first.isSurveyed}');
+      print(
+          'userActivity5544 survey : ${userActivityData.first.surveyData.rating}');
     });
   }
 
-  Future createUserNotificationDoc(EventDataModelStruct1 event) async {
+  void listenEventRegister() async {
+    FirebaseFirestore.instance
+        .collectionGroup("register")
+        .snapshots()
+        .listen((snapshot) {
+      eventRegisterDocs = snapshot.docs.map((d) => d.data()).toList();
+      print('userAcDocLength : ${snapshot.docs.map((d) => d.data()).toList()}');
+      // print('volley5544123');
+      // print(boothDocs.first);
+      eventRegisterData = eventRegisterDocs
+          .map(
+            (doc) => RegisterDataModelStruct.fromMap(doc),
+          )
+          .toList();
+      // print('Booth5544 : ${boothData[3].boothName}');
+      print('eventRegister5544 : ${eventRegisterData.length}');
+      print('${eventRegisterData.first.eventId}');
+      print('eventRegister5544 uid : ${eventRegisterData.first.uid}');
+    });
+  }
+
+  Future createUserNotificationDoc(
+      EventDataModelStruct1 event, BoothDataModelStructNew booth) async {
+    // filter noitที่เป็น event_id ที่ beaconจับเจอ และ noti_type เป็นชวนลงทะเบียน
+    List<UserNotificationDataModelStruct> filteredNotiType = userNotiData
+        .where((noti) =>
+            noti.notiType == 'register_invite' && noti.eventId == event.eventId)
+        .toList();
+
+    //filter register ว่าเคยลงทะเบียนevent_idนี้ไปหรือยัง
+    List<RegisterDataModelStruct> filteredRegister = eventRegisterData
+        .where((register) =>
+            register.eventId == event.eventId &&
+            register.uid == '${currentUserUid}')
+        .toList();
+
+    //ยังไม่เคยลงทะเบียนและยังไม่เคยส่งnotiชวนลงทะเบียนกิจกรรม
+    if (filteredRegister.length == 0 && filteredNotiType.length == 0) {
+      //ส่งinapp noti ชวนลงทะเบียนกิจกรรม event_idนี้
+      final notiRefRegist = FirebaseFirestore.instance
+          .collection('users')
+          .doc('${currentUserUid}')
+          .collection('notifications');
+
+      await notiRefRegist.add({
+        'to_uid': '${currentUserUid}',
+        'booth_id': '${booth.boothId}',
+        'title': 'เรียนเชิญลงทะเบียนทำกิจกรรม',
+        'body':
+            'ขณะนี้คุณได้อยู่ใกล้กับกิจกรรม${event.eventName} ขอเรียนเชิญลงทะเบียนได้ที่บุธกิจกรรมใกล้ท่าน',
+        'sent_at': FieldValue.serverTimestamp(),
+        'event_id': int.parse('${event.eventId}'),
+        'send_count': 1,
+        'is_read': false,
+        'is_deleted': false,
+        'noti_type': 'register_invite',
+      });
+
+      //ส่งnoti FCM นอกแอพ ชวนลงทะเบียน event_idนี้
+      triggerPushNotification(
+        notificationTitle: 'เรียนเชิญลงทะเบียนทำกิจกรรม',
+        notificationText:
+            'ขณะนี้คุณได้อยู่ใกล้กับกิจกรรม${event.eventName} ขอเรียนเชิญลงทะเบียนได้ที่บุธกิจกรรมใกล้ท่าน',
+        notificationSound: 'default',
+        userRefs: [currentUserReference!],
+        initialPageName: 'EventSelection',
+        parameterData: {},
+      );
+    }
+
+    //filter activity เคยเล่นboothนั้นหรือยัง
+    List<UserActivityDataModelStructNew> filteredUserActivity = userActivityData
+        .where((activity) =>
+            activity.uid == '${currentUserUid}' &&
+            activity.eventId == event.eventId &&
+            activity.boothId == booth.boothId)
+        .toList();
+
+    //เช็คว่าเคยเล่นbooth_idนี้หรือยัง
+    if (filteredUserActivity.length != 0) {
+      return;
+    }
+
+    //filter notiชวนเล่นกิจกรรม
     List<UserNotificationDataModelStruct> filteredNoti =
         userNotiData.where((noti) => noti.eventId == event.eventId).toList();
 
+    //เช็คว่าเคยส่งnotiชวนเล่นกิจกรรมนี้แล้ว
     if (filteredNoti.length != 0) {
+      //เช็คว่าจำนวนครั้งที่ส่งnotiไปแล้ว เกินnotificationFrequencyAmountของกิจกรรม ที่setไว้มั้ย
       if (filteredNoti.first.sendCount >=
           (event.notificationFrequencyAmount != null
               ? event.notificationFrequencyAmount
               : 0)) {
         return;
-      } else {
+      }
+      //ถ้ายังส่งnotiไม่เกินจำนวนครั้ง
+      else {
         DateTime nextNotiTime = filteredNoti.first.sentAt
             .add(Duration(minutes: event.notificationFrequencyMinute));
-
+        //เช็คว่าเวลาที่ส่งnotiชวนเล่นกิจกรรมล่าสุดของevent_idนี้ + กับเวลาnotificationFrequencyMinuteที่setไว้ เลยเวลาปัจจุบันหรือยัง
         if (nextNotiTime.isAfter(Timestamp.now().toDate())) {
           return;
         }
@@ -366,35 +464,44 @@ class MyStreamService {
         .where('event_id', isEqualTo: int.parse('${event.eventId}'))
         // .where('booth_id'), isEqualTo: '${event.boothList.first}'
         .get();
+    //notiกระดิ่ง (inapp)
+
+    //เคยส่งnotiชวนเล่นกิจกรรม event_idนี้แล้ว
     if (query.docs.isNotEmpty) {
-      // 👉 update first doc
+      // 👉 update noti doc
       await notiRef.doc(query.docs.first.id).set({
-        'booth_id': '${event.boothList.first.boothId}',
+        'booth_id': '${booth.boothId}',
         'sent_at': FieldValue.serverTimestamp(),
         'send_count': int.parse('${query.docs.first.data()['send_count'] + 1}'),
         'is_read': false,
         'is_deleted': false,
       }, SetOptions(merge: true));
-    } else {
-      // 👉 create new doc
+    }
+    //ยังไม่เคยเคยส่งnotiชวนเล่นกิจกรรม event_idนี้
+    else {
+      // 👉 create new noti doc
       await notiRef.add({
         'to_uid': '${currentUserUid}',
-        'booth_id': '${event.boothList.first.boothId}',
+        'booth_id': '${booth.boothId}',
         'title': 'เรียนเชิญเล่นกิจกรรม${event.eventName}',
         'body':
-            'ขณะนี้คุณได้อยู่ใกล้บูธ${event.boothList.first.boothName} กิจกรรม${event.eventName}แล้ว เชิญไปที่บูธเพื่อทำกรรมได้เลย',
+            'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} กิจกรรม${event.eventName}แล้ว เชิญไปที่บูธเพื่อทำกรรมได้เลย',
         'sent_at': FieldValue.serverTimestamp(),
         'event_id': int.parse('${event.eventId}'),
         'send_count': 1,
         'is_read': false,
         'is_deleted': false,
+        'noti_type': 'booth_invite',
       });
     }
 
+    //noti FCM (นอกแอพ)
+
+    //ส่ง FCM notiชวนเล่นกิจกรรม
     triggerPushNotification(
       notificationTitle: 'เรียนเชิญเล่นกิจกรรม${event.eventName}',
       notificationText:
-          'ขณะนี้คุณได้อยู่ใกล้บูธ${event.boothList.first.boothName} กิจกรรม${event.eventName}แล้ว เชิญไปที่บูธเพื่อทำกรรมได้เลย',
+          'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} กิจกรรม${event.eventName}แล้ว เชิญไปที่บูธเพื่อทำกรรมได้เลย',
       notificationSound: 'default',
       userRefs: [currentUserReference!],
       initialPageName: 'Home',

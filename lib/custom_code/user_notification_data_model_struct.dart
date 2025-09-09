@@ -8,6 +8,7 @@ class UserNotificationDataModelStruct {
   final DateTime sentAt;
   final int eventId;
   final int sendCount;
+  final String notiType;
 
   UserNotificationDataModelStruct({
     required this.toUid,
@@ -17,6 +18,7 @@ class UserNotificationDataModelStruct {
     required this.sentAt,
     required this.eventId,
     required this.sendCount,
+    required this.notiType,
   });
 
   factory UserNotificationDataModelStruct.fromMap(Map<String, dynamic> map) {
@@ -30,6 +32,7 @@ class UserNotificationDataModelStruct {
           : Timestamp.now().toDate(),
       eventId: map['event_id'] ?? 0,
       sendCount: map['send_count'] ?? 0,
+      notiType: map['noti_type'] ?? '',
     );
   }
 }

@@ -34,7 +34,9 @@ Future getBackgroundLocation() async {
     service.startListening(
         flutterBeacon.ranging(regions)); // stays alive across all pages
     service.listenUserNotification();
+    service.listenUserActivity();
     service.listenEventWithBooths();
+    service.listenEventRegister();
   });
 }
 
