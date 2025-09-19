@@ -310,7 +310,7 @@ class MyStreamService {
         .snapshots()
         .listen((snapshot) {
       userNotiDocs = snapshot.docs.map((d) => d.data()).toList();
-      print('userDocLength : ${snapshot.docs.map((d) => d.data()).toList()}');
+      // print('userDocLength : ${snapshot.docs.map((d) => d.data()).toList()}');
       // print('volley5544123');
       // print(boothDocs.first);
       userNotiData = userNotiDocs
@@ -319,7 +319,7 @@ class MyStreamService {
           )
           .toList();
       // print('Booth5544 : ${boothData[3].boothName}');
-      print('userNoti5544 : ${userNotiData.length}');
+      // print('userNoti5544 : ${userNotiData.length}');
     });
   }
 
@@ -341,10 +341,10 @@ class MyStreamService {
           )
           .toList();
       // print('Booth5544 : ${boothData[3].boothName}');
-      print('userActivity5544 : ${userActivityData.length}');
-      print('${userActivityData.first.isSurveyed}');
-      print(
-          'userActivity5544 survey : ${userActivityData.first.surveyData.rating}');
+      // print('userActivity5544 : ${userActivityData.length}');
+      // print('${userActivityData.first.isSurveyed}');
+      // print(
+      //     'userActivity5544 survey : ${userActivityData.first.surveyData.rating}');
     });
   }
 
@@ -354,7 +354,7 @@ class MyStreamService {
         .snapshots()
         .listen((snapshot) {
       eventRegisterDocs = snapshot.docs.map((d) => d.data()).toList();
-      print('userAcDocLength : ${snapshot.docs.map((d) => d.data()).toList()}');
+      // print('userAcDocLength : ${snapshot.docs.map((d) => d.data()).toList()}');
       // print('volley5544123');
       // print(boothDocs.first);
       eventRegisterData = eventRegisterDocs
@@ -363,9 +363,9 @@ class MyStreamService {
           )
           .toList();
       // print('Booth5544 : ${boothData[3].boothName}');
-      print('eventRegister5544 : ${eventRegisterData.length}');
-      print('${eventRegisterData.first.eventId}');
-      print('eventRegister5544 uid : ${eventRegisterData.first.uid}');
+      // print('eventRegister5544 : ${eventRegisterData.length}');
+      // print('${eventRegisterData.first.eventId}');
+      // print('eventRegister5544 uid : ${eventRegisterData.first.uid}');
     });
   }
 
