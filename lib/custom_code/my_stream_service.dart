@@ -117,7 +117,7 @@ class MyStreamService {
           print("Found ${matchingEvents.length} matching events");
 
           if (matchingEvents.length > 0) {
-            HapticFeedback.heavyImpact();
+            // HapticFeedback.heavyImpact();
             print('in range Beac');
             await Future.wait(
               matchingEvents.expand((event) => event.boothList
@@ -320,6 +320,12 @@ class MyStreamService {
           .toList();
       // print('Booth5544 : ${boothData[3].boothName}');
       // print('userNoti5544 : ${userNotiData.length}');
+      List<UserNotificationDataModelStruct> filteredNotiType5544 = userNotiData
+          .where(
+              (noti) => noti.notiType == 'register_invite' && noti.eventId == 2)
+          .toList();
+
+      print('filteredNotiType5544 : ${filteredNotiType5544.length}');
     });
   }
 
@@ -332,7 +338,7 @@ class MyStreamService {
         .snapshots()
         .listen((snapshot) {
       userActivityDocs = snapshot.docs.map((d) => d.data()).toList();
-      print('userAcDocLength : ${snapshot.docs.map((d) => d.data()).toList()}');
+      // print('userAcDocLength : ${snapshot.docs.map((d) => d.data()).toList()}');
       // print('volley5544123');
       // print(boothDocs.first);
       userActivityData = userActivityDocs
@@ -345,6 +351,8 @@ class MyStreamService {
       // print('${userActivityData.first.isSurveyed}');
       // print(
       //     'userActivity5544 survey : ${userActivityData.first.surveyData.rating}');
+      print('activity : ${userActivityData.length}');
+      // print('activity : ${userActivityData}');
     });
   }
 
@@ -366,6 +374,15 @@ class MyStreamService {
       // print('eventRegister5544 : ${eventRegisterData.length}');
       // print('${eventRegisterData.first.eventId}');
       // print('eventRegister5544 uid : ${eventRegisterData.first.uid}');
+      print('register : ${eventRegisterData.length}');
+
+      //filter register ว่าเคยลงทะเบียนevent_idนี้ไปหรือยัง
+      List<RegisterDataModelStruct> filteredRegister5544 = eventRegisterData
+          .where((register) =>
+              register.eventId == 2 && register.uid == '${currentUserUid}')
+          .toList();
+
+      print('filteredRegister : ${filteredRegister5544.length}');
     });
   }
 
@@ -384,8 +401,17 @@ class MyStreamService {
             register.uid == '${currentUserUid}')
         .toList();
 
+    print('filteredRegister.length : ${filteredRegister.length}');
+    FFAppState().textDebug = '${filteredRegister.length}';
+    print('filteredNotiType.length : ${filteredNotiType.length}');
+    FFAppState().textDebug2 = '${filteredNotiType.length}';
+    // if (filteredRegister.length > 0){
+    //
+    // }
+
     //ยังไม่เคยลงทะเบียนและยังไม่เคยส่งnotiชวนลงทะเบียนกิจกรรม
     if (filteredRegister.length == 0 && filteredNotiType.length == 0) {
+      // HapticFeedback.heavyImpact();
       //ส่งinapp noti ชวนลงทะเบียนกิจกรรม event_idนี้
       final notiRefRegist = FirebaseFirestore.instance
           .collection('users')
@@ -416,15 +442,25 @@ class MyStreamService {
         initialPageName: 'EventSelection',
         parameterData: {},
       );
+
+      return;
     }
 
+    if (filteredRegister.length == 0) {
+      return;
+    }
+
+    List<UserActivityDataModelStructNew> filteredUserActivity = [];
     //filter activity เคยเล่นboothนั้นหรือยัง
-    List<UserActivityDataModelStructNew> filteredUserActivity = userActivityData
-        .where((activity) =>
-            activity.uid == '${currentUserUid}' &&
-            activity.eventId == event.eventId &&
-            activity.boothId == booth.boothId)
-        .toList();
+    if (userActivityData.isNotEmpty) {
+      filteredUserActivity = userActivityData
+          .where((activity) =>
+              activity.uid == '${currentUserUid}' &&
+              activity.eventId == event.eventId &&
+              activity.boothId == booth.boothId)
+          .toList();
+    }
+    FFAppState().textDebug3 = '${filteredUserActivity.length}';
 
     //เช็คว่าเคยเล่นbooth_idนี้หรือยัง
     if (filteredUserActivity.length != 0) {
@@ -432,8 +468,12 @@ class MyStreamService {
     }
 
     //filter notiชวนเล่นกิจกรรม
-    List<UserNotificationDataModelStruct> filteredNoti =
-        userNotiData.where((noti) => noti.eventId == event.eventId).toList();
+    List<UserNotificationDataModelStruct> filteredNoti = userNotiData
+        .where((noti) =>
+            noti.eventId == event.eventId &&
+            noti.boothId == '${booth.boothId}' &&
+            noti.notiType == 'booth_invite')
+        .toList();
 
     //เช็คว่าเคยส่งnotiชวนเล่นกิจกรรมนี้แล้ว
     if (filteredNoti.length != 0) {
@@ -462,6 +502,8 @@ class MyStreamService {
 
     final query = await notiRef
         .where('event_id', isEqualTo: int.parse('${event.eventId}'))
+        .where('noti_type', isEqualTo: 'booth_invite')
+        .where('booth_id', isEqualTo: '${booth.boothId}')
         // .where('booth_id'), isEqualTo: '${event.boothList.first}'
         .get();
     //notiกระดิ่ง (inapp)
