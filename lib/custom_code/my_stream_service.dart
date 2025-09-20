@@ -402,9 +402,9 @@ class MyStreamService {
         .toList();
 
     print('filteredRegister.length : ${filteredRegister.length}');
-    FFAppState().textDebug = '${filteredRegister.length}';
+    // FFAppState().textDebug = '${filteredRegister.length}';
     print('filteredNotiType.length : ${filteredNotiType.length}');
-    FFAppState().textDebug2 = '${filteredNotiType.length}';
+    // FFAppState().textDebug2 = '${filteredNotiType.length}';
     // if (filteredRegister.length > 0){
     //
     // }
@@ -460,7 +460,7 @@ class MyStreamService {
               activity.boothId == booth.boothId)
           .toList();
     }
-    FFAppState().textDebug3 = '${filteredUserActivity.length}';
+    // FFAppState().textDebug3 = '${filteredUserActivity.length}';
 
     //เช็คว่าเคยเล่นbooth_idนี้หรือยัง
     if (filteredUserActivity.length != 0) {

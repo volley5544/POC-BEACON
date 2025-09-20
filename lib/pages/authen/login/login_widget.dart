@@ -134,7 +134,7 @@ class _LoginWidgetState extends State<LoginWidget>
                     ),
                     alignment: AlignmentDirectional(0.0, 0.0),
                     child: Text(
-                      'RAS ',
+                      'RASS',
                       style: FlutterFlowTheme.of(context).displaySmall.override(
                             font: GoogleFonts.outfit(
                               fontWeight: FlutterFlowTheme.of(context)

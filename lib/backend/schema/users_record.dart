@@ -111,8 +111,8 @@ class UsersRecord extends FirestoreRecord {
   bool hasPhotoUpdatedAt() => _photoUpdatedAt != null;
 
   // "roles_ref" field.
-  DocumentReference? _rolesRef;
-  DocumentReference? get rolesRef => _rolesRef;
+  String? _rolesRef;
+  String get rolesRef => _rolesRef ?? '';
   bool hasRolesRef() => _rolesRef != null;
 
   void _initializeFields() {
@@ -135,7 +135,7 @@ class UsersRecord extends FirestoreRecord {
     _updatedBy = snapshotData['updated_by'] as String?;
     _isActive = castToType<int>(snapshotData['is_active']);
     _photoUpdatedAt = snapshotData['photo_updated_at'] as DateTime?;
-    _rolesRef = snapshotData['roles_ref'] as DocumentReference?;
+    _rolesRef = snapshotData['roles_ref'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -191,7 +191,7 @@ Map<String, dynamic> createUsersRecordData({
   String? updatedBy,
   int? isActive,
   DateTime? photoUpdatedAt,
-  DocumentReference? rolesRef,
+  String? rolesRef,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{

@@ -1,4 +1,3 @@
-import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/index.dart';
 import 'create_account_widget.dart' show CreateAccountWidget;
@@ -7,12 +6,10 @@ import 'package:flutter/material.dart';
 class CreateAccountModel extends FlutterFlowModel<CreateAccountWidget> {
   ///  Local state fields for this page.
 
-  RolesRecord? roleDocRef;
+  String? roleDocRef = '/roles/Y27C7XEpYMjHPKWKBDxT';
 
   ///  State fields for stateful widgets in this page.
 
-  // Stores action output result for [Firestore Query - Query a collection] action in CreateAccount widget.
-  RolesRecord? dataRoles1;
   // State field(s) for firstName widget.
   FocusNode? firstNameFocusNode;
   TextEditingController? firstNameTextController;

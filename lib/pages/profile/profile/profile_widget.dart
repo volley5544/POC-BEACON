@@ -231,7 +231,13 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0.0, 4.0, 0.0, 0.0),
                                     child: Text(
-                                      FFAppState().rolesDescription,
+                                      valueOrDefault<String>(
+                                        profileUsersRecord.rolesRef ==
+                                                'roles/31gR5Y1xkubyiqgwMd5W'
+                                            ? 'ผู้ดูแลระบบ'
+                                            : 'ผู้ใช้งาน',
+                                        'ผู้ใช้งาน',
+                                      ),
                                       style: FlutterFlowTheme.of(context)
                                           .labelMedium
                                           .override(
@@ -289,7 +295,9 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           ),
                     ),
                   ),
-                  if (FFAppState().rolesID == 1)
+                  if ((FFAppState().rolesID == 1) &&
+                      (profileUsersRecord.rolesRef ==
+                          'roles/31gR5Y1xkubyiqgwMd5W'))
                     Padding(
                       padding:
                           EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
@@ -320,53 +328,58 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                             borderRadius: BorderRadius.circular(12.0),
                             shape: BoxShape.rectangle,
                           ),
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Icon(
-                                  Icons.align_vertical_bottom_outlined,
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryText,
-                                  size: 24.0,
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        12.0, 0.0, 0.0, 0.0),
-                                    child: Text(
-                                      'แดชบอร์ด & จัดการ',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyLarge
-                                          .override(
-                                            font: GoogleFonts.readexPro(
+                          child: Visibility(
+                            visible: (FFAppState().rolesID == 1) &&
+                                (profileUsersRecord.rolesRef ==
+                                    'roles/31gR5Y1xkubyiqgwMd5W'),
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Icon(
+                                    Icons.align_vertical_bottom_outlined,
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryText,
+                                    size: 24.0,
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          12.0, 0.0, 0.0, 0.0),
+                                      child: Text(
+                                        'แดชบอร์ด & จัดการ',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyLarge
+                                            .override(
+                                              font: GoogleFonts.readexPro(
+                                                fontWeight: FontWeight.w600,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyLarge
+                                                        .fontStyle,
+                                              ),
+                                              letterSpacing: 0.0,
                                               fontWeight: FontWeight.w600,
                                               fontStyle:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyLarge
                                                       .fontStyle,
                                             ),
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w600,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyLarge
-                                                    .fontStyle,
-                                          ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Align(
-                                  alignment: AlignmentDirectional(0.9, 0.0),
-                                  child: Icon(
-                                    Icons.arrow_forward_ios,
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryText,
-                                    size: 18.0,
+                                  Align(
+                                    alignment: AlignmentDirectional(0.9, 0.0),
+                                    child: Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryText,
+                                      size: 18.0,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),

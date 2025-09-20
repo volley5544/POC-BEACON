@@ -80,7 +80,8 @@ class _HomeWidgetState extends State<HomeWidget> {
         ),
         singleRecord: true,
       ).then((s) => s.firstOrNull);
-      if (_model.dataUser?.rolesRef != null) {
+      if (_model.dataUser?.rolesRef != null &&
+          _model.dataUser?.rolesRef != '') {
         // getRole
         _model.roleData = await queryRolesRecordOnce(
           queryBuilder: (rolesRecord) => rolesRecord.where(

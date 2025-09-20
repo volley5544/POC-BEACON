@@ -1707,10 +1707,10 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                           ),
                                           Align(
                                             alignment:
-                                                AlignmentDirectional(0.0, -1.0),
+                                                AlignmentDirectional(-1.0, 0.0),
                                             child: Container(
                                               width: double.infinity,
-                                              height: 450.0,
+                                              height: 100.0,
                                               child: Stack(
                                                 children: [
                                                   FlutterFlowPieChart(
@@ -1738,7 +1738,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                     donutHoleColor:
                                                         FlutterFlowTheme.of(
                                                                 context)
-                                                            .secondaryBackground,
+                                                            .primaryBackground,
                                                     sectionLabelType:
                                                         PieChartSectionLabelType
                                                             .value,

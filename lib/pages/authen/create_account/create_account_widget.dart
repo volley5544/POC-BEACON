@@ -4,8 +4,8 @@ import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:async';
 import '/index.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -38,22 +38,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
     _model = createModel(context, () => CreateAccountModel());
 
     // On page load action.
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.dataRoles1 = await queryRolesRecordOnce(
-        queryBuilder: (rolesRecord) => rolesRecord
-            .where(
-              'is_active',
-              isEqualTo: 0,
-            )
-            .where(
-              'roles_id',
-              isEqualTo: 2,
-            ),
-        singleRecord: true,
-      ).then((s) => s.firstOrNull);
-      _model.roleDocRef = _model.dataRoles1;
-      safeSetState(() {});
-    });
+    SchedulerBinding.instance.addPostFrameCallback((_) async {});
 
     _model.firstNameTextController ??= TextEditingController();
     _model.firstNameFocusNode ??= FocusNode();
@@ -160,7 +145,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                           ),
                           alignment: AlignmentDirectional(0.0, 0.0),
                           child: Text(
-                            'RAS',
+                            'RASS',
                             style: FlutterFlowTheme.of(context)
                                 .displaySmall
                                 .override(
@@ -860,6 +845,9 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                                           _model
                                                               .passwordConfirmTextController
                                                               .text) {
+                                                        unawaited(
+                                                          () async {}(),
+                                                        );
                                                         GoRouter.of(context)
                                                             .prepareAuthEvent();
                                                         if (_model
@@ -913,8 +901,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                                                 '${_model.firstNameTextController.text} ${_model.lastNameTextController.text}',
                                                             isActive: 0,
                                                             rolesRef: _model
-                                                                .roleDocRef
-                                                                ?.reference,
+                                                                .roleDocRef,
                                                           ),
                                                           ...mapToFirestore(
                                                             {

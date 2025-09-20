@@ -61,8 +61,8 @@ class RolesRecord extends FirestoreRecord {
   bool hasUpdatedBy() => _updatedBy != null;
 
   // "roles_ref" field.
-  DocumentReference? _rolesRef;
-  DocumentReference? get rolesRef => _rolesRef;
+  String? _rolesRef;
+  String get rolesRef => _rolesRef ?? '';
   bool hasRolesRef() => _rolesRef != null;
 
   void _initializeFields() {
@@ -75,7 +75,7 @@ class RolesRecord extends FirestoreRecord {
     _createdBy = snapshotData['created_by'] as String?;
     _updatedAt = snapshotData['updated_at'] as DateTime?;
     _updatedBy = snapshotData['updated_by'] as String?;
-    _rolesRef = snapshotData['roles_ref'] as DocumentReference?;
+    _rolesRef = snapshotData['roles_ref'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -121,7 +121,7 @@ Map<String, dynamic> createRolesRecordData({
   String? createdBy,
   DateTime? updatedAt,
   String? updatedBy,
-  DocumentReference? rolesRef,
+  String? rolesRef,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
