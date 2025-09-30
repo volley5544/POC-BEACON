@@ -16,7 +16,16 @@ import 'package:background_location/background_location.dart';
 
 Future beaconBackgroundServiceAction() async {
   // Add your function code here!
-  await getBackgroundLocation();
+  print('kIsWeb : ${kIsWeb}');
+  if (!kIsWeb) {
+    await getBackgroundLocation();
+  } else {
+    // final service = MyStreamService();
+    // service.listenUserNotification();
+    // service.listenUserActivity();
+    // service.listenEventWithBooths();
+    // service.listenEventRegister();
+  }
 }
 
 Future getBackgroundLocation() async {
