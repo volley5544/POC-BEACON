@@ -16,6 +16,7 @@ class EventDataModelStruct1 {
   final DateTime uploadedAt;
   final DateTime createdAt;
   final List<BoothDataModelStructNew> boothList;
+  final String docRef;
 
   EventDataModelStruct1(
       {required this.eventId,
@@ -31,34 +32,35 @@ class EventDataModelStruct1 {
       required this.endDatetime,
       required this.uploadedAt,
       required this.createdAt,
-      required this.boothList});
+      required this.boothList,
+      required this.docRef});
 
   factory EventDataModelStruct1.fromMap(Map<String, dynamic> map) {
     return EventDataModelStruct1(
-      eventId: map['event_id'] ?? 0,
-      eventName: map['event_name'] ?? '',
-      description: map['description'] ?? '',
-      createdBy: map['created_by'] ?? '',
-      isActive: map['is_active'] ?? 1,
-      uploadedBy: map['uploaded_by'] ?? '',
-      notificationFrequencyAmount: map['notification_frequency_amount'] ?? 0,
-      notificationFrequencyMinute: map['notification_frequency_minute'] ?? 0,
-      eventImageList: map['event_image_list'] != null
-          ? map['event_image_list'].cast<String>()
-          : [],
-      startDatetime: map['start_datetime'] != null
-          ? map['start_datetime'].toDate()
-          : Timestamp.now().toDate(),
-      endDatetime: map['end_datetime'] != null
-          ? map['end_datetime'].toDate()
-          : Timestamp.now().toDate(),
-      uploadedAt: map['uploaded_at'] != null
-          ? map['uploaded_at'].toDate()
-          : Timestamp.now().toDate(),
-      createdAt: map['created_at'] != null
-          ? map['created_at'].toDate()
-          : Timestamp.now().toDate(),
-      boothList: [],
-    );
+        eventId: map['event_id'] ?? 0,
+        eventName: map['event_name'] ?? '',
+        description: map['description'] ?? '',
+        createdBy: map['created_by'] ?? '',
+        isActive: map['is_active'] ?? 1,
+        uploadedBy: map['uploaded_by'] ?? '',
+        notificationFrequencyAmount: map['notification_frequency_amount'] ?? 0,
+        notificationFrequencyMinute: map['notification_frequency_minute'] ?? 0,
+        eventImageList: map['event_image_list'] != null
+            ? map['event_image_list'].cast<String>()
+            : [],
+        startDatetime: map['start_datetime'] != null
+            ? map['start_datetime'].toDate()
+            : Timestamp.now().toDate(),
+        endDatetime: map['end_datetime'] != null
+            ? map['end_datetime'].toDate()
+            : Timestamp.now().toDate(),
+        uploadedAt: map['uploaded_at'] != null
+            ? map['uploaded_at'].toDate()
+            : Timestamp.now().toDate(),
+        createdAt: map['created_at'] != null
+            ? map['created_at'].toDate()
+            : Timestamp.now().toDate(),
+        boothList: [],
+        docRef: '');
   }
 }

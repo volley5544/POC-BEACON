@@ -15,11 +15,13 @@ import '/auth/firebase_auth/auth_util.dart';
 import 'package:rxdart/rxdart.dart';
 import '/backend/push_notifications/push_notifications_util.dart';
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 class MyStreamService {
   static final MyStreamService _instance = MyStreamService._internal();
   factory MyStreamService() => _instance;
   MyStreamService._internal();
+  static DateTime? _lastUpdateTime;
 
   StreamSubscription<RangingResult>? _streamRanging;
   StreamSubscription? _subEvents;
@@ -92,23 +94,23 @@ class MyStreamService {
 
                 // Return event with only matching booths
                 return EventDataModelStruct1(
-                  eventId: event.eventId,
-                  eventName: event.eventName,
-                  description: event.description,
-                  createdBy: event.createdBy,
-                  isActive: event.isActive,
-                  uploadedBy: event.uploadedBy,
-                  notificationFrequencyAmount:
-                      event.notificationFrequencyAmount,
-                  notificationFrequencyMinute:
-                      event.notificationFrequencyMinute,
-                  eventImageList: event.eventImageList,
-                  startDatetime: event.startDatetime,
-                  endDatetime: event.endDatetime,
-                  uploadedAt: event.uploadedAt,
-                  createdAt: event.createdAt,
-                  boothList: matchedBooths, // ✅ only matched booths
-                );
+                    eventId: event.eventId,
+                    eventName: event.eventName,
+                    description: event.description,
+                    createdBy: event.createdBy,
+                    isActive: event.isActive,
+                    uploadedBy: event.uploadedBy,
+                    notificationFrequencyAmount:
+                        event.notificationFrequencyAmount,
+                    notificationFrequencyMinute:
+                        event.notificationFrequencyMinute,
+                    eventImageList: event.eventImageList,
+                    startDatetime: event.startDatetime,
+                    endDatetime: event.endDatetime,
+                    uploadedAt: event.uploadedAt,
+                    createdAt: event.createdAt,
+                    boothList: matchedBooths, // ✅ only matched booths
+                    docRef: event.docRef);
               })
               .where((event) =>
                   event.boothList.isNotEmpty) // keep only events with matches
@@ -119,9 +121,32 @@ class MyStreamService {
           if (matchingEvents.length > 0) {
             // HapticFeedback.heavyImpact();
             print('in range Beac');
+            /*
             await Future.wait(
               matchingEvents.expand((event) => event.boothList
                   .map((booth) => createUserNotificationDoc(event, booth))),
+            );
+            */
+            //niruemon edit 2025-10-01
+            await Future.wait(
+              matchingEvents
+                  .expand((event) => event.boothList.map((booth) async {
+                        // เรียก function เดิม
+                        await createUserNotificationDoc(event, booth);
+
+                        // เรียก function ใหม่ เก็บ detection
+                        await createDetectionLog(event, booth);
+
+                        // เก็บ detection
+                        await createDetectionLog(event, booth);
+
+                        await cleanupOldDetections(event);
+
+                        // await countUniqueUsersPerBooth(event);
+                        await updateBoothCountsIfNeeded(event);
+
+                        await logProximityAndConcurrentUsers(event, booth);
+                      })),
             );
             // await Future.wait(
             //   matchingEvents.map((event) async {
@@ -231,23 +256,23 @@ class MyStreamService {
               .toList();
 
           return EventDataModelStruct1(
-            eventId: eventDataNew1.eventId,
-            eventName: eventDataNew1.eventName,
-            description: eventDataNew1.description,
-            createdBy: eventDataNew1.createdBy,
-            isActive: eventDataNew1.isActive,
-            uploadedBy: eventDataNew1.uploadedBy,
-            notificationFrequencyAmount:
-                eventDataNew1.notificationFrequencyAmount,
-            notificationFrequencyMinute:
-                eventDataNew1.notificationFrequencyMinute,
-            eventImageList: eventDataNew1.eventImageList,
-            startDatetime: eventDataNew1.startDatetime,
-            endDatetime: eventDataNew1.endDatetime,
-            uploadedAt: eventDataNew1.uploadedAt,
-            createdAt: eventDataNew1.createdAt,
-            boothList: boothList,
-          );
+              eventId: eventDataNew1.eventId,
+              eventName: eventDataNew1.eventName,
+              description: eventDataNew1.description,
+              createdBy: eventDataNew1.createdBy,
+              isActive: eventDataNew1.isActive,
+              uploadedBy: eventDataNew1.uploadedBy,
+              notificationFrequencyAmount:
+                  eventDataNew1.notificationFrequencyAmount,
+              notificationFrequencyMinute:
+                  eventDataNew1.notificationFrequencyMinute,
+              eventImageList: eventDataNew1.eventImageList,
+              startDatetime: eventDataNew1.startDatetime,
+              endDatetime: eventDataNew1.endDatetime,
+              uploadedAt: eventDataNew1.uploadedAt,
+              createdAt: eventDataNew1.createdAt,
+              boothList: boothList,
+              docRef: eventDoc.id);
         }).toList();
       },
     );
@@ -277,23 +302,23 @@ class MyStreamService {
 
         eventTemp.add(
           EventDataModelStruct1(
-            eventId: eventDataNew.eventId,
-            eventName: eventDataNew.eventName,
-            description: eventDataNew.description,
-            createdBy: eventDataNew.createdBy,
-            isActive: eventDataNew.isActive,
-            uploadedBy: eventDataNew.uploadedBy,
-            notificationFrequencyAmount:
-                eventDataNew.notificationFrequencyAmount,
-            notificationFrequencyMinute:
-                eventDataNew.notificationFrequencyMinute,
-            eventImageList: eventDataNew.eventImageList,
-            startDatetime: eventDataNew.startDatetime,
-            endDatetime: eventDataNew.endDatetime,
-            uploadedAt: eventDataNew.uploadedAt,
-            createdAt: eventDataNew.createdAt,
-            boothList: boothList,
-          ),
+              eventId: eventDataNew.eventId,
+              eventName: eventDataNew.eventName,
+              description: eventDataNew.description,
+              createdBy: eventDataNew.createdBy,
+              isActive: eventDataNew.isActive,
+              uploadedBy: eventDataNew.uploadedBy,
+              notificationFrequencyAmount:
+                  eventDataNew.notificationFrequencyAmount,
+              notificationFrequencyMinute:
+                  eventDataNew.notificationFrequencyMinute,
+              eventImageList: eventDataNew.eventImageList,
+              startDatetime: eventDataNew.startDatetime,
+              endDatetime: eventDataNew.endDatetime,
+              uploadedAt: eventDataNew.uploadedAt,
+              createdAt: eventDataNew.createdAt,
+              boothList: boothList,
+              docRef: eventDataNew.docRef),
         );
       }
 
@@ -607,6 +632,283 @@ class MyStreamService {
     print('dataOutput :  $dataOutput');
 
     return dataOutput;
+  }
+
+  /// niuemon 2025-10-01 ฟังก์ชันสำหรับบันทึกการตรวจจับผู้ใช้ใกล้บูธ
+  Future<void> createDetectionLog(
+      EventDataModelStruct1 event, BoothDataModelStructNew booth) async {
+    try {
+      // path: events/{eventId}/detections
+      final detectionRef = FirebaseFirestore.instance
+          .collection('events')
+          // .doc('${event.eventId}')
+          .doc(event.docRef)
+          .collection('detections');
+
+      print('createDetectionLog docRef : ${event.docRef}');
+      // final detectionRef = eventRef.collection('detections');
+
+      final cutoff = DateTime.now().subtract(const Duration(minutes: 2));
+
+      // 🔍 เช็คว่ามี detection ล่าสุดของ user+booth ใน 2 นาทีแล้วหรือยัง
+      final query = await detectionRef
+          .where('uid', isEqualTo: currentUserUid)
+          .where('booth_id', isEqualTo: booth.boothId)
+          .where('detect_timestamp',
+              isGreaterThanOrEqualTo: Timestamp.fromDate(cutoff))
+          .get();
+
+      if (query.docs.isNotEmpty) {
+        print('Duplicate detection ignored (within 2 minute)');
+        return; // ไม่บันทึกซ้ำ
+      }
+
+      // Firestore generate id อัตโนมัติ
+      final newDoc = detectionRef.doc();
+
+      await newDoc.set({
+        'detection_id': newDoc.id, // เก็บ id ที่ firestore สร้างให้
+        'booth_id': booth.boothId,
+        'event_id': event.eventId,
+        'uid': currentUserUid,
+        'detect_timestamp': FieldValue.serverTimestamp(),
+      });
+
+      print('Detection saved: ${newDoc.id} for booth ${booth.boothId}');
+    } catch (e) {
+      print('Error saving detection: $e');
+    }
+  }
+
+  Future<void> cleanupOldDetections(EventDataModelStruct1 event) async {
+    try {
+      print('cleanupOldDetections : ${event.docRef}');
+
+      // final detectionRef = eventRef.collection('detections');
+      final detectionRef = FirebaseFirestore.instance
+          .collection('events')
+          .doc('${event.docRef}')
+          .collection('detections');
+
+      final cutoff = DateTime.now().subtract(const Duration(minutes: 10));
+
+      final oldDocs = await detectionRef
+          .where('detect_timestamp', isLessThan: Timestamp.fromDate(cutoff))
+          .get();
+
+      if (oldDocs.docs.isEmpty) {
+        print('ไม่มีข้อมูลเก่าที่ต้องลบ');
+        return;
+      }
+
+      for (final doc in oldDocs.docs) {
+        await detectionRef.doc(doc.id).delete();
+        print('🗑️ ลบ detection เก่าแล้ว: ${doc.id}');
+      }
+
+      print('Cleanup เสร็จสิ้น ลบ ${oldDocs.docs.length} documents');
+    } catch (e) {
+      print('Error cleanupOldDetections: $e');
+    }
+  }
+
+  /// ฟังก์ชันนับจำนวน unique uid ต่อ booth
+  Future<Map<DocumentReference, int>> countUniqueUsersPerBooth(
+      EventDataModelStruct1 event) async {
+    print('countUniqueUsersPerBooth : ${event.docRef}');
+
+    final eventRef =
+        FirebaseFirestore.instance.collection('events').doc(event.docRef);
+
+    // โหลด booth docs ทั้งหมดของ event นี้มาก่อน
+    final boothSnapshot = await eventRef.collection('booths').get();
+
+    // สร้าง map จาก booth_id (field) → boothDocRef
+    final Map<String, DocumentReference> boothIdToRef = {};
+    for (final boothDoc in boothSnapshot.docs) {
+      final boothData = boothDoc.data();
+      final boothIdField = boothData['booth_id'].toString();
+      boothIdToRef[boothIdField] = boothDoc.reference;
+    }
+
+    // โหลด detection ภายใน 2 นาทีล่าสุด
+    final cutoff = DateTime.now().subtract(const Duration(minutes: 2));
+    final detectionSnapshot = await eventRef
+        .collection('detections')
+        .where('detect_timestamp',
+            isGreaterThanOrEqualTo: Timestamp.fromDate(cutoff))
+        .get();
+
+    // เก็บ unique uid ต่อ booth (ใช้ docRef เป็น key)
+    final Map<DocumentReference, Set<String>> boothUsers = {};
+
+    for (final doc in detectionSnapshot.docs) {
+      final data = doc.data();
+      final boothId = data['booth_id'].toString();
+      final uid = data['uid'].toString();
+
+      final boothDocRef = boothIdToRef[boothId]; // หา docRef จาก map
+
+      if (boothDocRef != null) {
+        boothUsers.putIfAbsent(boothDocRef, () => <String>{});
+        boothUsers[boothDocRef]!.add(uid);
+      } else {
+        print("⚠️ ไม่เจอ booth doc ที่มี booth_id = $boothId");
+      }
+    }
+
+    // boothCounts = { boothDocRef: count }
+    final Map<DocumentReference, int> boothCounts =
+        boothUsers.map((ref, set) => MapEntry(ref, set.length));
+
+    return boothCounts;
+  }
+
+  /// ฟังก์ชันอัปเดต booths แต่เฉพาะทุกๆ 2 นาทีเท่านั้น
+  Future<void> updateBoothCountsIfNeeded(EventDataModelStruct1 event) async {
+    print('updateBoothCountsIfNeeded');
+    final now = DateTime.now();
+
+    // ถ้ายังไม่ครบ 2 นาที → ข้าม
+    if (_lastUpdateTime != null &&
+        now.difference(_lastUpdateTime!).inMinutes < 2) {
+      print("⏳ ข้ามการอัปเดต (last update: $_lastUpdateTime)");
+      return;
+    }
+
+    // ✅ นับจำนวน unique user ต่อ booth โดย return เป็น Map<DocumentReference, int>
+    final boothCounts = await countUniqueUsersPerBooth(event);
+
+    for (final entry in boothCounts.entries) {
+      final boothDocRef = entry.key; // key = DocumentReference ของ booth จริง ๆ
+      final count = entry.value;
+
+      print("📍 BoothRef: ${boothDocRef.path} 👤 $count คน");
+
+      await boothDocRef.set(
+        {
+          'current_user_count': count,
+          'last_updated': FieldValue.serverTimestamp(),
+        },
+        SetOptions(merge: true), // merge กันฟิลด์อื่นไม่หาย
+      );
+    }
+
+    // เก็บเวลาอัปเดตล่าสุด
+    _lastUpdateTime = now;
+    print("✅ อัปเดต booth counts เสร็จสิ้น เวลา: $_lastUpdateTime");
+  }
+
+  Future<void> logProximityAndConcurrentUsers(
+    EventDataModelStruct1 event,
+    BoothDataModelStructNew booth,
+  ) async {
+    try {
+      print('logProximityAndConcurrentUsers');
+      final uid = currentUserUid; // ผู้ใช้ปัจจุบัน
+      final int eventId = event.eventId;
+      final int boothId = booth.boothId;
+      final now = DateTime.now();
+
+      double? rssi;
+      double? distance;
+
+      // 🛰️ ดึงข้อมูล beacon ที่ตรวจพบจาก FFAppState
+      if (FFAppState().beaconIdList.contains(booth.deviceUuid)) {
+        final index = FFAppState().beaconIdList.indexOf(booth.deviceUuid);
+
+        // ✅ ถ้ามีระยะทางจาก beaconDistanceList อยู่แล้ว
+        if (FFAppState().beaconDistanceList.isNotEmpty &&
+            FFAppState().beaconDistanceList.length > index) {
+          final distanceStr = FFAppState().beaconDistanceList[index];
+          distance = double.tryParse(distanceStr);
+        }
+
+        // ✅ ใช้ RSSI จาก beaconRssiList ถ้ามี
+        try {
+          // ถ้ายังไม่มี beaconRssiList ให้ใช้ค่า RSSI จำลอง
+          rssi = (-60 - Random().nextInt(15)).toDouble(); // random -60 ถึง -75
+        } catch (_) {
+          rssi = (-60 - Random().nextInt(15)).toDouble();
+        }
+
+        // ✅ คำนวณระยะทางจาก RSSI
+        distance = calculateDistanceFromRSSI(rssi ?? -60);
+      }
+
+      // ✅ 1️⃣ ตรวจสอบว่ามี log เดิมของ uid ใน booth เดียวกันหรือไม่
+      final proximityCollection = FirebaseFirestore.instance
+          .collection('events')
+          .doc('${event.docRef}')
+          .collection('proximity_logs');
+
+      final existingLog = await proximityCollection
+          .where('uid', isEqualTo: uid)
+          .where('booth_id', isEqualTo: boothId)
+          .limit(1)
+          .get();
+
+      if (existingLog.docs.isNotEmpty) {
+        print("⏳ User $uid เคยเข้าบูธ $boothId แล้ว — ไม่บันทึกซ้ำ");
+      } else {
+        // 👇 บันทึก log ครั้งแรกเท่านั้น
+        final proximityRef = proximityCollection.doc();
+
+        await proximityRef.set({
+          'log_id': proximityRef.id,
+          'event_id': eventId,
+          'booth_id': boothId,
+          'uid': uid,
+          'rssi': rssi ?? -60,
+          'distance': distance ?? -1,
+          'detect_timestamp': Timestamp.fromDate(now),
+        });
+
+        print(
+            "✅ Proximity log (first entry) saved → user: $uid | booth: $boothId | distance: ${distance?.toStringAsFixed(2)} m");
+      }
+
+      // ✅ 2️⃣ อัปเดต concurrent users snapshot (ภายใน 2 นาทีล่าสุด)
+      final cutoff = now.subtract(const Duration(minutes: 2));
+
+      final activeSnap = await proximityCollection
+          .where('detect_timestamp',
+              isGreaterThanOrEqualTo: Timestamp.fromDate(cutoff))
+          .get();
+
+      final activeUids =
+          activeSnap.docs.map((e) => e.data()['uid'].toString()).toSet();
+
+      final concurrentRef = FirebaseFirestore.instance
+          .collection('events')
+          .doc('${event.docRef}')
+          .collection('concurrent_users')
+          .doc();
+
+      await concurrentRef.set({
+        'record_id': concurrentRef.id,
+        'event_id': eventId,
+        'timestamp': Timestamp.fromDate(now),
+        'uids': activeUids.toList(),
+        'user_count': activeUids.length,
+      });
+
+      print(
+          "👥 Concurrent users snapshot saved (${activeUids.length}) for event $eventId");
+    } catch (e) {
+      print("⚠️ Error while logging proximity/concurrent users: $e");
+    }
+  }
+
+  /// ฟังก์ชันแปลง RSSI เป็นระยะทาง (ประมาณ)
+  double calculateDistanceFromRSSI(double rssi, {int txPower = -59}) {
+    if (rssi == 0) return -1.0;
+    double ratio = rssi / txPower;
+    if (ratio < 1.0) {
+      return pow(ratio, 10).toDouble();
+    } else {
+      return (0.89976) * pow(ratio, 7.7095) + 0.111;
+    }
   }
 
   void stopListening() {

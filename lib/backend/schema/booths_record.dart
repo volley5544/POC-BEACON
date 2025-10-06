@@ -80,6 +80,16 @@ class BoothsRecord extends FirestoreRecord {
   String get deviceUuid => _deviceUuid ?? '';
   bool hasDeviceUuid() => _deviceUuid != null;
 
+  // "current_user_count" field.
+  int? _currentUserCount;
+  int get currentUserCount => _currentUserCount ?? 0;
+  bool hasCurrentUserCount() => _currentUserCount != null;
+
+  // "last_updated" field.
+  DateTime? _lastUpdated;
+  DateTime? get lastUpdated => _lastUpdated;
+  bool hasLastUpdated() => _lastUpdated != null;
+
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
@@ -97,6 +107,8 @@ class BoothsRecord extends FirestoreRecord {
     _eventId = castToType<int>(snapshotData['event_id']);
     _boothImageList = getDataList(snapshotData['booth_image_list']);
     _deviceUuid = snapshotData['device_uuid'] as String?;
+    _currentUserCount = castToType<int>(snapshotData['current_user_count']);
+    _lastUpdated = snapshotData['last_updated'] as DateTime?;
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -150,6 +162,8 @@ Map<String, dynamic> createBoothsRecordData({
   String? updatedBy,
   int? eventId,
   String? deviceUuid,
+  int? currentUserCount,
+  DateTime? lastUpdated,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -165,6 +179,8 @@ Map<String, dynamic> createBoothsRecordData({
       'updated_by': updatedBy,
       'event_id': eventId,
       'device_uuid': deviceUuid,
+      'current_user_count': currentUserCount,
+      'last_updated': lastUpdated,
     }.withoutNulls,
   );
 
@@ -189,7 +205,9 @@ class BoothsRecordDocumentEquality implements Equality<BoothsRecord> {
         e1?.updatedBy == e2?.updatedBy &&
         e1?.eventId == e2?.eventId &&
         listEquality.equals(e1?.boothImageList, e2?.boothImageList) &&
-        e1?.deviceUuid == e2?.deviceUuid;
+        e1?.deviceUuid == e2?.deviceUuid &&
+        e1?.currentUserCount == e2?.currentUserCount &&
+        e1?.lastUpdated == e2?.lastUpdated;
   }
 
   @override
@@ -206,7 +224,9 @@ class BoothsRecordDocumentEquality implements Equality<BoothsRecord> {
         e?.updatedBy,
         e?.eventId,
         e?.boothImageList,
-        e?.deviceUuid
+        e?.deviceUuid,
+        e?.currentUserCount,
+        e?.lastUpdated
       ]);
 
   @override

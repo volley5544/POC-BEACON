@@ -67,6 +67,12 @@ class _HomeWidgetState extends State<HomeWidget> {
         },
       );
 
+      logFirebaseEvent(
+        'homepage',
+        parameters: {
+          'Param 1': '',
+        },
+      );
       setDarkModeSetting(context, ThemeMode.light);
       if (!FFAppState().isInApp) {
         await actions.beaconBackgroundServiceAction();

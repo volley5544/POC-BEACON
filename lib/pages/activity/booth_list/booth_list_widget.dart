@@ -614,6 +614,9 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
                                                                   .spaceBetween,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
                                                           children: [
                                                             Padding(
                                                               padding:
@@ -631,32 +634,35 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                     CrossAxisAlignment
                                                                         .start,
                                                                 children: [
-                                                                  Text(
-                                                                    boothListVarItem
-                                                                        .boothName,
-                                                                    style: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .headlineSmall
-                                                                        .override(
-                                                                          font:
-                                                                              GoogleFonts.outfit(
+                                                                  Align(
+                                                                    alignment:
+                                                                        AlignmentDirectional(
+                                                                            -1.0,
+                                                                            -1.0),
+                                                                    child: Text(
+                                                                      boothListVarItem
+                                                                          .boothName,
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .headlineSmall
+                                                                          .override(
+                                                                            font:
+                                                                                GoogleFonts.outfit(
+                                                                              fontWeight: FontWeight.w600,
+                                                                              fontStyle: FlutterFlowTheme.of(context).headlineSmall.fontStyle,
+                                                                            ),
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).tertiary,
+                                                                            fontSize:
+                                                                                18.0,
+                                                                            letterSpacing:
+                                                                                0.0,
                                                                             fontWeight:
-                                                                                FontWeight.w500,
+                                                                                FontWeight.w600,
                                                                             fontStyle:
                                                                                 FlutterFlowTheme.of(context).headlineSmall.fontStyle,
                                                                           ),
-                                                                          color:
-                                                                              FlutterFlowTheme.of(context).tertiary,
-                                                                          fontSize:
-                                                                              18.0,
-                                                                          letterSpacing:
-                                                                              0.0,
-                                                                          fontWeight:
-                                                                              FontWeight.w500,
-                                                                          fontStyle: FlutterFlowTheme.of(context)
-                                                                              .headlineSmall
-                                                                              .fontStyle,
-                                                                        ),
+                                                                    ),
                                                                   ),
                                                                 ],
                                                               ),
@@ -673,6 +679,9 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                 mainAxisSize:
                                                                     MainAxisSize
                                                                         .max,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .start,
                                                                 crossAxisAlignment:
                                                                     CrossAxisAlignment
                                                                         .end,
@@ -705,6 +714,37 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                               boothListVarItem.deviceUuid,
                                                                         ),
                                                                       ),
+                                                                    ),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding: EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            0.0,
+                                                                            0.0,
+                                                                            5.0,
+                                                                            0.0),
+                                                                    child: Text(
+                                                                      'ขณะนี้มีคนอยู่ในบูธ ${boothListVarItem.currentUserCount.toString()} คน',
+                                                                      style: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .headlineSmall
+                                                                          .override(
+                                                                            font:
+                                                                                GoogleFonts.outfit(
+                                                                              fontWeight: FontWeight.w500,
+                                                                              fontStyle: FlutterFlowTheme.of(context).headlineSmall.fontStyle,
+                                                                            ),
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).primary,
+                                                                            fontSize:
+                                                                                10.0,
+                                                                            letterSpacing:
+                                                                                0.0,
+                                                                            fontWeight:
+                                                                                FontWeight.w500,
+                                                                            fontStyle:
+                                                                                FlutterFlowTheme.of(context).headlineSmall.fontStyle,
+                                                                          ),
                                                                     ),
                                                                   ),
                                                                 ],
@@ -1061,106 +1101,124 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                 alignment: AlignmentDirectional(0.0, 1.0),
                                 child: Align(
                                   alignment: AlignmentDirectional(0.0, 1.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional(0.0, 0.0),
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 20.0, 0.0, 20.0),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Expanded(
-                                                child: Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(24.0, 0.0, 24.0,
-                                                          24.0),
-                                                  child: FFButtonWidget(
-                                                    onPressed:
-                                                        (containerUserActivityRecordList
-                                                                    .length ==
-                                                                0)
-                                                            ? null
-                                                            : () async {
-                                                                context
-                                                                    .pushNamed(
-                                                                  SurveyWidget
-                                                                      .routeName,
-                                                                  queryParameters:
-                                                                      {
-                                                                    'uid':
-                                                                        serializeParam(
-                                                                      currentUserReference
-                                                                          ?.id,
-                                                                      ParamType
-                                                                          .String,
-                                                                    ),
-                                                                    'eventRef':
-                                                                        serializeParam(
-                                                                      widget
-                                                                          .eventDocRef,
-                                                                      ParamType
-                                                                          .Document,
-                                                                    ),
-                                                                    'eventId':
-                                                                        serializeParam(
-                                                                      widget
-                                                                          .eventId,
-                                                                      ParamType
-                                                                          .int,
-                                                                    ),
-                                                                  }.withoutNulls,
-                                                                  extra: <String,
-                                                                      dynamic>{
-                                                                    'eventRef':
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 1.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Align(
+                                          alignment:
+                                              AlignmentDirectional(0.0, 0.0),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 20.0, 0.0, 50.0),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(24.0, 0.0,
+                                                                24.0, 50.0),
+                                                    child: FFButtonWidget(
+                                                      onPressed:
+                                                          (containerUserActivityRecordList
+                                                                      .length ==
+                                                                  0)
+                                                              ? null
+                                                              : () async {
+                                                                  context
+                                                                      .pushNamed(
+                                                                    SurveyWidget
+                                                                        .routeName,
+                                                                    queryParameters:
+                                                                        {
+                                                                      'uid':
+                                                                          serializeParam(
+                                                                        currentUserReference
+                                                                            ?.id,
+                                                                        ParamType
+                                                                            .String,
+                                                                      ),
+                                                                      'eventRef':
+                                                                          serializeParam(
                                                                         widget
                                                                             .eventDocRef,
-                                                                  },
-                                                                );
-                                                              },
-                                                    text: 'ประเมินกิจกรรม',
-                                                    icon: Icon(
-                                                      Icons.speaker_notes,
-                                                      size: 24.0,
-                                                    ),
-                                                    options: FFButtonOptions(
-                                                      width: double.infinity,
-                                                      height: 48.0,
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  24.0,
-                                                                  0.0,
-                                                                  24.0,
-                                                                  0.0),
-                                                      iconPadding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .primary,
-                                                      textStyle:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .titleSmall
-                                                              .override(
-                                                                font: GoogleFonts
-                                                                    .readexPro(
+                                                                        ParamType
+                                                                            .Document,
+                                                                      ),
+                                                                      'eventId':
+                                                                          serializeParam(
+                                                                        widget
+                                                                            .eventId,
+                                                                        ParamType
+                                                                            .int,
+                                                                      ),
+                                                                    }.withoutNulls,
+                                                                    extra: <String,
+                                                                        dynamic>{
+                                                                      'eventRef':
+                                                                          widget
+                                                                              .eventDocRef,
+                                                                    },
+                                                                  );
+                                                                },
+                                                      text: 'ประเมินกิจกรรม',
+                                                      icon: Icon(
+                                                        Icons.speaker_notes,
+                                                        size: 24.0,
+                                                      ),
+                                                      options: FFButtonOptions(
+                                                        width: double.infinity,
+                                                        height: 48.0,
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    24.0,
+                                                                    0.0,
+                                                                    24.0,
+                                                                    0.0),
+                                                        iconPadding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    0.0,
+                                                                    0.0,
+                                                                    0.0,
+                                                                    0.0),
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primary,
+                                                        textStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .titleSmall
+                                                                .override(
+                                                                  font: GoogleFonts
+                                                                      .readexPro(
+                                                                    fontWeight: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .titleSmall
+                                                                        .fontWeight,
+                                                                    fontStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .titleSmall
+                                                                        .fontStyle,
+                                                                  ),
+                                                                  color: Colors
+                                                                      .white,
+                                                                  letterSpacing:
+                                                                      0.0,
                                                                   fontWeight: FlutterFlowTheme.of(
                                                                           context)
                                                                       .titleSmall
@@ -1170,40 +1228,29 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                       .titleSmall
                                                                       .fontStyle,
                                                                 ),
-                                                                color: Colors
-                                                                    .white,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                                fontWeight: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .fontWeight,
-                                                                fontStyle: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleSmall
-                                                                    .fontStyle,
-                                                              ),
-                                                      elevation: 3.0,
-                                                      borderSide: BorderSide(
-                                                        color:
-                                                            Colors.transparent,
-                                                        width: 1.0,
+                                                        elevation: 3.0,
+                                                        borderSide: BorderSide(
+                                                          color: Colors
+                                                              .transparent,
+                                                          width: 1.0,
+                                                        ),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.0),
+                                                        disabledColor:
+                                                            Color(0x7F4B39EF),
                                                       ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.0),
-                                                      disabledColor:
-                                                          Color(0x7F4B39EF),
-                                                    ),
-                                                  ).animateOnPageLoad(animationsMap[
-                                                      'buttonOnPageLoadAnimation']!),
+                                                    ).animateOnPageLoad(
+                                                        animationsMap[
+                                                            'buttonOnPageLoadAnimation']!),
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );

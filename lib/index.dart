@@ -72,5 +72,5 @@ export '/setting_backup/setting_event_list_copy4/setting_event_list_copy4_widget
     show SettingEventListCopy4Widget;
 export '/dashboard/dashboard_widget.dart' show DashboardWidget;
 export '/setting_backup/datatable/datatable_widget.dart' show DatatableWidget;
-export '/pages/activity/booth_list_copy4/booth_list_copy4_widget.dart'
+export '/setting_backup/booth_list_copy4/booth_list_copy4_widget.dart'
     show BoothListCopy4Widget;
