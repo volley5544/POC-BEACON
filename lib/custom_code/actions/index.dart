@@ -15,3 +15,4 @@ export 'get_data_from_collection.dart' show getDataFromCollection;
 export 'beacon_background_service_action.dart'
     show beaconBackgroundServiceAction;
 export 'check_if_event_id_exists.dart' show checkIfEventIdExists;
+export 'setup_firebase_messaging.dart' show setupFirebaseMessaging;

@@ -67,10 +67,19 @@ class _HomeWidgetState extends State<HomeWidget> {
         },
       );
 
-      logFirebaseEvent(
-        'homepage',
-        parameters: {
-          'Param 1': '',
+      await actions.setupFirebaseMessaging();
+      await showDialog(
+        context: context,
+        builder: (alertDialogContext) {
+          return AlertDialog(
+            title: Text('setupFirebaseMessaging'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(alertDialogContext),
+                child: Text('Ok'),
+              ),
+            ],
+          );
         },
       );
       setDarkModeSetting(context, ThemeMode.light);
