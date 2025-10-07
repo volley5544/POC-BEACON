@@ -32,7 +32,7 @@ Future<void> setupFirebaseMessaging() async {
         'notification_id': message.messageId ?? '',
         'title': message.notification?.title ?? '',
         'body': message.notification?.body ?? '',
-        'sent_time': message.sentTime?.toIso8601String(),
+        'sent_time': FieldValue.serverTimestamp(),
         'uid': uid,
       },
     );

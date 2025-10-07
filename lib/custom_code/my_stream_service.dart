@@ -468,7 +468,7 @@ class MyStreamService {
           'booth_id': booth.boothId,
           'noti_type': 'register_invite',
           'to_uid': currentUserUid,
-          'timestamp': DateTime.now().toIso8601String(),
+          'timestamp': FieldValue.serverTimestamp(),
         },
       );
 
@@ -587,7 +587,7 @@ class MyStreamService {
           'to_uid': currentUserUid,
           'title': 'เรียนเชิญเล่นกิจกรรม${event.eventName}',
           'booth_name': booth.boothName,
-          'timestamp': DateTime.now().toIso8601String(),
+          'timestamp': FieldValue.serverTimestamp(),
         },
       );
     }
