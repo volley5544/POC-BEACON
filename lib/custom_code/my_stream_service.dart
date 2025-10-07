@@ -16,6 +16,7 @@ import 'package:rxdart/rxdart.dart';
 import '/backend/push_notifications/push_notifications_util.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 class MyStreamService {
   static final MyStreamService _instance = MyStreamService._internal();
@@ -457,6 +458,20 @@ class MyStreamService {
         'noti_type': 'register_invite',
       });
 
+      // ✅ เพิ่มการ log event ใน Firebase Analytics
+
+      FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+      await analytics.logEvent(
+        name: 'notification_sent',
+        parameters: {
+          'event_id': event.eventId,
+          'booth_id': booth.boothId,
+          'noti_type': 'register_invite',
+          'to_uid': currentUserUid,
+          'timestamp': DateTime.now().toIso8601String(),
+        },
+      );
+
       //ส่งnoti FCM นอกแอพ ชวนลงทะเบียน event_idนี้
       triggerPushNotification(
         notificationTitle: 'เรียนเชิญลงทะเบียนทำกิจกรรม',
@@ -560,6 +575,21 @@ class MyStreamService {
         'is_deleted': false,
         'noti_type': 'booth_invite',
       });
+
+      final analytics = FirebaseAnalytics.instance;
+      // ✅ เพิ่ม log event เข้า Firebase Analytics
+      await analytics.logEvent(
+        name: 'notification_sent',
+        parameters: {
+          'event_id': event.eventId,
+          'booth_id': booth.boothId,
+          'noti_type': 'booth_invite',
+          'to_uid': currentUserUid,
+          'title': 'เรียนเชิญเล่นกิจกรรม${event.eventName}',
+          'booth_name': booth.boothName,
+          'timestamp': DateTime.now().toIso8601String(),
+        },
+      );
     }
 
     //noti FCM (นอกแอพ)
