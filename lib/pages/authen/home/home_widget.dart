@@ -43,73 +43,87 @@ class _HomeWidgetState extends State<HomeWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      showDialog(
-        context: context,
-        builder: (dialogContext) {
-          return Dialog(
-            elevation: 0,
-            insetPadding: EdgeInsets.zero,
-            backgroundColor: Colors.transparent,
-            alignment: AlignmentDirectional(0.0, 0.0)
-                .resolve(Directionality.of(context)),
-            child: GestureDetector(
-              onTap: () {
-                FocusScope.of(dialogContext).unfocus();
-                FocusManager.instance.primaryFocus?.unfocus();
-              },
-              child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                child: LoadingComponentWidget(),
-              ),
-            ),
+      await Future.wait([
+        Future(() async {
+          showDialog(
+            context: context,
+            builder: (dialogContext) {
+              return Dialog(
+                elevation: 0,
+                insetPadding: EdgeInsets.zero,
+                backgroundColor: Colors.transparent,
+                alignment: AlignmentDirectional(0.0, 0.0)
+                    .resolve(Directionality.of(context)),
+                child: GestureDetector(
+                  onTap: () {
+                    FocusScope.of(dialogContext).unfocus();
+                    FocusManager.instance.primaryFocus?.unfocus();
+                  },
+                  child: Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    child: LoadingComponentWidget(),
+                  ),
+                ),
+              );
+            },
           );
-        },
-      );
 
-      await actions.setupFirebaseMessaging();
-      await showDialog(
-        context: context,
-        builder: (alertDialogContext) {
-          return AlertDialog(
-            title: Text('setupFirebaseMessaging'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(alertDialogContext),
-                child: Text('Ok'),
-              ),
-            ],
+          await actions.setupFirebaseMessaging();
+          await showDialog(
+            context: context,
+            builder: (alertDialogContext) {
+              return AlertDialog(
+                title: Text('setupFirebaseMessaging'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(alertDialogContext),
+                    child: Text('Ok'),
+                  ),
+                ],
+              );
+            },
           );
-        },
-      );
-      setDarkModeSetting(context, ThemeMode.light);
-      if (!FFAppState().isInApp) {
-        await actions.beaconBackgroundServiceAction();
-        FFAppState().isInApp = true;
-        safeSetState(() {});
-      }
-      _model.dataUser = await queryUsersRecordOnce(
-        queryBuilder: (usersRecord) => usersRecord.where(
-          'uid',
-          isEqualTo: currentUserReference?.id,
-        ),
-        singleRecord: true,
-      ).then((s) => s.firstOrNull);
-      if (_model.dataUser!.hasRolesRef()) {
-        // getRole
-        _model.roleData = await queryRolesRecordOnce(
-          queryBuilder: (rolesRecord) => rolesRecord.where(
-            'roles_ref',
-            isEqualTo: _model.dataUser?.rolesRef,
-          ),
-          singleRecord: true,
-        ).then((s) => s.firstOrNull);
-        FFAppState().rolesName = _model.roleData!.rolesName;
-        FFAppState().rolesDescription = _model.roleData!.rolesDescription;
-        FFAppState().rolesID = _model.roleData!.rolesId;
-        safeSetState(() {});
-      }
-      Navigator.pop(context);
+          setDarkModeSetting(context, ThemeMode.light);
+          if (!FFAppState().isInApp) {
+            await actions.beaconBackgroundServiceAction();
+            FFAppState().isInApp = true;
+            safeSetState(() {});
+          }
+          _model.dataUser = await queryUsersRecordOnce(
+            queryBuilder: (usersRecord) => usersRecord.where(
+              'uid',
+              isEqualTo: currentUserReference?.id,
+            ),
+            singleRecord: true,
+          ).then((s) => s.firstOrNull);
+          if (_model.dataUser!.hasRolesRef()) {
+            // getRole
+            _model.roleData = await queryRolesRecordOnce(
+              queryBuilder: (rolesRecord) => rolesRecord.where(
+                'roles_ref',
+                isEqualTo: _model.dataUser?.rolesRef,
+              ),
+              singleRecord: true,
+            ).then((s) => s.firstOrNull);
+            FFAppState().rolesName = _model.roleData!.rolesName;
+            FFAppState().rolesDescription = _model.roleData!.rolesDescription;
+            FFAppState().rolesID = _model.roleData!.rolesId;
+            safeSetState(() {});
+          }
+          Navigator.pop(context);
+        }),
+        Future(() async {
+          while (true) {
+            safeSetState(() {});
+            await Future.delayed(
+              Duration(
+                milliseconds: 1000,
+              ),
+            );
+          }
+        }),
+      ]);
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
@@ -603,6 +617,26 @@ class _HomeWidgetState extends State<HomeWidget> {
                             );
                           },
                         ),
+                      ),
+                      Text(
+                        FFAppState().firebaseMessage,
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              font: GoogleFonts.readexPro(
+                                fontWeight: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontWeight,
+                                fontStyle: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .fontStyle,
+                              ),
+                              letterSpacing: 0.0,
+                              fontWeight: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontWeight,
+                              fontStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .fontStyle,
+                            ),
                       ),
                     ],
                   ),
