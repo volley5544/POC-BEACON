@@ -25,6 +25,8 @@ Future<void> setupFirebaseMessaging() async {
   // ✅ foreground: เมื่อแอปเปิดอยู่และได้รับ noti
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     print("📩 Notification received: ${message.notification?.title}");
+    FFAppState().firebaseMessage =
+        "Notification received: ${message.notification?.title}";
 
     await analytics.logEvent(
       name: 'notification_received',
@@ -41,6 +43,8 @@ Future<void> setupFirebaseMessaging() async {
   // ✅ เมื่อผู้ใช้แตะ notification เปิดแอป
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
     print("📬 Notification opened by user: ${message.notification?.title}");
+    FFAppState().firebaseMessage =
+        "Notification opened by user: ${message.notification?.title}";
 
     await analytics.logEvent(
       name: 'notification_opened',

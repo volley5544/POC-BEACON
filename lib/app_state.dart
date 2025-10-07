@@ -232,6 +232,12 @@ class FFAppState extends ChangeNotifier {
   set isInApp(bool value) {
     _isInApp = value;
   }
+
+  String _firebaseMessage = '';
+  String get firebaseMessage => _firebaseMessage;
+  set firebaseMessage(String value) {
+    _firebaseMessage = value;
+  }
 }
 
 void _safeInit(Function() initializeField) {
