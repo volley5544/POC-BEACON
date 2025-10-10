@@ -19,11 +19,13 @@ class TextWidgetShowBeaconDistance extends StatefulWidget {
     this.width,
     this.height,
     this.deviceUuid,
+    this.notificationDistance,
   });
 
   final double? width;
   final double? height;
   final String? deviceUuid;
+  final String? notificationDistance;
 
   @override
   State<TextWidgetShowBeaconDistance> createState() =>
@@ -42,7 +44,12 @@ class _TextWidgetShowBeaconDistanceState
           builder: (context, ids, __) {
             return Text(
               returnIndexValueInList(ids.toList(), widget.deviceUuid!) != -1
-                  ? 'อยู่ในระยะ ${distances.elementAtOrNull(returnIndexValueInList(ids.toList(), widget.deviceUuid!)!)} m'
+                  ? double.parse(distances.elementAtOrNull(
+                              returnIndexValueInList(
+                                  ids.toList(), widget.deviceUuid!)!)!) <=
+                          double.parse(widget.notificationDistance!)
+                      ? 'อยู่ในระยะ ${distances.elementAtOrNull(returnIndexValueInList(ids.toList(), widget.deviceUuid!)!)} m'
+                      : 'ไม่อยู่ในระยะ'
                   : 'ไม่อยู่ในระยะ',
               style: FlutterFlowTheme.of(context).labelMedium.override(
                     font: GoogleFonts.readexPro(

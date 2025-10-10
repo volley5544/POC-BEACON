@@ -344,6 +344,8 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                     width: 120.0,
                                     height: 30.0,
                                     deviceUuid: widget.boothDoc?.deviceUuid,
+                                    notificationDistance:
+                                        '${widget.boothDoc?.notificationDistance.toString()}',
                                   ),
                                 ),
                               ),

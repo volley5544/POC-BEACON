@@ -712,6 +712,8 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                               30.0,
                                                                           deviceUuid:
                                                                               boothListVarItem.deviceUuid,
+                                                                          notificationDistance:
+                                                                              '${boothListVarItem.notificationDistance.toString()}',
                                                                         ),
                                                                       ),
                                                                     ),
