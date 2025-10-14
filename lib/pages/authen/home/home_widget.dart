@@ -70,20 +70,6 @@ class _HomeWidgetState extends State<HomeWidget> {
           );
 
           await actions.setupFirebaseMessaging();
-          await showDialog(
-            context: context,
-            builder: (alertDialogContext) {
-              return AlertDialog(
-                title: Text('setupFirebaseMessaging'),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(alertDialogContext),
-                    child: Text('Ok'),
-                  ),
-                ],
-              );
-            },
-          );
           setDarkModeSetting(context, ThemeMode.light);
           if (!FFAppState().isInApp) {
             await actions.beaconBackgroundServiceAction();

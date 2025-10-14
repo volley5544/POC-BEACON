@@ -567,7 +567,7 @@ class MyStreamService {
         'booth_id': '${booth.boothId}',
         'title': 'เชิญเข้าร่วมกิจกรรม ${event.eventName}',
         'body':
-            'ขณะนี้คุณได้อยู่ที่บูธ ${booth.boothName} (กิจกรรม ${event.eventName}) รายละเอียด ${booth.description}',
+            'ขณะนี้คุณได้อยู่ที่บูธ${booth.boothName} (กิจกรรม ${event.eventName}) รายละเอียด ${booth.description}',
         'sent_at': FieldValue.serverTimestamp(),
         'event_id': int.parse('${event.eventId}'),
         'send_count': 1,
@@ -598,7 +598,7 @@ class MyStreamService {
     triggerPushNotification(
       notificationTitle: 'เชิญเข้าร่วมกิจกรรม ${event.eventName}',
       notificationText:
-          'ขณะนี้คุณได้อยู่ที่บูธ ${booth.boothName} (กิจกรรม ${event.eventName}) รายละเอียด ${booth.description}',
+          'ขณะนี้คุณได้อยู่ที่บูธ${booth.boothName} (กิจกรรม ${event.eventName}) รายละเอียด ${booth.description}',
       notificationSound: 'default',
       userRefs: [currentUserReference!],
       initialPageName: 'Home',
