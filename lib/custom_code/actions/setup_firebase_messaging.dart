@@ -43,7 +43,7 @@ Future<void> setupFirebaseMessaging() async {
         'notification_id': message.messageId ?? '',
         'title': message.notification?.title ?? '',
         'body': message.notification?.body ?? '',
-        // 'sent_time': DateTime.now(), // ✅ บังคับเป็น String ชัดเจน
+        'sent_time': DateTime.now(), // ✅ บังคับเป็น String ชัดเจน
         // 'sent_time': DateTime.now().toIso8601String().toString(), // ✅ บังคับเป็น String ชัดเจน
         'uid': uid,
       },
@@ -86,7 +86,7 @@ Future<void> setupFirebaseMessaging() async {
         'notification_id': message.messageId ?? '',
         'title': message.notification?.title ?? '',
         'body': message.notification?.body ?? '', //2
-        // 'open_time': DateTime.now(), // ✅ บังคับเป็น String ชัดเจน
+        'open_time': DateTime.now(), // ✅ บังคับเป็น String ชัดเจน
         // // 'open_time': DateTime.now().toIso8601String().toString(), // ✅ บังคับเป็น String ชัดเจน
         'uid': uid, //2
         'click_action': message.data['click_action'] ?? '', //2

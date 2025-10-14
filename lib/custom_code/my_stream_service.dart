@@ -565,9 +565,9 @@ class MyStreamService {
       await notiRef.add({
         'to_uid': '${currentUserUid}',
         'booth_id': '${booth.boothId}',
-        'title': 'เชิญเข้าร่วมกิจกรรม ${event.eventName}',
-        'body':
-            'ขณะนี้คุณได้อยู่ที่บูธ${booth.boothName} (กิจกรรม ${event.eventName}) รายละเอียด ${booth.description}',
+        'title':
+            'ขณะนี้คุณได้อยู่ที่บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
+        'body': '${booth.description}',
         'sent_at': FieldValue.serverTimestamp(),
         'event_id': int.parse('${event.eventId}'),
         'send_count': 1,
@@ -585,7 +585,9 @@ class MyStreamService {
           'booth_id': booth.boothId,
           'noti_type': 'booth_invite',
           'to_uid': currentUserUid,
-          'title': 'เชิญเข้าร่วมกิจกรรม ${event.eventName}',
+          'title':
+              'ขณะนี้คุณได้อยู่ที่บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
+          'body': '${booth.description}',
           'booth_name': booth.boothName,
           'timestamp': FieldValue.serverTimestamp(),
         },
@@ -596,9 +598,9 @@ class MyStreamService {
 
     //ส่ง FCM notiชวนเล่นกิจกรรม
     triggerPushNotification(
-      notificationTitle: 'เชิญเข้าร่วมกิจกรรม ${event.eventName}',
-      notificationText:
-          'ขณะนี้คุณได้อยู่ที่บูธ${booth.boothName} (กิจกรรม ${event.eventName}) รายละเอียด ${booth.description}',
+      notificationTitle:
+          'ขณะนี้คุณได้อยู่ที่บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
+      notificationText: '${booth.description}',
       notificationSound: 'default',
       userRefs: [currentUserReference!],
       initialPageName: 'Home',
