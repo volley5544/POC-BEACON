@@ -25,36 +25,75 @@ Future<void> setupFirebaseMessaging() async {
   // ✅ foreground: เมื่อแอปเปิดอยู่และได้รับ noti
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     print("📩 Notification received: ${message.notification?.title}");
-    FFAppState().firebaseMessage =
-        "Notification received: ${message.notification?.title}";
 
-    await analytics.logEvent(
-      name: 'notification_received',
+    // await analytics.logEvent(
+    //   name: 'notification_received',
+    //   parameters: {
+    //     'notification_id': message.messageId ?? '',
+    //     'title': message.notification?.title ?? '',
+    //     'body': message.notification?.body ?? '',
+    //     'sent_time': FieldValue.serverTimestamp(),
+    //     'uid': uid,
+    //   },
+    // );
+
+    await FirebaseAnalytics.instance.logEvent(
+      name: 'notification_received_beacon',
       parameters: {
         'notification_id': message.messageId ?? '',
         'title': message.notification?.title ?? '',
         'body': message.notification?.body ?? '',
-        'sent_time': FieldValue.serverTimestamp(),
+        // 'sent_time': DateTime.now(), // ✅ บังคับเป็น String ชัดเจน
+        // 'sent_time': DateTime.now().toIso8601String().toString(), // ✅ บังคับเป็น String ชัดเจน
         'uid': uid,
       },
     );
+
+    FFAppState().firebaseMessage =
+        "Notification received: ${message.notification?.title}";
   });
 
   // ✅ เมื่อผู้ใช้แตะ notification เปิดแอป
+  // ✅ เมื่อผู้ใช้แตะ notification เปิดแอป
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
     print("📬 Notification opened by user: ${message.notification?.title}");
-    FFAppState().firebaseMessage =
-        "Notification opened by user: ${message.notification?.title}";
 
-    await analytics.logEvent(
-      name: 'notification_opened',
+    // await analytics.logEvent(
+    //   name: 'notification_opened',
+    //   parameters: {
+    //     'notification_id': message.messageId ?? '',
+    //     'title': message.notification?.title ?? '',
+    //     'body': message.notification?.body ?? '',
+    //     'uid': uid,
+    //     'click_action': message.data['click_action'] ?? '',
+    //   },
+    // );
+
+    // FirebaseAnalytics.instance.logEvent(
+    //   name: 'notification_opened_beacon',
+    //   parameters: {
+    //     'notification_id': message.messageId ?? '',
+    //     'title': message.notification?.title ?? '',
+    //     'body': message.notification?.body ?? '',
+    //     'uid': uid,
+    //     'click_action': message.data['click_action'] ?? '',
+    //   },
+    // );
+
+    await FirebaseAnalytics.instance.logEvent(
+      name: 'notification_opened_beacon',
       parameters: {
         'notification_id': message.messageId ?? '',
         'title': message.notification?.title ?? '',
-        'body': message.notification?.body ?? '',
-        'uid': uid,
-        'click_action': message.data['click_action'] ?? '',
+        'body': message.notification?.body ?? '', //2
+        // 'open_time': DateTime.now(), // ✅ บังคับเป็น String ชัดเจน
+        // // 'open_time': DateTime.now().toIso8601String().toString(), // ✅ บังคับเป็น String ชัดเจน
+        'uid': uid, //2
+        'click_action': message.data['click_action'] ?? '', //2
       },
     );
+
+    FFAppState().firebaseMessage =
+        "Notification opened by user: ${message.notification?.title}";
   });
 }

@@ -567,7 +567,7 @@ class MyStreamService {
         'booth_id': '${booth.boothId}',
         'title': 'เรียนเชิญเล่นกิจกรรม${event.eventName}',
         'body':
-            'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} กิจกรรม${event.eventName}แล้ว เชิญไปที่บูธเพื่อทำกรรมได้เลย',
+            'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} กิจกรรม${event.eventName}แล้ว เชิญไปที่บูธเพื่อทำกิจกรรมได้เลย',
         'sent_at': FieldValue.serverTimestamp(),
         'event_id': int.parse('${event.eventId}'),
         'send_count': 1,
@@ -598,7 +598,7 @@ class MyStreamService {
     triggerPushNotification(
       notificationTitle: 'เรียนเชิญเล่นกิจกรรม${event.eventName}',
       notificationText:
-          'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} กิจกรรม${event.eventName}แล้ว เชิญไปที่บูธเพื่อทำกรรมได้เลย',
+          'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} กิจกรรม${event.eventName}แล้ว เชิญไปที่บูธเพื่อทำกิจกรรมได้เลย',
       notificationSound: 'default',
       userRefs: [currentUserReference!],
       initialPageName: 'Home',
@@ -613,7 +613,7 @@ class MyStreamService {
     //   'to_uid': '${currentUserUid}',
     //   'booth_id': '${event.boothList.first.boothId}',
     //   'title': 'เรียนเชิญเล่นกิจกรรม${event.eventName}',
-    // 'body': 'ขณะนี้คุณได้อยู่ใกล้บูธ${event.boothList.first.boothName} กิจกรรม${event.eventName}แล้ว เชิญไปที่บูธเพื่อทำกรรมได้เลย',
+    // 'body': 'ขณะนี้คุณได้อยู่ใกล้บูธ${event.boothList.first.boothName} กิจกรรม${event.eventName}แล้ว เชิญไปที่บูธเพื่อทำกิจกรรมได้เลย',
     // 'sent_at': FieldValue.serverTimestamp(),
     // 'event_id': int.parse('${event.eventId}'),
     // 'send_count': 1,
@@ -678,9 +678,9 @@ class MyStreamService {
       print('createDetectionLog docRef : ${event.docRef}');
       // final detectionRef = eventRef.collection('detections');
 
-      final cutoff = DateTime.now().subtract(const Duration(minutes: 2));
+      final cutoff = DateTime.now().subtract(const Duration(minutes: 1));
 
-      // 🔍 เช็คว่ามี detection ล่าสุดของ user+booth ใน 2 นาทีแล้วหรือยัง
+      // 🔍 เช็คว่ามี detection ล่าสุดของ user+booth ใน 1 นาทีแล้วหรือยัง
       final query = await detectionRef
           .where('uid', isEqualTo: currentUserUid)
           .where('booth_id', isEqualTo: booth.boothId)
@@ -689,7 +689,7 @@ class MyStreamService {
           .get();
 
       if (query.docs.isNotEmpty) {
-        print('Duplicate detection ignored (within 2 minute)');
+        print('Duplicate detection ignored (within 1 minute)');
         return; // ไม่บันทึกซ้ำ
       }
 
@@ -761,8 +761,8 @@ class MyStreamService {
       boothIdToRef[boothIdField] = boothDoc.reference;
     }
 
-    // โหลด detection ภายใน 2 นาทีล่าสุด
-    final cutoff = DateTime.now().subtract(const Duration(minutes: 2));
+    // โหลด detection ภายใน 1 นาทีล่าสุด
+    final cutoff = DateTime.now().subtract(const Duration(minutes: 1));
     final detectionSnapshot = await eventRef
         .collection('detections')
         .where('detect_timestamp',
@@ -794,14 +794,14 @@ class MyStreamService {
     return boothCounts;
   }
 
-  /// ฟังก์ชันอัปเดต booths แต่เฉพาะทุกๆ 2 นาทีเท่านั้น
+  /// ฟังก์ชันอัปเดต booths แต่เฉพาะทุกๆ 1 นาทีเท่านั้น
   Future<void> updateBoothCountsIfNeeded(EventDataModelStruct1 event) async {
     print('updateBoothCountsIfNeeded');
     final now = DateTime.now();
 
-    // ถ้ายังไม่ครบ 2 นาที → ข้าม
+    // ถ้ายังไม่ครบ 1 นาที → ข้าม
     if (_lastUpdateTime != null &&
-        now.difference(_lastUpdateTime!).inMinutes < 2) {
+        now.difference(_lastUpdateTime!).inMinutes < 1) {
       print("⏳ ข้ามการอัปเดต (last update: $_lastUpdateTime)");
       return;
     }
@@ -896,35 +896,36 @@ class MyStreamService {
 
         print(
             "✅ Proximity log (first entry) saved → user: $uid | booth: $boothId | distance: ${distance?.toStringAsFixed(2)} m");
+
+        //////////// save concurrent_users ////////////
+        // ✅ 2️⃣ อัปเดต concurrent users snapshot (ภายใน 2 นาทีล่าสุด)
+        // final cutoff = now.subtract(const Duration(minutes: 2));
+
+        // final activeSnap = await proximityCollection
+        //     .where('detect_timestamp',
+        //         isGreaterThanOrEqualTo: Timestamp.fromDate(cutoff))
+        //     .get();
+
+        // final activeUids =
+        //     activeSnap.docs.map((e) => e.data()['uid'].toString()).toSet();
+
+        // final concurrentRef = FirebaseFirestore.instance
+        //     .collection('events')
+        //     .doc('${event.docRef}')
+        //     .collection('concurrent_users')
+        //     .doc();
+
+        // await concurrentRef.set({
+        //   'record_id': concurrentRef.id,
+        //   'event_id': eventId,
+        //   'timestamp': Timestamp.fromDate(now),
+        //   'uids': activeUids.toList(),
+        //   'user_count': activeUids.length,
+        // });
+
+        // print(
+        //     "👥 Concurrent users snapshot saved (${activeUids.length}) for event $eventId");
       }
-
-      // ✅ 2️⃣ อัปเดต concurrent users snapshot (ภายใน 2 นาทีล่าสุด)
-      final cutoff = now.subtract(const Duration(minutes: 2));
-
-      final activeSnap = await proximityCollection
-          .where('detect_timestamp',
-              isGreaterThanOrEqualTo: Timestamp.fromDate(cutoff))
-          .get();
-
-      final activeUids =
-          activeSnap.docs.map((e) => e.data()['uid'].toString()).toSet();
-
-      final concurrentRef = FirebaseFirestore.instance
-          .collection('events')
-          .doc('${event.docRef}')
-          .collection('concurrent_users')
-          .doc();
-
-      await concurrentRef.set({
-        'record_id': concurrentRef.id,
-        'event_id': eventId,
-        'timestamp': Timestamp.fromDate(now),
-        'uids': activeUids.toList(),
-        'user_count': activeUids.length,
-      });
-
-      print(
-          "👥 Concurrent users snapshot saved (${activeUids.length}) for event $eventId");
     } catch (e) {
       print("⚠️ Error while logging proximity/concurrent users: $e");
     }
