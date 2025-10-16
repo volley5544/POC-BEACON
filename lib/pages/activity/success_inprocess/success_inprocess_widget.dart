@@ -42,6 +42,8 @@ class _SuccessInprocessWidgetState extends State<SuccessInprocessWidget>
     super.initState();
     _model = createModel(context, () => SuccessInprocessModel());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'SuccessInprocess'});
     animationsMap.addAll({
       'containerOnPageLoadAnimation': AnimationInfo(
         trigger: AnimationTrigger.onPageLoad,

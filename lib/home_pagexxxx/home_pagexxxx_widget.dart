@@ -30,6 +30,8 @@ class _HomePagexxxxWidgetState extends State<HomePagexxxxWidget> {
     super.initState();
     _model = createModel(context, () => HomePagexxxxModel());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'HomePagexxxx'});
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 

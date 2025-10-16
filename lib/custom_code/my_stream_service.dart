@@ -459,16 +459,15 @@ class MyStreamService {
       });
 
       // ✅ เพิ่มการ log event ใน Firebase Analytics
-
-      FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-      await analytics.logEvent(
-        name: 'notification_sent',
+      await FirebaseAnalytics.instance.logEvent(
+        name: 'register_invite_beacon',
         parameters: {
           'event_id': event.eventId,
           'booth_id': booth.boothId,
           'noti_type': 'register_invite',
           'to_uid': currentUserUid,
-          'timestamp': FieldValue.serverTimestamp(),
+          'detect_time': DateTime.now()
+              .millisecondsSinceEpoch, // ✅ บังคับเป็น String ชัดเจน
         },
       );
 
@@ -576,10 +575,26 @@ class MyStreamService {
         'noti_type': 'booth_invite',
       });
 
-      final analytics = FirebaseAnalytics.instance;
-      // ✅ เพิ่ม log event เข้า Firebase Analytics
-      await analytics.logEvent(
-        name: 'notification_sent',
+      // final analytics = FirebaseAnalytics.instance;
+      // // ✅ เพิ่ม log event เข้า Firebase Analytics
+      // await analytics.logEvent(
+      //   name: 'notification_sent',
+      //   parameters: {
+      //     'event_id': event.eventId,
+      //     'booth_id': booth.boothId,
+      //     'noti_type': 'booth_invite',
+      //     'to_uid': currentUserUid,
+      //     'title':
+      //         'ขณะนี้คุณได้อยู่ที่บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
+      //     'body': '${booth.description}',
+      //     'booth_name': booth.boothName,
+      //     'timestamp': FieldValue.serverTimestamp(),
+      //   },
+      // );
+
+      // ✅ เพิ่มการ log event ใน Firebase Analytics
+      await FirebaseAnalytics.instance.logEvent(
+        name: 'notification_detect_beacon',
         parameters: {
           'event_id': event.eventId,
           'booth_id': booth.boothId,
@@ -589,7 +604,8 @@ class MyStreamService {
               'ขณะนี้คุณได้อยู่ที่บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
           'body': '${booth.description}',
           'booth_name': booth.boothName,
-          'timestamp': FieldValue.serverTimestamp(),
+          'detect_time': DateTime.now()
+              .millisecondsSinceEpoch, // ✅ บังคับเป็น String ชัดเจน
         },
       );
     }
@@ -836,8 +852,14 @@ class MyStreamService {
     BoothDataModelStructNew booth,
   ) async {
     try {
-      print('logProximityAndConcurrentUsers');
-      final uid = currentUserUid; // ผู้ใช้ปัจจุบัน
+      print('🛰️ logProximityAndConcurrentUsers');
+      final uid = currentUserUid;
+
+      if (uid == null || uid.isEmpty) {
+        print('⚠️ ไม่มี UID ผู้ใช้ — ยกเลิกการบันทึก');
+        return;
+      }
+
       final int eventId = event.eventId;
       final int boothId = booth.boothId;
       final now = DateTime.now();
@@ -845,30 +867,39 @@ class MyStreamService {
       double? rssi;
       double? distance;
 
-      // 🛰️ ดึงข้อมูล beacon ที่ตรวจพบจาก FFAppState
+      // ✅ ตรวจสอบว่ามี beacon นี้ในรายการที่ตรวจจับได้ไหม
       if (FFAppState().beaconIdList.contains(booth.deviceUuid)) {
         final index = FFAppState().beaconIdList.indexOf(booth.deviceUuid);
 
-        // ✅ ถ้ามีระยะทางจาก beaconDistanceList อยู่แล้ว
-        if (FFAppState().beaconDistanceList.isNotEmpty &&
-            FFAppState().beaconDistanceList.length > index) {
-          final distanceStr = FFAppState().beaconDistanceList[index];
-          distance = double.tryParse(distanceStr);
+        // ✅ ดึงค่า RSSI จริงจาก FFAppState
+        if (FFAppState().beaconRssiList.isNotEmpty &&
+            FFAppState().beaconRssiList.length > index) {
+          final rssiStr = FFAppState().beaconRssiList[index];
+          rssi = double.tryParse(rssiStr);
         }
 
-        // ✅ ใช้ RSSI จาก beaconRssiList ถ้ามี
-        try {
-          // ถ้ายังไม่มี beaconRssiList ให้ใช้ค่า RSSI จำลอง
-          rssi = (-60 - Random().nextInt(15)).toDouble(); // random -60 ถึง -75
-        } catch (_) {
-          rssi = (-60 - Random().nextInt(15)).toDouble();
+        // ✅ หากยังไม่มีค่า RSSI ให้สแกนสดจาก Beacon
+        if (rssi == null) {
+          rssi = await _getAveragedRSSI(booth.deviceUuid);
         }
 
-        // ✅ คำนวณระยะทางจาก RSSI
-        distance = calculateDistanceFromRSSI(rssi ?? -60);
+        if (rssi == null) {
+          print("⚠️ ไม่สามารถอ่านค่า RSSI จาก Beacon ${booth.deviceUuid}");
+          // 📌 บันทึกว่าไม่พบสัญญาณ (out_of_range)
+          await _logOutOfRange(event, booth, uid, now);
+          return;
+        }
+
+        // ✅ คำนวณระยะทางจาก RSSI จริง
+        distance = calculateDistanceFromRSSI(rssi);
+      } else {
+        // 📌 ถ้าไม่เจอบีคอนเลย
+        print("❌ Beacon ${booth.deviceUuid} ไม่พบในรายการตรวจจับ");
+        await _logOutOfRange(event, booth, uid, now);
+        return;
       }
 
-      // ✅ 1️⃣ ตรวจสอบว่ามี log เดิมของ uid ใน booth เดียวกันหรือไม่
+      // ✅ ตรวจสอบว่าผู้ใช้นี้เคยเข้าบูธนี้หรือยัง
       final proximityCollection = FirebaseFirestore.instance
           .collection('events')
           .doc('${event.docRef}')
@@ -882,65 +913,123 @@ class MyStreamService {
 
       if (existingLog.docs.isNotEmpty) {
         print("⏳ User $uid เคยเข้าบูธ $boothId แล้ว — ไม่บันทึกซ้ำ");
-      } else {
-        // 👇 บันทึก log ครั้งแรกเท่านั้น
-        final proximityRef = proximityCollection.doc();
+        return;
+      }
 
-        await proximityRef.set({
+      // ✅ บันทึกครั้งแรกเท่านั้น
+      final proximityRef = proximityCollection.doc();
+      await proximityRef.set({
+        'log_id': proximityRef.id,
+        'event_id': eventId,
+        'booth_id': boothId,
+        'uid': uid,
+        'rssi': rssi,
+        'distance': distance,
+        'status': 'in_range',
+        'detect_timestamp': Timestamp.fromDate(now),
+      });
+
+      // ✅ Log ไปที่ Firebase Analytics
+      await FirebaseAnalytics.instance.logEvent(
+        name: 'detect_distance_beacon',
+        parameters: {
           'log_id': proximityRef.id,
           'event_id': eventId,
           'booth_id': boothId,
           'uid': uid,
-          'rssi': rssi ?? -60,
-          'distance': distance ?? -1,
-          'detect_timestamp': Timestamp.fromDate(now),
-        });
+          'rssi': rssi,
+          'distance': distance,
+          'status': 'in_range',
+          'detect_time': now.millisecondsSinceEpoch,
+        },
+      );
 
-        print(
-            "✅ Proximity log (first entry) saved → user: $uid | booth: $boothId | distance: ${distance?.toStringAsFixed(2)} m");
-
-        //////////// save concurrent_users ////////////
-        // ✅ 2️⃣ อัปเดต concurrent users snapshot (ภายใน 2 นาทีล่าสุด)
-        // final cutoff = now.subtract(const Duration(minutes: 2));
-
-        // final activeSnap = await proximityCollection
-        //     .where('detect_timestamp',
-        //         isGreaterThanOrEqualTo: Timestamp.fromDate(cutoff))
-        //     .get();
-
-        // final activeUids =
-        //     activeSnap.docs.map((e) => e.data()['uid'].toString()).toSet();
-
-        // final concurrentRef = FirebaseFirestore.instance
-        //     .collection('events')
-        //     .doc('${event.docRef}')
-        //     .collection('concurrent_users')
-        //     .doc();
-
-        // await concurrentRef.set({
-        //   'record_id': concurrentRef.id,
-        //   'event_id': eventId,
-        //   'timestamp': Timestamp.fromDate(now),
-        //   'uids': activeUids.toList(),
-        //   'user_count': activeUids.length,
-        // });
-
-        // print(
-        //     "👥 Concurrent users snapshot saved (${activeUids.length}) for event $eventId");
-      }
-    } catch (e) {
+      print(
+          "✅ Proximity log (first entry) saved → user: $uid | booth: $boothId | distance: ${distance?.toStringAsFixed(2)} m");
+    } catch (e, stack) {
       print("⚠️ Error while logging proximity/concurrent users: $e");
+      print(stack);
     }
   }
 
-  /// ฟังก์ชันแปลง RSSI เป็นระยะทาง (ประมาณ)
-  double calculateDistanceFromRSSI(double rssi, {int txPower = -59}) {
+  /// 🧮 คำนวณระยะทางจาก RSSI (Log-distance Path Loss model)
+  double calculateDistanceFromRSSI(double rssi,
+      {int txPower = -59, double n = 2.2}) {
     if (rssi == 0) return -1.0;
-    double ratio = rssi / txPower;
-    if (ratio < 1.0) {
-      return pow(ratio, 10).toDouble();
-    } else {
-      return (0.89976) * pow(ratio, 7.7095) + 0.111;
+    double ratioDb = txPower - rssi;
+    double ratioLinear = pow(10, ratioDb / (10 * n));
+    return ratioLinear;
+  }
+
+  /// 🔄 อ่านค่า RSSI จริงจาก Beacon (เฉลี่ย 5 ครั้งเพื่อลด noise)
+  Future<double?> _getAveragedRSSI(String uuid) async {
+    try {
+      final region = Region(identifier: 'target', proximityUUID: uuid);
+      await flutterBeacon.initializeScanning;
+      final rssiValues = <double>[];
+      final stream = flutterBeacon.ranging([region]);
+
+      await for (final result in stream) {
+        for (final beacon in result.beacons) {
+          if (beacon.proximityUUID == uuid) {
+            rssiValues.add(beacon.rssi.toDouble());
+          }
+        }
+        if (rssiValues.length >= 5) {
+          stream.drain();
+          break;
+        }
+      }
+
+      if (rssiValues.isEmpty) return null;
+      final avg = rssiValues.reduce((a, b) => a + b) / rssiValues.length;
+      print("📡 Averaged RSSI for $uuid = ${avg.toStringAsFixed(2)} dBm");
+      return avg;
+    } catch (e) {
+      print("⚠️ Error while reading RSSI: $e");
+      return null;
+    }
+  }
+
+  /// 📍 บันทึกกรณีไม่เจอบีคอน (out_of_range)
+  Future<void> _logOutOfRange(
+    EventDataModelStruct1 event,
+    BoothDataModelStructNew booth,
+    String uid,
+    DateTime now,
+  ) async {
+    try {
+      final proximityCollection = FirebaseFirestore.instance
+          .collection('events')
+          .doc('${event.docRef}')
+          .collection('proximity_logs');
+
+      final existingLog = await proximityCollection
+          .where('uid', isEqualTo: uid)
+          .where('booth_id', isEqualTo: booth.boothId)
+          .limit(1)
+          .get();
+
+      // ✅ บันทึกเฉพาะกรณีที่ยังไม่เคยเข้า
+      if (existingLog.docs.isEmpty) {
+        final proximityRef = proximityCollection.doc();
+        await proximityRef.set({
+          'log_id': proximityRef.id,
+          'event_id': event.eventId,
+          'booth_id': booth.boothId,
+          'uid': uid,
+          'rssi': null,
+          'distance': -1,
+          'status': 'out_of_range',
+          'detect_timestamp': Timestamp.fromDate(now),
+        });
+
+        print("🚫 บันทึก out_of_range → user: $uid | booth: ${booth.boothId}");
+      } else {
+        print("ℹ️ ผู้ใช้นี้เคยเข้าแล้ว และตอนนี้ไม่เจอบีคอน — ไม่บันทึกซ้ำ");
+      }
+    } catch (e) {
+      print("⚠️ Error while saving out_of_range log: $e");
     }
   }
 

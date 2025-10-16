@@ -58,6 +58,8 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
     super.initState();
     _model = createModel(context, () => SettingBoothModel());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'SettingBooth'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       if (FFAppState().rolesID != 1) {

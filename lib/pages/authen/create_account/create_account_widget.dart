@@ -37,6 +37,8 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
     super.initState();
     _model = createModel(context, () => CreateAccountModel());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'CreateAccount'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {});
 

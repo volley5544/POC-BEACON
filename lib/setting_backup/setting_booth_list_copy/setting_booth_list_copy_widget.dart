@@ -42,6 +42,8 @@ class _SettingBoothListCopyWidgetState
     super.initState();
     _model = createModel(context, () => SettingBoothListCopyModel());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'SettingBoothListCopy'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _model.apiResultoee = await RasGroup.getAllBoothsCall.call(

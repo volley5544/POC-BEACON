@@ -41,6 +41,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     super.initState();
     _model = createModel(context, () => HomeModel());
 
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'Home'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       await Future.wait([

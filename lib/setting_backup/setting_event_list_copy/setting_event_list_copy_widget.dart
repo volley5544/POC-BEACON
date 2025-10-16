@@ -44,6 +44,8 @@ class _SettingEventListCopyWidgetState extends State<SettingEventListCopyWidget>
     super.initState();
     _model = createModel(context, () => SettingEventListCopyModel());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'SettingEventListCopy'});
     _model.tabBarController = TabController(
       vsync: this,
       length: 2,

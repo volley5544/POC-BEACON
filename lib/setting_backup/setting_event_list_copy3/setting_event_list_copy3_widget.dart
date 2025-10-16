@@ -38,6 +38,8 @@ class _SettingEventListCopy3WidgetState
     super.initState();
     _model = createModel(context, () => SettingEventListCopy3Model());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'SettingEventListCopy3'});
     _model.tabBarController = TabController(
       vsync: this,
       length: 2,

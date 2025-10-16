@@ -25,6 +25,7 @@ class _TestWidgetState extends State<TestWidget> {
     super.initState();
     _model = createModel(context, () => TestModel());
 
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'test'});
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 

@@ -31,6 +31,7 @@ class _ScanBeaconWidgetState extends State<ScanBeaconWidget> {
     super.initState();
     _model = createModel(context, () => ScanBeaconModel());
 
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'scan_beacon'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _model.checkPermissionBeaconOutput =

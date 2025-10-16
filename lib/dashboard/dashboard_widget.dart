@@ -34,6 +34,7 @@ class _DashboardWidgetState extends State<DashboardWidget>
     super.initState();
     _model = createModel(context, () => DashboardModel());
 
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'dashboard'});
     animationsMap.addAll({
       'containerOnPageLoadAnimation4': AnimationInfo(
         trigger: AnimationTrigger.onPageLoad,

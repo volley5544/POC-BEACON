@@ -48,6 +48,8 @@ class _BoothListCopy4WidgetState extends State<BoothListCopy4Widget>
     super.initState();
     _model = createModel(context, () => BoothListCopy4Model());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'BoothListCopy4'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {});
 

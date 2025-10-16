@@ -38,6 +38,7 @@ class _QRCodeWidgetState extends State<QRCodeWidget> {
     super.initState();
     _model = createModel(context, () => QRCodeModel());
 
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'QRCode'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _model.dataEvent = await queryEventsRecordOnce(

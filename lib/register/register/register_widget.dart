@@ -41,6 +41,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
     super.initState();
     _model = createModel(context, () => RegisterModel());
 
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'Register'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       // getEvent

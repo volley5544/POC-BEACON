@@ -29,6 +29,7 @@ class _Checkout3WidgetState extends State<Checkout3Widget> {
     super.initState();
     _model = createModel(context, () => Checkout3Model());
 
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'Checkout3'});
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
 

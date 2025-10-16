@@ -52,6 +52,7 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
     super.initState();
     _model = createModel(context, () => BoothDetailModel());
 
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'BoothDetail'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       await Future.wait([

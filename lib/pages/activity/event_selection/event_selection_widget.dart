@@ -33,6 +33,8 @@ class _EventSelectionWidgetState extends State<EventSelectionWidget> {
     super.initState();
     _model = createModel(context, () => EventSelectionModel());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'EventSelection'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _model.datetimeCurrent = getCurrentTimestamp;

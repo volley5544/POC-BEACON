@@ -37,6 +37,8 @@ class _SettingBoothList2WidgetState extends State<SettingBoothList2Widget>
     super.initState();
     _model = createModel(context, () => SettingBoothList2Model());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'SettingBoothList2'});
     _model.tabBarController = TabController(
       vsync: this,
       length: 1,

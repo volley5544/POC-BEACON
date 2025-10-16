@@ -60,6 +60,8 @@ class _SettingEventWidgetState extends State<SettingEventWidget>
     super.initState();
     _model = createModel(context, () => SettingEventModel());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'SettingEvent'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       if (FFAppState().rolesID != 1) {

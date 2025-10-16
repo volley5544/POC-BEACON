@@ -50,6 +50,7 @@ class _SurveyWidgetState extends State<SurveyWidget>
     super.initState();
     _model = createModel(context, () => SurveyModel());
 
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'Survey'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       showDialog(

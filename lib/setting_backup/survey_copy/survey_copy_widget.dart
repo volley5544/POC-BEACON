@@ -32,6 +32,7 @@ class _SurveyCopyWidgetState extends State<SurveyCopyWidget>
     super.initState();
     _model = createModel(context, () => SurveyCopyModel());
 
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'SurveyCopy'});
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
 

@@ -31,6 +31,8 @@ class _PracticePageWidgetState extends State<PracticePageWidget> {
     super.initState();
     _model = createModel(context, () => PracticePageModel());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'PracticePage'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _model.testApiOutput = await TestApiCallCall.call();

@@ -35,6 +35,7 @@ class _ProfileCopyWidgetState extends State<ProfileCopyWidget> {
     super.initState();
     _model = createModel(context, () => ProfileCopyModel());
 
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'ProfileCopy'});
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 

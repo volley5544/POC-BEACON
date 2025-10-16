@@ -51,6 +51,8 @@ class _SettingBoothOldWidgetState extends State<SettingBoothOldWidget> {
     super.initState();
     _model = createModel(context, () => SettingBoothOldModel());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'SettingBoothOld'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _model.queryBooth = await queryBoothsRecordOnce(

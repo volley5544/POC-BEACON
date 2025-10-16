@@ -39,6 +39,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
     super.initState();
     _model = createModel(context, () => EditProfileModel());
 
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'EditProfile'});
     _model.firstNameTextController ??= TextEditingController(
         text: valueOrDefault(currentUserDocument?.firstName, ''));
     _model.firstNameFocusNode ??= FocusNode();

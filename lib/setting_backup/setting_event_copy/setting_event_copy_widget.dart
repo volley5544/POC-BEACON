@@ -46,6 +46,8 @@ class _SettingEventCopyWidgetState extends State<SettingEventCopyWidget> {
     super.initState();
     _model = createModel(context, () => SettingEventCopyModel());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'SettingEventCopy'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _model.dataEvent = await queryEventsRecordOnce(

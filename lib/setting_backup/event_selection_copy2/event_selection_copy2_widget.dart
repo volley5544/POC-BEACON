@@ -33,6 +33,8 @@ class _EventSelectionCopy2WidgetState extends State<EventSelectionCopy2Widget> {
     super.initState();
     _model = createModel(context, () => EventSelectionCopy2Model());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'EventSelectionCopy2'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       _model.datetimeCurrent = getCurrentTimestamp;

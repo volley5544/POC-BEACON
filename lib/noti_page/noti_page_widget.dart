@@ -32,6 +32,7 @@ class _NotiPageWidgetState extends State<NotiPageWidget> {
     super.initState();
     _model = createModel(context, () => NotiPageModel());
 
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'notiPage'});
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 

@@ -34,6 +34,8 @@ class _SuccessEditProfileWidgetState extends State<SuccessEditProfileWidget>
     super.initState();
     _model = createModel(context, () => SuccessEditProfileModel());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'SuccessEditProfile'});
     animationsMap.addAll({
       'containerOnPageLoadAnimation': AnimationInfo(
         trigger: AnimationTrigger.onPageLoad,

@@ -51,6 +51,8 @@ class _SettingEventListCopy2WidgetState
     super.initState();
     _model = createModel(context, () => SettingEventListCopy2Model());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'SettingEventListCopy2'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       if (FFAppState().rolesID != 1) {

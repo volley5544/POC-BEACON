@@ -40,6 +40,8 @@ class _SuccessSurveyWidgetState extends State<SuccessSurveyWidget>
     super.initState();
     _model = createModel(context, () => SuccessSurveyModel());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'SuccessSurvey'});
     animationsMap.addAll({
       'containerOnPageLoadAnimation': AnimationInfo(
         trigger: AnimationTrigger.onPageLoad,

@@ -42,6 +42,8 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
     super.initState();
     _model = createModel(context, () => SettingBoothListModel());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'SettingBoothList'});
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       if (FFAppState().rolesID == 1) {

@@ -40,6 +40,8 @@ class _SuccessRegisterWidgetState extends State<SuccessRegisterWidget>
     super.initState();
     _model = createModel(context, () => SuccessRegisterModel());
 
+    logFirebaseEvent('screen_view',
+        parameters: {'screen_name': 'SuccessRegister'});
     animationsMap.addAll({
       'containerOnPageLoadAnimation': AnimationInfo(
         trigger: AnimationTrigger.onPageLoad,

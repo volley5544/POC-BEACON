@@ -34,6 +34,7 @@ class _DatatableWidgetState extends State<DatatableWidget>
     super.initState();
     _model = createModel(context, () => DatatableModel());
 
+    logFirebaseEvent('screen_view', parameters: {'screen_name': 'datatable'});
     animationsMap.addAll({
       'containerOnPageLoadAnimation4': AnimationInfo(
         trigger: AnimationTrigger.onPageLoad,
