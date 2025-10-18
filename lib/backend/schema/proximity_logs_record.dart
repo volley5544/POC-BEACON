@@ -55,6 +55,21 @@ class ProximityLogsRecord extends FirestoreRecord {
   double get rssi => _rssi ?? 0.0;
   bool hasRssi() => _rssi != null;
 
+  // "device_model" field.
+  String? _deviceModel;
+  String get deviceModel => _deviceModel ?? '';
+  bool hasDeviceModel() => _deviceModel != null;
+
+  // "os_version" field.
+  String? _osVersion;
+  String get osVersion => _osVersion ?? '';
+  bool hasOsVersion() => _osVersion != null;
+
+  // "device_brand" field.
+  String? _deviceBrand;
+  String get deviceBrand => _deviceBrand ?? '';
+  bool hasDeviceBrand() => _deviceBrand != null;
+
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
@@ -66,6 +81,9 @@ class ProximityLogsRecord extends FirestoreRecord {
     _boothId = castToType<int>(snapshotData['booth_id']);
     _distance = castToType<double>(snapshotData['distance']);
     _rssi = castToType<double>(snapshotData['rssi']);
+    _deviceModel = snapshotData['device_model'] as String?;
+    _osVersion = snapshotData['os_version'] as String?;
+    _deviceBrand = snapshotData['device_brand'] as String?;
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -116,6 +134,9 @@ Map<String, dynamic> createProximityLogsRecordData({
   int? boothId,
   double? distance,
   double? rssi,
+  String? deviceModel,
+  String? osVersion,
+  String? deviceBrand,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -127,6 +148,9 @@ Map<String, dynamic> createProximityLogsRecordData({
       'booth_id': boothId,
       'distance': distance,
       'rssi': rssi,
+      'device_model': deviceModel,
+      'os_version': osVersion,
+      'device_brand': deviceBrand,
     }.withoutNulls,
   );
 
@@ -146,7 +170,10 @@ class ProximityLogsRecordDocumentEquality
         e1?.eventId == e2?.eventId &&
         e1?.boothId == e2?.boothId &&
         e1?.distance == e2?.distance &&
-        e1?.rssi == e2?.rssi;
+        e1?.rssi == e2?.rssi &&
+        e1?.deviceModel == e2?.deviceModel &&
+        e1?.osVersion == e2?.osVersion &&
+        e1?.deviceBrand == e2?.deviceBrand;
   }
 
   @override
@@ -158,7 +185,10 @@ class ProximityLogsRecordDocumentEquality
         e?.eventId,
         e?.boothId,
         e?.distance,
-        e?.rssi
+        e?.rssi,
+        e?.deviceModel,
+        e?.osVersion,
+        e?.deviceBrand
       ]);
 
   @override
