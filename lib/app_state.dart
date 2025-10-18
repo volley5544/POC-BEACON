@@ -238,6 +238,35 @@ class FFAppState extends ChangeNotifier {
   set firebaseMessage(String value) {
     _firebaseMessage = value;
   }
+
+  List<String> _beaconRssiList = [];
+  List<String> get beaconRssiList => _beaconRssiList;
+  set beaconRssiList(List<String> value) {
+    _beaconRssiList = value;
+  }
+
+  void addToBeaconRssiList(String value) {
+    beaconRssiList.add(value);
+  }
+
+  void removeFromBeaconRssiList(String value) {
+    beaconRssiList.remove(value);
+  }
+
+  void removeAtIndexFromBeaconRssiList(int index) {
+    beaconRssiList.removeAt(index);
+  }
+
+  void updateBeaconRssiListAtIndex(
+    int index,
+    String Function(String) updateFn,
+  ) {
+    beaconRssiList[index] = updateFn(_beaconRssiList[index]);
+  }
+
+  void insertAtIndexInBeaconRssiList(int index, String value) {
+    beaconRssiList.insert(index, value);
+  }
 }
 
 void _safeInit(Function() initializeField) {
