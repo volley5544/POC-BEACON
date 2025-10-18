@@ -470,7 +470,7 @@ class MyStreamService {
         'booth_id': '${booth.boothId}',
         'title': 'เชิญลงทะเบียน',
         'body':
-            'ขณะนี้คุณได้อยู่ใกล้กับกิจกรรม ${event.eventName} เชิญลงทะเบียนเข้าร่วมกิจกรรม',
+            'ขณะนี้คุณได้อยู่ใกล้กิจกรรม ${event.eventName} เชิญลงทะเบียนเข้าร่วมกิจกรรม',
         'sent_at': FieldValue.serverTimestamp(),
         'event_id': int.parse('${event.eventId}'),
         'send_count': 1,
@@ -510,7 +510,7 @@ class MyStreamService {
       triggerPushNotification(
         notificationTitle: 'เชิญลงทะเบียน',
         notificationText:
-            'ขณะนี้คุณได้อยู่ใกล้กับกิจกรรม ${event.eventName} เชิญลงทะเบียนเข้าร่วมกิจกรรม',
+            'ขณะนี้คุณได้อยู่ใกล้กิจกรรม ${event.eventName} เชิญลงทะเบียนเข้าร่วมกิจกรรม',
         notificationSound: 'default',
         userRefs: [currentUserReference!],
         initialPageName: 'EventSelection',
@@ -578,7 +578,7 @@ class MyStreamService {
       'to_uid': '${currentUserUid}',
       'booth_id': '${booth.boothId}',
       'title':
-          'ขณะนี้คุณได้อยู่ที่บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
+          'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
       'body': '${booth.description}',
       'sent_at': FieldValue.serverTimestamp(),
       'event_id': int.parse('${event.eventId}'),
@@ -619,7 +619,7 @@ class MyStreamService {
         'to_uid': '${currentUserUid}',
         'booth_id': '${booth.boothId}',
         'title':
-            'ขณะนี้คุณได้อยู่ที่บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
+            'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
         'body': '${booth.description}',
         'sent_at': FieldValue.serverTimestamp(),
         'event_id': int.parse('${event.eventId}'),
@@ -655,7 +655,7 @@ class MyStreamService {
           'noti_type': 'booth_invite',
           'to_uid': currentUserUid,
           'title':
-              'ขณะนี้คุณได้อยู่ที่บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
+              'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
           'body': '${booth.description}',
           'booth_name': booth.boothName,
           'detect_time': DateTime.now()
@@ -671,7 +671,7 @@ class MyStreamService {
     //ส่ง FCM notiชวนเล่นกิจกรรม
     triggerPushNotification(
       notificationTitle:
-          'ขณะนี้คุณได้อยู่ที่บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
+          'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
       notificationText: '${booth.description}',
       notificationSound: 'default',
       userRefs: [currentUserReference!],

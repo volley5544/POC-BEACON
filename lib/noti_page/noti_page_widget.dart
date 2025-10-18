@@ -304,7 +304,7 @@ class _NotiPageWidgetState extends State<NotiPageWidget> {
                                                                 .fontStyle,
                                                       ),
                                                       color: Color(0xFFFF6500),
-                                                      fontSize: 20.0,
+                                                      fontSize: 18.0,
                                                       letterSpacing: 0.0,
                                                       fontWeight:
                                                           FontWeight.w600,

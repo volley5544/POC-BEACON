@@ -6,6 +6,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/index.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -834,22 +835,32 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                           decoration:
                                                                               BoxDecoration(),
                                                                           child:
-                                                                              Text(
-                                                                            boothListVarItem.hasDescription()
-                                                                                ? boothListVarItem.description
-                                                                                : '',
-                                                                            style: FlutterFlowTheme.of(context).displaySmall.override(
-                                                                                  font: GoogleFonts.outfit(
+                                                                              Align(
+                                                                            alignment:
+                                                                                AlignmentDirectional(-1.0, -1.0),
+                                                                            child:
+                                                                                AutoSizeText(
+                                                                              boothListVarItem.hasDescription()
+                                                                                  ? boothListVarItem.description
+                                                                                  : ''.maybeHandleOverflow(
+                                                                                      maxChars: 300,
+                                                                                    ),
+                                                                              textAlign: TextAlign.start,
+                                                                              maxLines: 2,
+                                                                              minFontSize: 10.0,
+                                                                              style: FlutterFlowTheme.of(context).displaySmall.override(
+                                                                                    font: GoogleFonts.outfit(
+                                                                                      fontWeight: FontWeight.w100,
+                                                                                      fontStyle: FlutterFlowTheme.of(context).displaySmall.fontStyle,
+                                                                                    ),
+                                                                                    color: FlutterFlowTheme.of(context).secondaryText,
+                                                                                    fontSize: 14.0,
+                                                                                    letterSpacing: 0.0,
                                                                                     fontWeight: FontWeight.w100,
                                                                                     fontStyle: FlutterFlowTheme.of(context).displaySmall.fontStyle,
+                                                                                    lineHeight: 2.0,
                                                                                   ),
-                                                                                  color: FlutterFlowTheme.of(context).secondaryText,
-                                                                                  fontSize: 16.0,
-                                                                                  letterSpacing: 0.0,
-                                                                                  fontWeight: FontWeight.w100,
-                                                                                  fontStyle: FlutterFlowTheme.of(context).displaySmall.fontStyle,
-                                                                                  lineHeight: 3.0,
-                                                                                ),
+                                                                            ),
                                                                           ),
                                                                         ),
                                                                         StreamBuilder<
@@ -1132,7 +1143,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                     padding:
                                                         EdgeInsetsDirectional
                                                             .fromSTEB(24.0, 0.0,
-                                                                24.0, 50.0),
+                                                                24.0, 100.0),
                                                     child: FFButtonWidget(
                                                       onPressed:
                                                           (containerUserActivityRecordList
