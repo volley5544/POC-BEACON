@@ -4,7 +4,7 @@ class BoothDataModelStructNew {
   final int boothId;
   final String boothName;
   final String description;
-  final int notificationDistance;
+  final double notificationDistance;
   final String associatedEventId;
   final DateTime createdAt;
   final String createdBy;
