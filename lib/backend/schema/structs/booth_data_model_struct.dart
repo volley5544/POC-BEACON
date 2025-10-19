@@ -13,7 +13,7 @@ class BoothDataModelStruct extends FFFirebaseStruct {
     int? boothId,
     String? boothName,
     String? description,
-    int? notificationDistance,
+    double? notificationDistance,
     String? associatedEventId,
     String? createdAt,
     String? createdBy,
@@ -71,11 +71,11 @@ class BoothDataModelStruct extends FFFirebaseStruct {
   bool hasDescription() => _description != null;
 
   // "notification_distance" field.
-  int? _notificationDistance;
-  int get notificationDistance => _notificationDistance ?? 0;
-  set notificationDistance(int? val) => _notificationDistance = val;
+  double? _notificationDistance;
+  double get notificationDistance => _notificationDistance ?? 0.0;
+  set notificationDistance(double? val) => _notificationDistance = val;
 
-  void incrementNotificationDistance(int amount) =>
+  void incrementNotificationDistance(double amount) =>
       notificationDistance = notificationDistance + amount;
 
   bool hasNotificationDistance() => _notificationDistance != null;
@@ -157,7 +157,7 @@ class BoothDataModelStruct extends FFFirebaseStruct {
         boothId: castToType<int>(data['booth_id']),
         boothName: data['booth_name'] as String?,
         description: data['description'] as String?,
-        notificationDistance: castToType<int>(data['notification_distance']),
+        notificationDistance: castToType<double>(data['notification_distance']),
         associatedEventId: data['associated_event_id'] as String?,
         createdAt: data['created_at'] as String?,
         createdBy: data['created_by'] as String?,
@@ -213,7 +213,7 @@ class BoothDataModelStruct extends FFFirebaseStruct {
         ),
         'notification_distance': serializeParam(
           _notificationDistance,
-          ParamType.int,
+          ParamType.double,
         ),
         'associated_event_id': serializeParam(
           _associatedEventId,
@@ -278,7 +278,7 @@ class BoothDataModelStruct extends FFFirebaseStruct {
         ),
         notificationDistance: deserializeParam(
           data['notification_distance'],
-          ParamType.int,
+          ParamType.double,
           false,
         ),
         associatedEventId: deserializeParam(
@@ -376,7 +376,7 @@ BoothDataModelStruct createBoothDataModelStruct({
   int? boothId,
   String? boothName,
   String? description,
-  int? notificationDistance,
+  double? notificationDistance,
   String? associatedEventId,
   String? createdAt,
   String? createdBy,
