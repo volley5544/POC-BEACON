@@ -1670,7 +1670,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                                           .descriptionTextController
                                                           .text,
                                                       notificationDistance:
-                                                          int.tryParse(_model
+                                                          double.tryParse(_model
                                                               .distanceTextController
                                                               .text),
                                                       createdBy:
@@ -1714,7 +1714,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                                           .descriptionTextController
                                                           .text,
                                                       notificationDistance:
-                                                          int.tryParse(_model
+                                                          double.tryParse(_model
                                                               .distanceTextController
                                                               .text),
                                                       createdBy:
@@ -1790,7 +1790,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                                           .descriptionTextController
                                                           .text,
                                                       notificationDistance:
-                                                          int.tryParse(_model
+                                                          double.tryParse(_model
                                                               .distanceTextController
                                                               .text),
                                                       updatedBy:

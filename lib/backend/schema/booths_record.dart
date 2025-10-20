@@ -30,11 +30,6 @@ class BoothsRecord extends FirestoreRecord {
   String get description => _description ?? '';
   bool hasDescription() => _description != null;
 
-  // "notification_distance" field.
-  int? _notificationDistance;
-  int get notificationDistance => _notificationDistance ?? 0;
-  bool hasNotificationDistance() => _notificationDistance != null;
-
   // "associated_event_id" field.
   String? _associatedEventId;
   String get associatedEventId => _associatedEventId ?? '';
@@ -90,14 +85,17 @@ class BoothsRecord extends FirestoreRecord {
   DateTime? get lastUpdated => _lastUpdated;
   bool hasLastUpdated() => _lastUpdated != null;
 
+  // "notification_distance" field.
+  double? _notificationDistance;
+  double get notificationDistance => _notificationDistance ?? 0.0;
+  bool hasNotificationDistance() => _notificationDistance != null;
+
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
     _boothId = castToType<int>(snapshotData['booth_id']);
     _boothName = snapshotData['booth_name'] as String?;
     _description = snapshotData['description'] as String?;
-    _notificationDistance =
-        castToType<int>(snapshotData['notification_distance']);
     _associatedEventId = snapshotData['associated_event_id'] as String?;
     _createdAt = snapshotData['created_at'] as DateTime?;
     _createdBy = snapshotData['created_by'] as String?;
@@ -109,6 +107,8 @@ class BoothsRecord extends FirestoreRecord {
     _deviceUuid = snapshotData['device_uuid'] as String?;
     _currentUserCount = castToType<int>(snapshotData['current_user_count']);
     _lastUpdated = snapshotData['last_updated'] as DateTime?;
+    _notificationDistance =
+        castToType<double>(snapshotData['notification_distance']);
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -153,7 +153,6 @@ Map<String, dynamic> createBoothsRecordData({
   int? boothId,
   String? boothName,
   String? description,
-  int? notificationDistance,
   String? associatedEventId,
   DateTime? createdAt,
   String? createdBy,
@@ -164,13 +163,13 @@ Map<String, dynamic> createBoothsRecordData({
   String? deviceUuid,
   int? currentUserCount,
   DateTime? lastUpdated,
+  double? notificationDistance,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
       'booth_id': boothId,
       'booth_name': boothName,
       'description': description,
-      'notification_distance': notificationDistance,
       'associated_event_id': associatedEventId,
       'created_at': createdAt,
       'created_by': createdBy,
@@ -181,6 +180,7 @@ Map<String, dynamic> createBoothsRecordData({
       'device_uuid': deviceUuid,
       'current_user_count': currentUserCount,
       'last_updated': lastUpdated,
+      'notification_distance': notificationDistance,
     }.withoutNulls,
   );
 
@@ -196,7 +196,6 @@ class BoothsRecordDocumentEquality implements Equality<BoothsRecord> {
     return e1?.boothId == e2?.boothId &&
         e1?.boothName == e2?.boothName &&
         e1?.description == e2?.description &&
-        e1?.notificationDistance == e2?.notificationDistance &&
         e1?.associatedEventId == e2?.associatedEventId &&
         e1?.createdAt == e2?.createdAt &&
         e1?.createdBy == e2?.createdBy &&
@@ -207,7 +206,8 @@ class BoothsRecordDocumentEquality implements Equality<BoothsRecord> {
         listEquality.equals(e1?.boothImageList, e2?.boothImageList) &&
         e1?.deviceUuid == e2?.deviceUuid &&
         e1?.currentUserCount == e2?.currentUserCount &&
-        e1?.lastUpdated == e2?.lastUpdated;
+        e1?.lastUpdated == e2?.lastUpdated &&
+        e1?.notificationDistance == e2?.notificationDistance;
   }
 
   @override
@@ -215,7 +215,6 @@ class BoothsRecordDocumentEquality implements Equality<BoothsRecord> {
         e?.boothId,
         e?.boothName,
         e?.description,
-        e?.notificationDistance,
         e?.associatedEventId,
         e?.createdAt,
         e?.createdBy,
@@ -226,7 +225,8 @@ class BoothsRecordDocumentEquality implements Equality<BoothsRecord> {
         e?.boothImageList,
         e?.deviceUuid,
         e?.currentUserCount,
-        e?.lastUpdated
+        e?.lastUpdated,
+        e?.notificationDistance
       ]);
 
   @override
