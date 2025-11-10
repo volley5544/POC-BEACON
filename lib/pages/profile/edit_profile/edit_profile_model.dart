@@ -8,12 +8,12 @@ class EditProfileModel extends FlutterFlowModel<EditProfileWidget> {
 
   bool isDataUploading_uploadData1mc = false;
   FFUploadedFile uploadedLocalFile_uploadData1mc =
-      FFUploadedFile(bytes: Uint8List.fromList([]));
+      FFUploadedFile(bytes: Uint8List.fromList([]), originalFilename: '');
   String uploadedFileUrl_uploadData1mc = '';
 
   bool isDataUploading_photoProfile = false;
   FFUploadedFile uploadedLocalFile_photoProfile =
-      FFUploadedFile(bytes: Uint8List.fromList([]));
+      FFUploadedFile(bytes: Uint8List.fromList([]), originalFilename: '');
   String uploadedFileUrl_photoProfile = '';
 
   // State field(s) for firstName widget.

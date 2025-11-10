@@ -71,12 +71,54 @@ class _HomeWidgetState extends State<HomeWidget> {
           );
 
           await actions.setupFirebaseMessaging();
+          await showDialog(
+            context: context,
+            builder: (alertDialogContext) {
+              return AlertDialog(
+                content: Text('1'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(alertDialogContext),
+                    child: Text('Ok'),
+                  ),
+                ],
+              );
+            },
+          );
           setDarkModeSetting(context, ThemeMode.light);
+          await showDialog(
+            context: context,
+            builder: (alertDialogContext) {
+              return AlertDialog(
+                content: Text('2'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(alertDialogContext),
+                    child: Text('Ok'),
+                  ),
+                ],
+              );
+            },
+          );
           if (!FFAppState().isInApp) {
             await actions.beaconBackgroundServiceAction();
             FFAppState().isInApp = true;
             safeSetState(() {});
           }
+          await showDialog(
+            context: context,
+            builder: (alertDialogContext) {
+              return AlertDialog(
+                content: Text('4'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(alertDialogContext),
+                    child: Text('Ok'),
+                  ),
+                ],
+              );
+            },
+          );
           _model.dataUser = await queryUsersRecordOnce(
             queryBuilder: (usersRecord) => usersRecord.where(
               'uid',
@@ -84,6 +126,20 @@ class _HomeWidgetState extends State<HomeWidget> {
             ),
             singleRecord: true,
           ).then((s) => s.firstOrNull);
+          await showDialog(
+            context: context,
+            builder: (alertDialogContext) {
+              return AlertDialog(
+                content: Text('5'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(alertDialogContext),
+                    child: Text('Ok'),
+                  ),
+                ],
+              );
+            },
+          );
           if (_model.dataUser!.hasRolesRef()) {
             // getRole
             _model.roleData = await queryRolesRecordOnce(
@@ -98,6 +154,20 @@ class _HomeWidgetState extends State<HomeWidget> {
             FFAppState().rolesID = _model.roleData!.rolesId;
             safeSetState(() {});
           }
+          await showDialog(
+            context: context,
+            builder: (alertDialogContext) {
+              return AlertDialog(
+                content: Text('6'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(alertDialogContext),
+                    child: Text('Ok'),
+                  ),
+                ],
+              );
+            },
+          );
           Navigator.pop(context);
         }),
         Future(() async {

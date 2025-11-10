@@ -2273,6 +2273,8 @@ class _SettingEventWidgetState extends State<SettingEventWidget>
                                                                       ?.width,
                                                                   blurHash: m
                                                                       .blurHash,
+                                                                  originalFilename:
+                                                                      m.originalFilename,
                                                                 ))
                                                             .toList();
                                                   } finally {

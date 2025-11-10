@@ -1364,6 +1364,8 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                                                       ?.width,
                                                                   blurHash: m
                                                                       .blurHash,
+                                                                  originalFilename:
+                                                                      m.originalFilename,
                                                                 ))
                                                             .toList();
                                                   } finally {

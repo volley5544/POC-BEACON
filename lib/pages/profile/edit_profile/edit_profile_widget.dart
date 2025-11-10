@@ -214,6 +214,7 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                                         height: m.dimensions?.height,
                                         width: m.dimensions?.width,
                                         blurHash: m.blurHash,
+                                        originalFilename: m.originalFilename,
                                       ))
                                   .toList();
 
@@ -288,6 +289,8 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                                               height: m.dimensions?.height,
                                               width: m.dimensions?.width,
                                               blurHash: m.blurHash,
+                                              originalFilename:
+                                                  m.originalFilename,
                                             ))
                                         .toList();
 
