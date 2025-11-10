@@ -167,6 +167,20 @@ class _HomeWidgetState extends State<HomeWidget> {
               context: context,
               builder: (alertDialogContext) {
                 return AlertDialog(
+                  content: Text(_model.dataUser!.rolesRef),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(alertDialogContext),
+                      child: Text('Ok'),
+                    ),
+                  ],
+                );
+              },
+            );
+            await showDialog(
+              context: context,
+              builder: (alertDialogContext) {
+                return AlertDialog(
                   content: Text(_model.roleData!.rolesName),
                   actions: [
                     TextButton(
@@ -205,8 +219,9 @@ class _HomeWidgetState extends State<HomeWidget> {
                 );
               },
             );
-            FFAppState().rolesName = _model.roleData!.rolesName;
-            FFAppState().rolesDescription = _model.roleData!.rolesDescription;
+            FFAppState().rolesName = '${_model.roleData?.rolesName}';
+            FFAppState().rolesDescription =
+                '${_model.roleData?.rolesDescription}';
             FFAppState().rolesID = _model.roleData!.rolesId;
             safeSetState(() {});
           }
