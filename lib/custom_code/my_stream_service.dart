@@ -26,7 +26,7 @@ class MyStreamService with WidgetsBindingObserver {
   factory MyStreamService() => _instance;
 
   MyStreamService._internal() {
-    // ✅ เริ่มฟังสถานะ lifecycle ของแอป เพิ่ม observer ตอนสร้าง service
+    // ✅ เริ่มฟังสถานะ lifecycle ของแอป เพิ่ม observer ตอนสร้าง service..
     WidgetsBinding.instance.addObserver(this);
 
     // ✅ โหลดค่า config ทันทีเมื่อสร้าง instance
