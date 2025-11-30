@@ -19,12 +19,31 @@ import 'dart:math';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:io';
+import 'package:flutter/widgets.dart';
 
-class MyStreamService {
+class MyStreamService with WidgetsBindingObserver {
   static final MyStreamService _instance = MyStreamService._internal();
   factory MyStreamService() => _instance;
-  MyStreamService._internal();
+
+  MyStreamService._internal() {
+    // ✅ เริ่มฟังสถานะ lifecycle ของแอป เพิ่ม observer ตอนสร้าง service
+    WidgetsBinding.instance.addObserver(this);
+
+    // ✅ โหลดค่า config ทันทีเมื่อสร้าง instance
+    FirebaseFirestore.instance
+        .collection('app_config')
+        .doc('test_mode')
+        .snapshots()
+        .listen((snapshot) {
+      if (snapshot.exists) {
+        isTestMode = snapshot.data()?['isTestMode'] ?? false;
+        print('🔥 Test mode updated from Firebase: $isTestMode');
+      }
+    });
+  }
+
   static DateTime? _lastUpdateTime;
+  bool isTestMode = false;
 
   StreamSubscription<RangingResult>? _streamRanging;
   StreamSubscription? _subEvents;
@@ -47,41 +66,152 @@ class MyStreamService {
   List<Map<String, dynamic>> eventRegisterDocs = [];
   List<RegisterDataModelStruct> eventRegisterData = [];
 
+  final Map<String, List<double>> _rssiHistory = {};
+  final Map<String, double> _emaMap = {};
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
-  // List<String> get beaconId => _beaconId;
-  // List<String> get beaconDistance => _beaconDistance;
+  // 🔴 1. ค่าคงที่สำหรับการปรับเทียบ (ต้องแทนที่ด้วยค่าที่วัดได้จริง)
+  // **สำคัญ:** แทนที่ค่าเหล่านี้ด้วยผลลัพธ์จากฟังก์ชัน calculateCalibrationParams
+  // static const double TX_POWER_CALIBRATED = -59.5; // ตัวอย่าง: ค่า RSSI ที่วัดได้จริง ณ 1 เมตร
+  // static const double PATH_LOSS_EXPONENT_N = 2.75; // ตัวอย่าง: ค่า Path Loss Exponent ที่คำนวณได้
+
+  static const double TX_POWER_CALIBRATED = -55.33844294323458;
+  static const double PATH_LOSS_EXPONENT_N = 4.064296685954029;
+
+  // 🟢 2. ค่าคงที่สำหรับ Exponential Moving Average (EMA)
+  // ใช้สำหรับกรอง RSSI: ค่า α ยิ่งน้อย (ใกล้ 0) ยิ่งเสถียร (ตอบสนองช้า)
+  // static const double EMA_ALPHA = 0.2; // แนะนำ 0.1 - 0.3 สำหรับความเสถียรสูง
+  static const double EMA_ALPHA = 0.15; // แนะนำ 0.1 - 0.3 สำหรับความเสถียรสูง
+
+  // เก็บค่า RSSI ล่าสุดที่ถูก Smoothing แล้วของแต่ละ Beacon
+  // Map<major:minor, smoothedRssi>
+  Map<String, double> _smoothedRssiCache = {};
+
+// List<String> get beaconId => _beaconId;
+// List<String> get beaconDistance => _beaconDistance;
+
+//เพิ่ม “Hysteresis” ป้องกันการกระพริบของสถานะ
+// bool isWithinRange(double distance, double threshold, {double hysteresisBuffer = 0.3}) {
+//   return distance <= threshold + hysteresisBuffer;
+// }
+  bool? _wasInRange;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      print("🟢 แอปกลับมา Foreground → รีเซ็ตสถานะ beacon");
+      // FFAppState().isAppForeground = true;
+
+      // ✅ รีเซ็ตสถานะค้างทั้งหมด
+      _wasInRange = null;
+      FFAppState().beaconIdList = [];
+      FFAppState().beaconDistanceList = [];
+      FFAppState().beaconRssiList = [];
+
+      // ✅ รีสตาร์ทการฟังสัญญาณใหม่
+      if (_streamRanging != null) {
+        _streamRanging!.cancel();
+        _streamRanging = null;
+      }
+
+      // เรียก startListening() ใหม่ (ต้องมี stream จาก plugin beacon)
+      // ตัวอย่าง:
+      // startListening(FlutterBeacon.ranging(...));
+    }
+
+    if (state == AppLifecycleState.paused) {
+      print("🔴 แอปไป Background → หยุดฟังสัญญาณชั่วคราว");
+      // FFAppState().isAppForeground = false;
+      _streamRanging?.pause();
+    }
+  }
+
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _streamRanging?.cancel();
+    _subEvents?.cancel();
+    _subBooth?.cancel();
+  }
 
   void startListening(Stream<RangingResult> myStream) {
     List<EventDataModelStruct1> matchingEvents = [];
     _streamRanging ??= myStream.listen((result) async {
       print('in ranging.listen');
+      print('🎧 Start listening... Test mode: $isTestMode');
+
+      if (result.beacons.isEmpty) return;
+
       if (result.beacons.isNotEmpty) {
+        // เรียงตามความใกล้
         result.beacons.sort((a, b) => a.accuracy.compareTo(b.accuracy));
         final nearest = result.beacons;
 
-        beaconId.value = nearest.map((e) => e.proximityUUID).toList();
+        // กรอง beacon ที่สัญญาณอ่อนกว่า -90 dB
+        final validBeacons = result.beacons.where((b) => b.rssi > -95).toList();
+        if (validBeacons.isEmpty) return;
+
+        // beaconId.value = nearest.map((e) => e.proximityUUID).toList();
 
         // beaconDistance.value =
         //     nearest.map((e) => e.accuracy.toStringAsFixed(2)).toList();
         // ;
 
-        // ✅ ใช้ฟังก์ชัน calculateDistanceFromRSSI() แทน accuracy ของ library
-        beaconDistance.value = nearest
-            .map((e) => calculateDistanceFromRSSI(e.rssi.toDouble(),
-                    txPower: -63, n: 2.2)
-                .toStringAsFixed(2))
-            .toList();
+        beaconId.value = validBeacons.map((e) => e.proximityUUID).toList();
+        beaconDistance.value = validBeacons
+            .map((e) {
+              // final smoothedRssi = getSmoothedRSSI(e.proximityUUID, e.rssi.toDouble());
+              // 1. ใช้ UUID เป็น Key ในการทำ EMA
+              final smoothedRssi =
+                  applyExponentialSmoothing(e.proximityUUID, e.rssi.toDouble());
 
-        // FFAppState().beaconDistanceList =
-        //     nearest.map((e) => e.accuracy.toStringAsFixed(2)).toList();
+              // 2. คำนวณระยะทางจาก RSSI ที่ถูกกรองแล้ว (ใช้ค่า TxPower และ n ที่ Calibration แล้ว)
+              final dist = calculateDistanceFromRSSI(smoothedRssi);
 
-        // ✅ เก็บข้อมูลลงใน FFAppState
+              // return calibrateDistance(dist).toStringAsFixed(2);
+              // 3. แสดงผลระยะทางเป็นทศนิยม 2 ตำแหน่ง
+              return dist.toStringAsFixed(2);
+            })
+            .toList()
+            .cast<String>();
+
+        // ✅ อัปเดต FFAppState
         FFAppState().beaconDistanceList = List.from(beaconDistance.value);
         FFAppState().beaconIdList =
-            nearest.map((e) => e.proximityUUID).toList();
+            validBeacons.map((e) => e.proximityUUID).toList();
         FFAppState().beaconRssiList =
-            nearest.map((e) => e.rssi.toString()).toList();
+            validBeacons.map((e) => e.rssi.toString()).toList();
+
+        print('🛰️ Beacon Map Updated: ${FFAppState().beaconDistanceList}');
+
+        // // ✅ ใช้ฟังก์ชัน calculateDistanceFromRSSI() แทน accuracy ของ library
+        // // ✅ ใช้ฟังก์ชัน calculateDistanceFromRSSI() + calibrateDistance() แทน accuracy ของ library
+        // beaconDistance.value = nearest.map((e) {
+        //   // 🔹 กรองสัญญาณ RSSI ให้เรียบก่อน
+        //   final smoothedRssi = getSmoothedRSSI(e.proximityUUID, e.rssi.toDouble());
+        //
+        //   // 🔹 คำนวณระยะด้วยสูตรใหม่
+        //   final rawDistance = calculateDistanceFromRSSI(
+        //     smoothedRssi,
+        //     txPower: -63, // ปรับตาม Beacon ที่วัดจริง
+        //     n: 2.45,      // ค่าเหมาะสมในห้องขนาด 23 ตร.ม.
+        //   );
+        //
+        //   // 🔹 คาลิเบรตระยะเพิ่มเติม (ลดความคลาดเคลื่อนจากผนัง / สิ่งกีดขวาง)
+        //   final calibrated = calibrateDistance(rawDistance);
+        //
+        //   // 🔹 คืนค่าระยะคาลิเบรตแล้ว (หน่วยเมตร)
+        //   return calibrated.toStringAsFixed(2);
+        // }).toList();
+        //
+        // // FFAppState().beaconDistanceList =
+        // //     nearest.map((e) => e.accuracy.toStringAsFixed(2)).toList();
+        //
+        // // ✅ เก็บข้อมูลลงใน FFAppState
+        // FFAppState().beaconDistanceList = List.from(beaconDistance.value);
+        // FFAppState().beaconIdList =
+        //     nearest.map((e) => e.proximityUUID).toList();
+        // FFAppState().beaconRssiList =
+        //     nearest.map((e) => e.rssi.toString()).toList();
 
         // Convert beaconId + beaconDistance into a Map for easy lookup แปลง beaconId + distance เป็น Map สำหรับ lookup ภายหลัง
         Map<String, double> beaconMap = {
@@ -109,9 +239,16 @@ class MyStreamService {
               .map((event) {
                 // Filter booths by condition
                 final matchedBooths = event.boothList.where((booth) {
-                  final beaconDist = beaconMap['${booth.deviceUuid}'];
-                  return beaconDist != null &&
-                      beaconDist <= booth.notificationDistance;
+                  final beaconDist = beaconMap[booth.deviceUuid];
+                  if (beaconDist == null) return false;
+                  // final double maxDistance = booth.notificationDistance;
+
+                  // ✅ เงื่อนไข: ถ้าค่าระยะไม่เป็น null และอยู่ในรัศมี
+                  // return beaconDist != null && beaconDist <= maxDistance;
+
+                  // ใช้ฟังก์ชันตรวจสอบแบบมี buffer
+                  return isWithinRange(beaconDist, booth.notificationDistance,
+                      hysteresisBuffer: 0.3);
                 }).toList();
 
                 // Return event with only matching booths
@@ -143,53 +280,45 @@ class MyStreamService {
           if (matchingEvents.length > 0) {
             // HapticFeedback.heavyImpact();
             print('in range Beac');
-            /*
-            await Future.wait(
-              matchingEvents.expand((event) => event.boothList
-                  .map((booth) => createUserNotificationDoc(event, booth))),
-            );
-            */
-            //niruemon edit 2025-10-01
+
             await Future.wait(
               matchingEvents
                   .expand((event) => event.boothList.map((booth) async {
-                        // เรียก function เดิม
-                        await createUserNotificationDoc(event, booth);
+                        // await createUserNotificationDoc(event, booth);// เรียก function เดิม
+                        // await createDetectionLog(event, booth);// เรียก function ใหม่ เก็บ detection
+                        // await cleanupOldDetections(event);
+                        // await updateBoothCountsIfNeeded(event);
 
-                        // เรียก function ใหม่ เก็บ detection
-                        await createDetectionLog(event, booth);
+                        // final boothUuid = booth.deviceUuid;
+                        // print('boothUuid ddd :'+boothUuid);
 
-                        // เก็บ detection
-                        await createDetectionLog(event, booth);
+                        // final distance = getDistanceOfUuid(booth.deviceUuid); // ระยะที่คำนวณล่าสุด
+                        // final shouldNotify = await shouldTriggerNotification(booth, distance);
+                        //
+                        // // final isNear = service.isUserStableNear(booth, distance);
+                        //
+                        // if (shouldNotify) {
+                        // ✅ ผู้ใช้ยืนใกล้บูธจริง และอยู่ต่อเนื่องครบเวลา
+                        // print('✅ ผู้ใช้อยู่ใกล้บูธ ${booth.boothName} แล้ว (ระยะ ${distance} m)');
 
+                        // ✅ ตรวจสอบระยะ, RSSI, ความเสถียรก่อนแจ้งเตือน
+                        // final detect = await handleBeaconDetection(event, booth);
+
+                        // if(detect){
+                        // ✅ ส่ง noti และบันทึก log เฉพาะเมื่อผ่านเงื่อนไขแล้ว
+                        await createUserNotificationDoc(
+                            event, booth); // เรียก function เดิม
+                        await createDetectionLog(
+                            event, booth); // เรียก function ใหม่ เก็บ detection
                         await cleanupOldDetections(event);
-
-                        // await countUniqueUsersPerBooth(event);
                         await updateBoothCountsIfNeeded(event);
-
-                        // await logProximityAndConcurrentUsers(event, booth);
+                        // }
+                        // }
                       })),
             );
-            // await Future.wait(
-            //   matchingEvents.map((event) async {
-            // Map<String,dynamic> queryNotiData = await getDataFromCollection('${event.eventId}');
-            // if(queryNotiData == {}){
-            //   return createUserNotificationDoc(event);
-            // }
-            // else{
-            //   return createUserNotificationDoc(event);
-            // }
-            // return createUserNotificationDoc(event);
-            // } ),
-            // );
           } else {
             print('not in range Beac');
           }
-          // List<EventDataModelStruct1> matchingEvents = eventData.where((event) {
-          //   return event.boothList.any((booth) => FFAppState().beaconIdList.contains(booth.deviceUuid) && );
-          // }).toList();
-          //
-          // print("Found ${matchingEvents.length} matching events");
         }
       }
       // handle data
@@ -429,7 +558,7 @@ class MyStreamService {
               register.eventId == 2 && register.uid == '${currentUserUid}')
           .toList();
 
-      print('filteredRegister : ${filteredRegister5544.length}');
+      // print('filteredRegister : ${filteredRegister5544.length}');
     });
   }
 
@@ -448,9 +577,9 @@ class MyStreamService {
             register.uid == '${currentUserUid}')
         .toList();
 
-    print('filteredRegister.length : ${filteredRegister.length}');
+    // print('filteredRegister.length : ${filteredRegister.length}');
     // FFAppState().textDebug = '${filteredRegister.length}';
-    print('filteredNotiType.length : ${filteredNotiType.length}');
+    // print('filteredNotiType.length : ${filteredNotiType.length}');
     // FFAppState().textDebug2 = '${filteredNotiType.length}';
     // if (filteredRegister.length > 0){
     //
@@ -573,20 +702,67 @@ class MyStreamService {
       }
     }
 
-    //niruemon บันทึกเมื่อ beacon detect เจอ
-    final logId = await logProximityAndConcurrentUsers(event, booth, {
-      'to_uid': '${currentUserUid}',
-      'booth_id': '${booth.boothId}',
-      'title':
-          'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
-      'body': '${booth.description}',
-      'sent_at': FieldValue.serverTimestamp(),
-      'event_id': int.parse('${event.eventId}'),
-      'send_count': 1,
-      'is_read': false,
-      'is_deleted': false,
-      'noti_type': 'booth_invite',
-    });
+    //niruemon add
+    // 1️⃣ คำนวณระยะล่าสุด
+    // final distance = getDistanceOfUuid(booth.deviceUuid);
+    // 🧭 1️⃣ อ่านระยะและ RSSI ของ Beacon ปัจจุบัน
+    double? rssi;
+    double calibratedDistance = getDistanceOfUuid(booth.deviceUuid);
+    bool isStable = false;
+
+    // 🔹 อ่าน RSSI จาก FFAppState() (ยังจำเป็นสำหรับ log/analysis)
+    if (FFAppState().beaconIdList.contains(booth.deviceUuid)) {
+      final index = FFAppState().beaconIdList.indexOf(booth.deviceUuid);
+      rssi = double.tryParse(FFAppState().beaconRssiList[index]) ?? -60;
+    }
+
+    // 🔹 ตรวจว่าอยู่ในระยะต่อเนื่องหรือไม่
+    isStable = isUserStableNear(booth, calibratedDistance);
+
+    // 2️⃣ ตรวจเงื่อนไข stable + calibration
+    // 🧩 2️⃣ ตรวจเงื่อนไขเข้าใกล้บูธด้วย RSSI/ระยะ
+    final shouldNotify = await shouldTriggerNotification(
+      booth,
+      calibratedDistance ?? 999,
+      rssi: rssi,
+    );
+
+    // 3️⃣ ถ้าไม่ผ่านเงื่อนไข ให้จบเลย
+    if (!shouldNotify) {
+      print(
+          '⏳ ยังไม่เข้าเงื่อนไขส่ง noti สำหรับ ${booth.boothName} (ระยะ ${calibratedDistance.toStringAsFixed(2)} m)');
+      return;
+    }
+
+    // 4️⃣ ผ่านเงื่อนไข → ส่ง Notification และบันทึกข้อมูล
+    print(
+        '✅ ผู้ใช้อยู่ใกล้บูธ ${booth.boothName} แล้ว (ระยะ ${calibratedDistance.toStringAsFixed(2)} m)');
+
+    // ✅ Niruemon: บันทึกเมื่อ Beacon ตรวจจับได้
+    final logId = await logProximityAndConcurrentUsers(
+      event,
+      booth,
+      rssi: rssi, // ค่า RSSI ล่าสุด
+      calibratedDistance: calibratedDistance, // ระยะหลังคาลิเบรต
+      isStable: isStable, // สถานะเสถียร (อยู่ใกล้ต่อเนื่อง)
+      boothThreshold: booth.notificationDistance ?? 1.5,
+      source: 'createUserNotificationDoc',
+      status: shouldNotify ? 'in_range' : 'out_of_range',
+      notiData: {
+        // ✅ ส่งเฉพาะข้อมูล noti
+        'to_uid': currentUserUid,
+        'booth_id': booth.boothId,
+        'title':
+            'ขณะนี้คุณอยู่ใกล้บูธ ${booth.boothName} (กิจกรรม ${event.eventName})',
+        'body': booth.description,
+        'sent_at': FieldValue.serverTimestamp(),
+        'event_id': event.eventId,
+        'send_count': 1,
+        'is_read': false,
+        'is_deleted': false,
+        'noti_type': 'booth_invite',
+      },
+    );
 
     final notiRef = FirebaseFirestore.instance
         .collection('users')
@@ -628,45 +804,31 @@ class MyStreamService {
         'is_deleted': false,
         'noti_type': 'booth_invite',
       });
-      print('xxxxxx');
-
-      // ✅ เพิ่ม log event เข้า Firebase Analytics
-      // await analytics.logEvent(
-      //   name: 'notification_sent',
-      //   parameters: {
-      //     'event_id': event.eventId,
-      //     'booth_id': booth.boothId,
-      //     'noti_type': 'booth_invite',
-      //     'to_uid': currentUserUid,
-      //     'title':
-      //     'ขณะนี้คุณได้อยู่ที่บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
-      //     'body': '${booth.description}',
-      //     'booth_name': booth.boothName,
-      //     'timestamp': FieldValue.serverTimestamp(),
-      //   },
-      // );
-
-      print('yyyyyy');
-      await analytics.logEvent(
-        name: 'detect_booth_beacon',
-        parameters: {
-          'event_id': event.eventId,
-          'booth_id': booth.boothId,
-          'noti_type': 'booth_invite',
-          'to_uid': currentUserUid,
-          'title':
-              'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
-          'body': '${booth.description}',
-          'booth_name': booth.boothName,
-          'detect_time': DateTime.now()
-              .millisecondsSinceEpoch, // ✅ บังคับเป็น String ชัดเจน
-          'log_id': logId ?? '',
-        },
-      );
-      print('zzzzzz');
     }
 
     //noti FCM (นอกแอพ)
+
+    await analytics.logEvent(
+      name: 'detect_booth_beacon',
+      parameters: {
+        'event_id': event.eventId,
+        'booth_id': booth.boothId,
+        'noti_type': 'booth_invite',
+        'to_uid': currentUserUid,
+        'title':
+            'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
+        'body': '${booth.description}',
+        'booth_name': booth.boothName ?? '',
+        'booth_uuid': booth.deviceUuid ?? '',
+        'notification_distance': booth.notificationDistance ?? '',
+        'detect_time':
+            DateTime.now().millisecondsSinceEpoch, // ✅ บังคับเป็น String ชัดเจน
+        'log_id': logId ?? '',
+        // ✅ เพิ่มสถานะ foreground / background
+        // 'is_background': !FFAppState().isAppForeground ? 1 : 0,
+        'is_background': 0,
+      },
+    );
 
     //ส่ง FCM notiชวนเล่นกิจกรรม
     triggerPushNotification(
@@ -682,20 +844,6 @@ class MyStreamService {
         'booth_id': booth.boothId,
       },
     );
-
-    // await FirebaseFirestore.instance
-    //     .collection('users')
-    //     .doc('${currentUserUid}')
-    //     .collection('notifications')
-    //     .add({
-    //   'to_uid': '${currentUserUid}',
-    //   'booth_id': '${event.boothList.first.boothId}',
-    //   'title': 'เรียนเชิญเข้าร่วมกิจกรรม ${event.eventName}',
-    // 'body': 'ขณะนี้คุณได้อยู่ที่บูธ${event.boothList.first.boothName} (กิจกรรม${event.eventName})',
-    // 'sent_at': FieldValue.serverTimestamp(),
-    // 'event_id': int.parse('${event.eventId}'),
-    // 'send_count': 1,
-    // });
   }
 
   Future updateUserNotificationDoc(EventDataModelStruct1 event) async {
@@ -783,7 +931,7 @@ class MyStreamService {
           .doc(event.docRef)
           .collection('detections');
 
-      print('createDetectionLog docRef : ${event.docRef}');
+      // print('createDetectionLog docRef : ${event.docRef}');
       // final detectionRef = eventRef.collection('detections');
 
       final cutoff = DateTime.now().subtract(const Duration(minutes: 1));
@@ -797,7 +945,7 @@ class MyStreamService {
           .get();
 
       if (query.docs.isNotEmpty) {
-        print('Duplicate detection ignored (within 1 minute)');
+        // print('Duplicate detection ignored (within 1 minute)');
         return; // ไม่บันทึกซ้ำ
       }
 
@@ -820,7 +968,7 @@ class MyStreamService {
 
   Future<void> cleanupOldDetections(EventDataModelStruct1 event) async {
     try {
-      print('cleanupOldDetections : ${event.docRef}');
+      // print('cleanupOldDetections : ${event.docRef}');
 
       // final detectionRef = eventRef.collection('detections');
       final detectionRef = FirebaseFirestore.instance
@@ -835,16 +983,16 @@ class MyStreamService {
           .get();
 
       if (oldDocs.docs.isEmpty) {
-        print('ไม่มีข้อมูลเก่าที่ต้องลบ');
+        // print('ไม่มีข้อมูลเก่าที่ต้องลบ');
         return;
       }
 
       for (final doc in oldDocs.docs) {
         await detectionRef.doc(doc.id).delete();
-        print('🗑️ ลบ detection เก่าแล้ว: ${doc.id}');
+        // print('🗑️ ลบ detection เก่าแล้ว: ${doc.id}');
       }
 
-      print('Cleanup เสร็จสิ้น ลบ ${oldDocs.docs.length} documents');
+      // print('Cleanup เสร็จสิ้น ลบ ${oldDocs.docs.length} documents');
     } catch (e) {
       print('Error cleanupOldDetections: $e');
     }
@@ -910,7 +1058,7 @@ class MyStreamService {
     // ถ้ายังไม่ครบ 1 นาที → ข้าม
     if (_lastUpdateTime != null &&
         now.difference(_lastUpdateTime!).inMinutes < 1) {
-      print("⏳ ข้ามการอัปเดต (last update: $_lastUpdateTime)");
+      // print("⏳ ข้ามการอัปเดต (last update: $_lastUpdateTime)");
       return;
     }
 
@@ -939,13 +1087,19 @@ class MyStreamService {
 
   Future<String?> logProximityAndConcurrentUsers(
     EventDataModelStruct1 event,
-    BoothDataModelStructNew booth, [
-    Map<String, dynamic>? notiData,
-  ]) async {
+    BoothDataModelStructNew booth, {
+    required double? rssi, // ค่าที่อ่านจาก BLE ล่าสุด
+    required double? calibratedDistance, // ระยะคาลิเบรตแล้ว
+    required bool isStable, // อยู่ใกล้บูธต่อเนื่องครบเวลา
+    required double? boothThreshold, // threshold เฉพาะของบูธ
+    String source = 'createUserNotificationDoc', // ✅ default
+    String status = 'in_range', // ✅ default
+    Map<String, dynamic>? notiData, // ข้อมูล noti (เช่น title, body)
+  }) async {
     try {
-      print('logProximityAndConcurrentUsers');
+      print('🛰 logProximityAndConcurrentUsers: ${booth.boothName}');
 
-      final uid = currentUserUid; // ผู้ใช้ปัจจุบัน
+      final uid = currentUserUid;
       final int eventId = event.eventId;
       final int boothId = booth.boothId;
       final now = DateTime.now();
@@ -956,92 +1110,33 @@ class MyStreamService {
       final String deviceModel = deviceData['device_model'] ?? 'unknown';
       final String osVersion = deviceData['os_version'] ?? 'unknown';
 
-      double? rssi;
-      double? distance;
-
-      // 🛰️ ดึงข้อมูล beacon ที่ตรวจพบจาก FFAppState
-      if (FFAppState().beaconIdList.contains(booth.deviceUuid)) {
-        final index = FFAppState().beaconIdList.indexOf(booth.deviceUuid);
-
-        // ✅ ถ้ามีระยะทางจาก beaconDistanceList อยู่แล้ว
-        if (FFAppState().beaconDistanceList.isNotEmpty &&
-            FFAppState().beaconDistanceList.length > index) {
-          final distanceStr = FFAppState().beaconDistanceList[index];
-          distance = double.tryParse(distanceStr);
-        }
-
-        // // ✅ ใช้ RSSI จาก beaconRssiList ถ้ามี
-        // try {
-        //   // ถ้ายังไม่มี beaconRssiList ให้ใช้ค่า RSSI จำลอง
-        //   rssi = (-60 - Random().nextInt(15)).toDouble(); // random -60 ถึง -75
-        // } catch (_) {
-        //   rssi = (-60 - Random().nextInt(15)).toDouble();
-        // }
-        // ✅ ใช้ RSSI จริงจาก FFAppState ถ้ามี
-        if (FFAppState().beaconRssiList.isNotEmpty &&
-            FFAppState().beaconRssiList.length > index) {
-          rssi = double.tryParse(FFAppState().beaconRssiList[index]) ?? -60;
-        } else {
-          rssi = -60; // fallback default
-        }
-
-        // ✅ คำนวณระยะทางจาก RSSI
-        // distance = calculateDistanceFromRSSI(rssi ?? -60);
-        distance = calculateDistanceFromRSSI(rssi, txPower: -63, n: 2.2);
-      }
-
-      // final proximityCollection = FirebaseFirestore.instance
-      //     .collection('events')
-      //     .doc('${event.docRef}')
-      //     .collection('proximity_logs');
-
-      // ✅ 1️⃣ ตรวจสอบว่ามี log เดิมของ uid ใน booth เดียวกันหรือไม่
+      // ✅ เก็บ log ที่ collection ของ user (หรือจะเก็บที่ event ก็ได้)
       final proximityCollection = FirebaseFirestore.instance
           .collection('users')
-          .doc('${uid}')
+          .doc(uid)
           .collection('proximity_logs');
 
-      // ✅ สร้างช่วงเวลาเริ่มต้นของวันนี้
-      // final nowToday = DateTime.now();
-      // final startOfDay = DateTime(nowToday.year, nowToday.month, nowToday.day);
-      // final endOfDay = startOfDay.add(const Duration(days: 1));
-      // final oneHourAgo = now.subtract(const Duration(hours: 1));
-
-      // final existingLog = await proximityCollection
-      //     .where('uid', isEqualTo: uid)
-      //     .where('booth_id', isEqualTo: boothId)
-      //     .where('detect_timestamp',isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
-      //     .where('detect_timestamp',isLessThan: Timestamp.fromDate(endOfDay))
-      //     .limit(1)
-      //     .get();
-
-      // final existingLog = await proximityCollection
-      //   .where('uid', isEqualTo: uid)
-      //   .where('booth_id', isEqualTo: boothId)
-      //   .where('detect_timestamp', isGreaterThanOrEqualTo: Timestamp.fromDate(oneHourAgo))
-      //   .limit(1)
-      //   .get();
-
-      // if (existingLog.docs.isNotEmpty) {
-      //   print("⏳ User $uid เคยเข้าบูธ $boothId แล้ว — ไม่บันทึกซ้ำ");
-      // } else {
-      // 👇 บันทึก log ครั้งแรกเท่านั้น
-      // print('⏳ Skip insert (recent log found within 1 hour)');
       final proximityRef = proximityCollection.doc();
 
+      // ✅ เขียนข้อมูลลง Firestore
       await proximityRef.set({
         'log_id': proximityRef.id,
         'event_id': eventId,
         'event_ref': '${event.docRef}',
         'booth_id': boothId,
-        'booth_ref': '',
         'uid': uid,
-        'rssi': rssi ?? -00,
-        'distance': distance ?? -1,
+        'rssi': rssi ?? -99,
+        'distance_calibrated': calibratedDistance ?? -1,
+        'stable_status': (isStable ?? false) ? 'stable' : 'unstable',
+        'threshold': boothThreshold ?? 1.5,
+        'status': status,
+        'source': source,
         'detect_timestamp': Timestamp.fromDate(now),
         'device_brand': deviceBrand,
         'device_model': deviceModel,
         'os_version': osVersion,
+
+        // ✅ รวมข้อมูลการแจ้งเตือน (ถ้ามี)
         if (notiData != null) ...{
           'noti_type': notiData['noti_type'] ?? '',
           'title': notiData['title'] ?? '',
@@ -1053,23 +1148,26 @@ class MyStreamService {
         },
       });
 
-      // ✅ Log ไปที่ Firebase Analytics
+      // ✅ Log ไปที่ Firebase Analytics (สำหรับ dashboard)
       await analytics.logEvent(
         name: 'detect_distance_beacon',
         parameters: {
           'log_id': proximityRef.id,
           'event_id': eventId,
-          'event_ref': '${event.docRef}',
           'booth_id': boothId,
-          'booth_ref': '',
+          'booth_name': booth.boothName ?? '',
+          'booth_uuid': booth.deviceUuid ?? '',
           'uid': uid,
-          'rssi': rssi ?? -00,
-          'distance': distance ?? -1,
-          // 'status': 'in_range',
-          'detect_time': DateTime.now().millisecondsSinceEpoch,
+          'rssi': rssi ?? -99,
+          'distance_calibrated': calibratedDistance ?? -1,
+          'stable_status': isStable ? 'stable' : 'unstable',
+          'config_threshold': boothThreshold ?? 1.5,
           'device_brand': deviceBrand,
           'device_model': deviceModel,
           'os_version': osVersion,
+          'status': status,
+          'source': source,
+          'detect_time': now.millisecondsSinceEpoch,
           if (notiData != null) ...{
             'noti_type': notiData['noti_type'] ?? '',
             'title': notiData['title'] ?? '',
@@ -1079,43 +1177,214 @@ class MyStreamService {
       );
 
       print(
-          "✅ Proximity log (first entry) saved → user: $uid | booth: $boothId | distance: ${distance?.toStringAsFixed(2)} m");
+        "✅ Proximity log saved: booth=${booth.boothName}, "
+        "distance=${calibratedDistance?.toStringAsFixed(2)}m, "
+        "stable=${isStable ? 'Y' : 'N'}",
+      );
 
-      return proximityRef.id; // ✅ คืนค่า log_id ออกไป
-      //////////// save concurrent_users ////////////
-      // ✅ 2️⃣ อัปเดต concurrent users snapshot (ภายใน 2 นาทีล่าสุด)
-      // final cutoff = now.subtract(const Duration(minutes: 2));
-
-      // final activeSnap = await proximityCollection
-      //     .where('detect_timestamp',
-      //         isGreaterThanOrEqualTo: Timestamp.fromDate(cutoff))
-      //     .get();
-
-      // final activeUids =
-      //     activeSnap.docs.map((e) => e.data()['uid'].toString()).toSet();
-
-      // final concurrentRef = FirebaseFirestore.instance
-      //     .collection('events')
-      //     .doc('${event.docRef}')
-      //     .collection('concurrent_users')
-      //     .doc();
-
-      // await concurrentRef.set({
-      //   'record_id': concurrentRef.id,
-      //   'event_id': eventId,
-      //   'timestamp': Timestamp.fromDate(now),
-      //   'uids': activeUids.toList(),
-      //   'user_count': activeUids.length,
-      // });
-
-      // print(
-      //     "👥 Concurrent users snapshot saved (${activeUids.length}) for event $eventId");
-      // }
-    } catch (e) {
+      return proximityRef.id;
+    } catch (e, st) {
       print("⚠️ Error while logging proximity/concurrent users: $e");
-      return '';
+      print(st);
+      return null;
     }
   }
+
+  // Future < String ?> logProximityAndConcurrentUsers(
+  //     EventDataModelStruct1 event,
+  //     BoothDataModelStructNew booth, [
+  //       Map<String, dynamic> ? notiData,
+  //     ]) async {
+  //   try {
+  //     print('logProximityAndConcurrentUsers');
+  //
+  //     final uid = currentUserUid; // ผู้ใช้ปัจจุบัน
+  //     final int eventId = event.eventId;
+  //     final int boothId = booth.boothId;
+  //     final now = DateTime.now();
+  //
+  //     // 📱 ดึงข้อมูลอุปกรณ์
+  //     final deviceData = await getDeviceDetails();
+  //     final String deviceBrand = deviceData['device_brand'] ?? 'unknown';
+  //     final String deviceModel = deviceData['device_model'] ?? 'unknown';
+  //     final String osVersion = deviceData['os_version'] ?? 'unknown';
+  //
+  //     double ? rssi;
+  //     double ? distance;
+  //
+  //     // 🛰️ ดึงข้อมูล beacon ที่ตรวจพบจาก FFAppState
+  //     if (FFAppState().beaconIdList.contains(booth.deviceUuid)) {
+  //       final index = FFAppState().beaconIdList.indexOf(booth.deviceUuid);
+  //
+  //       // ✅ ถ้ามีระยะทางจาก beaconDistanceList อยู่แล้ว
+  //       if (FFAppState().beaconDistanceList.isNotEmpty &&
+  //           FFAppState().beaconDistanceList.length > index) {
+  //         final distanceStr = FFAppState().beaconDistanceList[index];
+  //         distance = double.tryParse(distanceStr);
+  //       }
+  //
+  //       // // ✅ ใช้ RSSI จาก beaconRssiList ถ้ามี
+  //       // try {
+  //       //   // ถ้ายังไม่มี beaconRssiList ให้ใช้ค่า RSSI จำลอง
+  //       //   rssi = (-60 - Random().nextInt(15)).toDouble(); // random -60 ถึง -75
+  //       // } catch (_) {
+  //       //   rssi = (-60 - Random().nextInt(15)).toDouble();
+  //       // }
+  //       // ✅ ใช้ RSSI จริงจาก FFAppState ถ้ามี
+  //       if (FFAppState().beaconRssiList.isNotEmpty &&
+  //           FFAppState().beaconRssiList.length > index) {
+  //         rssi = double.tryParse(FFAppState().beaconRssiList[index]) ?? -60;
+  //       } else {
+  //         rssi = -60; // fallback default
+  //       }
+  //
+  //       // ✅ คำนวณระยะทางจาก RSSI
+  //       // distance = calculateDistanceFromRSSI(rssi ?? -60);
+  //       distance = calculateDistanceFromRSSI(rssi, txPower: -63, n: 2.2);
+  //     }
+  //
+  //     // final proximityCollection = FirebaseFirestore.instance
+  //     //     .collection('events')
+  //     //     .doc('${event.docRef}')
+  //     //     .collection('proximity_logs');
+  //
+  //     // ✅ 1️⃣ ตรวจสอบว่ามี log เดิมของ uid ใน booth เดียวกันหรือไม่
+  //     final proximityCollection = FirebaseFirestore.instance
+  //         .collection('users')
+  //         .doc('${uid}')
+  //         .collection('proximity_logs');
+  //
+  //     // ✅ สร้างช่วงเวลาเริ่มต้นของวันนี้
+  //     // final nowToday = DateTime.now();
+  //     // final startOfDay = DateTime(nowToday.year, nowToday.month, nowToday.day);
+  //     // final endOfDay = startOfDay.add(const Duration(days: 1));
+  //     // final oneHourAgo = now.subtract(const Duration(hours: 1));
+  //
+  //     // final existingLog = await proximityCollection
+  //     //     .where('uid', isEqualTo: uid)
+  //     //     .where('booth_id', isEqualTo: boothId)
+  //     //     .where('detect_timestamp',isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
+  //     //     .where('detect_timestamp',isLessThan: Timestamp.fromDate(endOfDay))
+  //     //     .limit(1)
+  //     //     .get();
+  //
+  //     // final existingLog = await proximityCollection
+  //     //   .where('uid', isEqualTo: uid)
+  //     //   .where('booth_id', isEqualTo: boothId)
+  //     //   .where('detect_timestamp', isGreaterThanOrEqualTo: Timestamp.fromDate(oneHourAgo))
+  //     //   .limit(1)
+  //     //   .get();
+  //
+  //     // if (existingLog.docs.isNotEmpty) {
+  //     //   print("⏳ User $uid เคยเข้าบูธ $boothId แล้ว — ไม่บันทึกซ้ำ");
+  //     // } else {
+  //     // 👇 บันทึก log ครั้งแรกเท่านั้น
+  //     // print('⏳ Skip insert (recent log found within 1 hour)');
+  //     final proximityRef = proximityCollection.doc();
+  //
+  //     await proximityRef.set({
+  //       'log_id': proximityRef.id,
+  //       'event_id': eventId,
+  //       'event_ref': '${event.docRef}',
+  //       'booth_id': boothId,
+  //       'booth_ref': '',
+  //       'uid': uid,
+  //
+  //       // ✅ ค่า RSSI เดิม (ดิบ)
+  //       'rssi': rssi ?? -99,
+  //
+  //       // ✅ ระยะคาลิเบรตแล้ว (ระยะจริงที่แสดงบนจอ)
+  //       'distance_calibrated': distance ?? -1,
+  //
+  //       // ✅ สถานะความเสถียรของการตรวจจับ
+  //       'stable_status': isStable ? 'stable' : 'unstable',
+  //
+  //       // ✅ ระยะ threshold ของบูธนี้ (ดึงจาก config หรือ booth.notificationDistance)
+  //       'threshold': boothThreshold ?? 1.5,
+  //
+  //       // ✅ เวลา timestamp
+  //       'detect_timestamp': Timestamp.fromDate(now),
+  //
+  //       // ✅ รายละเอียดอุปกรณ์
+  //       'device_brand': deviceBrand,
+  //       'device_model': deviceModel,
+  //       'os_version': osVersion,
+  //
+  //       // ✅ รวมข้อมูลการแจ้งเตือน (ถ้ามี)
+  //       if (notiData != null) ...{
+  //         'noti_type': notiData['noti_type'] ?? '',
+  //         'title': notiData['title'] ?? '',
+  //         'body': notiData['body'] ?? '',
+  //         'sent_at': notiData['sent_at'] ?? FieldValue.serverTimestamp(),
+  //         'send_count': notiData['send_count'] ?? 1,
+  //         'is_read': notiData['is_read'] ?? false,
+  //         'is_deleted': notiData['is_deleted'] ?? false,
+  //       },
+  //     });
+  //
+  //     // ✅ Log ไปที่ Firebase Analytics
+  //     await analytics.logEvent(
+  //       name: 'detect_distance_beacon',
+  //       parameters: {
+  //         'log_id': proximityRef.id,
+  //         'event_id': eventId,
+  //         'event_ref': '${event.docRef}',
+  //         'booth_id': boothId,
+  //         'booth_ref': '',
+  //         'uid': uid,
+  //         'rssi': rssi ?? -00,
+  //         'distance': distance ?? -1,
+  //         // 'status': 'in_range',
+  //         'detect_time': DateTime.now().millisecondsSinceEpoch,
+  //         'device_brand': deviceBrand,
+  //         'device_model': deviceModel,
+  //         'os_version': osVersion,
+  //         if(notiData != null) ...{
+  //           'noti_type': notiData['noti_type'] ?? '',
+  //           'title': notiData['title'] ?? '',
+  //           'body': notiData['body'] ?? '',
+  //         },
+  //       },
+  //     );
+  //
+  //     print(
+  //         "✅ Proximity log (first entry) saved → user: $uid | booth: $boothId | distance: ${distance?.toStringAsFixed(2)} m");
+  //
+  //     return proximityRef.id; // ✅ คืนค่า log_id ออกไป
+  //     //////////// save concurrent_users ////////////
+  //     // ✅ 2️⃣ อัปเดต concurrent users snapshot (ภายใน 2 นาทีล่าสุด)
+  //     // final cutoff = now.subtract(const Duration(minutes: 2));
+  //
+  //     // final activeSnap = await proximityCollection
+  //     //     .where('detect_timestamp',
+  //     //         isGreaterThanOrEqualTo: Timestamp.fromDate(cutoff))
+  //     //     .get();
+  //
+  //     // final activeUids =
+  //     //     activeSnap.docs.map((e) => e.data()['uid'].toString()).toSet();
+  //
+  //     // final concurrentRef = FirebaseFirestore.instance
+  //     //     .collection('events')
+  //     //     .doc('${event.docRef}')
+  //     //     .collection('concurrent_users')
+  //     //     .doc();
+  //
+  //     // await concurrentRef.set({
+  //     //   'record_id': concurrentRef.id,
+  //     //   'event_id': eventId,
+  //     //   'timestamp': Timestamp.fromDate(now),
+  //     //   'uids': activeUids.toList(),
+  //     //   'user_count': activeUids.length,
+  //     // });
+  //
+  //     // print(
+  //     //     "👥 Concurrent users snapshot saved (${activeUids.length}) for event $eventId");
+  //     // }
+  //   } catch (e) {
+  //     print("⚠️ Error while logging proximity/concurrent users: $e");
+  //     return '';
+  //   }
+  // }
 
   /// ฟังก์ชันแปลง RSSI เป็นระยะทาง (ประมาณ)
   // double calculateDistanceFromRSSI(double rssi, {int txPower = -59}) {
@@ -1127,19 +1396,267 @@ class MyStreamService {
   //     return (0.89976) * pow(ratio, 7.7095) + 0.111;
   //   }
   // }
-  double calculateDistanceFromRSSI(double rssi,
-      {int txPower = -59, double n = 2.2}) {
-    if (rssi == 0) return -1.0;
+  /// ✅ เวอร์ชันใหม่ตามสูตรมาตรฐานของอาจารย์
+  double calculateDistanceFromRSSI(
+    double rssi, {
+    int txPower = -63, // A = RSSI ที่ 1 เมตร
+    double n = 2.0, // ห้องโล่งใช้ 2.0 ได้
+  }) {
+    if (rssi == 0) return -1.0; // ป้องกัน error กรณีไม่มีสัญญาณ
 
-    double ratio = (txPower - rssi) / (10 * n);
-    double distance = pow(10, ratio).toDouble(); // ✅ แปลงเป็น double
+    // สูตร Log-distance Path Loss Model
+    double distance = pow(10, (txPower - rssi) / (10 * n)).toDouble();
 
-    double compensated = distance * 0.9; // ชดเชย noise ในห้องเล็ก
-    if (compensated < 0.1) compensated = 0.1;
-    if (compensated > 8.0) compensated = 8.0;
+    // จำกัดระยะที่คำนวณได้ให้อยู่ในขอบเขตสมเหตุสมผล
+    if (distance < 0.1) distance = 0.1;
+    if (distance > 20.0) distance = 20.0;
 
-    return double.parse(compensated.toStringAsFixed(2));
+    return double.parse(distance.toStringAsFixed(2));
   }
+
+  // ======================
+  // ✅ ตรวจผู้ใช้อยู่ในระยะต่อเนื่อง
+  // ======================
+  Map<String, DateTime?> _stableStartMap = {};
+  Map<String, bool> _inRangeState = {};
+
+  bool isUserStableNear(
+    BoothDataModelStructNew booth,
+    double distance, {
+    int stableMs = 1000, // 1 วินาที
+  }) {
+    final boothUuid = booth.deviceUuid ?? '';
+    final threshold = booth.notificationDistance ?? 1.5;
+    final now = DateTime.now();
+
+    _stableStartMap.putIfAbsent(boothUuid, () => null);
+    _inRangeState.putIfAbsent(boothUuid, () => false);
+
+    if (distance <= threshold) {
+      _stableStartMap[boothUuid] ??= now;
+      final diff = now.difference(_stableStartMap[boothUuid]!).inMilliseconds;
+      if (diff >= stableMs) {
+        _inRangeState[boothUuid] = true;
+        return true;
+      }
+    } else {
+      _stableStartMap[boothUuid] = null;
+      _inRangeState[boothUuid] = false;
+    }
+    return false;
+  }
+
+// ---------------------------
+// ✅ ฟังก์ชันคาลิเบรตระยะทาง (ลดระยะที่ระบบคำนวณเกินจริง)
+// ---------------------------
+
+  // /// ค่า offset คาลิเบรต (วัดจากการเทียบระยะจริง)
+  // /// เช่น ถ้าระบบวัด 1.3 m แต่จริง ๆ 1.0 m → offset = 0.3
+  // double distanceOffset = 0.4; // ปรับตามผลคาลิเบรตของคุณ
+  //
+  // double calibrateDistance(double rawDistance) {
+  //   final adjusted = rawDistance - distanceOffset;
+  //   return adjusted < 0.1 ? 0.1 : adjusted;
+  // }
+
+// ---------------------------
+// ✅ ใช้ใน shouldTriggerNotification
+// ---------------------------
+
+  Future<bool> shouldTriggerNotification(
+    BoothDataModelStructNew booth,
+    double rawDistance, {
+    double? rssi, // ✅ เพิ่ม RSSI เป็น optional parameter
+  }) async {
+    // final calibrated = calibrateDistance(rawDistance);
+    final calibrated = rawDistance;
+    final stable = isUserStableNear(booth, calibrated);
+
+    // ✅ บันทึก log เข้า Firebase Analytics พร้อม RSSI
+    // await analytics.logEvent(
+    //   name: 'beacon_distance_log',
+    //   parameters: {
+    //     'booth_uuid': booth.deviceUuid ?? '',
+    //     'booth_name': booth.boothName ?? '',
+    //     'rssi': rssi ?? -99, // ✅ เก็บค่า RSSI ไว้ใน log ด้วย
+    //     'threshold': booth.notificationDistance ?? 1.5,
+    //     'distance_calibrated': calibrated,
+    //     'stable_status': stable ? 'stable' : 'unstable',
+    //     'timestamp': DateTime.now().millisecondsSinceEpoch,
+    //   },
+    // );
+
+    return stable;
+  }
+
+  // ======================
+  // ✅ RSSI smoothing: median + exponential moving average
+  // ======================
+  double getSmoothedRSSI(String uuid, double newRssi,
+      {int window = 10, double alpha = 0.2}) {
+    _rssiHistory.putIfAbsent(uuid, () => []);
+    final history = _rssiHistory[uuid]!;
+
+    if (newRssi < -90) return _emaMap[uuid] ?? -90; // กรองสัญญาณอ่อนเกิน
+
+    history.add(newRssi);
+    if (history.length > window) history.removeAt(0);
+
+    final sorted = [...history]..sort();
+    final median = sorted[sorted.length ~/ 2];
+
+    final prev = _emaMap[uuid] ?? median;
+    final ema = alpha * median + (1 - alpha) * prev;
+    _emaMap[uuid] = ema;
+    return ema;
+  }
+
+  // ======================
+  // ✅ ปรับ Hysteresis buffer
+  // ======================
+  bool isWithinRange(double distance, double threshold,
+      {double hysteresisBuffer = 0.5}) {
+    if (_wasInRange == null) _wasInRange = false;
+    if (_wasInRange! && distance > threshold + hysteresisBuffer) {
+      _wasInRange = false;
+    } else if (!_wasInRange! && distance < threshold - hysteresisBuffer) {
+      _wasInRange = true;
+    }
+    return _wasInRange!;
+  }
+
+  double getDistanceOfUuid(String uuid) {
+    if (FFAppState().beaconIdList.contains(uuid)) {
+      final index = FFAppState().beaconIdList.indexOf(uuid);
+      return double.tryParse(FFAppState().beaconDistanceList[index]) ?? 999;
+    }
+    return 999;
+  }
+
+  /// ฟังก์ชันสำหรับกรองค่า RSSI ด้วย Exponential Moving Average (EMA)
+  double applyExponentialSmoothing(String beaconId, double currentRssi) {
+    // กำหนดค่าเริ่มต้นสำหรับ Beacon ที่ไม่เคยมีข้อมูล
+    if (!_smoothedRssiCache.containsKey(beaconId)) {
+      _smoothedRssiCache[beaconId] = currentRssi;
+      return currentRssi;
+    }
+
+    double previousRssi = _smoothedRssiCache[beaconId]!;
+
+    // สูตร EMA: S_t = α * Y_t + (1 - α) * S_{t-1}
+    double smoothedRssi =
+        (EMA_ALPHA * currentRssi) + ((1.0 - EMA_ALPHA) * previousRssi);
+
+    // อัปเดต Cache และคืนค่า
+    _smoothedRssiCache[beaconId] = smoothedRssi;
+
+    return smoothedRssi;
+  }
+
+  /// ฟังก์ชันสำหรับหาค่า TxPower และ n ด้วย Linear Regression (ต้องใช้ Math Library)
+  Map<String, double> calculateCalibrationParams(
+      List<double> distances, List<double> rssis) {
+    // Log-distance path loss model: RSSI = TxPower - 10n * log10(d)
+    // จัดรูปให้อยู่ในรูปสมการเส้นตรง: y = m*x + c
+    // โดยที่ y = RSSI, x = log10(d), m = -10n, c = TxPower
+
+    // 1. แปลงระยะทางให้อยู่ในรูป Log10(d)
+    List<double> logDistances = distances.map((d) => log(d) / ln10).toList();
+
+    // 2. คำนวณค่าเฉลี่ย
+    double meanX = logDistances.reduce((a, b) => a + b) / logDistances.length;
+    double meanY = rssis.reduce((a, b) => a + b) / rssis.length;
+
+    // 3. คำนวณความชัน (Slope, m) และจุดตัดแกน Y (Intercept, c)
+    double num = 0.0; // ตัวเศษ
+    double den = 0.0; // ตัวส่วน
+    for (int i = 0; i < logDistances.length; i++) {
+      num += (logDistances[i] - meanX) * (rssis[i] - meanY);
+      den += pow((logDistances[i] - meanX), 2);
+    }
+
+    double slope = num / den; // m = -10n
+    double intercept = meanY - slope * meanX; // c = TxPower
+
+    // 4. คำนวณหาค่า n และ TxPower
+    double n = -slope / 10.0;
+    double txPower = intercept;
+
+    return {"txPower": txPower, "n": n};
+  }
+
+  // ⚠️ วิธีการใช้งาน (รันแค่ครั้งเดียวเพื่อหาค่า):
+  void testCalibrationAndGetValues() {
+    // 🔴 ป้อนข้อมูลที่วัดได้จริงของคุณที่นี่:
+    List<double> realDistances = [
+      0.5,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0
+    ]; // ระยะทางจริง (เมตร)
+    List<double> rssis = [
+      -45.5,
+      -53.2,
+      -65.1,
+      -74.8,
+      -80.5,
+      -85.2
+    ]; // RSSI เฉลี่ยที่วัดได้
+
+    final result = calculateCalibrationParams(realDistances, rssis);
+    print("-------------------------------------------------------");
+    print(
+        "✅ ค่าที่ต้องนำไปใช้ในโค้ด (TX_POWER_CALIBRATED): ${result['txPower']}");
+    print("✅ ค่าที่ต้องนำไปใช้ในโค้ด (PATH_LOSS_EXPONENT_N): ${result['n']}");
+    print("-------------------------------------------------------");
+
+    // นำค่าเหล่านี้ไปแทนที่ในส่วนที่ 1: TX_POWER_CALIBRATED และ PATH_LOSS_EXPONENT_N
+  }
+
+  /// ✅ ฟังก์ชันคาลิเบรตอัตโนมัติ
+  /// รับค่า RSSI และระยะจริง แล้วคำนวณหาค่า txPower และ n ที่เหมาะสมที่สุด
+  // Map<String, double> autoCalibrateParameters(List<double> distances, List<double> rssis) {
+  //   if (distances.length != rssis.length || distances.isEmpty) {
+  //     throw ArgumentError("จำนวนข้อมูล RSSI และระยะต้องเท่ากัน และไม่เป็นค่าว่าง");
+  //   }
+  //
+  //   // แปลงสมการ RSSI = A - 10n * log10(d)
+  //   // จะได้: RSSI = (-10n)*log10(d) + A
+  //   // → y = m*x + c (สมการเส้นตรง)
+  //   List<double> logDistances = distances.map((d) => log(d) / ln10).toList(); // log10(d)
+  //
+  //   double meanX = logDistances.reduce((a, b) => a + b) / logDistances.length;
+  //   double meanY = rssis.reduce((a, b) => a + b) / rssis.length;
+  //
+  //   double num = 0.0;
+  //   double den = 0.0;
+  //   for (int i = 0; i < logDistances.length; i++) {
+  //     num += (logDistances[i] - meanX) * (rssis[i] - meanY);
+  //     den += pow((logDistances[i] - meanX), 2);
+  //   }
+  //
+  //   double slope = num / den;     // m = -10n
+  //   double intercept = meanY - slope * meanX; // c = A
+  //
+  //   double n = -slope / 10.0;
+  //   double txPower = intercept;
+  //
+  //   return {"txPower": txPower, "n": n};
+  // }
+  //
+  // /// ✅ ตัวอย่างการทดสอบฟังก์ชัน
+  // void testCalibration() {
+  //   List<double> realDistances = [0.5, 1.0, 2.0, 3.0, 5.0];
+  //   List<double> measuredRSSI = [-40, -53, -61, -66, -72];
+  //
+  //   final result = autoCalibrateParameters(realDistances, measuredRSSI);
+  //
+  //   print("🎯 ค่าที่คาลิเบรตได้:");
+  //   print("txPower (RSSI @1m): ${result['txPower']!.toStringAsFixed(2)} dBm");
+  //   print("n (Path-loss exponent): ${result['n']!.toStringAsFixed(2)}");
+  // }
 
   void stopListening() {
     _streamRanging?.cancel();

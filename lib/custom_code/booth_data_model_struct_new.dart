@@ -36,7 +36,8 @@ class BoothDataModelStructNew {
       boothId: map['booth_id'] ?? 0,
       boothName: map['booth_name'] ?? '',
       description: map['description'] ?? '',
-      notificationDistance: map['notification_distance'] ?? 0,
+      notificationDistance:
+          (map['notification_distance'] as num?)?.toDouble() ?? 0.0,
       associatedEventId: map['associated_event_id'] != null
           ? '${map['associated_event_id']}'
           : '',
