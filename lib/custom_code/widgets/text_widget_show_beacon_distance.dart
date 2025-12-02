@@ -20,12 +20,14 @@ class TextWidgetShowBeaconDistance extends StatefulWidget {
     this.height,
     this.deviceUuid,
     this.notificationDistance,
+    // this.showText = false, // niruemon ค่า default = ซ่อนข้อความ
   });
 
   final double? width;
   final double? height;
   final String? deviceUuid;
   final String? notificationDistance;
+  // final bool showText; // พารามิเตอร์เปิด/ปิดข้อความ
 
   @override
   State<TextWidgetShowBeaconDistance> createState() =>
@@ -42,30 +44,35 @@ class _TextWidgetShowBeaconDistanceState
         return ValueListenableBuilder<List<String>>(
           valueListenable: MyStreamService().beaconId,
           builder: (context, ids, __) {
-            return Text(
-              returnIndexValueInList(ids.toList(), widget.deviceUuid!) != -1
-                  ? double.parse(distances.elementAtOrNull(
-                              returnIndexValueInList(
-                                  ids.toList(), widget.deviceUuid!)!)!) <=
-                          double.parse(widget.notificationDistance!)
-                      ? 'อยู่ในระยะ ${distances.elementAtOrNull(returnIndexValueInList(ids.toList(), widget.deviceUuid!)!)} m'
-                      : 'ไม่อยู่ในระยะ'
-                  : 'ไม่อยู่ในระยะ',
-              style: FlutterFlowTheme.of(context).labelMedium.override(
-                    font: GoogleFonts.readexPro(
-                      fontWeight:
-                          FlutterFlowTheme.of(context).labelMedium.fontWeight,
-                      fontStyle:
-                          FlutterFlowTheme.of(context).labelMedium.fontStyle,
-                    ),
-                    color: FlutterFlowTheme.of(context).success,
-                    letterSpacing: 0.0,
-                    fontWeight:
-                        FlutterFlowTheme.of(context).labelMedium.fontWeight,
-                    fontStyle:
-                        FlutterFlowTheme.of(context).labelMedium.fontStyle,
-                  ),
-            );
+            // if (!widget.showText) {
+            //   // 👈 ถ้าไม่ให้แสดงข้อความ → ซ่อนทั้งหมด
+            return SizedBox.shrink();
+            // }
+
+            // return Text(
+            //   returnIndexValueInList(ids.toList(), widget.deviceUuid!) != -1
+            //       ? double.parse(distances.elementAtOrNull(
+            //                   returnIndexValueInList(
+            //                       ids.toList(), widget.deviceUuid!)!)!) <=
+            //               double.parse(widget.notificationDistance!)
+            //           ? 'อยู่ในระยะ ${distances.elementAtOrNull(returnIndexValueInList(ids.toList(), widget.deviceUuid!)!)} m'
+            //           : 'ไม่อยู่ในระยะ'
+            //       : 'ไม่อยู่ในระยะ',
+            //   style: FlutterFlowTheme.of(context).labelMedium.override(
+            //         font: GoogleFonts.readexPro(
+            //           fontWeight:
+            //               FlutterFlowTheme.of(context).labelMedium.fontWeight,
+            //           fontStyle:
+            //               FlutterFlowTheme.of(context).labelMedium.fontStyle,
+            //         ),
+            //         color: FlutterFlowTheme.of(context).success,
+            //         letterSpacing: 0.0,
+            //         fontWeight:
+            //             FlutterFlowTheme.of(context).labelMedium.fontWeight,
+            //         fontStyle:
+            //             FlutterFlowTheme.of(context).labelMedium.fontStyle,
+            //       ),
+            // );
           },
         );
       },

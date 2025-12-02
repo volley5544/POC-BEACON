@@ -728,7 +728,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                       ParamType.Document,
                     ),
                   ),
-                ))
+                )),
+        FFRoute(
+          name: ScanBeaconRSSIWidget.routeName,
+          path: ScanBeaconRSSIWidget.routePath,
+          builder: (context, params) => ScanBeaconRSSIWidget(),
+        )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
 

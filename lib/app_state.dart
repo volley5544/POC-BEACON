@@ -267,6 +267,24 @@ class FFAppState extends ChangeNotifier {
   void insertAtIndexInBeaconRssiList(int index, String value) {
     beaconRssiList.insert(index, value);
   }
+
+  double _DeviceDistance = 0.0;
+  double get DeviceDistance => _DeviceDistance;
+  set DeviceDistance(double value) {
+    _DeviceDistance = value;
+  }
+
+  bool _isLogging = false;
+  bool get isLogging => _isLogging;
+  set isLogging(bool value) {
+    _isLogging = value;
+  }
+
+  int _DeviceMinute = 0;
+  int get DeviceMinute => _DeviceMinute;
+  set DeviceMinute(int value) {
+    _DeviceMinute = value;
+  }
 }
 
 void _safeInit(Function() initializeField) {

@@ -74,3 +74,5 @@ export '/dashboard/dashboard_widget.dart' show DashboardWidget;
 export '/setting_backup/datatable/datatable_widget.dart' show DatatableWidget;
 export '/setting_backup/booth_list_copy4/booth_list_copy4_widget.dart'
     show BoothListCopy4Widget;
+export '/pages/activity/scan_beacon_r_s_s_i/scan_beacon_r_s_s_i_widget.dart'
+    show ScanBeaconRSSIWidget;
