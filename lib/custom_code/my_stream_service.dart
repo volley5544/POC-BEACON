@@ -20,6 +20,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:io';
 import 'package:flutter/widgets.dart';
+import 'package:flutter/widgets.dart';
 
 class MyStreamService with WidgetsBindingObserver {
   static final MyStreamService _instance = MyStreamService._internal();
@@ -1610,16 +1611,19 @@ class MyStreamService with WidgetsBindingObserver {
 
     print(
         "📡 Start continuous RAW RSSI logging for minute : $minutes , Distance : $distance");
+    await saveLogToFile(
+        "=== Start logging === Minute:$minutes  Distance:$distance ===");
 
     _continuousPrintTimer?.cancel();
     _continuousPrintTimer = Timer.periodic(
       const Duration(milliseconds: 500),
-      (timer) {
+      (timer) async {
         final now = DateTime.now();
 
         // ❌ หมดเวลาตามกำหนด -> หยุด
         if (now.isAfter(endTime)) {
           print("🛑 Logging finished (time limit reached)");
+          await saveLogToFile("🛑 Logging finished (time limit reached)");
           timer.cancel();
           return;
         }
@@ -1632,12 +1636,15 @@ class MyStreamService with WidgetsBindingObserver {
           // ถ้าไม่เจอ beacon เกิน 5 วินาที → หยุด
           if (now.difference(_lastSeenBeacon!).inSeconds >= 5) {
             print("🛑 Auto stop logging — no beacon detected for 5 seconds");
+            await saveLogToFile(
+                "🛑 Auto stop logging — no beacon detected for 5 seconds");
             timer.cancel();
             _lastSeenBeacon = null;
             return;
           }
 
           print("⚠️ Beacon not found... waiting...");
+          await saveLogToFile("⚠️ Beacon not found... waiting...");
           return;
         }
 
@@ -1652,6 +1659,7 @@ class MyStreamService with WidgetsBindingObserver {
         final rawRssi = double.tryParse(rawRssiStr);
         if (rawRssi == null) {
           print("⚠️ Cannot parse RSSI: $rawRssiStr");
+          await saveLogToFile("⚠️ Cannot parse RSSI: $rawRssiStr");
           return;
         }
 
@@ -1662,11 +1670,26 @@ class MyStreamService with WidgetsBindingObserver {
         // }else{
         //   print("📝 [$now] UUID=$uuid | RAW_RSSI=$rawRssi , Distance=");
         // }
-        print("📝 [$now] UUID=$uuid | RAW_RSSI=$rawRssi");
+        final log = "📝 [$now] UUID=$uuid | RSSI=$rawRssi";
+        print("$log");
+        await saveLogToFile(log);
       },
     );
 
     FFAppState().isLogging = false;
+  }
+
+  Future<File> saveLogToFile(String text) async {
+    final directory = Directory('/storage/emulated/0/Documents');
+
+    if (!directory.existsSync()) {
+      directory.createSync(recursive: true);
+    }
+
+    final fileName = "rssi_log_${DateTime.now().millisecondsSinceEpoch}.txt";
+
+    final file = File('${directory.path}/$fileName');
+    return file.writeAsString("$text\n", mode: FileMode.append);
   }
 
   void stopPrintRawRSSIContinuous() {
