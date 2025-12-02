@@ -626,6 +626,20 @@ class _HomeWidgetState extends State<HomeWidget> {
                                   .fontStyle,
                             ),
                       ),
+                      InkWell(
+                        splashColor: Colors.transparent,
+                        focusColor: Colors.transparent,
+                        hoverColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: () async {
+                          context.pushNamed(ScanBeaconRSSIWidget.routeName);
+                        },
+                        child: Icon(
+                          Icons.access_alarms_outlined,
+                          color: FlutterFlowTheme.of(context).primaryText,
+                          size: 24.0,
+                        ),
+                      ),
                     ],
                   ),
                 ),
