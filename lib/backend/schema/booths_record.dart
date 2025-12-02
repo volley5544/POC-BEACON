@@ -90,6 +90,36 @@ class BoothsRecord extends FirestoreRecord {
   double get notificationDistance => _notificationDistance ?? 0.0;
   bool hasNotificationDistance() => _notificationDistance != null;
 
+  // "tx_power" field.
+  double? _txPower;
+  double get txPower => _txPower ?? 0.0;
+  bool hasTxPower() => _txPower != null;
+
+  // "path_loss_exponent" field.
+  double? _pathLossExponent;
+  double get pathLossExponent => _pathLossExponent ?? 0.0;
+  bool hasPathLossExponent() => _pathLossExponent != null;
+
+  // "smoothing_alpha" field.
+  double? _smoothingAlpha;
+  double get smoothingAlpha => _smoothingAlpha ?? 0.0;
+  bool hasSmoothingAlpha() => _smoothingAlpha != null;
+
+  // "max_distance_cap" field.
+  double? _maxDistanceCap;
+  double get maxDistanceCap => _maxDistanceCap ?? 0.0;
+  bool hasMaxDistanceCap() => _maxDistanceCap != null;
+
+  // "calibrated_at" field.
+  DateTime? _calibratedAt;
+  DateTime? get calibratedAt => _calibratedAt;
+  bool hasCalibratedAt() => _calibratedAt != null;
+
+  // "environment_label" field.
+  String? _environmentLabel;
+  String get environmentLabel => _environmentLabel ?? '';
+  bool hasEnvironmentLabel() => _environmentLabel != null;
+
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
@@ -109,6 +139,12 @@ class BoothsRecord extends FirestoreRecord {
     _lastUpdated = snapshotData['last_updated'] as DateTime?;
     _notificationDistance =
         castToType<double>(snapshotData['notification_distance']);
+    _txPower = castToType<double>(snapshotData['tx_power']);
+    _pathLossExponent = castToType<double>(snapshotData['path_loss_exponent']);
+    _smoothingAlpha = castToType<double>(snapshotData['smoothing_alpha']);
+    _maxDistanceCap = castToType<double>(snapshotData['max_distance_cap']);
+    _calibratedAt = snapshotData['calibrated_at'] as DateTime?;
+    _environmentLabel = snapshotData['environment_label'] as String?;
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -164,6 +200,12 @@ Map<String, dynamic> createBoothsRecordData({
   int? currentUserCount,
   DateTime? lastUpdated,
   double? notificationDistance,
+  double? txPower,
+  double? pathLossExponent,
+  double? smoothingAlpha,
+  double? maxDistanceCap,
+  DateTime? calibratedAt,
+  String? environmentLabel,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -181,6 +223,12 @@ Map<String, dynamic> createBoothsRecordData({
       'current_user_count': currentUserCount,
       'last_updated': lastUpdated,
       'notification_distance': notificationDistance,
+      'tx_power': txPower,
+      'path_loss_exponent': pathLossExponent,
+      'smoothing_alpha': smoothingAlpha,
+      'max_distance_cap': maxDistanceCap,
+      'calibrated_at': calibratedAt,
+      'environment_label': environmentLabel,
     }.withoutNulls,
   );
 
@@ -207,7 +255,13 @@ class BoothsRecordDocumentEquality implements Equality<BoothsRecord> {
         e1?.deviceUuid == e2?.deviceUuid &&
         e1?.currentUserCount == e2?.currentUserCount &&
         e1?.lastUpdated == e2?.lastUpdated &&
-        e1?.notificationDistance == e2?.notificationDistance;
+        e1?.notificationDistance == e2?.notificationDistance &&
+        e1?.txPower == e2?.txPower &&
+        e1?.pathLossExponent == e2?.pathLossExponent &&
+        e1?.smoothingAlpha == e2?.smoothingAlpha &&
+        e1?.maxDistanceCap == e2?.maxDistanceCap &&
+        e1?.calibratedAt == e2?.calibratedAt &&
+        e1?.environmentLabel == e2?.environmentLabel;
   }
 
   @override
@@ -226,7 +280,13 @@ class BoothsRecordDocumentEquality implements Equality<BoothsRecord> {
         e?.deviceUuid,
         e?.currentUserCount,
         e?.lastUpdated,
-        e?.notificationDistance
+        e?.notificationDistance,
+        e?.txPower,
+        e?.pathLossExponent,
+        e?.smoothingAlpha,
+        e?.maxDistanceCap,
+        e?.calibratedAt,
+        e?.environmentLabel
       ]);
 
   @override

@@ -320,6 +320,7 @@ final parametersBuilderMap =
               data, 'eventDocRef', EventsRecord.fromSnapshot),
         },
       ),
+  'scan_beaconRSSI': ParameterData.none(),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

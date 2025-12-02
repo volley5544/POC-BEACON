@@ -1686,6 +1686,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                                       deviceUuid: _model
                                                           .deviceUUIDTextController
                                                           .text,
+                                                      associatedEventId: '',
                                                     ),
                                                     ...mapToFirestore(
                                                       {
@@ -1730,6 +1731,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                                       deviceUuid: _model
                                                           .deviceUUIDTextController
                                                           .text,
+                                                      associatedEventId: '',
                                                     ),
                                                     ...mapToFirestore(
                                                       {
