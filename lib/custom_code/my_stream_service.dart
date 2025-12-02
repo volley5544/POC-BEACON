@@ -15,7 +15,7 @@ import '/auth/firebase_auth/auth_util.dart';
 import 'package:rxdart/rxdart.dart';
 import '/backend/push_notifications/push_notifications_util.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'dart:math' as math;
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'dart:io';
