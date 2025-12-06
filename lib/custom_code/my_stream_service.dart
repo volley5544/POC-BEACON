@@ -237,6 +237,8 @@ class MyStreamService with WidgetsBindingObserver {
                         event.notificationFrequencyAmount,
                     notificationFrequencyMinute:
                         event.notificationFrequencyMinute,
+                    notificationFrequencySecond:
+                        event.notificationFrequencySecond,
                     eventImageList: event.eventImageList,
                     startDatetime: event.startDatetime,
                     endDatetime: event.endDatetime,
@@ -368,6 +370,8 @@ class MyStreamService with WidgetsBindingObserver {
                   eventDataNew1.notificationFrequencyAmount,
               notificationFrequencyMinute:
                   eventDataNew1.notificationFrequencyMinute,
+              notificationFrequencySecond:
+                  eventDataNew1.notificationFrequencySecond,
               eventImageList: eventDataNew1.eventImageList,
               startDatetime: eventDataNew1.startDatetime,
               endDatetime: eventDataNew1.endDatetime,
@@ -414,6 +418,8 @@ class MyStreamService with WidgetsBindingObserver {
                   eventDataNew.notificationFrequencyAmount,
               notificationFrequencyMinute:
                   eventDataNew.notificationFrequencyMinute,
+              notificationFrequencySecond:
+                  eventDataNew.notificationFrequencySecond,
               eventImageList: eventDataNew.eventImageList,
               startDatetime: eventDataNew.startDatetime,
               endDatetime: eventDataNew.endDatetime,
@@ -657,7 +663,7 @@ class MyStreamService with WidgetsBindingObserver {
       //   }
       // }
       else {
-        final freq = event.notificationFrequencyMinute ?? 0;
+        final freq = event.notificationFrequencySecond ?? 0;
 
         // ⭐ แปลงนาที (รองรับทศนิยม) → วินาที
         final totalSeconds = (freq * 60).round();

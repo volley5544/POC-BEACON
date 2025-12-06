@@ -10,6 +10,7 @@ class EventDataModelStruct1 {
   final String uploadedBy;
   final int notificationFrequencyAmount;
   final int notificationFrequencyMinute;
+  final double notificationFrequencySecond;
   final List<String> eventImageList;
   final DateTime startDatetime;
   final DateTime endDatetime;
@@ -27,6 +28,7 @@ class EventDataModelStruct1 {
       required this.uploadedBy,
       required this.notificationFrequencyAmount,
       required this.notificationFrequencyMinute,
+      required this.notificationFrequencySecond,
       required this.eventImageList,
       required this.startDatetime,
       required this.endDatetime,
@@ -45,6 +47,7 @@ class EventDataModelStruct1 {
         uploadedBy: map['uploaded_by'] ?? '',
         notificationFrequencyAmount: map['notification_frequency_amount'] ?? 0,
         notificationFrequencyMinute: map['notification_frequency_minute'] ?? 0,
+        notificationFrequencySecond: map['notification_frequency_second'] ?? 0,
         eventImageList: map['event_image_list'] != null
             ? map['event_image_list'].cast<String>()
             : [],

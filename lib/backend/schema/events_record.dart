@@ -85,6 +85,11 @@ class EventsRecord extends FirestoreRecord {
   String get url => _url ?? '';
   bool hasUrl() => _url != null;
 
+  // "notification_frequency_second" field.
+  double? _notificationFrequencySecond;
+  double get notificationFrequencySecond => _notificationFrequencySecond ?? 0.0;
+  bool hasNotificationFrequencySecond() => _notificationFrequencySecond != null;
+
   void _initializeFields() {
     _eventId = castToType<int>(snapshotData['event_id']);
     _eventName = snapshotData['event_name'] as String?;
@@ -102,6 +107,8 @@ class EventsRecord extends FirestoreRecord {
     _endDatetime = snapshotData['end_datetime'] as DateTime?;
     _eventImageList = getDataList(snapshotData['event_image_list']);
     _url = snapshotData['url'] as String?;
+    _notificationFrequencySecond =
+        castToType<double>(snapshotData['notification_frequency_second']);
   }
 
   static CollectionReference get collection =>
@@ -151,6 +158,7 @@ Map<String, dynamic> createEventsRecordData({
   DateTime? startDatetime,
   DateTime? endDatetime,
   String? url,
+  double? notificationFrequencySecond,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -167,6 +175,7 @@ Map<String, dynamic> createEventsRecordData({
       'start_datetime': startDatetime,
       'end_datetime': endDatetime,
       'url': url,
+      'notification_frequency_second': notificationFrequencySecond,
     }.withoutNulls,
   );
 
@@ -192,7 +201,8 @@ class EventsRecordDocumentEquality implements Equality<EventsRecord> {
         e1?.startDatetime == e2?.startDatetime &&
         e1?.endDatetime == e2?.endDatetime &&
         listEquality.equals(e1?.eventImageList, e2?.eventImageList) &&
-        e1?.url == e2?.url;
+        e1?.url == e2?.url &&
+        e1?.notificationFrequencySecond == e2?.notificationFrequencySecond;
   }
 
   @override
@@ -210,7 +220,8 @@ class EventsRecordDocumentEquality implements Equality<EventsRecord> {
         e?.startDatetime,
         e?.endDatetime,
         e?.eventImageList,
-        e?.url
+        e?.url,
+        e?.notificationFrequencySecond
       ]);
 
   @override
