@@ -5,6 +5,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
+import 'dart:async';
 import '/custom_code/actions/index.dart' as actions;
 import '/index.dart';
 import 'package:flutter/material.dart';
@@ -471,32 +472,30 @@ class _ScanBeaconRSSIWidgetState extends State<ScanBeaconRSSIWidget> {
                           safeSetState(() {});
                           // Set isLogging
                           FFAppState().isLogging = true;
-                          safeSetState(() {});
-                          await showDialog(
-                            context: context,
-                            builder: (alertDialogContext) {
-                              return AlertDialog(
-                                title: Text(
-                                    FFAppState().DeviceDistance.toString()),
-                                content:
-                                    Text(FFAppState().DeviceMinute.toString()),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(alertDialogContext),
-                                    child: Text('Ok'),
-                                  ),
-                                ],
+                          FFAppState().update(() {});
+                          unawaited(
+                            () async {
+                              await showDialog(
+                                context: context,
+                                builder: (alertDialogContext) {
+                                  return AlertDialog(
+                                    content:
+                                        Text(FFAppState().isLogging.toString()),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(alertDialogContext),
+                                        child: Text('Ok'),
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
-                            },
+                            }(),
                           );
                           if (_shouldSetState) safeSetState(() {});
                         },
-                        text: 'ค้นหา Beacon',
-                        icon: Icon(
-                          Icons.search_outlined,
-                          size: 30.0,
-                        ),
+                        text: 'บันทึก RSSI',
                         options: FFButtonOptions(
                           height: 60.0,
                           padding: EdgeInsetsDirectional.fromSTEB(
