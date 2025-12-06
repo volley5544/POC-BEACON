@@ -34,7 +34,6 @@ Future<void> startScanningBeacon(
   //   if (result.beacons.isNotEmpty) {
   //     result.beacons.sort((a, b) => a.accuracy.compareTo(b.accuracy));
   //     final nearest = result.beacons.first;
-  //
   //     /* niruemon.n comment ชั่วคราว 2035-06-05*/
   //     triggerPushNotification(
   //       notificationTitle: 'Test Notification Title',
@@ -45,7 +44,6 @@ Future<void> startScanningBeacon(
   //       initialPageName: 'scan_beacon',
   //       parameterData: {},
   //     );
-  //
   //     streamRanging?.cancel(); // หยุดหลังเจอ
   //     showDialog(
   //       context: context,

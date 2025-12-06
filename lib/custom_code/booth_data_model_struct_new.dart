@@ -14,6 +14,12 @@ class BoothDataModelStructNew {
   final int eventId;
   final List<String> boothImageList;
   final String deviceUuid;
+  final double txPower;
+  final double pathLossExponent;
+  final double smoothingAlpha;
+  final double maxDistanceCap;
+  final DateTime calibratedAt;
+  final String environmentLabel;
 
   BoothDataModelStructNew({
     required this.boothId,
@@ -29,6 +35,12 @@ class BoothDataModelStructNew {
     required this.eventId,
     required this.boothImageList,
     required this.deviceUuid,
+    required this.txPower,
+    required this.pathLossExponent,
+    required this.smoothingAlpha,
+    required this.maxDistanceCap,
+    required this.calibratedAt,
+    required this.environmentLabel,
   });
 
   factory BoothDataModelStructNew.fromMap(Map<String, dynamic> map) {
@@ -55,6 +67,14 @@ class BoothDataModelStructNew {
           ? map['booth_image_list'].cast<String>()
           : [],
       deviceUuid: map['device_uuid'] ?? '',
+      txPower: (map['tx_power'] as num?)?.toDouble() ?? 0.0,
+      pathLossExponent: (map['path_loss_exponent'] as num?)?.toDouble() ?? 0.0,
+      smoothingAlpha: (map['smoothing_alpha'] as num?)?.toDouble() ?? 0.0,
+      maxDistanceCap: (map['max_distance_cap'] as num?)?.toDouble() ?? 0.0,
+      calibratedAt: map['calibrated_at'] != null
+          ? map['calibrated_at'].toDate()
+          : Timestamp.now().toDate(),
+      environmentLabel: map['environment_label'] ?? '',
     );
   }
 }
