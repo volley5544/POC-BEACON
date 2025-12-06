@@ -1601,94 +1601,194 @@ class MyStreamService with WidgetsBindingObserver {
   }
 
   Timer? _continuousPrintTimer;
-  DateTime? _lastSeenBeacon; // เวลาที่เจอ beacon ครั้งล่าสุด
+  DateTime? _lastSeenBeacon;   // ⭐ เวลาเจอ Beacon ครั้งล่าสุด
 
   Future<void> startPrintRawRSSIContinuous() async {
-    //int minutes
     final minutes = FFAppState().DeviceMinute;
     final distance = FFAppState().DeviceDistance;
     final endTime = DateTime.now().add(Duration(minutes: minutes));
 
-    print(
-        "📡 Start continuous RAW RSSI logging for minute : $minutes , Distance : $distance");
-    await saveLogToFile(
-        "=== Start logging === Minute:$minutes  Distance:$distance ===");
+    print("📡 Start FULL RSSI logging (200 ms) for $minutes minutes");
+
+    // Log header ให้ทุก Beacon
+    for (final uuid in FFAppState().beaconIdList) {
+      await saveLogToFile(uuid,
+          "=== Start logging === Minute:$minutes Distance:$distance ===");
+    }
 
     _continuousPrintTimer?.cancel();
     _continuousPrintTimer = Timer.periodic(
-      const Duration(milliseconds: 500),
-      (timer) async {
+      const Duration(milliseconds: 200),   // ⭐ sample ทุก 200 ms
+          (timer) async {
         final now = DateTime.now();
 
-        // ❌ หมดเวลาตามกำหนด -> หยุด
+        // ❌ หมดเวลา — หยุด
         if (now.isAfter(endTime)) {
           print("🛑 Logging finished (time limit reached)");
-          await saveLogToFile("🛑 Logging finished (time limit reached)");
+
+          for (final uuid in FFAppState().beaconIdList) {
+            await saveLogToFile(uuid, "🛑 Logging finished (time limit reached)");
+          }
           timer.cancel();
           return;
         }
 
-        // ❌ ไม่เจอ beacon
-        if (FFAppState().beaconRssiList.isEmpty) {
-          // ถ้าไม่เคยเจอ beacon มาก่อน → บันทึกเวลาเริ่มต้นตอนนี้
+        // ❌ ไม่พบ Beacon เลย
+        if (FFAppState().beaconIdList.isEmpty) {
+          // ถ้าเพิ่งเริ่มไม่เจอ ให้บันทึกเวลานี้เป็นครั้งแรก
           _lastSeenBeacon ??= now;
 
-          // ถ้าไม่เจอ beacon เกิน 5 วินาที → หยุด
+          // Beacon หายเกิน 5 วินาที → หยุด
           if (now.difference(_lastSeenBeacon!).inSeconds >= 5) {
-            print("🛑 Auto stop logging — no beacon detected for 5 seconds");
-            await saveLogToFile(
-                "🛑 Auto stop logging — no beacon detected for 5 seconds");
+            print("🛑 Auto stop — no beacon detected for 5 seconds");
+
+            // Log ให้ทุก UUID (กันข้อมูลขาด)
+            for (final uuid in FFAppState().beaconIdList) {
+              await saveLogToFile(uuid,
+                  "🛑 Auto stop — no beacon detected for 5 seconds");
+            }
+
             timer.cancel();
             _lastSeenBeacon = null;
             return;
           }
 
           print("⚠️ Beacon not found... waiting...");
-          await saveLogToFile("⚠️ Beacon not found... waiting...");
           return;
         }
 
-        // 🟢 เจอ beacon → รีเซ็ตเวลา
+        // 🟢 เจอ Beacon → reset timer
         _lastSeenBeacon = now;
 
-        // ใช้ค่า RSSI ดิบล่าสุด (ใน list เก็บเป็น String → แปลงเป็น double ก่อน)
-        final rawRssiStr = FFAppState().beaconRssiList.first;
-        final uuid = FFAppState().beaconIdList.first;
+        // Loop เก็บข้อมูลทุก Beacon
+        for (int i = 0; i < FFAppState().beaconIdList.length; i++) {
+          final uuid = FFAppState().beaconIdList[i];
+          final rssiStr = FFAppState().beaconRssiList[i];
+          final rssi = double.tryParse(rssiStr);
 
-        /// ใช้ค่า RSSI ดิบล่าสุด
-        final rawRssi = double.tryParse(rawRssiStr);
-        if (rawRssi == null) {
-          print("⚠️ Cannot parse RSSI: $rawRssiStr");
-          await saveLogToFile("⚠️ Cannot parse RSSI: $rawRssiStr");
-          return;
+          if (rssi == null) continue;
+
+          final log =
+              "📝 [$now] UUID=$uuid | RSSI=$rssi | Minute:$minutes | Distance:$distance";
+
+          print(log);
+          await saveLogToFile(uuid, log);  // ⭐ แยกไฟล์ตาม UUID
         }
-
-        // final distance = calculateDistanceByBeacon(uuid, rawRssi);
-        // if (distance != null) {
-        //   // print("📏 Distance estimate = ${distance.toStringAsFixed(2)}");
-        //   print("📝 [$now] UUID=$uuid | RAW_RSSI=$rawRssi , Distance=${distance.toStringAsFixed(2)}");
-        // }else{
-        //   print("📝 [$now] UUID=$uuid | RAW_RSSI=$rawRssi , Distance=");
-        // }
-        final log = "📝 [$now] UUID=$uuid | RSSI=$rawRssi";
-        print("$log");
-        await saveLogToFile(log);
       },
     );
 
     FFAppState().isLogging = false;
   }
 
-  Future<File> saveLogToFile(String text) async {
+
+  // Future<void> startPrintRawRSSIContinuous() async {
+  //   //int minutes
+  //   final minutes = FFAppState().DeviceMinute;
+  //   final distance = FFAppState().DeviceDistance;
+  //   final endTime = DateTime.now().add(Duration(minutes: minutes));
+  //
+  //   print(
+  //       "📡 Start continuous RAW RSSI logging for minute : $minutes , Distance : $distance");
+  //   await saveLogToFile(FFAppState().beaconIdList.first,
+  //       "=== Start logging === Minute:$minutes  Distance:$distance ===");
+  //
+  //   _continuousPrintTimer?.cancel();
+  //   _continuousPrintTimer = Timer.periodic(
+  //     const Duration(milliseconds: 200),
+  //     (timer) async {
+  //       final now = DateTime.now();
+  //
+  //       // ❌ หมดเวลาตามกำหนด -> หยุด
+  //       if (now.isAfter(endTime)) {
+  //         print("🛑 Logging finished (time limit reached)");
+  //         if(FFAppState().beaconIdList.isNotEmpty) {
+  //           await saveLogToFile(
+  //               FFAppState().beaconIdList.first, "🛑 Logging finished (time limit reached)");
+  //         }
+  //         timer.cancel();
+  //         return;
+  //       }
+  //
+  //       // ❌ ไม่เจอ beacon
+  //       if (FFAppState().beaconRssiList.isEmpty) {
+  //         // ถ้าไม่เคยเจอ beacon มาก่อน → บันทึกเวลาเริ่มต้นตอนนี้
+  //         _lastSeenBeacon ??= now;
+  //
+  //         // ถ้าไม่เจอ beacon เกิน 5 วินาที → หยุด
+  //         if (now.difference(_lastSeenBeacon!).inSeconds >= 5) {
+  //           print("🛑 Auto stop logging — no beacon detected for 5 seconds");
+  //           if(FFAppState().beaconIdList.isNotEmpty) {
+  //             await saveLogToFile(
+  //                 FFAppState().beaconIdList.first, "🛑 Auto stop logging — no beacon detected for 5 seconds");
+  //           }
+  //           timer.cancel();
+  //           _lastSeenBeacon = null;
+  //           return;
+  //         }
+  //
+  //         print("⚠️ Beacon not found... waiting...");
+  //         if(FFAppState().beaconIdList.isNotEmpty) {
+  //           await saveLogToFile(
+  //               FFAppState().beaconIdList.first, "⚠️ Beacon not found... waiting...");
+  //         }
+  //         return;
+  //       }
+  //
+  //       // 🟢 เจอ beacon → รีเซ็ตเวลา
+  //       _lastSeenBeacon = now;
+  //
+  //
+  //       // ใช้ค่า RSSI ดิบล่าสุด (ใน list เก็บเป็น String → แปลงเป็น double ก่อน)
+  //       final rawRssiStr = FFAppState().beaconRssiList.first;
+  //       final uuid = FFAppState().beaconIdList.first;
+  //
+  //
+  //       /// ใช้ค่า RSSI ดิบล่าสุด
+  //       final rawRssi = double.tryParse(rawRssiStr);
+  //       if (rawRssi == null) {
+  //         print("⚠️ Cannot parse RSSI: $rawRssiStr");
+  //         await saveLogToFile(uuid, "⚠️ Cannot parse RSSI: $rawRssiStr");
+  //         return;
+  //       }
+  //
+  //       // final distance = calculateDistanceByBeacon(uuid, rawRssi);
+  //       // if (distance != null) {
+  //       //   // print("📏 Distance estimate = ${distance.toStringAsFixed(2)}");
+  //       //   print("📝 [$now] UUID=$uuid | RAW_RSSI=$rawRssi , Distance=${distance.toStringAsFixed(2)}");
+  //       // }else{
+  //       //   print("📝 [$now] UUID=$uuid | RAW_RSSI=$rawRssi , Distance=");
+  //       // }
+  //       final log = "📝 [$now] UUID=$uuid } Minute:$minutes { Distance:$distance | RSSI=$rawRssi";
+  //       print("$log");
+  //       await saveLogToFile(uuid, log);
+  //     },
+  //   );
+  //
+  //   FFAppState().isLogging = false;
+  // }
+
+  Future<File> saveLogToFile(String uuid, String text) async {
+    // โฟลเดอร์ที่มองเห็นได้
     final directory = Directory('/storage/emulated/0/Documents');
 
     if (!directory.existsSync()) {
       directory.createSync(recursive: true);
     }
 
-    final fileName = "rssi_log_${DateTime.now().millisecondsSinceEpoch}.txt";
+    // วันที่แบบ YYYYMMDD
+    final date = DateTime.now();
+    final dateStr =
+        "${date.year}${date.month.toString().padLeft(2, '0')}${date.day.toString().padLeft(2, '0')}";
+
+    // UUID แบบ filename-safe (ตัด '-')
+    final uuidSafe = uuid.replaceAll("-", "");
+
+    // สร้างชื่อไฟล์แบบ 20250202_UUID.txt
+    final fileName = "${dateStr}_${uuidSafe}.txt";
 
     final file = File('${directory.path}/$fileName');
+
+    // เขียนต่อท้ายไฟล์ (append)
     return file.writeAsString("$text\n", mode: FileMode.append);
   }
 
