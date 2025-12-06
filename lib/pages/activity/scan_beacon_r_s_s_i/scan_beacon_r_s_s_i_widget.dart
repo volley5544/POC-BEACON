@@ -11,7 +11,6 @@ import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'scan_beacon_r_s_s_i_model.dart';
 export 'scan_beacon_r_s_s_i_model.dart';
 
@@ -77,8 +76,6 @@ class _ScanBeaconRSSIWidgetState extends State<ScanBeaconRSSIWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -479,8 +476,7 @@ class _ScanBeaconRSSIWidgetState extends State<ScanBeaconRSSIWidget> {
                                 context: context,
                                 builder: (alertDialogContext) {
                                   return AlertDialog(
-                                    content:
-                                        Text(FFAppState().isLogging.toString()),
+                                    title: Text('test'),
                                     actions: [
                                       TextButton(
                                         onPressed: () =>

@@ -13,27 +13,6 @@ import 'package:flutter/material.dart';
 import '/custom_code/my_stream_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class TextWidgetShowBeaconDistance extends StatefulWidget {
-  const TextWidgetShowBeaconDistance({
-    super.key,
-    this.width,
-    this.height,
-    this.deviceUuid,
-    this.notificationDistance,
-    // this.showText = false, // niruemon ค่า default = ซ่อนข้อความ
-  });
-
-  final double? width;
-  final double? height;
-  final String? deviceUuid;
-  final String? notificationDistance;
-  // final bool showText; // พารามิเตอร์เปิด/ปิดข้อความ
-
-  @override
-  State<TextWidgetShowBeaconDistance> createState() =>
-      _TextWidgetShowBeaconDistanceState();
-}
-
 class _TextWidgetShowBeaconDistanceState
     extends State<TextWidgetShowBeaconDistance> {
   @override
@@ -44,20 +23,32 @@ class _TextWidgetShowBeaconDistanceState
         return ValueListenableBuilder<List<String>>(
           valueListenable: MyStreamService().beaconId,
           builder: (context, ids, __) {
-            // if (!widget.showText) {
-            //   // 👈 ถ้าไม่ให้แสดงข้อความ → ซ่อนทั้งหมด
-            // return SizedBox.shrink();
-            // }
+            final index =
+                returnIndexValueInList(ids.toList(), widget.deviceUuid!);
+
+            String statusText = 'ไม่อยู่ในระยะ';
+            Color statusColor = Colors.red; // 👈 ค่าเริ่มต้นเป็นสีแดง
+
+            if (index != -1) {
+              final distanceStr = distances.elementAtOrNull(index);
+              if (distanceStr != null && widget.notificationDistance != null) {
+                final distance = double.tryParse(distanceStr);
+                final notifyDistance =
+                    double.tryParse(widget.notificationDistance!);
+
+                if (distance != null && notifyDistance != null) {
+                  if (distance <= notifyDistance) {
+                    statusText = 'อยู่ในระยะ';
+                    statusColor =
+                        FlutterFlowTheme.of(context).success; // สีเขียว
+                  }
+                }
+              }
+            }
 
             return Text(
-              returnIndexValueInList(ids.toList(), widget.deviceUuid!) != -1
-                  ? double.parse(distances.elementAtOrNull(
-                              returnIndexValueInList(
-                                  ids.toList(), widget.deviceUuid!)!)!) <=
-                          double.parse(widget.notificationDistance!)
-                      ? 'อยู่ในระยะ' // ${distances.elementAtOrNull(returnIndexValueInList(ids.toList(), widget.deviceUuid!)!)} m'
-                      : 'ไม่อยู่ในระยะ'
-                  : 'ไม่อยู่ในระยะ',
+              statusText,
+              textAlign: TextAlign.right, // 👉 ชิดขวาทุกสถานะ
               style: FlutterFlowTheme.of(context).labelMedium.override(
                     font: GoogleFonts.readexPro(
                       fontWeight:
@@ -65,7 +56,7 @@ class _TextWidgetShowBeaconDistanceState
                       fontStyle:
                           FlutterFlowTheme.of(context).labelMedium.fontStyle,
                     ),
-                    color: FlutterFlowTheme.of(context).success,
+                    color: statusColor, // 👉 เปลี่ยนสีตามสถานะ
                     letterSpacing: 0.0,
                     fontWeight:
                         FlutterFlowTheme.of(context).labelMedium.fontWeight,
