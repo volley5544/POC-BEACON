@@ -489,6 +489,11 @@ class _ScanBeaconRSSIWidgetState extends State<ScanBeaconRSSIWidget> {
                               );
                             }(),
                           );
+                          await actions.startScanningBeacon(
+                            context,
+                            currentUserDisplayName,
+                            currentUserReference,
+                          );
                           if (_shouldSetState) safeSetState(() {});
                         },
                         text: 'บันทึก RSSI',
