@@ -93,11 +93,8 @@ class MyStreamService with WidgetsBindingObserver {
 // List<String> get beaconId => _beaconId;
 // List<String> get beaconDistance => _beaconDistance;
 
-//เพิ่ม “Hysteresis” ป้องกันการกระพริบของสถานะ
-// bool isWithinRange(double distance, double threshold, {double hysteresisBuffer = 0.3}) {
-//   return distance <= threshold + hysteresisBuffer;
-// }
   bool? _wasInRange;
+  bool _registerInviteSent = false; // กันไม่ให้ยิงซ้ำ
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -541,6 +538,11 @@ class MyStreamService with WidgetsBindingObserver {
 
     //ยังไม่เคยลงทะเบียนและยังไม่เคยส่งnotiชวนลงทะเบียนกิจกรรม
     if (filteredRegister.length == 0 && filteredNotiType.length == 0) {
+      if (_registerInviteSent) {
+        return; // เคยยิงไปแล้ว
+      }
+      _registerInviteSent = true; // ล็อกครั้งแรก
+
       // HapticFeedback.heavyImpact();
       //ส่งinapp noti ชวนลงทะเบียนกิจกรรม event_idนี้
       final notiRefRegist = FirebaseFirestore.instance
@@ -646,11 +648,25 @@ class MyStreamService with WidgetsBindingObserver {
         return;
       }
       //ถ้ายังส่งnotiไม่เกินจำนวนครั้ง
+      // else {
+      //   DateTime nextNotiTime = filteredNoti.first.sentAt
+      //       .add(Duration(minutes: event.notificationFrequencyMinute));
+      //   //เช็คว่าเวลาที่ส่งnotiชวนเล่นกิจกรรมล่าสุดของevent_idนี้ + กับเวลาnotificationFrequencyMinuteที่setไว้ เลยเวลาปัจจุบันหรือยัง
+      //   if (nextNotiTime.isAfter(Timestamp.now().toDate())) {
+      //     return;
+      //   }
+      // }
       else {
-        DateTime nextNotiTime = filteredNoti.first.sentAt
-            .add(Duration(minutes: event.notificationFrequencyMinute));
-        //เช็คว่าเวลาที่ส่งnotiชวนเล่นกิจกรรมล่าสุดของevent_idนี้ + กับเวลาnotificationFrequencyMinuteที่setไว้ เลยเวลาปัจจุบันหรือยัง
-        if (nextNotiTime.isAfter(Timestamp.now().toDate())) {
+        final freq = event.notificationFrequencyMinute ?? 0;
+
+        // ⭐ แปลงนาที (รองรับทศนิยม) → วินาที
+        final totalSeconds = (freq * 60).round();
+
+        DateTime nextNotiTime =
+            filteredNoti.first.sentAt.add(Duration(seconds: totalSeconds));
+
+        // ⭐ ถ้ายังไม่ถึงเวลาที่ควรส่ง noti → ห้ามส่ง
+        if (nextNotiTime.isAfter(DateTime.now())) {
           return;
         }
       }
@@ -660,37 +676,26 @@ class MyStreamService with WidgetsBindingObserver {
     // 1️⃣ คำนวณระยะล่าสุด
     // final distance = getDistanceOfUuid(booth.deviceUuid);
     // 🧭 1️⃣ อ่านระยะและ RSSI ของ Beacon ปัจจุบัน
+    // double? rssi;
+    // double calibratedDistance = getDistanceOfUuid(booth.deviceUuid);
     double? rssi;
-    double calibratedDistance = getDistanceOfUuid(booth.deviceUuid);
+    double calibratedDistance = 999;
     bool isStable = false;
 
-    // 🔹 อ่าน RSSI จาก FFAppState() (ยังจำเป็นสำหรับ log/analysis)
+    // อ่าน RSSI ดิบจาก FFAppState
     if (FFAppState().beaconIdList.contains(booth.deviceUuid)) {
       final index = FFAppState().beaconIdList.indexOf(booth.deviceUuid);
       rssi = double.tryParse(FFAppState().beaconRssiList[index]) ?? -60;
+
+      // ⭐ คำนวณระยะหลังคาลิเบรตจริง (ไม่มี smoothing)
+      calibratedDistance = await getCalibratedDistance(
+        booth.deviceUuid,
+        rssi!,
+      );
     }
 
     // 🔹 ตรวจว่าอยู่ในระยะต่อเนื่องหรือไม่
     isStable = isUserStableNear(booth, calibratedDistance);
-
-    // 2️⃣ ตรวจเงื่อนไข stable + calibration
-    // 🧩 2️⃣ ตรวจเงื่อนไขเข้าใกล้บูธด้วย RSSI/ระยะ
-    final shouldNotify = await shouldTriggerNotification(
-      booth,
-      calibratedDistance ?? 999,
-      rssi: rssi,
-    );
-
-    // 3️⃣ ถ้าไม่ผ่านเงื่อนไข ให้จบเลย
-    if (!shouldNotify) {
-      // print(
-      //     '⏳ ยังไม่เข้าเงื่อนไขส่ง noti สำหรับ ${booth.boothName} (ระยะ ${calibratedDistance.toStringAsFixed(2)} m)');
-      return;
-    }
-
-    // 4️⃣ ผ่านเงื่อนไข → ส่ง Notification และบันทึกข้อมูล
-    // print(
-    //     '✅ ผู้ใช้อยู่ใกล้บูธ ${booth.boothName} แล้ว (ระยะ ${calibratedDistance.toStringAsFixed(2)} m)');
 
     // ✅ Niruemon: บันทึกเมื่อ Beacon ตรวจจับได้
     final logId = await logProximityAndConcurrentUsers(
@@ -699,9 +704,12 @@ class MyStreamService with WidgetsBindingObserver {
       rssi: rssi, // ค่า RSSI ล่าสุด
       calibratedDistance: calibratedDistance, // ระยะหลังคาลิเบรต
       isStable: isStable, // สถานะเสถียร (อยู่ใกล้ต่อเนื่อง)
-      boothThreshold: booth.notificationDistance ?? 1.5,
+      boothThreshold: booth.notificationDistance ?? 0,
       source: 'createUserNotificationDoc',
-      status: shouldNotify ? 'in_range' : 'out_of_range',
+      status:
+          (calibratedDistance <= (booth.notificationDistance ?? 0) && isStable)
+              ? 'in_range'
+              : 'out_of_range',
       notiData: {
         // ✅ ส่งเฉพาะข้อมูล noti
         'to_uid': currentUserUid,
@@ -1082,7 +1090,7 @@ class MyStreamService with WidgetsBindingObserver {
         'rssi': rssi ?? -99,
         'distance_calibrated': calibratedDistance ?? -1,
         'stable_status': (isStable ?? false) ? 'stable' : 'unstable',
-        'threshold': boothThreshold ?? 1.5,
+        'threshold': boothThreshold ?? 0,
         'status': status,
         'source': source,
         'detect_timestamp': Timestamp.fromDate(now),
@@ -1401,49 +1409,6 @@ class MyStreamService with WidgetsBindingObserver {
     return false;
   }
 
-// ---------------------------
-// ✅ ฟังก์ชันคาลิเบรตระยะทาง (ลดระยะที่ระบบคำนวณเกินจริง)
-// ---------------------------
-
-  // /// ค่า offset คาลิเบรต (วัดจากการเทียบระยะจริง)
-  // /// เช่น ถ้าระบบวัด 1.3 m แต่จริง ๆ 1.0 m → offset = 0.3
-  // double distanceOffset = 0.4; // ปรับตามผลคาลิเบรตของคุณ
-  //
-  // double calibrateDistance(double rawDistance) {
-  //   final adjusted = rawDistance - distanceOffset;
-  //   return adjusted < 0.1 ? 0.1 : adjusted;
-  // }
-
-// ---------------------------
-// ✅ ใช้ใน shouldTriggerNotification
-// ---------------------------
-
-  Future<bool> shouldTriggerNotification(
-    BoothDataModelStructNew booth,
-    double rawDistance, {
-    double? rssi, // ✅ เพิ่ม RSSI เป็น optional parameter
-  }) async {
-    // final calibrated = calibrateDistance(rawDistance);
-    final calibrated = rawDistance;
-    final stable = isUserStableNear(booth, calibrated);
-
-    // ✅ บันทึก log เข้า Firebase Analytics พร้อม RSSI
-    // await analytics.logEvent(
-    //   name: 'beacon_distance_log',
-    //   parameters: {
-    //     'booth_uuid': booth.deviceUuid ?? '',
-    //     'booth_name': booth.boothName ?? '',
-    //     'rssi': rssi ?? -99, // ✅ เก็บค่า RSSI ไว้ใน log ด้วย
-    //     'threshold': booth.notificationDistance ?? 1.5,
-    //     'distance_calibrated': calibrated,
-    //     'stable_status': stable ? 'stable' : 'unstable',
-    //     'timestamp': DateTime.now().millisecondsSinceEpoch,
-    //   },
-    // );
-
-    return stable;
-  }
-
   // ======================
   // ✅ RSSI smoothing: median + exponential moving average
   // ======================
@@ -1464,20 +1429,6 @@ class MyStreamService with WidgetsBindingObserver {
   //   final ema = alpha * median + (1 - alpha) * prev;
   //   _emaMap[uuid] = ema;
   //   return ema;
-  // }
-
-  // ======================
-  // ✅ ปรับ Hysteresis buffer
-  // ======================
-  // bool isWithinRange(double distance, double threshold,
-  //     {double hysteresisBuffer = 0.5}) {
-  //   if (_wasInRange == null) _wasInRange = false;
-  //   if (_wasInRange! && distance > threshold + hysteresisBuffer) {
-  //     _wasInRange = false;
-  //   } else if (!_wasInRange! && distance < threshold - hysteresisBuffer) {
-  //     _wasInRange = true;
-  //   }
-  //   return _wasInRange!;
   // }
 
   double getDistanceOfUuid(String uuid) {
@@ -1573,122 +1524,175 @@ class MyStreamService with WidgetsBindingObserver {
   // -----------------------------------
   // ฟังก์ชันคำนวณระยะจาก RSSI ต่อ Beacon
   // -----------------------------------
-  double? calculateDistanceByBeacon(String uuid, double rssi) {
-    final Map<String, Map<String, double>> params = {
-      // A = ค่า RSSI ที่ 1 เมตร (TxPower)
-      // n = ดัชนีการสูญเสียเส้นทาง (Path Loss Exponent)
-      "25786407-EBC6-CFAF-B14F-E2A49306A5FD": {"A": -62.12, "n": 3.55},
-      "FDA50693-A4E2-4FB1-AFCF-C6EB07647826": {"A": -62.12, "n": 3.55},
-      "FDA50693-A4E2-4FB1-AFCF-C6EB07647827": {"A": -62.12, "n": 3.55},
+  // double? calculateDistanceByBeacon(String uuid, double rssi) {
+  //   final Map<String, Map<String, double>> params = {
+  //     // A = ค่า RSSI ที่ 1 เมตร (TxPower)
+  //     // n = ดัชนีการสูญเสียเส้นทาง (Path Loss Exponent)
+  //     "25786407-EBC6-CFAF-B14F-E2A49306A5FD": {"A": -62.12, "n": 3.55},
+  //     "FDA50693-A4E2-4FB1-AFCF-C6EB07647826": {"A": -62.12, "n": 3.55},
+  //     "FDA50693-A4E2-4FB1-AFCF-C6EB07647827": {"A": -62.12, "n": 3.55},
+  //   };
+
+  //   if (!params.containsKey(uuid)) {
+  //     print("⚠️ Unknown beacon UUID: $uuid (no calibration params)");
+  //     return null;
+  //   }
+
+  //   final A = params[uuid]!["A"]!;
+  //   final n = params[uuid]!["n"]!;
+
+  //   final distance = math.pow(10, (A - rssi) / (10 * n));
+
+  //   // print(
+  //   //   "Calibrate :: Beacon $uuid , RSSI=$rssi ; Distance=$distance",
+  //   // );
+
+  //   // math.pow คืนค่าเป็น num → แปลงเป็น double
+  //   return distance.toDouble();
+  // }
+  Future<Map<String, double>?> getCalibrationParams(String uuid) async {
+    final doc =
+        await FirebaseFirestore.instance.collection('booths').doc(uuid).get();
+
+    if (!doc.exists) return null;
+
+    return {
+      "A": (doc["tx_power"] as num).toDouble(),
+      "n": (doc["path_loss_exponent"] as num).toDouble(),
     };
-
-    if (!params.containsKey(uuid)) {
-      print("⚠️ Unknown beacon UUID: $uuid (no calibration params)");
-      return null;
-    }
-
-    final A = params[uuid]!["A"]!;
-    final n = params[uuid]!["n"]!;
-
-    final distance = math.pow(10, (A - rssi) / (10 * n));
-
-    // print(
-    //   "Calibrate :: Beacon $uuid , RSSI=$rssi ; Distance=$distance",
-    // );
-
-    // math.pow คืนค่าเป็น num → แปลงเป็น double
-    return distance.toDouble();
   }
+
+  double calculateDistanceByBeacon(double rssi, double A, double n) {
+    return math.pow(10, (A - rssi) / (10 * n)).toDouble();
+  }
+
+  Future<double> getCalibratedDistance(String uuid, double rawRssi) async {
+    final params = await getCalibrationParams(uuid);
+
+    if (params == null) return 999;
+
+    final A = params["A"]!;
+    final n = params["n"]!;
+
+    final distance = calculateDistanceByBeacon(rawRssi, A, n);
+
+    return distance; // ⭐ ไม่มี smoothing, ใช้ RSSI ดิบล้วนๆ
+  }
+
+  // double? calculateDistanceByBeacon(String uuid, double rssi,
+  //   Map<String, double> params) {
+
+  //   final A = params["A"]!;
+  //   final n = params["n"]!;
+
+  //   final distance = math.pow(10, (A - rssi) / (10 * n));
+
+  //   return distance.toDouble();
+  // }
 
   Timer? _continuousPrintTimer;
   DateTime? _lastSeenBeacon; // เวลาที่เจอ beacon ครั้งล่าสุด
 
   Future<void> startPrintRawRSSIContinuous() async {
-    //int minutes
     final minutes = FFAppState().DeviceMinute;
     final distance = FFAppState().DeviceDistance;
     final endTime = DateTime.now().add(Duration(minutes: minutes));
 
-    print(
-        "📡 Start continuous RAW RSSI logging for minute : $minutes , Distance : $distance");
-    await saveLogToFile(
-        "=== Start logging === Minute:$minutes  Distance:$distance ===");
+    print("📡 Start FULL RSSI logging (200 ms) for $minutes minutes");
+
+    // Log header ให้ทุก Beacon
+    for (final uuid in FFAppState().beaconIdList) {
+      await saveLogToFile(
+          uuid, "=== Start logging === Minute:$minutes Distance:$distance ===");
+    }
 
     _continuousPrintTimer?.cancel();
     _continuousPrintTimer = Timer.periodic(
-      const Duration(milliseconds: 500),
+      const Duration(milliseconds: 200), // ⭐ sample ทุก 200 ms
       (timer) async {
         final now = DateTime.now();
 
-        // ❌ หมดเวลาตามกำหนด -> หยุด
+        // ❌ หมดเวลา — หยุด
         if (now.isAfter(endTime)) {
           print("🛑 Logging finished (time limit reached)");
-          await saveLogToFile("🛑 Logging finished (time limit reached)");
+
+          for (final uuid in FFAppState().beaconIdList) {
+            await saveLogToFile(
+                uuid, "🛑 Logging finished (time limit reached)");
+          }
           timer.cancel();
           return;
         }
 
-        // ❌ ไม่เจอ beacon
-        if (FFAppState().beaconRssiList.isEmpty) {
-          // ถ้าไม่เคยเจอ beacon มาก่อน → บันทึกเวลาเริ่มต้นตอนนี้
+        // ❌ ไม่พบ Beacon เลย
+        if (FFAppState().beaconIdList.isEmpty) {
+          // ถ้าเพิ่งเริ่มไม่เจอ ให้บันทึกเวลานี้เป็นครั้งแรก
           _lastSeenBeacon ??= now;
 
-          // ถ้าไม่เจอ beacon เกิน 5 วินาที → หยุด
+          // Beacon หายเกิน 5 วินาที → หยุด
           if (now.difference(_lastSeenBeacon!).inSeconds >= 5) {
-            print("🛑 Auto stop logging — no beacon detected for 5 seconds");
-            await saveLogToFile(
-                "🛑 Auto stop logging — no beacon detected for 5 seconds");
+            print("🛑 Auto stop — no beacon detected for 5 seconds");
+
+            // Log ให้ทุก UUID (กันข้อมูลขาด)
+            for (final uuid in FFAppState().beaconIdList) {
+              await saveLogToFile(
+                  uuid, "🛑 Auto stop — no beacon detected for 5 seconds");
+            }
+
             timer.cancel();
             _lastSeenBeacon = null;
             return;
           }
 
           print("⚠️ Beacon not found... waiting...");
-          await saveLogToFile("⚠️ Beacon not found... waiting...");
           return;
         }
 
-        // 🟢 เจอ beacon → รีเซ็ตเวลา
+        // 🟢 เจอ Beacon → reset timer
         _lastSeenBeacon = now;
 
-        // ใช้ค่า RSSI ดิบล่าสุด (ใน list เก็บเป็น String → แปลงเป็น double ก่อน)
-        final rawRssiStr = FFAppState().beaconRssiList.first;
-        final uuid = FFAppState().beaconIdList.first;
+        // Loop เก็บข้อมูลทุก Beacon
+        for (int i = 0; i < FFAppState().beaconIdList.length; i++) {
+          final uuid = FFAppState().beaconIdList[i];
+          final rssiStr = FFAppState().beaconRssiList[i];
+          final rssi = double.tryParse(rssiStr);
 
-        /// ใช้ค่า RSSI ดิบล่าสุด
-        final rawRssi = double.tryParse(rawRssiStr);
-        if (rawRssi == null) {
-          print("⚠️ Cannot parse RSSI: $rawRssiStr");
-          await saveLogToFile("⚠️ Cannot parse RSSI: $rawRssiStr");
-          return;
+          if (rssi == null) continue;
+
+          final log =
+              "📝 [$now] UUID=$uuid | RSSI=$rssi | Minute:$minutes | Distance:$distance";
+
+          print(log);
+          await saveLogToFile(uuid, log); // ⭐ แยกไฟล์ตาม UUID
         }
-
-        // final distance = calculateDistanceByBeacon(uuid, rawRssi);
-        // if (distance != null) {
-        //   // print("📏 Distance estimate = ${distance.toStringAsFixed(2)}");
-        //   print("📝 [$now] UUID=$uuid | RAW_RSSI=$rawRssi , Distance=${distance.toStringAsFixed(2)}");
-        // }else{
-        //   print("📝 [$now] UUID=$uuid | RAW_RSSI=$rawRssi , Distance=");
-        // }
-        final log = "📝 [$now] UUID=$uuid | RSSI=$rawRssi";
-        print("$log");
-        await saveLogToFile(log);
       },
     );
 
     FFAppState().isLogging = false;
   }
 
-  Future<File> saveLogToFile(String text) async {
+  Future<File> saveLogToFile(String uuid, String text) async {
+    // โฟลเดอร์ที่มองเห็นได้
     final directory = Directory('/storage/emulated/0/Documents');
 
     if (!directory.existsSync()) {
       directory.createSync(recursive: true);
     }
 
-    final fileName = "rssi_log_${DateTime.now().millisecondsSinceEpoch}.txt";
+    // วันที่แบบ YYYYMMDD
+    final date = DateTime.now();
+    final dateStr =
+        "${date.year}${date.month.toString().padLeft(2, '0')}${date.day.toString().padLeft(2, '0')}";
+
+    // UUID แบบ filename-safe (ตัด '-')
+    final uuidSafe = uuid.replaceAll("-", "");
+
+    // สร้างชื่อไฟล์แบบ 20250202_UUID.txt
+    final fileName = "${dateStr}_${uuidSafe}.txt";
 
     final file = File('${directory.path}/$fileName');
+
+    // เขียนต่อท้ายไฟล์ (append)
     return file.writeAsString("$text\n", mode: FileMode.append);
   }
 
