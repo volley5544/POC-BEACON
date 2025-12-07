@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="62930f54-980c-4cd6-98b0-6f9474f4f012" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/custom_code/actions/start_scanning_beacon.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/custom_code/actions/start_scanning_beacon.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/custom_code/actions/setup_firebase_messaging.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/custom_code/actions/setup_firebase_messaging.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/custom_code/my_stream_service.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/custom_code/my_stream_service.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

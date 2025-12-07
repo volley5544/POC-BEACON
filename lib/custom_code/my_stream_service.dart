@@ -597,6 +597,7 @@ class MyStreamService with WidgetsBindingObserver {
         },
       );
 
+      final sendTime = DateTime.now().millisecondsSinceEpoch;
       //ส่งnoti FCM นอกแอพ ชวนลงทะเบียน event_idนี้
       triggerPushNotification(
         notificationTitle: 'เชิญลงทะเบียน',
@@ -609,6 +610,7 @@ class MyStreamService with WidgetsBindingObserver {
           'log_id': '',
           'event_id': event.eventId,
           'booth_id': booth.boothId,
+          'sent_from_server_time': sendTime,
         },
       );
 
@@ -775,6 +777,7 @@ class MyStreamService with WidgetsBindingObserver {
     }
 
     //noti FCM (นอกแอพ)
+    final sendTime = DateTime.now().millisecondsSinceEpoch;
 
     await analytics.logEvent(
       name: 'detect_booth_beacon',
@@ -795,8 +798,10 @@ class MyStreamService with WidgetsBindingObserver {
         // ✅ เพิ่มสถานะ foreground / background
         // 'is_background': !FFAppState().isAppForeground ? 1 : 0,
         'is_background': 0,
+        'sent_from_server_time': sendTime,
       },
     );
+
 
     //ส่ง FCM notiชวนเล่นกิจกรรม
     triggerPushNotification(
@@ -810,6 +815,7 @@ class MyStreamService with WidgetsBindingObserver {
         'log_id': logId,
         'event_id': event.eventId,
         'booth_id': booth.boothId,
+        'sent_from_server_time': sendTime,
       },
     );
   }
@@ -1116,6 +1122,7 @@ class MyStreamService with WidgetsBindingObserver {
         },
       });
 
+      final sendTime = DateTime.now().millisecondsSinceEpoch;
       // ✅ Log ไปที่ Firebase Analytics (สำหรับ dashboard)
       await analytics.logEvent(
         name: 'detect_distance_beacon',
@@ -1136,6 +1143,7 @@ class MyStreamService with WidgetsBindingObserver {
           'status': status,
           'source': source,
           'detect_time': now.millisecondsSinceEpoch,
+          'sent_from_server_time': sendTime,
           if (notiData != null) ...{
             'noti_type': notiData['noti_type'] ?? '',
             'title': notiData['title'] ?? '',
