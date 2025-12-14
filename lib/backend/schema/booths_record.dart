@@ -120,6 +120,11 @@ class BoothsRecord extends FirestoreRecord {
   String get environmentLabel => _environmentLabel ?? '';
   bool hasEnvironmentLabel() => _environmentLabel != null;
 
+  // "rssi_threshold" field.
+  int? _rssiThreshold;
+  int get rssiThreshold => _rssiThreshold ?? 0;
+  bool hasRssiThreshold() => _rssiThreshold != null;
+
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
@@ -145,6 +150,7 @@ class BoothsRecord extends FirestoreRecord {
     _maxDistanceCap = castToType<double>(snapshotData['max_distance_cap']);
     _calibratedAt = snapshotData['calibrated_at'] as DateTime?;
     _environmentLabel = snapshotData['environment_label'] as String?;
+    _rssiThreshold = castToType<int>(snapshotData['rssi_threshold']);
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -206,6 +212,7 @@ Map<String, dynamic> createBoothsRecordData({
   double? maxDistanceCap,
   DateTime? calibratedAt,
   String? environmentLabel,
+  int? rssiThreshold,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -229,6 +236,7 @@ Map<String, dynamic> createBoothsRecordData({
       'max_distance_cap': maxDistanceCap,
       'calibrated_at': calibratedAt,
       'environment_label': environmentLabel,
+      'rssi_threshold': rssiThreshold,
     }.withoutNulls,
   );
 
@@ -261,7 +269,8 @@ class BoothsRecordDocumentEquality implements Equality<BoothsRecord> {
         e1?.smoothingAlpha == e2?.smoothingAlpha &&
         e1?.maxDistanceCap == e2?.maxDistanceCap &&
         e1?.calibratedAt == e2?.calibratedAt &&
-        e1?.environmentLabel == e2?.environmentLabel;
+        e1?.environmentLabel == e2?.environmentLabel &&
+        e1?.rssiThreshold == e2?.rssiThreshold;
   }
 
   @override
@@ -286,7 +295,8 @@ class BoothsRecordDocumentEquality implements Equality<BoothsRecord> {
         e?.smoothingAlpha,
         e?.maxDistanceCap,
         e?.calibratedAt,
-        e?.environmentLabel
+        e?.environmentLabel,
+        e?.rssiThreshold
       ]);
 
   @override
