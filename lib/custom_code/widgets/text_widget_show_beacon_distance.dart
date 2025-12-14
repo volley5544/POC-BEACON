@@ -20,12 +20,14 @@ class TextWidgetShowBeaconDistance extends StatefulWidget {
     this.height,
     this.deviceUuid,
     this.notificationDistance,
+    this.rssiThreshold,
   });
 
   final double? width;
   final double? height;
   final String? deviceUuid;
   final String? notificationDistance;
+  final int? rssiThreshold;
 
   @override
   State<TextWidgetShowBeaconDistance> createState() =>
@@ -37,32 +39,56 @@ class _TextWidgetShowBeaconDistanceState
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<List<String>>(
-      valueListenable: MyStreamService().beaconDistance,
+      // valueListenable: MyStreamService().beaconDistance,
+      valueListenable: MyStreamService().beaconRssi,
       builder: (context, distances, _) {
         return ValueListenableBuilder<List<String>>(
           valueListenable: MyStreamService().beaconId,
           builder: (context, ids, __) {
-            final index =
+            // final index =
+            // returnIndexValueInList(ids.toList(), widget.deviceUuid!);
+
+            // ✅ ประกาศตรงนี้ (อยู่ใน scope เดียวกับ if)
+            final int? indexNullable =
             returnIndexValueInList(ids.toList(), widget.deviceUuid!);
 
             String statusText = 'ไม่อยู่ในระยะ';
             Color statusColor = Colors.red;
 
-            if (index != -1) {
-              // final distanceStr = distances.elementAtOrNull(index);
-              final safeIndex = index!;   // แปลงเป็น non-null
-              final distanceStr = distances.elementAtOrNull(safeIndex);
-              if (distanceStr != null && widget.notificationDistance != null) {
-                final distance = double.tryParse(distanceStr);
-                final notifyDistance =
-                double.tryParse(widget.notificationDistance!);
+            // if (index != -1) {
+            //   // final distanceStr = distances.elementAtOrNull(index);
+            //   final safeIndex = index!;   // แปลงเป็น non-null
+            //   final distanceStr = distances.elementAtOrNull(safeIndex);
+            //   if (distanceStr != null && widget.notificationDistance != null) {
+            //     final distance = double.tryParse(distanceStr);
+            //     final notifyDistance =
+            //     double.tryParse(widget.notificationDistance!);
+            //
+            //     if (distance != null && notifyDistance != null) {
+            //       if (distance <= notifyDistance) {
+            //         statusText = 'อยู่ในระยะ';
+            //         statusColor = FlutterFlowTheme.of(context).success;
+            //       }
+            //     }
+            //   }
+            // }
 
-                if (distance != null && notifyDistance != null) {
-                  if (distance <= notifyDistance) {
-                    statusText = 'อยู่ในระยะ';
-                    statusColor = FlutterFlowTheme.of(context).success;
-                  }
-                }
+            if (indexNullable != null &&
+                indexNullable != -1 &&
+                widget.rssiThreshold != null &&
+                FFAppState().beaconRssiList.length > indexNullable) {
+
+              final int index = indexNullable; // ✅ แปลงเป็น non-null
+
+              final rawRssi =
+                  double.tryParse(FFAppState().beaconRssiList[index]) ?? -99;
+
+              final int threshold = widget.rssiThreshold!;
+
+              // ⭐ logic เดียวกับ backend
+              if (rawRssi >= -threshold) {
+                statusText = 'อยู่ในระยะ ${rawRssi}'
+                statusColor = FlutterFlowTheme.of(context).success;
               }
             }
 
