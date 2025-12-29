@@ -194,4 +194,3 @@ Future<Map<String, dynamic>> getLatestProximityLog(String uid) async {
     };
   }
 }
-

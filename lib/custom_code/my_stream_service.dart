@@ -754,18 +754,30 @@ class MyStreamService with WidgetsBindingObserver {
       //   }
       // }
       else {
-        final freq = event.notificationFrequencySecond ?? 0;
+        // ใช้สำหรับทดสอบ 144 จุด
+        // final freq = event.notificationFrequencySecond ?? 0;
+        //
+        // // ⭐ แปลงนาที (รองรับทศนิยม) → วินาที
+        // final totalSeconds = (freq * 60).round();
+        //
+        // DateTime nextNotiTime =
+        // filteredNoti.first.sentAt.add(Duration(seconds: totalSeconds));
+        //
+        // // ⭐ ถ้ายังไม่ถึงเวลาที่ควรส่ง noti → ห้ามส่ง
+        // if (nextNotiTime.isAfter(DateTime.now())) {
+        //   return;
+        // }
+        /////////////////////////////////////
+        final freqMinute = event.notificationFrequencyMinute ?? 0;
 
-        // ⭐ แปลงนาที (รองรับทศนิยม) → วินาที
-        final totalSeconds = (freq * 60).round();
+        final nextNotiTime = filteredNoti.first.sentAt.add(
+          Duration(minutes: freqMinute),
+        );
 
-        DateTime nextNotiTime =
-        filteredNoti.first.sentAt.add(Duration(seconds: totalSeconds));
-
-        // ⭐ ถ้ายังไม่ถึงเวลาที่ควรส่ง noti → ห้ามส่ง
         if (nextNotiTime.isAfter(DateTime.now())) {
           return;
         }
+        /////////////////////////////////////
 
           // DateTime nextNotiTime = filteredNoti.first.sentAt
           //     .add(Duration(minutes: event.notificationFrequencyMinute));
@@ -1983,4 +1995,3 @@ class MyStreamService with WidgetsBindingObserver {
 //   return FFAppState().beaconDistanceList;
 // }
 }
-
