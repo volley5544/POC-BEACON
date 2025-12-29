@@ -45,8 +45,8 @@ class _TextWidgetShowBeaconDistanceState
         return ValueListenableBuilder<List<String>>(
           valueListenable: MyStreamService().beaconId,
           builder: (context, ids, __) {
-            // final index =
-            // returnIndexValueInList(ids.toList(), widget.deviceUuid!);
+            final index =
+            returnIndexValueInList(ids.toList(), widget.deviceUuid!);
 
             // ✅ ประกาศตรงนี้ (อยู่ใน scope เดียวกับ if)
             final int? indexNullable =
@@ -73,24 +73,88 @@ class _TextWidgetShowBeaconDistanceState
             //   }
             // }
 
-            if (indexNullable != null &&
-                indexNullable != -1 &&
-                widget.rssiThreshold != null &&
-                FFAppState().beaconRssiList.length > indexNullable) {
+            // print('------xxx------');
+            // if (index != -1) {
+            //   print('------yyy------');
+            //
+            //   final safeIndex = index!;
+            //   final distanceStr = distances.elementAtOrNull(safeIndex);
+            //
+            //   if (distanceStr != null) {
+            //     print('------zzz------');
+            //
+            //     final distance = double.tryParse(distanceStr);
+            //     final notifyDistance =
+            //         double.tryParse(distances[safeIndex]) ?? -99;
+            //
+            //     print(
+            //       '[UI DEBUG] uuid=${widget.deviceUuid}, '
+            //           'notifyDistance=$notifyDistance, '
+            //           'distance=$distance, '
+            //           'distanceStr=$distanceStr',
+            //     );
+            //
+            //     if (distance != null && notifyDistance != null) {
+            //       if (distance <= notifyDistance) {
+            //         statusText = 'อยู่ในระยะ';
+            //         statusColor = FlutterFlowTheme.of(context).success;
+            //       }
+            //     }
+            //   }
+            // }
 
-              final int index = indexNullable; // ✅ แปลงเป็น non-null
+            if (index != null &&
+                index != -1 &&
+                index < distances.length) {
+
+              final int safeIndex = index; // ✅ แปลงจาก int? → int
 
               final rawRssi =
-                  double.tryParse(FFAppState().beaconRssiList[index]) ?? -99;
+                  double.tryParse(distances[safeIndex]) ?? -99;
 
-              final int threshold = widget.rssiThreshold!;
+              // final threshold = widget.rssiThreshold ?? 0;
 
-              // ⭐ logic เดียวกับ backend
-              if (rawRssi >= -threshold) {
-                statusText = 'อยู่ในระยะ ${rawRssi}'
+              // 🔧 TEMP: hardcode threshold ตาม UUID
+              int threshold;
+
+              switch (widget.deviceUuid) {
+                case '25786407-EBC6-CFAF-B14F-E2A49306A5FD':
+                  threshold = 62;
+                  break;
+
+                case 'FDA50693-A4E2-4FB1-AFCF-C6EB07647826':
+                  threshold = 71;
+                  break;
+
+                case 'FDA50693-A4E2-4FB1-AFCF-C6EB07647827':
+                  threshold = 70;
+                  break;
+
+                default:
+                  threshold = 70; // ค่า default กันพัง
+              }
+
+
+              final compareValue = -threshold;
+              final pass = rawRssi >= compareValue;
+
+              // 🔍 DEBUG
+              print(
+                  '[RSSI DEBUG] '
+                      'uuid=${widget.deviceUuid}, '
+                      'index=$safeIndex, '
+                      'rawRssi=$rawRssi dBm, '
+                      'threshold=$threshold (=> $compareValue dBm), '
+                      'pass=$pass'
+              );
+
+              if (pass) {
+                statusText = 'อยู่ในระยะ';
+                // statusText = 'อยู่ในระยะ $rawRssi';
                 statusColor = FlutterFlowTheme.of(context).success;
               }
             }
+
 
             return Text(
               statusText,

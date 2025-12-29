@@ -296,49 +296,49 @@ class MyStreamService with WidgetsBindingObserver {
 
           matchingEvents = eventData
               .map((event) {
-                // Filter booths by condition
-                // final matchedBooths = evefinal beaconDist = beaconMap['${booth.deviceUuid}']nt.boothList.where((booth) {
-                //   ;
-                //   return beaconDist != null &&
-                //       beaconDist <= booth.notificationDistance;
-                // }).toList();
+            // Filter booths by condition
+            // final matchedBooths = evefinal beaconDist = beaconMap['${booth.deviceUuid}']nt.boothList.where((booth) {
+            //   ;
+            //   return beaconDist != null &&
+            //       beaconDist <= booth.notificationDistance;
+            // }).toList();
 
-              final matchedBooths = event.boothList.where((booth) {
-                final rawRssi = beaconRssiMap[booth.deviceUuid];
-                if (rawRssi == null) return false;
+            final matchedBooths = event.boothList.where((booth) {
+              final rawRssi = beaconRssiMap[booth.deviceUuid];
+              if (rawRssi == null) return false;
 
-                final threshold = booth.rssiThreshold ?? 0;
+              final threshold = booth.rssiThreshold ?? 0;
 
-                print('----matchedBooths----');
-                print(threshold);
+              print('----matchedBooths----');
+              print(threshold);
 
-                return rawRssi >= -threshold;
-              }).toList();
+              return rawRssi >= -threshold;
+            }).toList();
 
             // Return event with only matching booths
-                return EventDataModelStruct1(
-                    eventId: event.eventId,
-                    eventName: event.eventName,
-                    description: event.description,
-                    createdBy: event.createdBy,
-                    isActive: event.isActive,
-                    uploadedBy: event.uploadedBy,
-                    notificationFrequencyAmount:
-                        event.notificationFrequencyAmount,
-                    notificationFrequencyMinute:
-                        event.notificationFrequencyMinute,
-                    notificationFrequencySecond:
-                        event.notificationFrequencySecond,
-                    eventImageList: event.eventImageList,
-                    startDatetime: event.startDatetime,
-                    endDatetime: event.endDatetime,
-                    uploadedAt: event.uploadedAt,
-                    createdAt: event.createdAt,
-                    boothList: matchedBooths, // ✅ only matched booths
-                    docRef: event.docRef);
-              })
+            return EventDataModelStruct1(
+                eventId: event.eventId,
+                eventName: event.eventName,
+                description: event.description,
+                createdBy: event.createdBy,
+                isActive: event.isActive,
+                uploadedBy: event.uploadedBy,
+                notificationFrequencyAmount:
+                event.notificationFrequencyAmount,
+                notificationFrequencyMinute:
+                event.notificationFrequencyMinute,
+                notificationFrequencySecond:
+                event.notificationFrequencySecond,
+                eventImageList: event.eventImageList,
+                startDatetime: event.startDatetime,
+                endDatetime: event.endDatetime,
+                uploadedAt: event.uploadedAt,
+                createdAt: event.createdAt,
+                boothList: matchedBooths, // ✅ only matched booths
+                docRef: event.docRef);
+          })
               .where((event) =>
-                  event.boothList.isNotEmpty) // keep only events with matches
+          event.boothList.isNotEmpty) // keep only events with matches
               .toList();
 
           // print("Found ${matchingEvents.length} matching events");
@@ -350,14 +350,14 @@ class MyStreamService with WidgetsBindingObserver {
             await Future.wait(
               matchingEvents
                   .expand((event) => event.boothList.map((booth) async {
-                        // ✅ ส่ง noti และบันทึก log เฉพาะเมื่อผ่านเงื่อนไขแล้ว
-                        await createUserNotificationDoc(
-                            event, booth); // เรียก function เดิม
-                        await createDetectionLog(
-                            event, booth); // เรียก function ใหม่ เก็บ detection
-                        await cleanupOldDetections(event);
-                        await updateBoothCountsIfNeeded(event);
-                      })),
+                // ✅ ส่ง noti และบันทึก log เฉพาะเมื่อผ่านเงื่อนไขแล้ว
+                await createUserNotificationDoc(
+                    event, booth); // เรียก function เดิม
+                await createDetectionLog(
+                    event, booth); // เรียก function ใหม่ เก็บ detection
+                await cleanupOldDetections(event);
+                await updateBoothCountsIfNeeded(event);
+              })),
             );
           } else {
             print('not in range Beac');
@@ -379,7 +379,7 @@ class MyStreamService with WidgetsBindingObserver {
       eventData = eventDocs
           .map(
             (doc) => EventDataModelStruct1.fromMap(doc),
-          )
+      )
           .toList();
       // print("Collection1 updated: ${eventDocs.length} docs");
       // print('object');
@@ -404,7 +404,7 @@ class MyStreamService with WidgetsBindingObserver {
       boothData = boothDocs
           .map(
             (doc) => BoothDataModelStructNew.fromMap(doc),
-          )
+      )
           .toList();
       // print('Booth5544 : ${boothData[3].boothName}');
     });
@@ -427,16 +427,16 @@ class MyStreamService with WidgetsBindingObserver {
         .snapshots();
 
     final boothsStream =
-        FirebaseFirestore.instance.collectionGroup("booths").snapshots();
+    FirebaseFirestore.instance.collectionGroup("booths").snapshots();
 
     return Rx.combineLatest2(
       eventsStream,
       boothsStream,
-      (QuerySnapshot eventSnapshot, QuerySnapshot boothSnapshot) {
+          (QuerySnapshot eventSnapshot, QuerySnapshot boothSnapshot) {
         // Convert booths first
         final allBooths = boothSnapshot.docs
             .map((doc) => BoothDataModelStructNew.fromMap(
-                doc.data() as Map<String, dynamic>))
+            doc.data() as Map<String, dynamic>))
             .toList();
 
         // Convert events and attach booths
@@ -457,11 +457,11 @@ class MyStreamService with WidgetsBindingObserver {
               isActive: eventDataNew1.isActive,
               uploadedBy: eventDataNew1.uploadedBy,
               notificationFrequencyAmount:
-                  eventDataNew1.notificationFrequencyAmount,
+              eventDataNew1.notificationFrequencyAmount,
               notificationFrequencyMinute:
-                  eventDataNew1.notificationFrequencyMinute,
+              eventDataNew1.notificationFrequencyMinute,
               notificationFrequencySecond:
-                  eventDataNew1.notificationFrequencySecond,
+              eventDataNew1.notificationFrequencySecond,
               eventImageList: eventDataNew1.eventImageList,
               startDatetime: eventDataNew1.startDatetime,
               endDatetime: eventDataNew1.endDatetime,
@@ -505,11 +505,11 @@ class MyStreamService with WidgetsBindingObserver {
               isActive: eventDataNew.isActive,
               uploadedBy: eventDataNew.uploadedBy,
               notificationFrequencyAmount:
-                  eventDataNew.notificationFrequencyAmount,
+              eventDataNew.notificationFrequencyAmount,
               notificationFrequencyMinute:
-                  eventDataNew.notificationFrequencyMinute,
+              eventDataNew.notificationFrequencyMinute,
               notificationFrequencySecond:
-                  eventDataNew.notificationFrequencySecond,
+              eventDataNew.notificationFrequencySecond,
               eventImageList: eventDataNew.eventImageList,
               startDatetime: eventDataNew.startDatetime,
               endDatetime: eventDataNew.endDatetime,
@@ -539,7 +539,7 @@ class MyStreamService with WidgetsBindingObserver {
       userNotiData = userNotiDocs
           .map(
             (doc) => UserNotificationDataModelStruct.fromMap(doc),
-          )
+      )
           .toList();
       // print('Booth5544 : ${boothData[3].boothName}');
       // print('userNoti5544 : ${userNotiData.length}');
@@ -567,7 +567,7 @@ class MyStreamService with WidgetsBindingObserver {
       userActivityData = userActivityDocs
           .map(
             (doc) => UserActivityDataModelStructNew.fromMap(doc),
-          )
+      )
           .toList();
       // print('Booth5544 : ${boothData[3].boothName}');
       // print('userActivity5544 : ${userActivityData.length}');
@@ -591,7 +591,7 @@ class MyStreamService with WidgetsBindingObserver {
       eventRegisterData = eventRegisterDocs
           .map(
             (doc) => RegisterDataModelStruct.fromMap(doc),
-          )
+      )
           .toList();
       // print('Booth5544 : ${boothData[3].boothName}');
       // print('eventRegister5544 : ${eventRegisterData.length}');
@@ -602,7 +602,7 @@ class MyStreamService with WidgetsBindingObserver {
       //filter register ว่าเคยลงทะเบียนevent_idนี้ไปหรือยัง
       List<RegisterDataModelStruct> filteredRegister5544 = eventRegisterData
           .where((register) =>
-              register.eventId == 2 && register.uid == '${currentUserUid}')
+      register.eventId == 2 && register.uid == '${currentUserUid}')
           .toList();
 
       // print('filteredRegister : ${filteredRegister5544.length}');
@@ -614,14 +614,14 @@ class MyStreamService with WidgetsBindingObserver {
     // filter noitที่เป็น event_id ที่ beaconจับเจอ และ noti_type เป็นชวนลงทะเบียน
     List<UserNotificationDataModelStruct> filteredNotiType = userNotiData
         .where((noti) =>
-            noti.notiType == 'register_invite' && noti.eventId == event.eventId)
+    noti.notiType == 'register_invite' && noti.eventId == event.eventId)
         .toList();
 
     //filter register ว่าเคยลงทะเบียนevent_idนี้ไปหรือยัง
     List<RegisterDataModelStruct> filteredRegister = eventRegisterData
         .where((register) =>
-            register.eventId == event.eventId &&
-            register.uid == '${currentUserUid}')
+    register.eventId == event.eventId &&
+        register.uid == '${currentUserUid}')
         .toList();
 
     // print('filteredRegister.length : ${filteredRegister.length}');
@@ -651,7 +651,7 @@ class MyStreamService with WidgetsBindingObserver {
         'booth_id': '${booth.boothId}',
         'title': 'เชิญลงทะเบียน',
         'body':
-            'ขณะนี้คุณได้อยู่ใกล้กิจกรรม ${event.eventName} เชิญลงทะเบียนเข้าร่วมกิจกรรม',
+        'ขณะนี้คุณได้อยู่ใกล้กิจกรรม ${event.eventName} เชิญลงทะเบียนเข้าร่วมกิจกรรม',
         'sent_at': FieldValue.serverTimestamp(),
         'event_id': int.parse('${event.eventId}'),
         'send_count': 1,
@@ -692,7 +692,7 @@ class MyStreamService with WidgetsBindingObserver {
       triggerPushNotification(
         notificationTitle: 'เชิญลงทะเบียน',
         notificationText:
-            'ขณะนี้คุณได้อยู่ใกล้กิจกรรม ${event.eventName} เชิญลงทะเบียนเข้าร่วมกิจกรรม',
+        'ขณะนี้คุณได้อยู่ใกล้กิจกรรม ${event.eventName} เชิญลงทะเบียนเข้าร่วมกิจกรรม',
         notificationSound: 'default',
         userRefs: [currentUserReference!],
         initialPageName: 'EventSelection',
@@ -700,7 +700,6 @@ class MyStreamService with WidgetsBindingObserver {
           'log_id': '',
           'event_id': event.eventId,
           'booth_id': booth.boothId,
-          'sent_from_server_time': sendTime,
         },
       );
 
@@ -716,9 +715,9 @@ class MyStreamService with WidgetsBindingObserver {
     if (userActivityData.isNotEmpty) {
       filteredUserActivity = userActivityData
           .where((activity) =>
-              activity.uid == '${currentUserUid}' &&
-              activity.eventId == event.eventId &&
-              activity.boothId == booth.boothId)
+      activity.uid == '${currentUserUid}' &&
+          activity.eventId == event.eventId &&
+          activity.boothId == booth.boothId)
           .toList();
     }
     // FFAppState().textDebug3 = '${filteredUserActivity.length}';
@@ -731,9 +730,9 @@ class MyStreamService with WidgetsBindingObserver {
     //filter notiชวนเล่นกิจกรรม
     List<UserNotificationDataModelStruct> filteredNoti = userNotiData
         .where((noti) =>
-            noti.eventId == event.eventId &&
-            noti.boothId == '${booth.boothId}' &&
-            noti.notiType == 'booth_invite')
+    noti.eventId == event.eventId &&
+        noti.boothId == '${booth.boothId}' &&
+        noti.notiType == 'booth_invite')
         .toList();
 
     //เช็คว่าเคยส่งnotiชวนเล่นกิจกรรมนี้แล้ว
@@ -761,12 +760,20 @@ class MyStreamService with WidgetsBindingObserver {
         final totalSeconds = (freq * 60).round();
 
         DateTime nextNotiTime =
-            filteredNoti.first.sentAt.add(Duration(seconds: totalSeconds));
+        filteredNoti.first.sentAt.add(Duration(seconds: totalSeconds));
 
         // ⭐ ถ้ายังไม่ถึงเวลาที่ควรส่ง noti → ห้ามส่ง
         if (nextNotiTime.isAfter(DateTime.now())) {
           return;
         }
+
+          // DateTime nextNotiTime = filteredNoti.first.sentAt
+          //     .add(Duration(minutes: event.notificationFrequencyMinute));
+          // //เช็คว่าเวลาที่ส่งnotiชวนเล่นกิจกรรมล่าสุดของevent_idนี้ + กับเวลาnotificationFrequencyMinuteที่setไว้ เลยเวลาปัจจุบันหรือยัง
+          // if (nextNotiTime.isAfter(Timestamp.now().toDate())) {
+          //   return;
+          // }
+
       }
     }
 
@@ -814,15 +821,15 @@ class MyStreamService with WidgetsBindingObserver {
       boothThreshold: booth.notificationDistance ?? 0,
       source: 'createUserNotificationDoc',
       status:
-          (calibratedDistance <= (booth.notificationDistance ?? 0))
-              ? 'in_range'
-              : 'out_of_range',
+      (calibratedDistance <= (booth.notificationDistance ?? 0))
+          ? 'in_range'
+          : 'out_of_range',
       notiData: {
         // ✅ ส่งเฉพาะข้อมูล noti
         'to_uid': currentUserUid,
         'booth_id': booth.boothId,
         'title':
-            'ขณะนี้คุณอยู่ใกล้บูธ ${booth.boothName} (กิจกรรม ${event.eventName})',
+        'ขณะนี้คุณอยู่ใกล้บูธ ${booth.boothName} (กิจกรรม ${event.eventName})',
         'body': booth.description,
         'sent_at': FieldValue.serverTimestamp(),
         'event_id': event.eventId,
@@ -842,7 +849,7 @@ class MyStreamService with WidgetsBindingObserver {
         .where('event_id', isEqualTo: int.parse('${event.eventId}'))
         .where('noti_type', isEqualTo: 'booth_invite')
         .where('booth_id', isEqualTo: '${booth.boothId}')
-        // .where('booth_id'), isEqualTo: '${event.boothList.first}'
+    // .where('booth_id'), isEqualTo: '${event.boothList.first}'
         .get();
     //notiกระดิ่ง (inapp)
 
@@ -859,12 +866,13 @@ class MyStreamService with WidgetsBindingObserver {
     }
     //ยังไม่เคยเคยส่งnotiชวนเล่นกิจกรรม event_idนี้
     else {
+      print('query.docs.isEmpty');
       // 👉 create new noti doc
       await notiRef.add({
         'to_uid': '${currentUserUid}',
         'booth_id': '${booth.boothId}',
         'title':
-            'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
+        'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
         'body': '${booth.description}',
         'sent_at': FieldValue.serverTimestamp(),
         'event_id': int.parse('${event.eventId}'),
@@ -877,35 +885,85 @@ class MyStreamService with WidgetsBindingObserver {
 
     //noti FCM (นอกแอพ)
     final sendTime = DateTime.now().millisecondsSinceEpoch;
+    // print('sendTime');
+    // print(sendTime);
+
+    // await analytics.logEvent(
+    //   name: 'detect_booth_beacon',
+    //   parameters: {
+    //     'event_id': event.eventId,
+    //     'booth_id': booth.boothId,
+    //     'noti_type': 'booth_invite',
+    //     'to_uid': currentUserUid,
+    //     'title':
+    //         'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
+    //     'body': '${booth.description}',
+    //     'booth_name': booth.boothName ?? '',
+    //     'booth_uuid': booth.deviceUuid ?? '',
+    //     'notification_distance': booth.notificationDistance ?? '',
+    //     'detect_time':
+    //         DateTime.now().millisecondsSinceEpoch, // ✅ บังคับเป็น String ชัดเจน
+    //     'log_id': logId ?? '',
+    //     // ✅ เพิ่มสถานะ foreground / background
+    //     // 'is_background': !FFAppState().isAppForeground ? 1 : 0,
+    //     'is_background': 0,
+    //     'sent_from_server_time': sendTime,
+    //   },
+    // );
 
     await analytics.logEvent(
       name: 'detect_booth_beacon',
       parameters: {
         'event_id': event.eventId,
-        'booth_id': booth.boothId,
-        'noti_type': 'booth_invite',
-        'to_uid': currentUserUid,
-        'title':
-            'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
-        'body': '${booth.description}',
-        'booth_name': booth.boothName ?? '',
-        'booth_uuid': booth.deviceUuid ?? '',
-        'notification_distance': booth.notificationDistance ?? '',
-        'detect_time':
-            DateTime.now().millisecondsSinceEpoch, // ✅ บังคับเป็น String ชัดเจน
         'log_id': logId ?? '',
-        // ✅ เพิ่มสถานะ foreground / background
-        // 'is_background': !FFAppState().isAppForeground ? 1 : 0,
+        'to_uid': currentUserUid,
+        'noti_type': 'booth_invite',
+
+        // 🔽 booth (ยุบ)
+        'booth': jsonEncode({
+          'id': booth.boothId,
+          'name': booth.boothName ?? '',
+          'uuid': booth.deviceUuid ?? '',
+        }),
+
+        // 🔽 noti (ยุบ)
+        // 'noti': jsonEncode({
+        //   'title':
+        //   'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
+        //   'body': booth.description ?? '',
+        // }),
+
         'is_background': 0,
+        'detect_time': DateTime.now().millisecondsSinceEpoch,
         'sent_from_server_time': sendTime,
       },
     );
 
 
+    // print('sendTime2 : ');
+    // print(sendTime);
+
+    // print('🔔 [DEBUG] triggerPushNotification CALLED');
+    // print('🔔 boothName = ${booth.boothName}');
+    // print('🔔 eventName = ${event.eventName}');
+    // print('🔔 boothId = ${booth.boothId}');
+    // print('🔔 logId = $logId');
+    // print('🔔 currentUserReference = $currentUserReference');
+    //
+    // final payload = {
+    //   'log_id': logId,
+    //   'event_id': event.eventId,
+    //   'booth_id': booth.boothId,
+    // };
+    //
+    // print('🔔 [DEBUG] payload = $payload');
+
+    // try {
+    print('🔔 [DEBUG] BEFORE triggerPushNotification');
     //ส่ง FCM notiชวนเล่นกิจกรรม
     triggerPushNotification(
       notificationTitle:
-          'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
+      'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
       notificationText: '${booth.description}',
       notificationSound: 'default',
       userRefs: [currentUserReference!],
@@ -914,9 +972,16 @@ class MyStreamService with WidgetsBindingObserver {
         'log_id': logId,
         'event_id': event.eventId,
         'booth_id': booth.boothId,
-        'sent_from_server_time': sendTime,
       },
     );
+    print('✅ [DEBUG] triggerPushNotification FINISHED');
+    // } catch (e, st) {
+    //   print('❌ [ERROR] triggerPushNotification failed');
+    //   print(e);
+    //   print(st);
+    // }
+    // print('sendTime3 : ');
+    // print(sendTime);
   }
 
   Future updateUserNotificationDoc(EventDataModelStruct1 event) async {
@@ -1000,7 +1065,7 @@ class MyStreamService with WidgetsBindingObserver {
       // path: events/{eventId}/detections
       final detectionRef = FirebaseFirestore.instance
           .collection('events')
-          // .doc('${event.eventId}')
+      // .doc('${event.eventId}')
           .doc(event.docRef)
           .collection('detections');
 
@@ -1014,7 +1079,7 @@ class MyStreamService with WidgetsBindingObserver {
           .where('uid', isEqualTo: currentUserUid)
           .where('booth_id', isEqualTo: booth.boothId)
           .where('detect_timestamp',
-              isGreaterThanOrEqualTo: Timestamp.fromDate(cutoff))
+          isGreaterThanOrEqualTo: Timestamp.fromDate(cutoff))
           .get();
 
       if (query.docs.isNotEmpty) {
@@ -1077,7 +1142,7 @@ class MyStreamService with WidgetsBindingObserver {
     print('countUniqueUsersPerBooth : ${event.docRef}');
 
     final eventRef =
-        FirebaseFirestore.instance.collection('events').doc(event.docRef);
+    FirebaseFirestore.instance.collection('events').doc(event.docRef);
 
     // โหลด booth docs ทั้งหมดของ event นี้มาก่อน
     final boothSnapshot = await eventRef.collection('booths').get();
@@ -1095,7 +1160,7 @@ class MyStreamService with WidgetsBindingObserver {
     final detectionSnapshot = await eventRef
         .collection('detections')
         .where('detect_timestamp',
-            isGreaterThanOrEqualTo: Timestamp.fromDate(cutoff))
+        isGreaterThanOrEqualTo: Timestamp.fromDate(cutoff))
         .get();
 
     // เก็บ unique uid ต่อ booth (ใช้ docRef เป็น key)
@@ -1118,7 +1183,7 @@ class MyStreamService with WidgetsBindingObserver {
 
     // boothCounts = { boothDocRef: count }
     final Map<DocumentReference, int> boothCounts =
-        boothUsers.map((ref, set) => MapEntry(ref, set.length));
+    boothUsers.map((ref, set) => MapEntry(ref, set.length));
 
     return boothCounts;
   }
@@ -1159,18 +1224,18 @@ class MyStreamService with WidgetsBindingObserver {
   }
 
   Future<String?> logProximityAndConcurrentUsers(
-    EventDataModelStruct1 event,
-    BoothDataModelStructNew booth, {
-    required double? rssi, // ค่าที่อ่านจาก BLE ล่าสุด
-    required double? calibratedDistance, // ระยะคาลิเบรตแล้ว
-    required double? calibratedDistance_Rmse, // ระยะคาลิเบรตแล้ว
-    required Timestamp? sent_from_server_time,
-    required bool isStable, // อยู่ใกล้บูธต่อเนื่องครบเวลา
-    required double? boothThreshold, // threshold เฉพาะของบูธ
-    String source = 'createUserNotificationDoc', // ✅ default
-    String status = 'in_range', // ✅ default
-    Map<String, dynamic>? notiData, // ข้อมูล noti (เช่น title, body)
-  }) async {
+      EventDataModelStruct1 event,
+      BoothDataModelStructNew booth, {
+        required double? rssi, // ค่าที่อ่านจาก BLE ล่าสุด
+        required double? calibratedDistance, // ระยะคาลิเบรตแล้ว
+        required double? calibratedDistance_Rmse, // ระยะคาลิเบรตแล้ว
+        required Timestamp? sent_from_server_time,
+        required bool isStable, // อยู่ใกล้บูธต่อเนื่องครบเวลา
+        required double? boothThreshold, // threshold เฉพาะของบูธ
+        String source = 'createUserNotificationDoc', // ✅ default
+        String status = 'in_range', // ✅ default
+        Map<String, dynamic>? notiData, // ข้อมูล noti (เช่น title, body)
+      }) async {
     try {
       // print('🛰 logProximityAndConcurrentUsers: ${booth.boothName}');
 
@@ -1228,39 +1293,98 @@ class MyStreamService with WidgetsBindingObserver {
       final sendTime = DateTime.now().millisecondsSinceEpoch;
       // ✅ Log ไปที่ Firebase Analytics (สำหรับ dashboard)
       await analytics.logEvent(
-        name: 'detect_distance_beacon',
-        parameters: {
-          'log_id': proximityRef.id,
-          'event_id': eventId,
-          'booth_id': boothId,
-          'booth_name': booth.boothName ?? '',
-          'booth_uuid': booth.deviceUuid ?? '',
-          'tx_powersd': booth.txPower ?? 0,
-          'path_loss_exponent': booth.pathLossExponent ?? 0,
-          'smoothing_alpha': booth.smoothingAlpha ?? 0,
-          'rmse_a': booth.rmseA ?? 0,
-          'rmse_b': booth.rmseB ?? 0,
-          'rmse_c': booth.rmseC ?? 0,
-          'uid': uid,
-          'rssi': rssi ?? -99,
-          'distance_calibrated': calibratedDistance ?? -1,
-          'distance_calibrated_rmse': calibratedDistance_Rmse ?? -1,
-          'stable_status': isStable ? 'stable' : 'unstable',
-          'config_threshold': boothThreshold ?? 999,
-          'device_brand': deviceBrand,
-          'device_model': deviceModel,
-          'os_version': osVersion,
-          'status': status,
-          'source': source,
-          'detect_time': now.millisecondsSinceEpoch,
-          'sent_from_server_time': sendTime,
-          if (notiData != null) ...{
-            'noti_type': notiData['noti_type'] ?? '',
-            'title': notiData['title'] ?? '',
-            'body': notiData['body'] ?? '',
-          },
-        },
+          name: 'detect_distance_beacon',
+          parameters: {
+            'log_id': proximityRef.id,
+            'event_id': eventId,
+            'uid': uid,
+            'noti_type': notiData?['noti_type'] ?? '',
+
+            'rssi': rssi ?? -99,
+            'distance': calibratedDistance ?? -1,
+
+            // 🔽 booth (ยุบ)
+            'booth': jsonEncode({
+              'id': boothId,
+              'name': booth.boothName ?? '',
+              'uuid': booth.deviceUuid ?? '',
+              'rssiThreshold': booth.rssiThreshold ?? 0,
+            }),
+
+            // 🔽 measurement
+            // 'measure': jsonEncode({
+            //   'distance': calibratedDistance ?? -1,
+            //   'stable': isStable ? 'stable' : 'unstable',
+            //   'threshold': boothThreshold ?? 999,
+            //   'status': status,
+            //   'source': source,
+            // }),
+
+            'context': jsonEncode({
+              'device': {
+                'brand': deviceBrand,
+                'model': deviceModel,
+                'os': osVersion,
+              },
+            }),
+
+            'detect_time': now.millisecondsSinceEpoch,
+            'sent_from_server_time': sendTime,
+
+            // 🔽 noti (ยุบ – เฉพาะ metadata)
+            if (notiData != null)
+              'noti': jsonEncode({
+                'type': notiData['noti_type'] ?? '',
+              })
+          }
       );
+
+      // await analytics.logEvent(
+      //   name: 'detect_distance_beacon',
+      //   parameters: {
+      //     'log_id': proximityRef.id,
+      //     'event_id': eventId,
+      //     'booth_id': boothId,
+      //     'booth_name': booth.boothName ?? '',
+      //     'booth_uuid': booth.deviceUuid ?? '',
+      //     'tx_powersd': booth.txPower ?? 0,
+      //     'path_loss_exponent': booth.pathLossExponent ?? 0,
+      //     'smoothing_alpha': booth.smoothingAlpha ?? 0,
+      //     // 'rmse_a': booth.rmseA ?? 0,
+      //     // 'rmse_b': booth.rmseB ?? 0,
+      //     // 'rmse_c': booth.rmseC ?? 0,
+      //     'uid': uid,
+      //     'rssi': rssi ?? -99,
+      //     'distance_calibrated': calibratedDistance ?? -1,
+      //     // 'distance_calibrated_rmse': calibratedDistance_Rmse ?? -1,
+      //     'stable_status': isStable ? 'stable' : 'unstable',
+      //     'config_threshold': boothThreshold ?? 999,
+      //     //
+      //     // 'context': jsonEncode({
+      //     //   'device': {
+      //     //     'brand': deviceBrand,
+      //     //     'model': deviceModel,
+      //     //     'os': osVersion,
+      //     //   },
+      //     //   'status': status,
+      //     //   'source': source,
+      //     // }),
+      //
+      //     // 'device_brand': deviceBrand,
+      //     // 'device_model': deviceModel,
+      //     // 'os_version': osVersion,
+      //     // 'status': status,
+      //     // 'source': source,
+      //
+      //     'detect_time': now.millisecondsSinceEpoch,
+      //     'sent_from_server_time': sendTime,
+      //     if (notiData != null) ...{
+      //       'noti_type': notiData['noti_type'] ?? '',
+      //       'title': notiData['title'] ?? '',
+      //       'body': notiData['body'] ?? '',
+      //     },
+      //   },
+      // );
 
       // print(
       //   "✅ Proximity log saved: booth=${booth.boothName}, "
@@ -1508,10 +1632,10 @@ class MyStreamService with WidgetsBindingObserver {
   Map<String, bool> _inRangeState = {};
 
   bool isUserStableNear(
-    BoothDataModelStructNew booth,
-    double distance, {
-    int stableMs = 1000, // 1 วินาที
-  }) {
+      BoothDataModelStructNew booth,
+      double distance, {
+        int stableMs = 1000, // 1 วินาที
+      }) {
     final boothUuid = booth.deviceUuid ?? '';
     final threshold = booth.notificationDistance ?? 1.5;
     final now = DateTime.now();
@@ -1752,7 +1876,7 @@ class MyStreamService with WidgetsBindingObserver {
     _continuousPrintTimer?.cancel();
     _continuousPrintTimer = Timer.periodic(
       const Duration(milliseconds: 200), // ⭐ sample ทุก 200 ms
-      (timer) async {
+          (timer) async {
         final now = DateTime.now();
 
         // ❌ หมดเวลา — หยุด
@@ -1859,3 +1983,4 @@ class MyStreamService with WidgetsBindingObserver {
 //   return FFAppState().beaconDistanceList;
 // }
 }
+

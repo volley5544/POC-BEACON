@@ -77,7 +77,7 @@ Future<void> setupFirebaseMessaging() async {
     );
 
     FFAppState().firebaseMessage =
-        ""; //"""[onMessage] Logged notification_received_beacon , log_id : ${logId}";//"""Notification received: ${eventId}";
+    ""; //"""[onMessage] Logged notification_received_beacon , log_id : ${logId}";//"""Notification received: ${eventId}";
     print("✅ [onMessage] Logged notification_received_beacon successfully");
   });
 
@@ -136,7 +136,7 @@ Future<void> setupFirebaseMessaging() async {
       },
     );
     FFAppState().firebaseMessage =
-        ""; //"""[onMessageOpenedApp] Logged notification_opened_beacon , log_id : ${logId}";//"""Notification opened by user: ${eventId}";
+    ""; //"""[onMessageOpenedApp] Logged notification_opened_beacon , log_id : ${logId}";//"""Notification opened by user: ${eventId}";
     print(
         "✅ [onMessageOpenedApp] Logged notification_opened_beacon successfully");
   });
@@ -194,3 +194,4 @@ Future<Map<String, dynamic>> getLatestProximityLog(String uid) async {
     };
   }
 }
+

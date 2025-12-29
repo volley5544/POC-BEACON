@@ -9,9 +9,9 @@ import '/flutter_flow/flutter_flow_util.dart';
 
 class BoothsRecord extends FirestoreRecord {
   BoothsRecord._(
-    DocumentReference reference,
-    Map<String, dynamic> data,
-  ) : super(reference, data) {
+      DocumentReference reference,
+      Map<String, dynamic> data,
+      ) : super(reference, data) {
     _initializeFields();
   }
 
@@ -120,6 +120,11 @@ class BoothsRecord extends FirestoreRecord {
   String get environmentLabel => _environmentLabel ?? '';
   bool hasEnvironmentLabel() => _environmentLabel != null;
 
+  // "rssi_threshold" field.
+  int? _rssiThreshold;
+  int get rssiThreshold => _rssiThreshold ?? 0;
+  bool hasRssiThreshold() => _rssiThreshold != null;
+
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
@@ -145,6 +150,7 @@ class BoothsRecord extends FirestoreRecord {
     _maxDistanceCap = castToType<double>(snapshotData['max_distance_cap']);
     _calibratedAt = snapshotData['calibrated_at'] as DateTime?;
     _environmentLabel = snapshotData['environment_label'] as String?;
+    _rssiThreshold = castToType<int>(snapshotData['rssi_threshold']);
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -162,14 +168,14 @@ class BoothsRecord extends FirestoreRecord {
       ref.get().then((s) => BoothsRecord.fromSnapshot(s));
 
   static BoothsRecord fromSnapshot(DocumentSnapshot snapshot) => BoothsRecord._(
-        snapshot.reference,
-        mapFromFirestore(snapshot.data() as Map<String, dynamic>),
-      );
+    snapshot.reference,
+    mapFromFirestore(snapshot.data() as Map<String, dynamic>),
+  );
 
   static BoothsRecord getDocumentFromData(
-    Map<String, dynamic> data,
-    DocumentReference reference,
-  ) =>
+      Map<String, dynamic> data,
+      DocumentReference reference,
+      ) =>
       BoothsRecord._(reference, mapFromFirestore(data));
 
   @override
@@ -182,7 +188,7 @@ class BoothsRecord extends FirestoreRecord {
   @override
   bool operator ==(other) =>
       other is BoothsRecord &&
-      reference.path.hashCode == other.reference.path.hashCode;
+          reference.path.hashCode == other.reference.path.hashCode;
 }
 
 Map<String, dynamic> createBoothsRecordData({
@@ -206,6 +212,7 @@ Map<String, dynamic> createBoothsRecordData({
   double? maxDistanceCap,
   DateTime? calibratedAt,
   String? environmentLabel,
+  int? rssiThreshold,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -229,6 +236,7 @@ Map<String, dynamic> createBoothsRecordData({
       'max_distance_cap': maxDistanceCap,
       'calibrated_at': calibratedAt,
       'environment_label': environmentLabel,
+      'rssi_threshold': rssiThreshold,
     }.withoutNulls,
   );
 
@@ -261,33 +269,35 @@ class BoothsRecordDocumentEquality implements Equality<BoothsRecord> {
         e1?.smoothingAlpha == e2?.smoothingAlpha &&
         e1?.maxDistanceCap == e2?.maxDistanceCap &&
         e1?.calibratedAt == e2?.calibratedAt &&
-        e1?.environmentLabel == e2?.environmentLabel;
+        e1?.environmentLabel == e2?.environmentLabel &&
+        e1?.rssiThreshold == e2?.rssiThreshold;
   }
 
   @override
   int hash(BoothsRecord? e) => const ListEquality().hash([
-        e?.boothId,
-        e?.boothName,
-        e?.description,
-        e?.associatedEventId,
-        e?.createdAt,
-        e?.createdBy,
-        e?.isActive,
-        e?.updatedAt,
-        e?.updatedBy,
-        e?.eventId,
-        e?.boothImageList,
-        e?.deviceUuid,
-        e?.currentUserCount,
-        e?.lastUpdated,
-        e?.notificationDistance,
-        e?.txPower,
-        e?.pathLossExponent,
-        e?.smoothingAlpha,
-        e?.maxDistanceCap,
-        e?.calibratedAt,
-        e?.environmentLabel
-      ]);
+    e?.boothId,
+    e?.boothName,
+    e?.description,
+    e?.associatedEventId,
+    e?.createdAt,
+    e?.createdBy,
+    e?.isActive,
+    e?.updatedAt,
+    e?.updatedBy,
+    e?.eventId,
+    e?.boothImageList,
+    e?.deviceUuid,
+    e?.currentUserCount,
+    e?.lastUpdated,
+    e?.notificationDistance,
+    e?.txPower,
+    e?.pathLossExponent,
+    e?.smoothingAlpha,
+    e?.maxDistanceCap,
+    e?.calibratedAt,
+    e?.environmentLabel,
+    e?.rssiThreshold
+  ]);
 
   @override
   bool isValidKey(Object? o) => o is BoothsRecord;
