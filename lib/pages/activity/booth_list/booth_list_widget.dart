@@ -1,12 +1,9 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
-import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import 'dart:math';
-import 'dart:ui';
 import '/custom_code/widgets/index.dart' as custom_widgets;
 import '/index.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -675,7 +672,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                             -1.0,
                                                                             -1.0),
                                                                     child: Text(
-                                                                      'rssi บูธ : ${boothListVarItem.rssiThreshold.toString()}',
+                                                                      'ระยะภายในบูธ : ${boothListVarItem.notificationDistance.toString()}',
                                                                       style: FlutterFlowTheme.of(
                                                                               context)
                                                                           .headlineSmall

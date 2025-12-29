@@ -13,6 +13,25 @@ import 'package:flutter/material.dart';
 import '/custom_code/my_stream_service.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+class TextWidgetShowBeaconDistance extends StatefulWidget {
+  const TextWidgetShowBeaconDistance({
+    super.key,
+    this.width,
+    this.height,
+    this.deviceUuid,
+    this.notificationDistance,
+  });
+
+  final double? width;
+  final double? height;
+  final String? deviceUuid;
+  final String? notificationDistance;
+
+  @override
+  State<TextWidgetShowBeaconDistance> createState() =>
+      _TextWidgetShowBeaconDistanceState();
+}
+
 class _TextWidgetShowBeaconDistanceState
     extends State<TextWidgetShowBeaconDistance> {
   @override
@@ -30,7 +49,7 @@ class _TextWidgetShowBeaconDistanceState
             Color statusColor = Colors.red; // 👈 ค่าเริ่มต้นเป็นสีแดง
 
             if (index != -1) {
-              final distanceStr = distances.elementAtOrNull(index);
+              final distanceStr = distances.elementAtOrNull(index!);
               if (distanceStr != null && widget.notificationDistance != null) {
                 final distance = double.tryParse(distanceStr);
                 final notifyDistance =
