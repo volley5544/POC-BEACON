@@ -26,6 +26,16 @@ class MyStreamService with WidgetsBindingObserver {
   factory MyStreamService() => _instance;
 
   // bool isLogging = false;
+  //2025-12-29 แก้เรื่อง จุดที่ 1: การประกาศตัวแปรต้น Class (แก้ปัญหา Error: Undefined name)
+  StreamSubscription<RangingResult>? _streamRanging;
+  StreamSubscription? _subEvents;
+  StreamSubscription? _subBooth;
+  DateTime? _lastUpdateTime;
+  DateTime? _lastScanProcessedAt;
+  // bool _registerInviteSent = false;
+
+
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
   MyStreamService._internal() {
     // ✅ เริ่มฟังสถานะ lifecycle ของแอป เพิ่ม observer ตอนสร้าง service..
@@ -44,12 +54,12 @@ class MyStreamService with WidgetsBindingObserver {
     });
   }
 
-  static DateTime? _lastUpdateTime;
+  // static DateTime? _lastUpdateTime;
   bool isTestMode = false;
 
-  StreamSubscription<RangingResult>? _streamRanging;
-  StreamSubscription? _subEvents;
-  StreamSubscription? _subBooth;
+  // StreamSubscription<RangingResult>? _streamRanging;
+  // StreamSubscription? _subEvents;
+  // StreamSubscription? _subBooth;
   final ValueNotifier<List<String>> beaconDistance = ValueNotifier([]);
   final ValueNotifier<List<String>> beaconId = ValueNotifier([]);
   final ValueNotifier<List<String>> beaconRssi = ValueNotifier([]);
@@ -71,20 +81,7 @@ class MyStreamService with WidgetsBindingObserver {
 
   final Map<String, List<double>> _rssiHistory = {};
   final Map<String, double> _emaMap = {};
-  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-
-  // 🔴 1. ค่าคงที่สำหรับการปรับเทียบ (ต้องแทนที่ด้วยค่าที่วัดได้จริง)
-  // **สำคัญ:** แทนที่ค่าเหล่านี้ด้วยผลลัพธ์จากฟังก์ชัน calculateCalibrationParams
-  // static const double TX_POWER_CALIBRATED = -59.5; // ตัวอย่าง: ค่า RSSI ที่วัดได้จริง ณ 1 เมตร
-  // static const double PATH_LOSS_EXPONENT_N = 2.75; // ตัวอย่าง: ค่า Path Loss Exponent ที่คำนวณได้
-
-  // static const double TX_POWER_CALIBRATED = -55.33844294323458;///
-  // static const double PATH_LOSS_EXPONENT_N = 4.064296685954029;
-  //
-  // // 🟢 2. ค่าคงที่สำหรับ Exponential Moving Average (EMA)
-  // // ใช้สำหรับกรอง RSSI: ค่า α ยิ่งน้อย (ใกล้ 0) ยิ่งเสถียร (ตอบสนองช้า)
-  // // static const double EMA_ALPHA = 0.2; // แนะนำ 0.1 - 0.3 สำหรับความเสถียรสูง
-  // static const double EMA_ALPHA = 0.15; // แนะนำ 0.1 - 0.3 สำหรับความเสถียรสูง
+  // FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
   // เก็บค่า RSSI ล่าสุดที่ถูก Smoothing แล้วของแต่ละ Beacon
   // Map<major:minor, smoothedRssi>
@@ -94,13 +91,19 @@ class MyStreamService with WidgetsBindingObserver {
 // List<String> get beaconDistance => _beaconDistance;
 
   bool? _wasInRange;
-  bool _registerInviteSent = false; // กันไม่ให้ยิงซ้ำ
+  // bool _registerInviteSent = false; // กันไม่ให้ยิงซ้ำ
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       // print("🟢 แอปกลับมา Foreground → รีเซ็ตสถานะ beacon");
       // FFAppState().isAppForeground = true;
+
+      if (_streamRanging == null) {
+        // คุณต้องมีตัวแปร regions ที่เก็บค่าไว้ หรือประกาศใหม่ที่นี่
+        final regions = <Region>[Region(identifier: 'com.beacon')];
+        startListening(flutterBeacon.ranging(regions));
+      }
 
       // ✅ รีเซ็ตสถานะค้างทั้งหมด
       _wasInRange = null;
@@ -117,12 +120,11 @@ class MyStreamService with WidgetsBindingObserver {
       // เรียก startListening() ใหม่ (ต้องมี stream จาก plugin beacon)
       // ตัวอย่าง:
       // startListening(FlutterBeacon.ranging(...));
-    }
-
-    if (state == AppLifecycleState.paused) {
+    }else if (state == AppLifecycleState.paused) {
       // print("🔴 แอปไป Background → หยุดฟังสัญญาณชั่วคราว");
       // FFAppState().isAppForeground = false;
-      _streamRanging?.pause();
+      // _streamRanging?.pause();
+      print("App paused: Scanning continues...");
     }
   }
 
@@ -133,114 +135,22 @@ class MyStreamService with WidgetsBindingObserver {
     _subBooth?.cancel();
   }
 
-//   DateTime lastScanTime = DateTime.now();
-//
-// // Threshold จาก Mean − 2σ ของแต่ละอุปกรณ์
-//   final Map<String, double> boothThreshold = {
-//     "UUID_BOOTH1": -71,
-//     "UUID_BOOTH2": -73.8,
-//     "UUID_BOOTH3": -75.5,
-//     "UUID_BOOTH4_2": -82.5,
-//     "UUID_BOOTH4_3": -84.4,
-//   };
-//
-//   void startListening(Stream<RangingResult> myStream) {
-//     _streamRanging ??= myStream.listen((result) async {
-//
-//       // 📌 จำกัดการประมวลผลทุก 200ms
-//       if (DateTime.now().difference(lastScanTime).inMilliseconds < 200) {
-//         return;
-//       }
-//       lastScanTime = DateTime.now();
-//
-//       if (result.beacons.isEmpty) return;
-//
-//       // 📌 ใช้ RSSI แทน accuracy
-//       result.beacons.sort((a, b) => b.rssi.compareTo(a.rssi));
-//       final nearest = result.beacons;
-//
-//       // 📌 Update global state
-//       beaconId.value = nearest.map((e) => e.proximityUUID).toList();
-//       FFAppState().beaconIdList = beaconId.value;
-//
-//       FFAppState().beaconRssiList =
-//           nearest.map((e) => e.rssi.toString()).toList();
-//
-//       if (FFAppState().isLogging) startPrintRawRSSIContinuous();
-//
-//       // 📌 เริ่มกรอง event
-//       final matchingEvents = eventData
-//           .map((event) {
-//
-//         // Filter booths by BEACON RSSI
-//         final matchedBooths = event.boothList.where((booth) {
-//
-//           final uuid = booth.deviceUuid;
-//
-//           // หา index
-//           final idx = FFAppState().beaconIdList.indexOf(uuid);
-//           if (idx == -1) return false;
-//
-//           final rawRssi =
-//               double.tryParse(FFAppState().beaconRssiList[idx]) ?? -99;
-//
-//           // Threshold ของแต่ละบูธ
-//           final threshold = boothThreshold[uuid] ?? -80;
-//
-//           // ⭐ ตัดสินด้วย RSSI
-//           return rawRssi >= threshold;
-//
-//         }).toList();
-//
-//         // ส่งกลับ event ที่เหลือเฉพาะบูธที่ match
-//         return event.copyWith(
-//           boothList: matchedBooths,
-//         );
-//       })
-//           .where((event) => event.boothList.isNotEmpty)
-//           .toList();
-//
-//       // 📌 ส่ง Noti
-//       if (matchingEvents.isNotEmpty) {
-//         await Future.wait(
-//           matchingEvents.expand((event) =>
-//               event.boothList.map((booth) async {
-//
-//                 await createUserNotificationDoc(event, booth);
-//                 await createDetectionLog(event, booth);
-//                 await cleanupOldDetections(event);
-//                 await updateBoothCountsIfNeeded(event);
-//
-//               })),
-//         );
-//       }
-//     });
-//   }
-
-  DateTime lastScanTime = DateTime.now();
-
-  // Threshold จาก Mean − 2σ ของแต่ละอุปกรณ์
-  // final Map<String, double> boothThreshold = {
-  //   "UUID_BOOTH1": -71,
-  //   "UUID_BOOTH2": -73.8,
-  //   "UUID_BOOTH3": -75.5,
-  //   "UUID_BOOTH4_2": -82.5,
-  //   "UUID_BOOTH4_3": -84.4,
-  // };
-
   void startListening(Stream<RangingResult> myStream) {
     List<EventDataModelStruct1> matchingEvents = [];
     _streamRanging ??= myStream.listen((result) async {
-      // print('in ranging.listen');
-      // print('🎧 Start listening... Test mode: $isTestMode');
 
-      // ⏳ Limit processing every 200 ms
-      if (DateTime.now().difference(lastScanTime).inMilliseconds < 200) {
+      //  ใส่ตรงนี้ (บรรทัดแรก)
+      final now = DateTime.now();
+      if (_lastScanProcessedAt != null &&
+          now.difference(_lastScanProcessedAt!).inMilliseconds < 200) { //ทำงานทุก 200 ms เท่านั้น
         return;
       }
-      lastScanTime = DateTime.now();
+      _lastScanProcessedAt = now;
+      // จบ throttle
 
-      if (result.beacons.isEmpty) return;
+      print('in ranging.listen');
+
+      // if (result.beacons.isEmpty) return;
 
       if (result.beacons.isNotEmpty) {
         // เรียงตามความใกล้
@@ -347,17 +257,35 @@ class MyStreamService with WidgetsBindingObserver {
             // HapticFeedback.heavyImpact();
             // print('in range Beac');
 
+            // await Future.wait(
+            //   matchingEvents
+            //       .expand((event) => event.boothList.map((booth) async {
+            //     // ✅ ส่ง noti และบันทึก log เฉพาะเมื่อผ่านเงื่อนไขแล้ว
+            //     await createUserNotificationDoc(
+            //         event, booth); // เรียก function เดิม
+            //     await createDetectionLog(
+            //         event, booth); // เรียก function ใหม่ เก็บ detection
+            //     await cleanupOldDetections(event);
+            //     await updateBoothCountsIfNeeded(event);
+            //   })),
+            // );
             await Future.wait(
-              matchingEvents
-                  .expand((event) => event.boothList.map((booth) async {
-                // ✅ ส่ง noti และบันทึก log เฉพาะเมื่อผ่านเงื่อนไขแล้ว
-                await createUserNotificationDoc(
-                    event, booth); // เรียก function เดิม
-                await createDetectionLog(
-                    event, booth); // เรียก function ใหม่ เก็บ detection
+              matchingEvents.map((event) async {
+
+                // ⭐ 1. register_invite แค่ครั้งเดียวต่อ event
+                final BoothDataModelStructNew firstBooth = event.boothList.first;
+                await createUserRegisterInviteIfNeeded(event, firstBooth);
+
+                // ⭐ 2. loop booth ชั้นเดียว
+                for (final booth in event.boothList) {
+                  await createUserNotificationDoc(event, booth);
+                  await createDetectionLog(event, booth);
+                }
+
+                // ⭐ 3. งานระดับ event
                 await cleanupOldDetections(event);
                 await updateBoothCountsIfNeeded(event);
-              })),
+              }),
             );
           } else {
             print('not in range Beac');
@@ -585,19 +513,12 @@ class MyStreamService with WidgetsBindingObserver {
         .snapshots()
         .listen((snapshot) {
       eventRegisterDocs = snapshot.docs.map((d) => d.data()).toList();
-      // print('userAcDocLength : ${snapshot.docs.map((d) => d.data()).toList()}');
-      // print('volley5544123');
-      // print(boothDocs.first);
+
       eventRegisterData = eventRegisterDocs
           .map(
             (doc) => RegisterDataModelStruct.fromMap(doc),
       )
           .toList();
-      // print('Booth5544 : ${boothData[3].boothName}');
-      // print('eventRegister5544 : ${eventRegisterData.length}');
-      // print('${eventRegisterData.first.eventId}');
-      // print('eventRegister5544 uid : ${eventRegisterData.first.uid}');
-      // print('register : ${eventRegisterData.length}');
 
       //filter register ว่าเคยลงทะเบียนevent_idนี้ไปหรือยัง
       List<RegisterDataModelStruct> filteredRegister5544 = eventRegisterData
@@ -605,12 +526,13 @@ class MyStreamService with WidgetsBindingObserver {
       register.eventId == 2 && register.uid == '${currentUserUid}')
           .toList();
 
-      // print('filteredRegister : ${filteredRegister5544.length}');
     });
   }
 
   Future createUserNotificationDoc(
       EventDataModelStruct1 event, BoothDataModelStructNew booth) async {
+/*
+
     // filter noitที่เป็น event_id ที่ beaconจับเจอ และ noti_type เป็นชวนลงทะเบียน
     List<UserNotificationDataModelStruct> filteredNotiType = userNotiData
         .where((noti) =>
@@ -624,6 +546,22 @@ class MyStreamService with WidgetsBindingObserver {
         register.uid == '${currentUserUid}')
         .toList();
 
+    //2025-12-29 แก้เรื่อง จุดที่ 2: แก้ปัญหาข้อ 1 และ 2 (เรื่องต้องปัดแอปถึงจะขึ้น Noti)
+    // เช็คสถานะการลงทะเบียนล่าสุดจาก Database โดยตรง (แก้ปัญหาต้องปัดแอป)
+    final regCheck = await FirebaseFirestore.instance
+        .collection("events")
+        .doc(event.docRef)
+        .collection("register")
+        .where('uid', isEqualTo: currentUserUid)
+        .get();
+
+    bool isAlreadyRegistered = regCheck.docs.isNotEmpty;
+
+    // หากลงทะเบียนแล้ว ให้ Reset flag เพื่อให้ Noti บูธทำงานได้ทันที
+    // if (isAlreadyRegistered) {
+    //   _registerInviteSent = false;
+    // }
+
     // print('filteredRegister.length : ${filteredRegister.length}');
     // FFAppState().textDebug = '${filteredRegister.length}';
     // print('filteredNotiType.length : ${filteredNotiType.length}');
@@ -631,13 +569,14 @@ class MyStreamService with WidgetsBindingObserver {
     // if (filteredRegister.length > 0){
     //
     // }
-
+    print('xxxx : ${regCheck.docs.isNotEmpty}');
     //ยังไม่เคยลงทะเบียนและยังไม่เคยส่งnotiชวนลงทะเบียนกิจกรรม
-    if (filteredRegister.length == 0 && filteredNotiType.length == 0) {
-      if (_registerInviteSent) {
-        return; // เคยยิงไปแล้ว
-      }
-      _registerInviteSent = true; // ล็อกครั้งแรก
+    if (!isAlreadyRegistered && filteredNotiType.isEmpty) { //if (filteredRegister.length == 0 && filteredNotiType.length == 0) {
+      print('isAlreadyRegistered : ${isAlreadyRegistered}');
+      // if (_registerInviteSent) {
+      //   return; // เคยยิงไปแล้ว
+      // }
+      // _registerInviteSent = true; // ล็อกครั้งแรก
 
       // HapticFeedback.heavyImpact();
       //ส่งinapp noti ชวนลงทะเบียนกิจกรรม event_idนี้
@@ -646,67 +585,86 @@ class MyStreamService with WidgetsBindingObserver {
           .doc('${currentUserUid}')
           .collection('notifications');
 
-      await notiRefRegist.add({
-        'to_uid': '${currentUserUid}',
-        'booth_id': '${booth.boothId}',
-        'title': 'เชิญลงทะเบียน',
-        'body':
-        'ขณะนี้คุณได้อยู่ใกล้กิจกรรม ${event.eventName} เชิญลงทะเบียนเข้าร่วมกิจกรรม',
-        'sent_at': FieldValue.serverTimestamp(),
-        'event_id': int.parse('${event.eventId}'),
-        'send_count': 1,
-        'is_read': false,
-        'is_deleted': false,
-        'noti_type': 'register_invite',
-      });
+      // 🔍 เช็คเฉพาะ noti_type = register_invite (และ event เดียวกัน)
+      final query = await notiRefRegist
+          .where('event_id', isEqualTo: event.eventId)
+          .where('noti_type', isEqualTo: 'register_invite')
+          .limit(1)
+          .get();
 
-      // ✅ เพิ่มการ log event ใน Firebase Analytics
+      // ❌ ถ้าเคยส่งแล้ว → ไม่ส่งซ้ำ
+      if (!query.docs.isNotEmpty) {
+        //   print('ddd : ${query.docs.isNotEmpty}');
+        //   return;
+        // }
+        isAlreadyRegistered = true;
 
-      // FirebaseAnalytics analytics = FirebaseAnalytics.instance; **ส่ง first time
-      // await analytics.logEvent(
-      //   name: 'notification_sent',
-      //   parameters: {
-      //     'event_id': event.eventId,
-      //     'booth_id': booth.boothId,
-      //     'noti_type': 'register_invite',
-      //     'to_uid': currentUserUid,
-      //     'timestamp': FieldValue.serverTimestamp(),
-      //   },
-      // );
-
-      // ✅ เพิ่มการ log event ใน Firebase Analytics
-      await analytics.logEvent(
-        name: 'register_invite_beacon',
-        parameters: {
-          'event_id': event.eventId,
-          'booth_id': booth.boothId,
+        await notiRefRegist.add({
+          'to_uid': '${currentUserUid}',
+          'booth_id': '${booth.boothId}',
+          'title': 'เชิญลงทะเบียน',
+          'body':
+          'ขณะนี้คุณได้อยู่ใกล้กิจกรรม ${event
+              .eventName} เชิญลงทะเบียนเข้าร่วมกิจกรรม',
+          'sent_at': FieldValue.serverTimestamp(),
+          'event_id': int.parse('${event.eventId}'),
+          'send_count': 1,
+          'is_read': false,
+          'is_deleted': false,
           'noti_type': 'register_invite',
-          'to_uid': currentUserUid,
-          'detect_time': DateTime.now()
-              .millisecondsSinceEpoch, // ✅ บังคับเป็น String ชัดเจน
-        },
-      );
+        });
 
-      final sendTime = DateTime.now().millisecondsSinceEpoch;
-      //ส่งnoti FCM นอกแอพ ชวนลงทะเบียน event_idนี้
-      triggerPushNotification(
-        notificationTitle: 'เชิญลงทะเบียน',
-        notificationText:
-        'ขณะนี้คุณได้อยู่ใกล้กิจกรรม ${event.eventName} เชิญลงทะเบียนเข้าร่วมกิจกรรม',
-        notificationSound: 'default',
-        userRefs: [currentUserReference!],
-        initialPageName: 'EventSelection',
-        parameterData: {
-          'log_id': '',
-          'event_id': event.eventId,
-          'booth_id': booth.boothId,
-        },
-      );
+        // ✅ เพิ่มการ log event ใน Firebase Analytics
+        await analytics.logEvent(
+          name: 'register_invite_beacon',
+          parameters: {
+            'event_id': event.eventId,
+            'booth_id': booth.boothId,
+            'noti_type': 'register_invite',
+            'to_uid': currentUserUid,
+            'detect_time': DateTime
+                .now()
+                .millisecondsSinceEpoch, // ✅ บังคับเป็น String ชัดเจน
+          },
+        );
 
-      return;
+        final sendTime = DateTime
+            .now()
+            .millisecondsSinceEpoch;
+        //ส่งnoti FCM นอกแอพ ชวนลงทะเบียน event_idนี้
+        triggerPushNotification(
+          notificationTitle: 'เชิญลงทะเบียน',
+          notificationText:
+          'ขณะนี้คุณได้อยู่ใกล้กิจกรรม ${event
+              .eventName} เชิญลงทะเบียนเข้าร่วมกิจกรรม',
+          notificationSound: 'default',
+          userRefs: [currentUserReference!],
+          initialPageName: 'EventSelection',
+          parameterData: {
+            'log_id': '',
+            'event_id': event.eventId,
+            'booth_id': booth.boothId,
+          },
+        );
+
+        return;
+      }
     }
+ */
 
-    if (filteredRegister.length == 0) {
+    //realtime ณ เวลาที่เรียก ไม่พึ่ง snapshot cache ไม่ต้องปัดแอพ
+    final regCheck = await FirebaseFirestore.instance
+        .collection('events')
+        .doc(event.docRef)
+        .collection('register')
+        .where('uid', isEqualTo: currentUserUid)
+        .limit(1)
+        .get();
+
+    final bool isAlreadyRegistered = regCheck.docs.isNotEmpty;
+
+    // ❌ ยังไม่ลงทะเบียน → ห้ามส่ง booth invite
+    if (!isAlreadyRegistered) {
       return;
     }
 
@@ -723,7 +681,7 @@ class MyStreamService with WidgetsBindingObserver {
     // FFAppState().textDebug3 = '${filteredUserActivity.length}';
 
     //เช็คว่าเคยเล่นbooth_idนี้หรือยัง
-    if (filteredUserActivity.length != 0) {
+    if (filteredUserActivity.isNotEmpty) { //if (filteredUserActivity.length != 0) {
       return;
     }
 
@@ -778,13 +736,6 @@ class MyStreamService with WidgetsBindingObserver {
           return;
         }
         /////////////////////////////////////
-
-          // DateTime nextNotiTime = filteredNoti.first.sentAt
-          //     .add(Duration(minutes: event.notificationFrequencyMinute));
-          // //เช็คว่าเวลาที่ส่งnotiชวนเล่นกิจกรรมล่าสุดของevent_idนี้ + กับเวลาnotificationFrequencyMinuteที่setไว้ เลยเวลาปัจจุบันหรือยัง
-          // if (nextNotiTime.isAfter(Timestamp.now().toDate())) {
-          //   return;
-          // }
 
       }
     }
@@ -897,32 +848,6 @@ class MyStreamService with WidgetsBindingObserver {
 
     //noti FCM (นอกแอพ)
     final sendTime = DateTime.now().millisecondsSinceEpoch;
-    // print('sendTime');
-    // print(sendTime);
-
-    // await analytics.logEvent(
-    //   name: 'detect_booth_beacon',
-    //   parameters: {
-    //     'event_id': event.eventId,
-    //     'booth_id': booth.boothId,
-    //     'noti_type': 'booth_invite',
-    //     'to_uid': currentUserUid,
-    //     'title':
-    //         'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
-    //     'body': '${booth.description}',
-    //     'booth_name': booth.boothName ?? '',
-    //     'booth_uuid': booth.deviceUuid ?? '',
-    //     'notification_distance': booth.notificationDistance ?? '',
-    //     'detect_time':
-    //         DateTime.now().millisecondsSinceEpoch, // ✅ บังคับเป็น String ชัดเจน
-    //     'log_id': logId ?? '',
-    //     // ✅ เพิ่มสถานะ foreground / background
-    //     // 'is_background': !FFAppState().isAppForeground ? 1 : 0,
-    //     'is_background': 0,
-    //     'sent_from_server_time': sendTime,
-    //   },
-    // );
-
     await analytics.logEvent(
       name: 'detect_booth_beacon',
       parameters: {
@@ -937,38 +862,11 @@ class MyStreamService with WidgetsBindingObserver {
           'name': booth.boothName ?? '',
           'uuid': booth.deviceUuid ?? '',
         }),
-
-        // 🔽 noti (ยุบ)
-        // 'noti': jsonEncode({
-        //   'title':
-        //   'ขณะนี้คุณได้อยู่ใกล้บูธ${booth.boothName} (กิจกรรม ${event.eventName})',
-        //   'body': booth.description ?? '',
-        // }),
-
         'is_background': 0,
         'detect_time': DateTime.now().millisecondsSinceEpoch,
         'sent_from_server_time': sendTime,
       },
     );
-
-
-    // print('sendTime2 : ');
-    // print(sendTime);
-
-    // print('🔔 [DEBUG] triggerPushNotification CALLED');
-    // print('🔔 boothName = ${booth.boothName}');
-    // print('🔔 eventName = ${event.eventName}');
-    // print('🔔 boothId = ${booth.boothId}');
-    // print('🔔 logId = $logId');
-    // print('🔔 currentUserReference = $currentUserReference');
-    //
-    // final payload = {
-    //   'log_id': logId,
-    //   'event_id': event.eventId,
-    //   'booth_id': booth.boothId,
-    // };
-    //
-    // print('🔔 [DEBUG] payload = $payload');
 
     // try {
     print('🔔 [DEBUG] BEFORE triggerPushNotification');
@@ -987,13 +885,6 @@ class MyStreamService with WidgetsBindingObserver {
       },
     );
     print('✅ [DEBUG] triggerPushNotification FINISHED');
-    // } catch (e, st) {
-    //   print('❌ [ERROR] triggerPushNotification failed');
-    //   print(e);
-    //   print(st);
-    // }
-    // print('sendTime3 : ');
-    // print(sendTime);
   }
 
   Future updateUserNotificationDoc(EventDataModelStruct1 event) async {
@@ -1203,7 +1094,7 @@ class MyStreamService with WidgetsBindingObserver {
   /// ฟังก์ชันอัปเดต booths แต่เฉพาะทุกๆ 1 นาทีเท่านั้น
   Future<void> updateBoothCountsIfNeeded(EventDataModelStruct1 event) async {
     // print('updateBoothCountsIfNeeded');
-    final now = DateTime.now();
+    DateTime now = DateTime.now();
 
     // ถ้ายังไม่ครบ 1 นาที → ข้าม
     if (_lastUpdateTime != null &&
@@ -1211,6 +1102,7 @@ class MyStreamService with WidgetsBindingObserver {
       // print("⏳ ข้ามการอัปเดต (last update: $_lastUpdateTime)");
       return;
     }
+    _lastUpdateTime = now; // บันทึกเวลาล่าสุด
 
     // ✅ นับจำนวน unique user ต่อ booth โดย return เป็น Map<DocumentReference, int>
     final boothCounts = await countUniqueUsersPerBooth(event);
@@ -1983,9 +1875,77 @@ class MyStreamService with WidgetsBindingObserver {
   }
 
   void stopListening() {
-    _streamRanging?.cancel();
-    _streamRanging = null;
+    // _streamRanging?.cancel();
+    // _streamRanging = null;
+
+    if (_streamRanging != null) {
+      _streamRanging!.cancel();
+      _streamRanging = null;
+    }
   }
+
+  Future<void> createUserRegisterInviteIfNeeded(
+      EventDataModelStruct1 event, BoothDataModelStructNew booth) async {
+
+    final notiRefRegist = FirebaseFirestore.instance
+        .collection('users')
+        .doc('${currentUserUid}')
+        .collection('notifications');
+
+    // 🔍 เช็คว่าเคยส่ง register_invite event นี้หรือยัง
+    final query = await notiRefRegist
+        .where('event_id', isEqualTo: event.eventId)
+        .where('noti_type', isEqualTo: 'register_invite')
+        .limit(1)
+        .get();
+
+    if (query.docs.isNotEmpty) return;
+
+    // 🔔 ส่ง noti ครั้งเดียว
+    await notiRefRegist.add({
+      'to_uid': '${currentUserUid}',
+      'booth_id': '${booth.boothId}',
+      'title': 'เชิญลงทะเบียน',
+      'body':
+      'ขณะนี้คุณได้อยู่ใกล้กิจกรรม ${event
+          .eventName} เชิญลงทะเบียนเข้าร่วมกิจกรรม',
+      'sent_at': FieldValue.serverTimestamp(),
+      'event_id': int.parse('${event.eventId}'),
+      'send_count': 1,
+      'is_read': false,
+      'is_deleted': false,
+      'noti_type': 'register_invite',
+    });
+
+    await analytics.logEvent(
+      name: 'register_invite_beacon',
+      parameters: {
+        'event_id': event.eventId,
+        'booth_id': booth.boothId,
+        'noti_type': 'register_invite',
+        'to_uid': currentUserUid,
+        'detect_time': DateTime
+            .now()
+            .millisecondsSinceEpoch, // ✅ บังคับเป็น String ชัดเจน
+      },
+    );
+
+    triggerPushNotification(
+      notificationTitle: 'เชิญลงทะเบียน',
+      notificationText:
+      'ขณะนี้คุณได้อยู่ใกล้กิจกรรม ${event
+          .eventName} เชิญลงทะเบียนเข้าร่วมกิจกรรม',
+      notificationSound: 'default',
+      userRefs: [currentUserReference!],
+      initialPageName: 'EventSelection',
+      parameterData: {
+        'log_id': '',
+        'event_id': event.eventId,
+        'booth_id': booth.boothId,
+      },
+    );
+  }
+
 
 // List<String> getBeaconIdList() {
 //   return beaconId;
