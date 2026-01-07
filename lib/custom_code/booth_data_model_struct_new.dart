@@ -20,6 +20,10 @@ class BoothDataModelStructNew {
   final double maxDistanceCap;
   final DateTime calibratedAt;
   final String environmentLabel;
+  final double rmseA;
+  final double rmseB;
+  final double rmseC;
+  final double rssiThreshold;
 
   BoothDataModelStructNew({
     required this.boothId,
@@ -41,6 +45,10 @@ class BoothDataModelStructNew {
     required this.maxDistanceCap,
     required this.calibratedAt,
     required this.environmentLabel,
+    required this.rmseA,
+    required this.rmseB,
+    required this.rmseC,
+    required this.rssiThreshold,
   });
 
   factory BoothDataModelStructNew.fromMap(Map<String, dynamic> map) {
@@ -75,6 +83,10 @@ class BoothDataModelStructNew {
           ? map['calibrated_at'].toDate()
           : Timestamp.now().toDate(),
       environmentLabel: map['environment_label'] ?? '',
+      rmseA: (map['rmse_a'] as num?)?.toDouble() ?? 0.0,
+      rmseB: (map['rmse_b'] as num?)?.toDouble() ?? 0.0,
+      rmseC: (map['rmse_c'] as num?)?.toDouble() ?? 0.0,
+      rssiThreshold: (map['rssi_threshold'] as num?)?.toDouble() ?? 0.0,
     );
   }
 }

@@ -683,7 +683,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                               fontStyle: FlutterFlowTheme.of(context).headlineSmall.fontStyle,
                                                                             ),
                                                                             color:
-                                                                                FlutterFlowTheme.of(context).primary,
+                                                                                FlutterFlowTheme.of(context).secondaryBackground,
                                                                             fontSize:
                                                                                 10.0,
                                                                             letterSpacing:

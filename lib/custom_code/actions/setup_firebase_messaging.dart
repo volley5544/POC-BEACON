@@ -71,6 +71,7 @@ Future<void> setupFirebaseMessaging() async {
         'booth_id': boothId,
         'sent_from_server_time': sentFromServerTime,
         'received_time': DateTime.now().millisecondsSinceEpoch,
+        'detect_time': message.data['detect_time'] ?? '',
         'uid': uid,
       },
     );
@@ -131,6 +132,7 @@ Future<void> setupFirebaseMessaging() async {
         'open_time': DateTime.now().millisecondsSinceEpoch,
         'uid': uid,
         'click_action': message.data['click_action'] ?? '',
+        'detect_time': message.data['detect_time'] ?? '',
       },
     );
     FFAppState().firebaseMessage =
