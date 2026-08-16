@@ -220,7 +220,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                               .scanBarcode(
                                         '#C62828', // scanning line color
                                         'Cancel', // cancel button text
-                                        true, // whether to show the flash icon
+                                        true, // whether to show the torch (camera LED) toggle icon
                                         ScanMode.QR,
                                       );
 

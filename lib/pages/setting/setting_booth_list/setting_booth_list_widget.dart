@@ -176,7 +176,7 @@ class _SettingBoothListWidgetState extends State<SettingBoothListWidget> {
                     padding:
                         EdgeInsetsDirectional.fromSTEB(20.0, 10.0, 0.0, 0.0),
                     child: Text(
-                      'จัดการบูธ',
+                      'จัดการบูท',
                       style: FlutterFlowTheme.of(context).labelLarge.override(
                             font: GoogleFonts.readexPro(
                               fontWeight: FlutterFlowTheme.of(context)

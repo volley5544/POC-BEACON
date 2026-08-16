@@ -649,12 +649,12 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                               filled: true,
                                               fillColor: Color(0xFFF1F4F8),
                                               suffixIcon: InkWell(
-                                                onTap: () => safeSetState(
-                                                  () => _model
+                                                onTap: () async {
+                                                  safeSetState(() => _model
                                                           .passwordVisibility =
                                                       !_model
-                                                          .passwordVisibility,
-                                                ),
+                                                          .passwordVisibility);
+                                                },
                                                 focusNode: FocusNode(
                                                     skipTraversal: true),
                                                 child: Icon(
@@ -774,12 +774,12 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                               filled: true,
                                               fillColor: Color(0xFFF1F4F8),
                                               suffixIcon: InkWell(
-                                                onTap: () => safeSetState(
-                                                  () => _model
+                                                onTap: () async {
+                                                  safeSetState(() => _model
                                                           .passwordConfirmVisibility =
                                                       !_model
-                                                          .passwordConfirmVisibility,
-                                                ),
+                                                          .passwordConfirmVisibility);
+                                                },
                                                 focusNode: FocusNode(
                                                     skipTraversal: true),
                                                 child: Icon(

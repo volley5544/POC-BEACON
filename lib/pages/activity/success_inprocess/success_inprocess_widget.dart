@@ -360,7 +360,7 @@ class _SuccessInprocessWidgetState extends State<SuccessInprocessWidget>
                               alignment: AlignmentDirectional(0.0, -1.0),
                               child: Text(
                                 valueOrDefault<String>(
-                                  'คุณทำกิจกรรมบูธ${widget.boothName}เรียบร้อยแล้ว',
+                                  'คุณทำกิจกรรมบูท${widget.boothName}เรียบร้อยแล้ว',
                                   '-',
                                 ),
                                 style: FlutterFlowTheme.of(context)

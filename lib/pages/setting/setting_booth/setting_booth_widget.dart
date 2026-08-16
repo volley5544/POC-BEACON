@@ -211,7 +211,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${widget.typePage == 'edit' ? 'แก้ไขบูธ' : 'เพิ่มบูธ'}',
+                  '${widget.typePage == 'edit' ? 'แก้ไขบูท' : 'เพิ่มบูท'}',
                   style: FlutterFlowTheme.of(context).headlineMedium.override(
                         font: GoogleFonts.outfit(
                           fontWeight: FlutterFlowTheme.of(context)
@@ -294,7 +294,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                           TextCapitalization.words,
                                       obscureText: false,
                                       decoration: InputDecoration(
-                                        labelText: 'ชื่อบูธ*',
+                                        labelText: 'ชื่อบูท*',
                                         labelStyle: FlutterFlowTheme.of(context)
                                             .headlineMedium
                                             .override(
@@ -470,7 +470,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                           TextCapitalization.words,
                                       obscureText: false,
                                       decoration: InputDecoration(
-                                        labelText: 'คำอธิบายบูธ',
+                                        labelText: 'คำอธิบายบูท',
                                         labelStyle: FlutterFlowTheme.of(context)
                                             .labelLarge
                                             .override(
@@ -812,7 +812,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                       obscureText: false,
                                       decoration: InputDecoration(
                                         labelText:
-                                            'ระยะส่ง Beacon เมื่อเข้าใกล้บูธ (เมตร)*',
+                                            'ระยะส่ง Beacon เมื่อเข้าใกล้บูท (เมตร)*',
                                         labelStyle: FlutterFlowTheme.of(context)
                                             .labelLarge
                                             .override(
@@ -985,7 +985,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'ใช้งานบูธ',
+                                          'ใช้งานบูท',
                                           style: FlutterFlowTheme.of(context)
                                               .labelMedium
                                               .override(
@@ -1040,7 +1040,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            'รูปภาพบูธที่อัพโหลดแล้ว (ในฐานข้อมูล)',
+                                            'รูปภาพบูทที่อัพโหลดแล้ว (ในฐานข้อมูล)',
                                             style: FlutterFlowTheme.of(context)
                                                 .labelMedium
                                                 .override(
@@ -1283,7 +1283,7 @@ class _SettingBoothWidgetState extends State<SettingBoothWidget>
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              'อัพโหลดรูปภาพบูธ${widget.typePage == 'edit' ? 'เพิ่มเติม' : ''}',
+                                              'อัพโหลดรูปภาพบูท${widget.typePage == 'edit' ? 'เพิ่มเติม' : ''}',
                                               style: FlutterFlowTheme.of(
                                                       context)
                                                   .labelMedium

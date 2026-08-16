@@ -238,7 +238,7 @@ Map<String, dynamic> getDataListFirestoreData(
   final firestoreData = mapToFirestore(dataList.toMap());
 
   // Add any Firestore field values
-  dataList.firestoreUtilData.fieldValues
+  mapToFirestore(dataList.firestoreUtilData.fieldValues)
       .forEach((k, v) => firestoreData[k] = v);
 
   return forFieldValue ? mergeNestedFields(firestoreData) : firestoreData;

@@ -382,7 +382,7 @@ Map<String, dynamic> getSurveyDataModelFirestoreData(
   final firestoreData = mapToFirestore(surveyDataModel.toMap());
 
   // Add any Firestore field values
-  surveyDataModel.firestoreUtilData.fieldValues
+  mapToFirestore(surveyDataModel.firestoreUtilData.fieldValues)
       .forEach((k, v) => firestoreData[k] = v);
 
   return forFieldValue ? mergeNestedFields(firestoreData) : firestoreData;

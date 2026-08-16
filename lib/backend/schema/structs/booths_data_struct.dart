@@ -155,7 +155,7 @@ Map<String, dynamic> getBoothsDataFirestoreData(
   final firestoreData = mapToFirestore(boothsData.toMap());
 
   // Add any Firestore field values
-  boothsData.firestoreUtilData.fieldValues
+  mapToFirestore(boothsData.firestoreUtilData.fieldValues)
       .forEach((k, v) => firestoreData[k] = v);
 
   return forFieldValue ? mergeNestedFields(firestoreData) : firestoreData;

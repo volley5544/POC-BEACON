@@ -177,7 +177,7 @@ Map<String, dynamic> getBeaconDataModelFirestoreData(
   final firestoreData = mapToFirestore(beaconDataModel.toMap());
 
   // Add any Firestore field values
-  beaconDataModel.firestoreUtilData.fieldValues
+  mapToFirestore(beaconDataModel.firestoreUtilData.fieldValues)
       .forEach((k, v) => firestoreData[k] = v);
 
   return forFieldValue ? mergeNestedFields(firestoreData) : firestoreData;

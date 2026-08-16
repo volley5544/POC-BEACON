@@ -221,10 +221,10 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                           transitionOnUserGestures: true,
                                           child: ClipRRect(
                                             borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(8.0),
-                                              bottomRight: Radius.circular(8.0),
                                               topLeft: Radius.circular(8.0),
                                               topRight: Radius.circular(8.0),
+                                              bottomLeft: Radius.circular(8.0),
+                                              bottomRight: Radius.circular(8.0),
                                             ),
                                             child: OctoImage(
                                               placeholderBuilder: (_) =>
@@ -404,7 +404,7 @@ class _BoothDetailWidgetState extends State<BoothDetailWidget> {
                                                       (alertDialogContext) {
                                                     return AlertDialog(
                                                       content: Text(
-                                                          'คุณต้องการเช็คอินบูธ${widget.boothDocRef?.boothName}ใช่ไหม ?'),
+                                                          'คุณต้องการเช็คอินบูท${widget.boothDocRef?.boothName}ใช่ไหม ?'),
                                                       actions: [
                                                         TextButton(
                                                           onPressed: () =>

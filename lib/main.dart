@@ -92,6 +92,7 @@ class MyAppScrollBehavior extends MaterialScrollBehavior {
   Set<PointerDeviceKind> get dragDevices => {
         PointerDeviceKind.touch,
         PointerDeviceKind.mouse,
+        PointerDeviceKind.trackpad,
       };
 }
 
@@ -106,7 +107,7 @@ class _MyAppState extends State<MyApp> {
     final RouteMatchList matchList = lastMatch is ImperativeRouteMatch
         ? lastMatch.matches
         : _router.routerDelegate.currentConfiguration;
-    return matchList.uri.toString();
+    return matchList.uri.path;
   }
 
   List<String> getRouteStack() =>
@@ -124,7 +125,7 @@ class _MyAppState extends State<MyApp> {
 
     _appStateNotifier = AppStateNotifier.instance;
     _router = createRouter(_appStateNotifier);
-    userStream = pocBeaconFirebaseUserStream()
+    userStream = rassFirebaseUserStream()
       ..listen((user) {
         _appStateNotifier.update(user);
       });
@@ -151,7 +152,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'POC-BEACON',
+      title: 'RASS',
       scrollBehavior: MyAppScrollBehavior(),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,

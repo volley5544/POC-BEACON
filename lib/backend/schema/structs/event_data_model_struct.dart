@@ -440,7 +440,7 @@ Map<String, dynamic> getEventDataModelFirestoreData(
   final firestoreData = mapToFirestore(eventDataModel.toMap());
 
   // Add any Firestore field values
-  eventDataModel.firestoreUtilData.fieldValues
+  mapToFirestore(eventDataModel.firestoreUtilData.fieldValues)
       .forEach((k, v) => firestoreData[k] = v);
 
   return forFieldValue ? mergeNestedFields(firestoreData) : firestoreData;

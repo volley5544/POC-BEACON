@@ -298,7 +298,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                   ),
                   if ((FFAppState().rolesID == 1) &&
                       (profileUsersRecord.rolesRef ==
-                          'roles/31gR5Y1xkubyiqgwMd5W'))
+                          '/roles/31gR5Y1xkubyiqgwMd5W'))
                     Padding(
                       padding:
                           EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
@@ -332,7 +332,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           child: Visibility(
                             visible: (FFAppState().rolesID == 1) &&
                                 (profileUsersRecord.rolesRef ==
-                                    'roles/31gR5Y1xkubyiqgwMd5W'),
+                                    '/roles/31gR5Y1xkubyiqgwMd5W'),
                             child: Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Row(

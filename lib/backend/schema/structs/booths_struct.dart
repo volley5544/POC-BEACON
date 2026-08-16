@@ -228,7 +228,8 @@ Map<String, dynamic> getBoothsFirestoreData(
   final firestoreData = mapToFirestore(booths.toMap());
 
   // Add any Firestore field values
-  booths.firestoreUtilData.fieldValues.forEach((k, v) => firestoreData[k] = v);
+  mapToFirestore(booths.firestoreUtilData.fieldValues)
+      .forEach((k, v) => firestoreData[k] = v);
 
   return forFieldValue ? mergeNestedFields(firestoreData) : firestoreData;
 }

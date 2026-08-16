@@ -315,7 +315,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                             );
                                           },
                                           child: Text(
-                                            'จำนวน (คน) เข้าร่วมแต่ละบูธ',
+                                            'จำนวน (คน) เข้าร่วมแต่ละบูท',
                                             style: FlutterFlowTheme.of(context)
                                                 .labelMedium
                                                 .override(
@@ -757,7 +757,7 @@ class _BoothListWidgetState extends State<BoothListWidget>
                                                                             5.0,
                                                                             0.0),
                                                                     child: Text(
-                                                                      'ขณะนี้มีคนอยู่ในบูธ ${boothListVarItem.currentUserCount.toString()} คน',
+                                                                      'ขณะนี้มีคนอยู่ในบูท ${boothListVarItem.currentUserCount.toString()} คน',
                                                                       style: FlutterFlowTheme.of(
                                                                               context)
                                                                           .headlineSmall

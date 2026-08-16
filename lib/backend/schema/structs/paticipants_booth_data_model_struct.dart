@@ -222,7 +222,7 @@ Map<String, dynamic> getPaticipantsBoothDataModelFirestoreData(
   final firestoreData = mapToFirestore(paticipantsBoothDataModel.toMap());
 
   // Add any Firestore field values
-  paticipantsBoothDataModel.firestoreUtilData.fieldValues
+  mapToFirestore(paticipantsBoothDataModel.firestoreUtilData.fieldValues)
       .forEach((k, v) => firestoreData[k] = v);
 
   return forFieldValue ? mergeNestedFields(firestoreData) : firestoreData;

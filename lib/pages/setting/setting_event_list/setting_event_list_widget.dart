@@ -1678,7 +1678,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                             alignment: AlignmentDirectional(
                                                 0.0, -0.85),
                                             child: Text(
-                                              'ความนิยมบูธ',
+                                              'ความนิยมบูท',
                                               textAlign: TextAlign.center,
                                               style: FlutterFlowTheme.of(
                                                       context)
@@ -2369,7 +2369,7 @@ class _SettingEventListWidgetState extends State<SettingEventListWidget>
                                                                                     size: 24.0,
                                                                                   ),
                                                                                   Text(
-                                                                                    'จัดการบูธ',
+                                                                                    'จัดการบูท',
                                                                                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                                                           font: GoogleFonts.readexPro(
                                                                                             fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,

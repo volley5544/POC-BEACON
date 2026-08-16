@@ -794,10 +794,10 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                         contentPadding: EdgeInsetsDirectional.fromSTEB(
                             20.0, 24.0, 0.0, 24.0),
                         suffixIcon: InkWell(
-                          onTap: () => safeSetState(
-                            () => _model.passwordVisibility =
-                                !_model.passwordVisibility,
-                          ),
+                          onTap: () async {
+                            safeSetState(() => _model.passwordVisibility =
+                                !_model.passwordVisibility);
+                          },
                           focusNode: FocusNode(skipTraversal: true),
                           child: Icon(
                             _model.passwordVisibility
@@ -920,10 +920,10 @@ class _EditProfileWidgetState extends State<EditProfileWidget> {
                       contentPadding:
                           EdgeInsetsDirectional.fromSTEB(20.0, 24.0, 0.0, 24.0),
                       suffixIcon: InkWell(
-                        onTap: () => safeSetState(
-                          () => _model.passwordConfirmVisibility =
-                              !_model.passwordConfirmVisibility,
-                        ),
+                        onTap: () async {
+                          safeSetState(() => _model.passwordConfirmVisibility =
+                              !_model.passwordConfirmVisibility);
+                        },
                         focusNode: FocusNode(skipTraversal: true),
                         child: Icon(
                           _model.passwordConfirmVisibility

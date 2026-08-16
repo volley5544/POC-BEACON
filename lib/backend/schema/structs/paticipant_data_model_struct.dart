@@ -157,7 +157,7 @@ Map<String, dynamic> getPaticipantDataModelFirestoreData(
   final firestoreData = mapToFirestore(paticipantDataModel.toMap());
 
   // Add any Firestore field values
-  paticipantDataModel.firestoreUtilData.fieldValues
+  mapToFirestore(paticipantDataModel.firestoreUtilData.fieldValues)
       .forEach((k, v) => firestoreData[k] = v);
 
   return forFieldValue ? mergeNestedFields(firestoreData) : firestoreData;

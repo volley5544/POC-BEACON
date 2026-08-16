@@ -462,7 +462,7 @@ Map<String, dynamic> getBoothDataModelFirestoreData(
   final firestoreData = mapToFirestore(boothDataModel.toMap());
 
   // Add any Firestore field values
-  boothDataModel.firestoreUtilData.fieldValues
+  mapToFirestore(boothDataModel.firestoreUtilData.fieldValues)
       .forEach((k, v) => firestoreData[k] = v);
 
   return forFieldValue ? mergeNestedFields(firestoreData) : firestoreData;

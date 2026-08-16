@@ -269,7 +269,8 @@ Map<String, dynamic> getImagesFirestoreData(
   final firestoreData = mapToFirestore(images.toMap());
 
   // Add any Firestore field values
-  images.firestoreUtilData.fieldValues.forEach((k, v) => firestoreData[k] = v);
+  mapToFirestore(images.firestoreUtilData.fieldValues)
+      .forEach((k, v) => firestoreData[k] = v);
 
   return forFieldValue ? mergeNestedFields(firestoreData) : firestoreData;
 }
